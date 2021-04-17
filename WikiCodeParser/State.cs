@@ -46,6 +46,7 @@ namespace WikiCodeParser
 
         public string Peek(int count)
         {
+            if (Index + count > Length) count = Length - Index;
             return Text.Substring(Index, count);
         }
 

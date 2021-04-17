@@ -72,7 +72,7 @@ namespace WikiCodeParser.Tags
                     if (stack == 0)
                     {
                         state.Seek(Token.Length + 3, false);
-                        if (!this.Validate(options, text)) break;
+                        if (!Validate(options, text)) break;
                         return FormatResult(parser, state, scope, options, text);
                     }
 
@@ -85,7 +85,7 @@ namespace WikiCodeParser.Tags
             else
             {
                 var text = state.ScanTo("[/" + Token + "]");
-                if (state.Peek(tokenLength + 3).ToLower() == "[/" + Token + "]" && this.Validate(options, text))
+                if (state.Peek(tokenLength + 3).ToLower() == "[/" + Token + "]" && Validate(options, text))
                 {
                     state.Seek(Token.Length + 3, false);
                     return FormatResult(parser, state, scope, options, text);

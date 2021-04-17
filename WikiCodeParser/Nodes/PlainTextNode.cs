@@ -7,7 +7,8 @@ namespace WikiCodeParser.Nodes
     /// </summary>
     public class PlainTextNode : INode
     {
-        public static INode NewLine = new PlainTextNode("\n");
+        public static readonly INode NewLine = new PlainTextNode("\n");
+        public static readonly INode Empty = new PlainTextNode(string.Empty);
 
         public string Text { get; set; }
 
