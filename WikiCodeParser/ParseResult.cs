@@ -5,7 +5,7 @@ namespace WikiCodeParser
 {
     public class ParseResult
     {
-        public NodeCollection Content { get; set; }
+        public INode Content { get; set; }
 
         public ParseResult()
         {

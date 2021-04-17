@@ -6,7 +6,7 @@ using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
 {
-    public abstract class BBCodeTag
+    public abstract class Tag
     {
         public abstract string Token { get; }
         public abstract string Element { get; }
@@ -105,7 +105,7 @@ namespace WikiCodeParser.Tags
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += '>';
             var after = "</" + Element + '>';
-            var content = parser.ParseInline(text, scope, IsBlock ? "block" : "inline");
+            var content = parser.ParseTags(text, scope, IsBlock ? "block" : "inline");
             return new HtmlNode(before, content, after);
         }
     }

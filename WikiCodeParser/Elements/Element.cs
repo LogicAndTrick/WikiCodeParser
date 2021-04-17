@@ -5,7 +5,7 @@ using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Elements
 {
-    public abstract class BBCodeElement
+    public abstract class Element
     {
         public List<string> Scopes { get; set; }
         public int Priority { get; set; } = 0;

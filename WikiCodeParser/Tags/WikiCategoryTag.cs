@@ -3,7 +3,7 @@ using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
 {
-    public class WikiCategoryTag : BBCodeTag
+    public class WikiCategoryTag : Tag
     {
         public override string Token => null;
         public override string Element => "";

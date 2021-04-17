@@ -1,75 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WikiCodeParser.Elements;
 using WikiCodeParser.Nodes;
-using WikiCodeParser.Tags;
 
 namespace WikiCodeParser
 {
+    /// <summary>
+    /// WikiCode parser
+    /// </summary>
     public class Parser
     {
-        public List<BBCodeElement> Elements { get; }
-        public List<BBCodeTag> Tags { get; }
+        public ParserConfiguration Configuration { get; }
 
-        public Parser()
+        public Parser(ParserConfiguration configuration)
         {
-            Elements = new List<BBCodeElement>();
-            Tags = new List<BBCodeTag>();
+            Configuration = configuration;
         }
 
+        /// <summary>
+        /// Parse WikiCode and return the result.
+        /// </summary>
+        /// <param name="text">The text to parse</param>
+        /// <param name="scope">The scope to parse in</param>
+        /// <returns>The parsed result</returns>
         public ParseResult ParseResult(string text, string scope = "")
         {
-            var result = new ParseResult();
-            result.Content.Nodes.AddRange(ParseBlock(result, text, scope));
-            return result;
+            return new ParseResult {Content = ParseElements(text, scope)};
         }
 
-        public IEnumerable<INode> ParseBlock(ParseResult result, string text, string scope)
+        /// <summary>
+        /// Parse a block of text and for elements return the resultant nodes.
+        /// </summary>
+        /// <param name="text">The text to parse</param>
+        /// <param name="scope">The scope to parse in</param>
+        /// <returns>The nodes of the parsed text</returns>
+        internal INode ParseElements(string text, string scope)
         {
+            var root = new NodeCollection();
+
+            // Elements are line-based scopes, an element cannot start in the middle of a line.
             text = text.Replace("\r", "");
-            return SplitElements(text, scope);
-        }
 
-        public IEnumerable<INode> SplitElements(string text, string scope)
-        {
             var lines = new Lines(text);
-            var inscope = Elements.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
+            var inscope = Configuration.Elements.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
             var plain = new List<string>();
 
             while (lines.Next())
             {
+                // Try and find an element for this line
                 var matched = false;
                 foreach (var e in inscope)
                 {
                     if (!e.Matches(lines)) continue;
 
-                    var con = e.Consume(this, lines);
-                    if (con == null) continue;
+                    var con = e.Consume(this, lines); // found an element, generate the result
+                    if (con == null) continue; // no result, guess this element wasn't valid after all
 
-                    if (plain.Count > 0) yield return ParseInline(String.Join("\n", plain), scope, "block");
+                    // if we have any plain text, create a node for it
+                    if (plain.Count > 0) root.Nodes.Add(ParseTags(String.Join("\n", plain), scope, "block"));
                     plain.Clear();
 
-                    yield return con;
+                    root.Nodes.Add(con);
                     matched = true;
                     break;
                 }
 
-                if (!matched) plain.Add(lines.Value());
+                if (!matched) plain.Add(lines.Value()); // there wasn't any match, so this line was plain text
             }
 
-            if (plain.Count > 0) yield return ParseInline(String.Join("\n", plain), scope, "block");
+            // parse any plain text that might be left
+            if (plain.Count > 0) root.Nodes.Add(ParseTags(String.Join("\n", plain), scope, "block"));
+
+            return root;
         }
 
-        public INode ParseInline(string text, string scope, string type)
+        /// <summary>
+        /// Parse a block of text for tags and return the resultant node
+        /// </summary>
+        /// <param name="text">The text to parse</param>
+        /// <param name="scope">The scope to parse in</param>
+        /// <param name="type">The type of tags to parse - block or inline</param>
+        /// <returns>The node of the parsed text</returns>
+        internal INode ParseTags(string text, string scope, string type)
         {
             var state = new State(text);
             var root = new NodeCollection();
-            var inscope = Tags.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
+            var inscope = Configuration.Tags.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
 
             while (!state.Done)
             {
-                var plain = ParsePlainText(state.ScanTo("["), scope, type);
+                var plain = ParseTextProcessors(state.ScanTo("["), scope, type);
                 if (plain != null) root.Nodes.Add(plain);
                 if (state.Done) break;
 
@@ -91,7 +111,7 @@ namespace WikiCodeParser
 
                 if (!found)
                 {
-                    plain = ParsePlainText(state.Next().ToString(), scope, type);
+                    plain = ParseTextProcessors(state.Next().ToString(), scope, type);
                     if (plain != null) root.Nodes.Add(plain);
                 }
             }
@@ -99,7 +119,14 @@ namespace WikiCodeParser
             return root;
         }
 
-        public INode ParsePlainText(string text, string scope, string type)
+        /// <summary>
+        /// Run text processors and return the resulting node.
+        /// </summary>
+        /// <param name="text">The text to parse</param>
+        /// <param name="scope">The scope to parse in</param>
+        /// <param name="type">The type of tags to parse - block or inline</param>
+        /// <returns>The node of the parsed text</returns>
+        internal INode ParseTextProcessors(string text, string scope, string type)
         {
             if (string.IsNullOrEmpty(text)) return null;
             // todo

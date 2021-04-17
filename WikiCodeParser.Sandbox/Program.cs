@@ -1,6 +1,4 @@
 ﻿using System;
-using WikiCodeParser.Elements;
-using WikiCodeParser.Tags;
 
 namespace WikiCodeParser.Sandbox
 {
@@ -8,9 +6,7 @@ namespace WikiCodeParser.Sandbox
     {
         static void Main(string[] args)
         {
-            var parser = new Parser();
-            parser.Elements.Add(new MdCodeElement());
-            parser.Tags.Add(new WikiCategoryTag());
+            var parser = new Parser(ParserConfiguration.Default);
             var result = parser.ParseResult(@"[cat:Tutorials]
 [book:Half-Life Programming|chapter:Monster Programming|chapternumber:4|pagenumber:1]
 [credit:Original author|user:5504]

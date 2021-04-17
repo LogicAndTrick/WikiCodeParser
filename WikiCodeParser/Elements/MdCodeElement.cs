@@ -5,7 +5,7 @@ using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Elements
 {
-    public class MdCodeElement : BBCodeElement
+    public class MdCodeElement : Element
     {
         private static readonly string[] AllowedLanguages =
         {
