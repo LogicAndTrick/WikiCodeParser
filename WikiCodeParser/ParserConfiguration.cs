@@ -12,6 +12,9 @@ namespace WikiCodeParser
         {
             Default = new ParserConfiguration();
             Default.Elements.Add(new MdCodeElement());
+
+            Default.Tags.Add(new CodeTag());
+            Default.Tags.Add(new FontTag());
             Default.Tags.Add(new WikiCategoryTag());
         }
 

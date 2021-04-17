@@ -14,6 +14,7 @@ namespace WikiCodeParser.Sandbox
 	Hello
 		This is some code
 ```
+test1 [code]test2[/code] test3
 	");
             var meta = result.GetMetadata();
             var plain = result.ToPlainText();

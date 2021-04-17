@@ -12,6 +12,7 @@ namespace WikiCodeParser.Tags
         public abstract string Element { get; }
         public virtual string ElementClass => null;
         public virtual string MainOption => null;
+        public virtual string[] Options => new string[0];
         public virtual bool AllOptionsInMain => false;
         public virtual bool IsBlock => false;
         public virtual bool IsNested => false;
@@ -22,7 +23,7 @@ namespace WikiCodeParser.Tags
         public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) ||
                                                      Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
 
-        public virtual bool Matches(State state, string token) => token.ToLower() == Token;
+        public virtual bool Matches(State state, string token) => token?.ToLower() == Token;
 
         public virtual INode Parse(Parser parser, State state, string scope)
         {
@@ -99,7 +100,7 @@ namespace WikiCodeParser.Tags
 
         public virtual bool Validate(Dictionary<string, string> options, string text) => true;
 
-        public INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public virtual INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';

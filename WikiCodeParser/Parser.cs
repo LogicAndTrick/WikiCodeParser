@@ -61,6 +61,7 @@ namespace WikiCodeParser
                     plain.Clear();
 
                     root.Nodes.Add(con);
+                    root.Nodes.Add(PlainTextNode.NewLine); // Elements always have a newline after
                     matched = true;
                     break;
                 }
