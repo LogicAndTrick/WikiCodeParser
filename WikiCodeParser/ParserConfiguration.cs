@@ -20,6 +20,7 @@ namespace WikiCodeParser
             Default.Tags.Add(new PreTag());
             Default.Tags.Add(new QuickLinkTag());
             Default.Tags.Add(new QuoteTag());
+            Default.Tags.Add(new SpoilerTag());
             Default.Tags.Add(new WikiCategoryTag());
         }
 
