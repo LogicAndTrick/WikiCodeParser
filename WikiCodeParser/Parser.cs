@@ -21,17 +21,17 @@ namespace WikiCodeParser
         public ParseResult ParseResult(string text, string scope = "")
         {
             var result = new ParseResult();
-            result.Content.Children.AddRange(ParseBlock(result, text, scope));
+            result.Content.Nodes.AddRange(ParseBlock(result, text, scope));
             return result;
         }
 
-        public IEnumerable<BBCodeContent> ParseBlock(ParseResult result, string text, string scope)
+        public IEnumerable<INode> ParseBlock(ParseResult result, string text, string scope)
         {
             text = text.Replace("\r", "");
             return SplitElements(text, scope);
         }
 
-        public IEnumerable<BBCodeContent> SplitElements(string text, string scope)
+        public IEnumerable<INode> SplitElements(string text, string scope)
         {
             var lines = new Lines(text);
             var inscope = Elements.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
@@ -61,16 +61,16 @@ namespace WikiCodeParser
             if (plain.Count > 0) yield return ParseInline(String.Join("\n", plain), scope, "block");
         }
 
-        public BBCodeContent ParseInline(string text, string scope, string type)
+        public INode ParseInline(string text, string scope, string type)
         {
             var state = new State(text);
-            var root = new BBCodeContent();
+            var root = new NodeCollection();
             var inscope = Tags.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
 
             while (!state.Done)
             {
                 var plain = ParsePlainText(state.ScanTo("["), scope, type);
-                if (plain != null) root.Children.Add(plain);
+                if (plain != null) root.Nodes.Add(plain);
                 if (state.Done) break;
 
                 var token = state.GetToken();
@@ -82,7 +82,7 @@ namespace WikiCodeParser
                         var parsed = t.Parse(this, state, scope);
                         if (parsed != null)
                         {
-                            root.Children.Add(parsed);
+                            root.Nodes.Add(parsed);
                             found = true;
                             break;
                         }
@@ -92,17 +92,18 @@ namespace WikiCodeParser
                 if (!found)
                 {
                     plain = ParsePlainText(state.Next().ToString(), scope, type);
-                    if (plain != null) root.Children.Add(plain);
+                    if (plain != null) root.Nodes.Add(plain);
                 }
             }
 
             return root;
         }
 
-        public BBCodeContent ParsePlainText(string text, string scope, string type)
+        public INode ParsePlainText(string text, string scope, string type)
         {
             if (string.IsNullOrEmpty(text)) return null;
-            return new BBCodeContent(null, null, text);
+            // todo
+            return new PlainTextNode(text);
         }
     }
 }

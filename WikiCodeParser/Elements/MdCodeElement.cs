@@ -7,7 +7,7 @@ namespace WikiCodeParser.Elements
 {
     public class MdCodeElement : BBCodeElement
     {
-        private static string[] _allowedLanguages = new[]
+        private static readonly string[] AllowedLanguages =
         {
             "php", "dos", "bat", "cmd", "css", "cpp", "c", "c++", "cs", "ini", "json", "xml", "html", "angelscript",
             "javascript", "js", "plaintext"
@@ -24,13 +24,13 @@ namespace WikiCodeParser.Elements
             return value.StartsWith("```");
         }
 
-        public override BBCodeContent Consume(Parser parser, Lines lines)
+        public override INode Consume(Parser parser, Lines lines)
         {
             var current = lines.Current();
             var firstLine = lines.Value().Substring(3).TrimEnd();
 
             string lang = null;
-            if (_allowedLanguages.Contains(firstLine, StringComparer.InvariantCultureIgnoreCase))
+            if (AllowedLanguages.Contains(firstLine, StringComparer.InvariantCultureIgnoreCase))
             {
                 lang = firstLine;
                 firstLine = "";
@@ -82,11 +82,11 @@ namespace WikiCodeParser.Elements
             // Dedent all lines by the longest common whitespace
             arr = arr.Select(a => a.Substring(Math.Min(longestWhitespace, a.Length))).ToList();
 
-            var plain = String.Join("\n", arr);
+            var plain = new PlainTextNode(String.Join("\n", arr));
             var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
             var before = $"<pre{cls}><code>";
             var after = "</code></pre>";
-            return new BBCodeContent(before, after, plain);
+            return new HtmlNode(before, plain, after);
         }
     }
 }

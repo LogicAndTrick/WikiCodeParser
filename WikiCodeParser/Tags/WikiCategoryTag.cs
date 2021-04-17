@@ -15,7 +15,7 @@ namespace WikiCodeParser.Tags
             return peekTag == "[cat:" && pt != null && pt.Length > 5 && !pt.Contains('\n');
         }
 
-        public override BBCodeContent Parse(Parser parser, State state, string scope)
+        public override INode Parse(Parser parser, State state, string scope)
         {
             var index = state.Index;
             if (state.ScanTo(":") != "[cat" || state.Next() != ':')
@@ -32,9 +32,7 @@ namespace WikiCodeParser.Tags
             }
 
             state.SkipWhitespace();
-            var bbcc = new BBCodeContent();
-            bbcc.AddMeta("WikiCategory", str);
-            return bbcc;
+            return new MetadataNode("WikiCategory", str);
         }
     }
 }

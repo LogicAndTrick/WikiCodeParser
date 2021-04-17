@@ -10,7 +10,7 @@ namespace WikiCodeParser.Elements
             throw new NotImplementedException();
         }
 
-        public override BBCodeContent Consume(Parser parser, Lines lines)
+        public override INode Consume(Parser parser, Lines lines)
         {
             throw new NotImplementedException();
         }

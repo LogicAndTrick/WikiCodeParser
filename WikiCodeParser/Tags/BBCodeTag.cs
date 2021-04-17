@@ -24,7 +24,7 @@ namespace WikiCodeParser.Tags
 
         public virtual bool Matches(State state, string token) => token.ToLower() == Token;
 
-        public virtual BBCodeContent Parse(Parser parser, State state, string scope)
+        public virtual INode Parse(Parser parser, State state, string scope)
         {
             var index = state.Index;
             var tokenLength = Token.Length;
@@ -99,15 +99,14 @@ namespace WikiCodeParser.Tags
 
         public virtual bool Validate(Dictionary<string, string> options, string text) => true;
 
-        public BBCodeContent FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options,
-            string text)
+        public INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += '>';
             var after = "</" + Element + '>';
-            var child = parser.ParseInline(text, scope, IsBlock ? "block" : "inline");
-            return new BBCodeContent(before, after, child);
+            var content = parser.ParseInline(text, scope, IsBlock ? "block" : "inline");
+            return new HtmlNode(before, content, after);
         }
     }
 }

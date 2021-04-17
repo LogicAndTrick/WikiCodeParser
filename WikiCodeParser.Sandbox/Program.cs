@@ -19,14 +19,14 @@ namespace WikiCodeParser.Sandbox
 		This is some code
 ```
 	");
-            var meta = result.Content.GetMeta();
+            var meta = result.GetMetadata();
             var plain = result.ToPlainText();
             var html = result.ToHtml();
 
             Console.WriteLine("Meta:");
             foreach (var m in meta)
             {
-                foreach (var v in m.Value) Console.WriteLine($"{m.Key}: {v}");
+                Console.WriteLine($"{m.Key}: {m.Value}");
             }
             Console.WriteLine("-------\n");
             Console.WriteLine("Plain:");
