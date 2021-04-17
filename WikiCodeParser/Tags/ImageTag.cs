@@ -34,7 +34,10 @@ namespace WikiCodeParser.Tags
                          $"<span class=\"caption-panel\">" +
                          $"<img class=\"caption-body\" src=\"{url}\" alt=\"User posted image\" />";
             var after = $"</span></{element}>";
-            return new HtmlNode(before, PlainTextNode.Empty, after) { PlainBefore = "[User posted image]" };
+            return new HtmlNode(before, PlainTextNode.Empty, after)
+            {
+                PlainBefore = "[User posted image]" + (element == "div" ? "\n" : " ")
+            };
         }
 
         public override bool Validate(Dictionary<string, string> options, string text)

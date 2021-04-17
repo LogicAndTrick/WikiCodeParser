@@ -17,6 +17,9 @@ namespace WikiCodeParser
             Default.Tags.Add(new FontTag());
             Default.Tags.Add(new ImageTag());
             Default.Tags.Add(new LinkTag());
+            Default.Tags.Add(new PreTag());
+            Default.Tags.Add(new QuickLinkTag());
+            Default.Tags.Add(new QuoteTag());
             Default.Tags.Add(new WikiCategoryTag());
         }
 
