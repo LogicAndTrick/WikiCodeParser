@@ -46,9 +46,9 @@ namespace WikiCodeParser
             Default.Tags.Add(new QuoteTag());
             Default.Tags.Add(new FontTag().WithScopes("inline", "excerpt"));
             Default.Tags.Add(new WikiCategoryTag().WithScopes("inline", "excerpt"));
-            // Default.Tags.Add(new WikiBookTag().WithScopes("inline", "excerpt"));
-            // Default.Tags.Add(new WikiCreditTag().WithScopes("inline", "excerpt"));
-            // Default.Tags.Add(new WikiArchiveTag().WithScopes("inline", "excerpt"));
+            Default.Tags.Add(new WikiBookTag().WithScopes("inline", "excerpt"));
+            Default.Tags.Add(new WikiCreditTag().WithScopes("inline", "excerpt"));
+            Default.Tags.Add(new WikiArchiveTag().WithScopes("inline", "excerpt"));
             Default.Tags.Add(new SpoilerTag().WithScopes("inline", "excerpt"));
             Default.Tags.Add(new CodeTag().WithScopes("excerpt"));
 

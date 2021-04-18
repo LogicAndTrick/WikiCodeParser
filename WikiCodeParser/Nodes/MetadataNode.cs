@@ -8,9 +8,9 @@ namespace WikiCodeParser.Nodes
     public class MetadataNode : INode
     {
         public string Key { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
 
-        public MetadataNode(string key, string value)
+        public MetadataNode(string key, object value)
         {
             Key = key;
             Value = value;

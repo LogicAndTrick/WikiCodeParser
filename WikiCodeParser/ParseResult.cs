@@ -12,12 +12,12 @@ namespace WikiCodeParser
             Content = new NodeCollection();
         }
 
-        public List<KeyValuePair<string, string>> GetMetadata()
+        public List<KeyValuePair<string, object>> GetMetadata()
         {
-            var list = new List<KeyValuePair<string, string>>();
+            var list = new List<KeyValuePair<string, object>>();
             Content.Walk(n =>
             {
-                if (n is MetadataNode md) list.Add(new KeyValuePair<string, string>(md.Key, md.Value));
+                if (n is MetadataNode md) list.Add(new KeyValuePair<string, object>(md.Key, md.Value));
             });
             return list;
         }
