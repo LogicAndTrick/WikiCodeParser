@@ -6,7 +6,7 @@ namespace WikiCodeParser.Sandbox
     {
         static void Main(string[] args)
         {
-            var parser = new Parser(ParserConfiguration.Default);
+            var parser = new Parser(ParserConfiguration.Default());
             var result = parser.ParseResult(@"[cat:Tutorials]
 [book:Half-Life Programming|chapter:Monster Programming|chapternumber:4|pagenumber:1]
 [credit:Original author|user:5504]
