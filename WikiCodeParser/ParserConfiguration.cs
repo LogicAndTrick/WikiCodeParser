@@ -56,6 +56,20 @@ namespace WikiCodeParser
 
             // Elements
             conf.Elements.Add(new MdCodeElement());
+            // conf.Elements.Add(new PreElement());
+            // conf.Elements.Add(new MdHeadingElement());
+            // conf.Elements.Add(new MdLineElement());
+            // conf.Elements.Add(new MdQuoteElement());
+            // conf.Elements.Add(new MdListElement());
+            // conf.Elements.Add(new MdTableElement());
+            // conf.Elements.Add(new MdPanelElement());
+            // conf.Elements.Add(new MdColumnsElement());
+            
+            // Processors
+            // conf.Processors.Add(new MarkdownTextProcessor());
+            // conf.Processors.Add(new AutoLinkingProcessor());
+            // conf.Processors.Add(new SmiliesProcessor());
+            // conf.Processors.Add(new NewLineProcessor());
 
             return conf;
         }
