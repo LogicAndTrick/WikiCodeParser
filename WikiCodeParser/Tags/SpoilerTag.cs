@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
 {
     public class SpoilerTag : Tag
     {
-        public override string Token => "spoiler";
-        public override string Element => "span";
-        public override string ElementClass => "spoiler";
-        public override string MainOption => "text";
-        public override string[] Options => new[] {"text"};
-        public override bool AllOptionsInMain => true;
+        public SpoilerTag()
+        {
+            Token = "spoiler";
+            Element = "span";
+            ElementClass = "spoiler";
+            MainOption = "text";
+            Options = new[] {"text"};
+            AllOptionsInMain = true;
+        }
 
         public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {
@@ -26,10 +27,10 @@ namespace WikiCodeParser.Tags
             return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(text, scope, IsBlock ? "block" : "inline")), after);
         }
 
-        public class SpoilerNode : INode
+        private class SpoilerNode : INode
         {
-            public string VisibleText { get; }
-            public INode SpoilerContent { get; }
+            private string VisibleText { get; }
+            private INode SpoilerContent { get; }
 
             public SpoilerNode(string visibleText, INode spoilerContent)
             {

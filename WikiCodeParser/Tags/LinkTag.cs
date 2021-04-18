@@ -7,10 +7,13 @@ namespace WikiCodeParser.Tags
 {
     public class LinkTag : Tag
     {
-        public override string Token => "url";
-        public override string Element => "a";
-        public override string MainOption => "url";
-        public override string[] Options => new[] {"url"};
+        public LinkTag()
+        {
+            Token = "url";
+            Element = "a";
+            MainOption = "url";
+            Options = new[] {"url"};
+        }
 
         public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {

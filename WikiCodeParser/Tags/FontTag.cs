@@ -5,10 +5,13 @@ namespace WikiCodeParser.Tags
 {
     public class FontTag : Tag
     {
-        public override string Token => "font";
-        public override string Element => "span";
-        public override string MainOption => "color";
-        public override string[] Options => new[] {"color", "colour", "size"};
+        public FontTag()
+        {
+            Token = "font";
+            Element = "span";
+            MainOption = "color";
+            Options = new[] {"color", "colour", "size"};
+        }
 
         public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {

@@ -5,8 +5,11 @@ namespace WikiCodeParser.Tags
 {
     public class WikiCategoryTag : Tag
     {
-        public override string Token => null;
-        public override string Element => "";
+        public WikiCategoryTag()
+        {
+            Token = null;
+            Element = "";
+        }
 
         public override bool Matches(State state, string token)
         {

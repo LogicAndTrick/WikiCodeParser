@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
 {
     public class VaultEmbedTag : Tag
     {
-        public override string Token => null;
-        public override string Element => "div";
-        public override string MainOption => "id";
-        public override string[] Options => new[] {"id"};
+        public VaultEmbedTag()
+        {
+            Element = "div";
+            MainOption = "id";
+            Options = new[] {"id"};
+        }
 
         public override bool Matches(State state, string token)
         {

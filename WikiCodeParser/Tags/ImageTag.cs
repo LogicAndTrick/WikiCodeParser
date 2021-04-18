@@ -7,10 +7,13 @@ namespace WikiCodeParser.Tags
 {
     public class ImageTag : Tag
     {
-        public override string Token => "img";
-        public override string Element => "span";
-        public override string MainOption => "url";
-        public override string[] Options => new[] {"url"};
+        public ImageTag()
+        {
+            Token = "img";
+            Element = "span";
+            MainOption = "url";
+            Options = new[] {"url"};
+        }
 
         public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {

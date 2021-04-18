@@ -5,13 +5,16 @@ namespace WikiCodeParser.Tags
 {
     public class QuoteTag : Tag
     {
-        public override string Token => "quote";
-        public override string Element => "blockquote";
-        public override string MainOption => "name";
-        public override string[] Options => new[] {"name"};
-        public override bool AllOptionsInMain => true;
-        public override bool IsBlock => true;
-        public override bool IsNested => true;
+        public QuoteTag()
+        {
+            Token = "quote";
+            Element = "blockquote";
+            MainOption = "name";
+            Options = new[] {"name"};
+            AllOptionsInMain = true;
+            IsBlock = true;
+            IsNested = true;
+        }
 
         public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
         {

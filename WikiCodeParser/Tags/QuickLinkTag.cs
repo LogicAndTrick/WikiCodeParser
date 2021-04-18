@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WikiCodeParser.Nodes;
 
@@ -7,10 +6,13 @@ namespace WikiCodeParser.Tags
 {
     public class QuickLinkTag : Tag
     {
-        public override string Token => null;
-        public override string Element => "a";
-        public override string MainOption => "url";
-        public override string[] Options => new[] {"url"};
+        public QuickLinkTag()
+        {
+            Token = null;
+            Element = "a";
+            MainOption = "url";
+            Options = new[] {"url"};
+        }
 
         public override bool Matches(State state, string token)
         {

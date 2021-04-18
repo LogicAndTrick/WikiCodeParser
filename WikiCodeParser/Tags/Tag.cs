@@ -6,18 +6,18 @@ using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
 {
-    public abstract class Tag
+    public class Tag
     {
-        public abstract string Token { get; }
-        public abstract string Element { get; }
-        public virtual string ElementClass => null;
-        public virtual string MainOption => null;
-        public virtual string[] Options => new string[0];
-        public virtual bool AllOptionsInMain => false;
-        public virtual bool IsBlock => false;
-        public virtual bool IsNested => false;
+        public string Token { get; set; }
+        public string Element { get; set; }
+        public string ElementClass { get; set; }
+        public string MainOption { get; set; }
+        public string[] Options { get; set; } = new string[0];
+        public bool AllOptionsInMain { get; set; }
+        public bool IsBlock { get; set; }
+        public bool IsNested { get; set; }
 
-        public List<string> Scopes { get; set; }
+        public List<string> Scopes { get; set; } = new List<string>();
         public int Priority { get; set; } = 0;
 
         public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) ||
