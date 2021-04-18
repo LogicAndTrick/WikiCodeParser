@@ -12,19 +12,21 @@ namespace WikiCodeParser.Tags
         public string Element { get; set; }
         public string ElementClass { get; set; }
         public string MainOption { get; set; }
-        public string[] Options { get; set; } = new string[0];
+        public string[] Options { get; set; }
         public bool AllOptionsInMain { get; set; }
         public bool IsBlock { get; set; }
         public bool IsNested { get; set; }
 
-        public List<string> Scopes { get; set; } = new List<string>();
+        public List<string> Scopes { get; set; }
         public int Priority { get; set; } = 0;
 
-        public Tag()
+        protected Tag()
         {
+            Options = new string[0];
+            Scopes = new List<string>();
         }
 
-        public Tag(string token, string element, string elementClass = null)
+        public Tag(string token, string element, string elementClass = null) : this()
         {
             Token = token;
             Element = element;

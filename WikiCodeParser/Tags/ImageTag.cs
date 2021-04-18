@@ -37,9 +37,10 @@ namespace WikiCodeParser.Tags
                          $"<span class=\"caption-panel\">" +
                          $"<img class=\"caption-body\" src=\"{url}\" alt=\"User posted image\" />";
             var after = $"</span></{element}>";
+            var plainsp = element == "div" ? "\n" : "";
             return new HtmlNode(before, PlainTextNode.Empty, after)
             {
-                PlainBefore = "[User posted image]" + (element == "div" ? "\n" : " ")
+                PlainBefore = $"{plainsp}[User posted image]{plainsp}"
             };
         }
 

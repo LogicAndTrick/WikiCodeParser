@@ -45,7 +45,7 @@ namespace WikiCodeParser.Tags
 
             public string ToPlainText()
             {
-                return $"[{VisibleText}]";
+                return $"[{VisibleText}](spoiler text)";
             }
 
             public IEnumerable<INode> GetChildren()

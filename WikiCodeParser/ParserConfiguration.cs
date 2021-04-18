@@ -33,15 +33,15 @@ namespace WikiCodeParser
             conf.Tags.Add(new LinkTag().WithScopes("excerpt"));
             conf.Tags.Add(new LinkTag().WithScopes("excerpt").WithToken("email"));
             conf.Tags.Add(new QuickLinkTag());
-            // Default.Tags.Add(new WikiLinkTag());
-            // Default.Tags.Add(new WikiFileTag());
+            conf.Tags.Add(new WikiLinkTag());
+            conf.Tags.Add(new WikiFileTag());
 
             // Embedded
             conf.Tags.Add(new ImageTag());
             conf.Tags.Add(new ImageTag().WithToken("simg"));
-            // Default.Tags.Add(new WikiImageTag());
-            // Default.Tags.Add(new YoutubeTag());
-            // Default.Tags.Add(new WikiYoutubeTag());
+            conf.Tags.Add(new WikiImageTag());
+            // conf.Tags.Add(new YoutubeTag());
+            // conf.Tags.Add(new WikiYoutubeTag());
             conf.Tags.Add(new VaultEmbedTag());
 
             // Custom
