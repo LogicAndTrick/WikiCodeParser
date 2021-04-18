@@ -20,6 +20,17 @@ namespace WikiCodeParser.Tags
         public List<string> Scopes { get; set; } = new List<string>();
         public int Priority { get; set; } = 0;
 
+        public Tag()
+        {
+        }
+
+        public Tag(string token, string element, string elementClass = null)
+        {
+            Token = token;
+            Element = element;
+            ElementClass = elementClass;
+        }
+
         public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) ||
                                                      Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
 
