@@ -24,7 +24,7 @@ namespace WikiCodeParser.Elements
             return value.StartsWith("```");
         }
 
-        public override INode Consume(Parser parser, Lines lines)
+        public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
             var current = lines.Current();
             var firstLine = lines.Value().Substring(3).TrimEnd();

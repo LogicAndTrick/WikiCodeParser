@@ -16,7 +16,7 @@ namespace WikiCodeParser.Tags
             Options = new[] {"id"};
         }
 
-        public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var id = text;
             if (options.ContainsKey("id")) id = options["id"];

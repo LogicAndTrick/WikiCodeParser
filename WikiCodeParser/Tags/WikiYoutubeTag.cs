@@ -22,7 +22,7 @@ namespace WikiCodeParser.Tags
             return peekTag == "[youtube:" && pt != null && pt.Length > 9 && !pt.Contains("\n");
         }
 
-        public override INode Parse(Parser parser, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope)
         {
             var index = state.Index;
             if (state.ScanTo(":") != "[youtube" || state.Next() != ':')

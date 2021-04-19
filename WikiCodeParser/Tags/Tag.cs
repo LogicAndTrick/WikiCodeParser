@@ -38,7 +38,7 @@ namespace WikiCodeParser.Tags
 
         public virtual bool Matches(State state, string token) => token?.ToLower() == Token;
 
-        public virtual INode Parse(Parser parser, State state, string scope)
+        public virtual INode Parse(Parser parser, ParseData data, State state, string scope)
         {
             var index = state.Index;
             var tokenLength = Token.Length;
@@ -86,7 +86,7 @@ namespace WikiCodeParser.Tags
                     {
                         state.Seek(Token.Length + 3, false);
                         if (!Validate(options, text)) break;
-                        return FormatResult(parser, state, scope, options, text);
+                        return FormatResult(parser, data, state, scope, options, text);
                     }
 
                     text += state.Next();
@@ -101,7 +101,7 @@ namespace WikiCodeParser.Tags
                 if (state.Peek(tokenLength + 3).ToLower() == "[/" + Token + "]" && Validate(options, text))
                 {
                     state.Seek(Token.Length + 3, false);
-                    return FormatResult(parser, state, scope, options, text);
+                    return FormatResult(parser, data, state, scope, options, text);
                 }
                 else
                 {
@@ -113,13 +113,13 @@ namespace WikiCodeParser.Tags
 
         public virtual bool Validate(Dictionary<string, string> options, string text) => true;
 
-        public virtual INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public virtual INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += '>';
             var after = "</" + Element + '>';
-            var content = parser.ParseTags(text, scope, IsBlock ? "block" : "inline");
+            var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
             return new HtmlNode(before, content, after);
         }
     }

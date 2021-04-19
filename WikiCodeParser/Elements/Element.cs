@@ -14,6 +14,6 @@ namespace WikiCodeParser.Elements
                                                      Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
 
         public abstract bool Matches(Lines lines);
-        public abstract INode Consume(Parser parser, Lines lines);
+        public abstract INode Consume(Parser parser, ParseData data, Lines lines, string scope);
     }
 }

@@ -25,16 +25,18 @@ namespace WikiCodeParser
         /// <returns>The parsed result</returns>
         public ParseResult ParseResult(string text, string scope = "")
         {
-            return new ParseResult {Content = ParseElements(text, scope)};
+            var data = new ParseData();
+            return new ParseResult {Content = ParseElements(data, text, scope)};
         }
 
         /// <summary>
         /// Parse a block of text and for elements return the resultant nodes.
         /// </summary>
+        /// <param name="data"></param>
         /// <param name="text">The text to parse</param>
         /// <param name="scope">The scope to parse in</param>
         /// <returns>The nodes of the parsed text</returns>
-        internal INode ParseElements(string text, string scope)
+        internal INode ParseElements(ParseData data, string text, string scope)
         {
             var root = new NodeCollection();
 
@@ -53,11 +55,11 @@ namespace WikiCodeParser
                 {
                     if (!e.Matches(lines)) continue;
 
-                    var con = e.Consume(this, lines); // found an element, generate the result
+                    var con = e.Consume(this, data, lines, scope); // found an element, generate the result
                     if (con == null) continue; // no result, guess this element wasn't valid after all
 
                     // if we have any plain text, create a node for it
-                    if (plain.Count > 0) root.Nodes.Add(ParseTags(String.Join("\n", plain), scope, "block"));
+                    if (plain.Count > 0) root.Nodes.Add(ParseTags(data, String.Join("\n", plain), scope, "block"));
                     plain.Clear();
 
                     root.Nodes.Add(con);
@@ -70,7 +72,7 @@ namespace WikiCodeParser
             }
 
             // parse any plain text that might be left
-            if (plain.Count > 0) root.Nodes.Add(ParseTags(String.Join("\n", plain), scope, "block"));
+            if (plain.Count > 0) root.Nodes.Add(ParseTags(data, String.Join("\n", plain), scope, "block"));
 
             return root;
         }
@@ -78,11 +80,12 @@ namespace WikiCodeParser
         /// <summary>
         /// Parse a block of text for tags and return the resultant node
         /// </summary>
+        /// <param name="data"></param>
         /// <param name="text">The text to parse</param>
         /// <param name="scope">The scope to parse in</param>
         /// <param name="type">The type of tags to parse - block or inline</param>
         /// <returns>The node of the parsed text</returns>
-        internal INode ParseTags(string text, string scope, string type)
+        internal INode ParseTags(ParseData data, string text, string scope, string type)
         {
             var state = new State(text);
             var root = new NodeCollection();
@@ -100,7 +103,7 @@ namespace WikiCodeParser
                 {
                     if (t.Matches(state, token))
                     {
-                        var parsed = t.Parse(this, state, scope);
+                        var parsed = t.Parse(this, data, state, scope);
                         if (parsed != null)
                         {
                             root.Nodes.Add(parsed);

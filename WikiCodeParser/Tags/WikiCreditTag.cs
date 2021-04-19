@@ -18,7 +18,7 @@ namespace WikiCodeParser.Tags
             return peekTag == "[credit:" && pt != null && pt.Length > 8 && !pt.Contains("\n");
         }
 
-        public override INode Parse(Parser parser, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope)
         {
             var index = state.Index;
             if (state.Next() != '[')

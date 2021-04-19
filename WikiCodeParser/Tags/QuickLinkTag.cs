@@ -23,7 +23,7 @@ namespace WikiCodeParser.Tags
             return pt.Length > 0 && !pt.Contains("\n") && Regex.IsMatch(pt, @"^([a-z]{2,10}://[^\]]*?)(?:\|([^\]]*?))?", RegexOptions.IgnoreCase);
         }
 
-        public override INode Parse(Parser parser, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope)
         {
             var index = state.Index;
 

@@ -13,7 +13,7 @@ namespace WikiCodeParser.Tags
             Options = new[] {"color", "colour", "size"};
         }
 
-        public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + "\"";
@@ -26,7 +26,7 @@ namespace WikiCodeParser.Tags
                 before += "\"";
             }
             before += ">";
-            var content = parser.ParseTags(text, scope, IsBlock ? "block" : "inline");
+            var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
             var after = "</" + Element + ">";
             return new HtmlNode(before, content, after);
         }

@@ -15,7 +15,7 @@ namespace WikiCodeParser.Tags
             Options = new[] {"url"};
         }
 
-        public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];

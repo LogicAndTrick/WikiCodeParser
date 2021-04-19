@@ -15,7 +15,7 @@ namespace WikiCodeParser.Tags
             Options = new[] {"url"};
         }
 
-        public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];
@@ -30,7 +30,7 @@ namespace WikiCodeParser.Tags
             var after = $"</{Element}>";
 
             var content = options.ContainsKey("url")
-                ? parser.ParseTags(text, scope, IsBlock ? "block" : "inline")
+                ? parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline")
                 : new PlainTextNode(text);
             return new HtmlNode(before, content, after);
         }

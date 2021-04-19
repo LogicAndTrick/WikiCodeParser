@@ -11,7 +11,7 @@ namespace WikiCodeParser.Tags
             Element = "pre";
         }
 
-        public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';

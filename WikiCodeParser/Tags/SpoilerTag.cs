@@ -15,7 +15,7 @@ namespace WikiCodeParser.Tags
             AllOptionsInMain = true;
         }
 
-        public override INode FormatResult(Parser parser, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
             var visibleText = "Spoiler";
             if (options.ContainsKey("text") && options["text"].Length > 0) visibleText = options["text"];
@@ -24,7 +24,7 @@ namespace WikiCodeParser.Tags
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += $" title=\"{visibleText}\">";
             var after = "</" + Element + '>';
-            return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(text, scope, IsBlock ? "block" : "inline")), after);
+            return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline")), after);
         }
 
         private class SpoilerNode : INode
