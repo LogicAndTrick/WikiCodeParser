@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using WikiCodeParser.Nodes;
+﻿using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
 {
@@ -15,7 +14,7 @@ namespace WikiCodeParser.Tags
         {
             var peekTag = state.Peek(5);
             var pt = state.PeekTo("]");
-            return peekTag == "[cat:" && pt != null && pt.Length > 5 && !pt.Contains('\n');
+            return peekTag == "[cat:" && pt != null && pt.Length > 5 && !pt.Contains("\n");
         }
 
         public override INode Parse(Parser parser, State state, string scope)

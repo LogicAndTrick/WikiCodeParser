@@ -40,8 +40,8 @@ namespace WikiCodeParser
             conf.Tags.Add(new ImageTag());
             conf.Tags.Add(new ImageTag().WithToken("simg"));
             conf.Tags.Add(new WikiImageTag());
-            // conf.Tags.Add(new YoutubeTag());
-            // conf.Tags.Add(new WikiYoutubeTag());
+            conf.Tags.Add(new YoutubeTag());
+            conf.Tags.Add(new WikiYoutubeTag());
             conf.Tags.Add(new VaultEmbedTag());
 
             // Custom

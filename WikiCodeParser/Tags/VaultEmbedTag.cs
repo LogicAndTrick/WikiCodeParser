@@ -55,7 +55,8 @@ namespace WikiCodeParser.Tags
             var after = "</div></div></div></div>";
             return new HtmlNode(before, PlainTextNode.Empty, after)
             {
-                PlainBefore = $"[TWHL vault item #{id}]"
+                PlainBefore = $"[TWHL vault item #{id}]",
+                PlainAfter = "\n"
             };
         }
     }
