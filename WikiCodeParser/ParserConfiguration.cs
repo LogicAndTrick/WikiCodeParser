@@ -58,8 +58,8 @@ namespace WikiCodeParser
             conf.Elements.Add(new MdCodeElement());
             // conf.Elements.Add(new PreElement());
             conf.Elements.Add(new MdHeadingElement());
-            // conf.Elements.Add(new MdLineElement());
-            // conf.Elements.Add(new MdQuoteElement());
+            conf.Elements.Add(new MdLineElement());
+            conf.Elements.Add(new MdQuoteElement());
             // conf.Elements.Add(new MdListElement());
             // conf.Elements.Add(new MdTableElement());
             // conf.Elements.Add(new MdPanelElement());
