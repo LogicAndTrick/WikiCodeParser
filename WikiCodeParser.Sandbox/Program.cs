@@ -7,15 +7,9 @@ namespace WikiCodeParser.Sandbox
         static void Main(string[] args)
         {
             var parser = new Parser(ParserConfiguration.Default());
-            var result = parser.ParseResult(@"[cat:Tutorials]
-[book:Half-Life Programming|chapter:Monster Programming|chapternumber:4|pagenumber:1]
-[credit:Original author|user:5504]
-```c
-	Hello
-		This is some code
-```
-test1 [code]test2[/code] test3
-	");
+            var result = parser.ParseResult(@"- a
+-- b
+-# c");
             var meta = result.GetMetadata();
             var plain = result.ToPlainText();
             var html = result.ToHtml();
