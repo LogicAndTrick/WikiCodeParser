@@ -62,7 +62,7 @@ namespace WikiCodeParser
             conf.Elements.Add(new MdQuoteElement());
             conf.Elements.Add(new MdListElement());
             // conf.Elements.Add(new MdTableElement());
-            // conf.Elements.Add(new MdPanelElement());
+            conf.Elements.Add(new MdPanelElement());
             conf.Elements.Add(new MdColumnsElement());
             
             // Processors
