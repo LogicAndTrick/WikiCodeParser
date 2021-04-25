@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WikiCodeParser.Nodes
 {
@@ -7,7 +8,6 @@ namespace WikiCodeParser.Nodes
     /// </summary>
     public class PlainTextNode : INode
     {
-        public static readonly INode NewLine = new PlainTextNode("\n");
         public static readonly INode Empty = new PlainTextNode(string.Empty);
 
         public string Text { get; set; }
@@ -19,6 +19,7 @@ namespace WikiCodeParser.Nodes
 
         public string ToHtml() => System.Web.HttpUtility.HtmlEncode(Text);
         public string ToPlainText() => Text;
-        public IEnumerable<INode> GetChildren() => new INode[0];
+        public IList<INode> GetChildren() => new INode[0];
+        public void ReplaceChild(int i, INode node) => throw new InvalidOperationException();
     }
 }

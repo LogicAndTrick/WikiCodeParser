@@ -102,9 +102,14 @@ namespace WikiCodeParser.Elements
                 return sb.ToString();
             }
 
-            public IEnumerable<INode> GetChildren()
+            public IList<INode> GetChildren()
             {
                 return Cells;
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                Cells[i] = node;
             }
         }
     }

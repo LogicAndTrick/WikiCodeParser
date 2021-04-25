@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WikiCodeParser.Elements;
+using WikiCodeParser.Processors;
 using WikiCodeParser.Tags;
 
 namespace WikiCodeParser
@@ -67,21 +68,23 @@ namespace WikiCodeParser
             conf.Elements.Add(new RefElement());
             
             // Processors
-            // conf.Processors.Add(new MarkdownTextProcessor());
-            // conf.Processors.Add(new AutoLinkingProcessor());
+            conf.Processors.Add(new MarkdownTextProcessor());
+            conf.Processors.Add(new AutoLinkingProcessor());
             // conf.Processors.Add(new SmiliesProcessor());
-            // conf.Processors.Add(new NewLineProcessor());
+            conf.Processors.Add(new NewLineProcessor());
 
             return conf;
         }
 
         public List<Element> Elements { get; }
         public List<Tag> Tags { get; }
+        public List<INodeProcessor> Processors { get; set; }
 
         public ParserConfiguration()
         {
             Elements = new List<Element>();
             Tags = new List<Tag>();
+            Processors = new List<INodeProcessor>();
         }
     }
 }

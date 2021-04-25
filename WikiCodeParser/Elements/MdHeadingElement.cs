@@ -21,7 +21,7 @@ namespace WikiCodeParser.Elements
             var text = res.Groups[2].Value.Trim();
 
             var id = GenerateUniqueHeaderID(data, text);
-            return new HeadingNode(level, id, text);
+            return new HeadingNode(level, id, parser.ParseTags(data, text, scope, "inline"));
         }
 
         private static string GenerateUniqueHeaderID(ParseData data, string text)
@@ -45,9 +45,9 @@ namespace WikiCodeParser.Elements
         {
             public int Level { get; }
             public string ID { get; }
-            public string Text { get; }
+            public INode Text { get; set; }
 
-            public HeadingNode(int level, string id, string text)
+            public HeadingNode(int level, string id, INode text)
             {
                 Level = level;
                 ID = id;
@@ -57,18 +57,25 @@ namespace WikiCodeParser.Elements
             public string ToHtml()
             {
                 return $"<h{Level} id=\"{ID}\">"
-                       + System.Web.HttpUtility.HtmlEncode(Text)
+                       + Text.ToHtml()
                        + $"</h{Level}>";
             }
 
             public string ToPlainText()
             {
-                return Text + "\n" + new string('-', Text.Length);
+                var plain = Text.ToPlainText();
+                return plain + "\n" + new string('-', plain.Length);
             }
 
-            public IEnumerable<INode> GetChildren()
+            public IList<INode> GetChildren()
             {
-                yield break;
+                return new[] { Text };
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                if (i != 0) throw new ArgumentOutOfRangeException();
+                Text = node;
             }
         }
     }

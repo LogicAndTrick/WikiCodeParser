@@ -6,6 +6,7 @@ namespace WikiCodeParser.Nodes
     {
         string ToHtml();
         string ToPlainText();
-        IEnumerable<INode> GetChildren();
+        IList<INode> GetChildren();
+        void ReplaceChild(int i, INode node);
     }
 }

@@ -145,15 +145,20 @@ namespace WikiCodeParser.Elements
                 return sb.ToString();
             }
 
-            public IEnumerable<INode> GetChildren()
+            public IList<INode> GetChildren()
             {
-                return Items;
+                return Items.OfType<INode>().ToList();
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                Items[i] = (ListItemNode) node;
             }
         }
 
         public class ListItemNode : INode
         {
-            public INode Content { get; }
+            public INode Content { get; set; }
             public List<ListNode> Subtrees { get; }
 
             public ListItemNode(INode content)
@@ -184,9 +189,15 @@ namespace WikiCodeParser.Elements
                 return sb.ToString();
             }
 
-            public IEnumerable<INode> GetChildren()
+            public IList<INode> GetChildren()
             {
-                return new[] {Content}.Concat(Subtrees);
+                return new[] {Content}.Concat(Subtrees).ToList();
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                if (i == 0) Content = node;
+                else Subtrees[i - 1] = (ListNode) node;
             }
         }
     }

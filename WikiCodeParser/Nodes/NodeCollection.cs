@@ -22,6 +22,7 @@ namespace WikiCodeParser.Nodes
 
         public string ToHtml() => string.Join("", Nodes.Select(x => x.ToHtml()));
         public string ToPlainText() => string.Join("", Nodes.Select(x => x.ToPlainText()));
-        public IEnumerable<INode> GetChildren() => Nodes;
+        public IList<INode> GetChildren() => Nodes;
+        public void ReplaceChild(int i, INode node) => Nodes[i] = node;
     }
 }

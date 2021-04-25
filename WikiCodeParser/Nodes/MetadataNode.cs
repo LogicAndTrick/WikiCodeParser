@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WikiCodeParser.Nodes
 {
@@ -18,6 +19,7 @@ namespace WikiCodeParser.Nodes
 
         public string ToHtml() => string.Empty;
         public string ToPlainText() => string.Empty;
-        public IEnumerable<INode> GetChildren() => new INode[0];
+        public IList<INode> GetChildren() => new INode[0];
+        public void ReplaceChild(int i, INode node) => throw new InvalidOperationException();
     }
 }

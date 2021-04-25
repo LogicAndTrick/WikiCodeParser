@@ -70,7 +70,7 @@ namespace WikiCodeParser.Elements
         public class ColumnNode : INode
         {
             public int Width { get; }
-            public INode Content { get; }
+            public INode Content { get; set; }
 
             public ColumnNode(int width, INode content)
             {
@@ -88,9 +88,15 @@ namespace WikiCodeParser.Elements
                 return Content.ToPlainText();
             }
 
-            public IEnumerable<INode> GetChildren()
+            public IList<INode> GetChildren()
             {
-                yield return Content;
+                return new[] {Content};
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                if (i != 0) throw new ArgumentOutOfRangeException();
+                Content = node;
             }
         }
     }

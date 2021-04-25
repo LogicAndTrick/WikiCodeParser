@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WikiCodeParser.Nodes;
+using WikiCodeParser.Processors;
 
 namespace WikiCodeParser
 {
@@ -26,7 +27,13 @@ namespace WikiCodeParser
         public ParseResult ParseResult(string text, string scope = "")
         {
             var data = new ParseData();
-            return new ParseResult {Content = ParseElements(data, text, scope)};
+            text = text.Trim();
+            var node = ParseElements(data, text, scope);
+            node = RunProcessors(node, data, scope);
+            return new ParseResult
+            {
+                Content = node
+            };
         }
 
         /// <summary>
@@ -63,7 +70,7 @@ namespace WikiCodeParser
                     plain.Clear();
 
                     root.Nodes.Add(con);
-                    root.Nodes.Add(PlainTextNode.NewLine); // Elements always have a newline after
+                    root.Nodes.Add(HtmlNode.UnbreakableNewLine); // Elements always have a newline after
                     matched = true;
                     break;
                 }
@@ -93,8 +100,8 @@ namespace WikiCodeParser
 
             while (!state.Done)
             {
-                var plain = ParseTextProcessors(state.ScanTo("["), scope, type);
-                if (plain != null) root.Nodes.Add(plain);
+                var plain = state.ScanTo("[");
+                if (!String.IsNullOrWhiteSpace(plain)) root.Nodes.Add(new PlainTextNode(plain));
                 if (state.Done) break;
 
                 var token = state.GetToken();
@@ -115,26 +122,43 @@ namespace WikiCodeParser
 
                 if (!found)
                 {
-                    plain = ParseTextProcessors(state.Next().ToString(), scope, type);
-                    if (plain != null) root.Nodes.Add(plain);
+                    plain = state.Next().ToString();
+                    if (!String.IsNullOrWhiteSpace(plain)) root.Nodes.Add(new PlainTextNode(plain));
                 }
             }
 
             return root;
         }
 
-        /// <summary>
-        /// Run text processors and return the resulting node.
-        /// </summary>
-        /// <param name="text">The text to parse</param>
-        /// <param name="scope">The scope to parse in</param>
-        /// <param name="type">The type of tags to parse - block or inline</param>
-        /// <returns>The node of the parsed text</returns>
-        internal INode ParseTextProcessors(string text, string scope, string type)
+        internal INode RunProcessors(INode node, ParseData data, string scope)
         {
-            if (string.IsNullOrEmpty(text)) return null;
-            // todo
-            return new PlainTextNode(text);
+            foreach (var processor in Configuration.Processors.OrderByDescending(x => x.Priority))
+            {
+                node = RunProcessor(node, processor, data, scope);
+            }
+
+            return node;
+        }
+
+        private INode RunProcessor(INode node, INodeProcessor processor, ParseData data, string scope)
+        {
+            // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessors if it's needed.
+            if (processor.ShouldProcess(node, scope))
+            {
+                var result = processor.Process(this, data, node, scope).ToList();
+                return result.Count == 1 ? result[0] : new NodeCollection(result);
+            }
+
+            var children = node.GetChildren();
+
+            for (var i = 0; i < children.Count; i++)
+            {
+                var child = children[i];
+                var processed = RunProcessor(child, processor, data, scope);
+                node.ReplaceChild(i, processed);
+            }
+
+            return node;
         }
     }
 }

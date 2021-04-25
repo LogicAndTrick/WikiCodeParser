@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Tags
@@ -30,7 +31,7 @@ namespace WikiCodeParser.Tags
         private class SpoilerNode : INode
         {
             private string VisibleText { get; }
-            private INode SpoilerContent { get; }
+            private INode SpoilerContent { get; set; }
 
             public SpoilerNode(string visibleText, INode spoilerContent)
             {
@@ -48,9 +49,15 @@ namespace WikiCodeParser.Tags
                 return $"[{VisibleText}](spoiler text)";
             }
 
-            public IEnumerable<INode> GetChildren()
+            public IList<INode> GetChildren()
             {
-                yield return SpoilerContent;
+                return new[] {SpoilerContent};
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                if (i != 0) throw new ArgumentOutOfRangeException();
+                SpoilerContent = node;
             }
         }
     }

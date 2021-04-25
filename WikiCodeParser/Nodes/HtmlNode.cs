@@ -8,9 +8,11 @@ namespace WikiCodeParser.Nodes
     /// </summary>
     public class HtmlNode : INode
     {
-        public string HtmlBefore { get; set; }
+        public static readonly INode UnbreakableNewLine = new HtmlNode("\n", PlainTextNode.Empty, "") { PlainBefore = "\n" };
+
+        public string HtmlBefore { get; }
         public INode Content { get; set; }
-        public string HtmlAfter { get; set; }
+        public string HtmlAfter { get; }
 
         public string PlainBefore { get; set; }
         public string PlainAfter { get; set; }
@@ -33,9 +35,15 @@ namespace WikiCodeParser.Nodes
             return PlainBefore + Content.ToPlainText() + PlainAfter;
         }
 
-        public IEnumerable<INode> GetChildren()
+        public IList<INode> GetChildren()
         {
-            yield return Content;
+            return new[] {Content};
+        }
+
+        public void ReplaceChild(int i, INode node)
+        {
+            if (i != 0) throw new ArgumentOutOfRangeException();
+            Content = node;
         }
     }
 }
