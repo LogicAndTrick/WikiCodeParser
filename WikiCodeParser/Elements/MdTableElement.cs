@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using WikiCodeParser.Nodes;
 
 namespace WikiCodeParser.Elements
@@ -23,7 +24,7 @@ namespace WikiCodeParser.Elements
                     lines.Back();
                     break;
                 }
-                var cells = SplitTable(value.Substring(2)).Select(x => parser.ParseTags(data, x, scope, "inline"));
+                var cells = SplitTable(value.Substring(2)).Select(x => ResolveCell(x, parser, data, scope));
                 arr.Add(new TableRow(value[1] == '=' ? "th" : "td", cells));
             } while (lines.Next());
 
@@ -49,6 +50,18 @@ namespace WikiCodeParser.Elements
                 }
             }
             if (last < len) yield return text.Substring(last, (i-last) + (i == len - 1 ? 1 : 0));
+        }
+
+        private static INode ResolveCell(string text, Parser parser, ParseData data, string scope)
+        {
+            var res = Regex.Match(text.Trim(), "^:ref=([a-z ]+)$", RegexOptions.IgnoreCase);
+            if (res.Success)
+            {
+                var name = res.Groups[1].Value;
+                var node = data.Get<INode>($"Ref::{name}", () => null);
+                if (node != null) return node;
+            }
+            return parser.ParseTags(data, text, scope, "inline");
         }
 
         private class TableRow : INode
