@@ -78,7 +78,7 @@ namespace WikiCodeParser
 
         public List<Element> Elements { get; }
         public List<Tag> Tags { get; }
-        public List<INodeProcessor> Processors { get; set; }
+        public List<INodeProcessor> Processors { get; }
 
         public ParserConfiguration()
         {

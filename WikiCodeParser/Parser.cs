@@ -101,7 +101,7 @@ namespace WikiCodeParser
             while (!state.Done)
             {
                 var plain = state.ScanTo("[");
-                if (!String.IsNullOrWhiteSpace(plain)) root.Nodes.Add(new PlainTextNode(plain));
+                if (!String.IsNullOrEmpty(plain)) root.Nodes.Add(new PlainTextNode(plain));
                 if (state.Done) break;
 
                 var token = state.GetToken();
@@ -123,7 +123,7 @@ namespace WikiCodeParser
                 if (!found)
                 {
                     plain = state.Next().ToString();
-                    if (!String.IsNullOrWhiteSpace(plain)) root.Nodes.Add(new PlainTextNode(plain));
+                    if (!String.IsNullOrEmpty(plain)) root.Nodes.Add(new PlainTextNode(plain));
                 }
             }
 
