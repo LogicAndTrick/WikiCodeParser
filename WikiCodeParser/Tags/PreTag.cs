@@ -17,7 +17,7 @@ namespace WikiCodeParser.Tags
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += "><code>";
             var after = "</code></" + Element + '>';
-            return new HtmlNode(before, new PlainTextNode(text), after);
+            return new HtmlNode(before, new UnprocessablePlainTextNode(text), after);
         }
     }
 }

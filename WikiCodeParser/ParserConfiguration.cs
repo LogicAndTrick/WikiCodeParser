@@ -70,7 +70,7 @@ namespace WikiCodeParser
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());
             conf.Processors.Add(new AutoLinkingProcessor());
-            // conf.Processors.Add(new SmiliesProcessor());
+            conf.Processors.Add(new SmiliesProcessor().AddDefault());
             conf.Processors.Add(new NewLineProcessor());
 
             return conf;

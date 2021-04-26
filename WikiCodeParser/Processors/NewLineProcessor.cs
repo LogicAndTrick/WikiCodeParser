@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WikiCodeParser.Nodes;
 
@@ -26,7 +25,7 @@ namespace WikiCodeParser.Processors
                 var line = lines[i];
                 if (string.IsNullOrEmpty(line))
                 {
-                    if (!prevLineIsBlank) yield return new HtmlNode("<br/>", HtmlNode.UnbreakableNewLine, "");
+                    if (!prevLineIsBlank) yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
                     prevLineIsBlank = true;
                 }
                 else
@@ -34,7 +33,7 @@ namespace WikiCodeParser.Processors
                     prevLineIsBlank = false;
                     yield return new PlainTextNode(line);
                     // Don't emit a line break after the final line of the text as it did not end with a newline
-                    if (i < lines.Length - 1) yield return new HtmlNode("<br/>", HtmlNode.UnbreakableNewLine, "");
+                    if (i < lines.Length - 1) yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
                 }
             }
         }

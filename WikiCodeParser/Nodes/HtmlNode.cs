@@ -8,8 +8,6 @@ namespace WikiCodeParser.Nodes
     /// </summary>
     public class HtmlNode : INode
     {
-        public static readonly INode UnbreakableNewLine = new HtmlNode("\n", PlainTextNode.Empty, "") { PlainBefore = "\n" };
-
         public string HtmlBefore { get; }
         public INode Content { get; set; }
         public string HtmlAfter { get; }

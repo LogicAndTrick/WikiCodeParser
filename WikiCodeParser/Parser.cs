@@ -70,7 +70,7 @@ namespace WikiCodeParser
                     plain.Clear();
 
                     root.Nodes.Add(con);
-                    root.Nodes.Add(HtmlNode.UnbreakableNewLine); // Elements always have a newline after
+                    root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Elements always have a newline after
                     matched = true;
                     break;
                 }

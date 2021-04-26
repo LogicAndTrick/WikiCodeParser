@@ -140,7 +140,7 @@ namespace WikiCodeParser.Elements
             var highlights = string.Join("", highlight.Select(
                 h => $"<div class=\"line-highlight\" style=\"top: {h.firstLine}em; height: {h.numLines}em; background: {h.color};\"></div>")
             );
-            var plain = new PlainTextNode(String.Join("\n", arr));
+            var plain = new UnprocessablePlainTextNode(String.Join("\n", arr));
             var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
             var before = $"<pre{cls}><code>{highlights}";
             var after = "</code></pre>";

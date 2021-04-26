@@ -82,7 +82,7 @@ namespace WikiCodeParser.Elements
             // Dedent all lines by the longest common whitespace
             arr = arr.Select(a => a.Substring(Math.Min(longestWhitespace, a.Length))).ToList();
 
-            var plain = new PlainTextNode(String.Join("\n", arr));
+            var plain = new UnprocessablePlainTextNode(String.Join("\n", arr));
             var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
             var before = $"<pre{cls}><code>";
             var after = "</code></pre>";

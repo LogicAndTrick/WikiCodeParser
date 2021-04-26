@@ -7,9 +7,7 @@ namespace WikiCodeParser.Sandbox
         static void Main(string[] args)
         {
             var parser = new Parser(ParserConfiguration.Default());
-            var result = parser.ParseResult(@"- a
--- b
--# c");
+            var result = parser.ParseResult(@":)");
             var meta = result.GetMetadata();
             var plain = result.ToPlainText();
             var html = result.ToHtml();
