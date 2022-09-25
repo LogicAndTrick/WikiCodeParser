@@ -1,7 +1,9 @@
-﻿using System;
+﻿using LogicAndTrick.WikiCodeParser.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 
 namespace LogicAndTrick.WikiCodeParser.WinUI
@@ -30,6 +32,18 @@ namespace LogicAndTrick.WikiCodeParser.WinUI
             };
             WebView.EnsureCoreWebView2Async().ConfigureAwait(false);
             TextBox.TextChanged += (_, _) => Render();
+
+            TextBox.Text = @"= Title
+Hello
+
+== Heading
+
+This is a test
+
+~~~
+information
+~~~
+";
         }
 
         private async void Render()
@@ -40,7 +54,7 @@ namespace LogicAndTrick.WikiCodeParser.WinUI
             try
             {
                 var parsed = _parser.ParseResult(text);
-                var content = parsed.ToHtml() + HtmlMetadata(parsed.GetMetadata());
+                var content = "<div class=\"bbcode\">" + parsed.ToHtml() + "</div>" + HtmlMetadata(parsed.GetMetadata());
                 var json = System.Text.Json.JsonSerializer.Serialize(new
                 {
                     content
@@ -65,12 +79,29 @@ namespace LogicAndTrick.WikiCodeParser.WinUI
 <head>
 <meta charset=""utf-8"">
 <link href=""https://twhl.info/css/app.css"" rel=""stylesheet"">
+<style>
+@font-face {
+ font-family:FontAwesome;
+ font-style:normal;
+ font-weight:400;
+ src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0);
+ src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format(""embedded-opentype""),
+ url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0) format(""woff2""),
+ url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0) format(""woff""),
+ url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0) format(""truetype""),
+ url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular) format(""svg"")
+}
+</style>
 <link href=""https://fonts.googleapis.com/css?family=Roboto:400,300"" rel=""stylesheet"" type=""text/css"">
 <script type=""text/javascript"" src=""https://twhl.info/js/all.js""></script>
 <script>
 function display_result({ content }) {
     const el = document.getElementById('el');
     el.innerHTML = content;
+    el.querySelectorAll('pre code').forEach(code => {
+        hljs.highlightBlock(code);
+    });
+    document.querySelectorAll('a').forEach(link => link.target = '_blank');
 }
 function display_exception({ message, stacktrace }) {
     const el = document.getElementById('el');
@@ -79,7 +110,7 @@ function display_exception({ message, stacktrace }) {
 </script>
 </head>
 <body style=""background: #fffcf9;"">
-<div class=""bbcode"" id=""el"">
+<div id=""el"" style=""overflow: hidden; padding: 1rem;"">
 </div>
 </body>
 </html>
@@ -92,20 +123,143 @@ function display_exception({ message, stacktrace }) {
         {
             if (!meta.Any()) return "";
 
-            var sb = new StringBuilder("<h6>Metadata</h6>");
-            sb.Append("<ul>");
+            var cats = new List<string>();
+            var credits = new List<WikiRevisionCredit>();
+            var others = new List<KeyValuePair<string, object>>();
+
+            var sb = new StringBuilder();
 
             foreach (var kv in meta)
             {
-                sb.Append("<li>");
-                sb.Append("<strong>");
-                sb.Append(kv.Key);
-                sb.Append(":</strong> ");
-                sb.Append(kv.Value);
-                sb.Append("</li>");
+                switch (kv.Key)
+                {
+                    case "WikiCategory":
+                        cats.Add(kv.Value.ToString() ?? "");
+                        break;
+                    case "WikiCredit":
+                        credits.Add((WikiRevisionCredit) kv.Value);
+                        break;
+                    case "WikiLink":
+                    case "WikiUpload":
+                        break;
+                    default:
+                        others.Add(kv);
+                        break;
+                }
             }
 
-            sb.Append("</ul>");
+            if (cats.Any())
+            {
+                sb.Append(@"
+<ul class=""wiki-categories inline-bullet"">
+    <li class=""header"">Categories</li>");
+                foreach (var cat in cats)
+                {
+                    sb.Append("<li><a href=\"https://twhl.info/wiki/page/category:").Append(Uri.EscapeDataString(cat.Replace(' ', '_'))).Append("\">").Append(cat.Replace('_', ' ')).Append("</a></li>");
+
+                }
+    sb.Append("</ul>");
+            }
+
+            if (credits.Any(x => x.Type != WikiRevisionCredit.TypeFull))
+            {
+                sb.Append(@"
+<ul class=""wiki-credits"">
+    <li class=""header"">Article Credits</li>");
+                foreach (var cred in credits.Where(x => x.Type != WikiRevisionCredit.TypeFull))
+                {
+                    sb.Append("<li>");
+                    if (cred.Type == WikiRevisionCredit.TypeCredit)
+                    {
+                        sb.Append("<span class=\"fa fa-pencil\"></span> ");
+                        if (cred.UserID.HasValue) sb.Append("<a href=\"https://twhl.info/user/view/").Append(cred.UserID).Append("\">[Avatar for user #").Append(cred.UserID).Append("]</a>");
+                        else if (!string.IsNullOrWhiteSpace(cred.Url)) sb.Append("<a href=\"").Append(cred.Url).Append("\">").Append(cred.Name).Append("</a>");
+                        else sb.Append("<strong>").Append(cred.Name).Append("</strong>");
+                        sb.Append(" &ndash; ").Append(cred.Description);
+                    }
+                    else if (cred.Type == WikiRevisionCredit.TypeArchive)
+                    {
+                        sb.Append("<span class=\"fa fa-globe\"></span> This article contains archived content from ");
+                        sb.Append("<strong>").Append(cred.Name).Append("</strong>");
+                        if (!string.IsNullOrWhiteSpace(cred.Description)) sb.Append(" &ndash; <em>").Append(cred.Description).Append("</em>");
+                        sb.Append(".");
+                        if (!string.IsNullOrWhiteSpace(cred.Url)) sb.Append("Original link <a href=\"").Append(cred.Url).Append("\">here</a>.");
+                        if (!string.IsNullOrWhiteSpace(cred.WaybackUrl)) sb.Append("Archive link <a href=\"").Append(cred.WaybackUrl).Append("\">here</a>.");
+                    }
+                }
+
+                if (credits.Any(x => x.Type == WikiRevisionCredit.TypeArchive))
+                {
+                    sb.Append(@"
+                    <li>
+                        <span class=""fa fa-info-circle""></span>
+                        TWHL only publishes archived articles from defunct websites, or with permission.
+                        For more information on TWHL's archiving efforts, please visit the
+                        <a href=""https://twhl.info/wiki/page/TWHL_Archiving_Project"" title=""TWHL Archiving Project"">TWHL Archiving Project</a> page.
+                    </li>");
+                }
+                sb.Append("</ul>");
+            }
+
+            if (credits.Any(x => x.Type == WikiRevisionCredit.TypeFull))
+            {
+                sb.Append(@"<div class=""wiki-archive-credits bbcode"">");
+                foreach (var cred in credits.Where(x => x.Type == WikiRevisionCredit.TypeFull))
+                {
+                    sb.Append(@$"
+                        <div class=""card card-info"">
+                            <div class=""card-body"">
+                                <div>
+                                    <span class=""fa fa-globe""></span>
+                                    This article was originally published on <strong>{cred.Name}</strong>{(String.IsNullOrWhiteSpace(cred.Description) ? "" : $"as <em>{cred.Description}</em>")}.
+                                </div>
+                    ");
+                    if (!string.IsNullOrWhiteSpace(cred.Url))
+                    {
+                        sb.Append(@$"
+                                <div class=""ml-3"">
+                                    <span class=""fa fa-link""></span> The original URL of the article was <a href=""{cred.Url}"">{cred.Url}</a>.
+                                </div>
+                        ");
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(cred.WaybackUrl))
+                        sb.Append(@$"
+                                <div class=""ml-3"">
+                                    <span class=""fa fa-archive""></span> The archived page is available <a href=""{cred.WaybackUrl}"">here</a>.
+                                </div>
+                        ");
+                    sb.Append(@"
+                                <div>
+                                    <span class=""fa fa-info-circle""></span>
+                                    TWHL only publishes archived articles from defunct websites, or with permission.
+                                    For more information on TWHL's archiving efforts, please visit the
+                                    <a href=""https://twhl.info/wiki/page/TWHL_Archiving_Project"" title=""TWHL Archiving Project"">TWHL Archiving Project</a> page.
+                                </div>
+                            </div>
+                        </div>
+                    ");
+                }
+                sb.Append(@"</div>");
+            }
+
+            if (others.Any())
+            {
+                sb.AppendLine("<h6>Metadata</h6>");
+                sb.Append("<dl class=\"dl-horizontal\">");
+
+                foreach (var kv in others)
+                {
+                    sb.Append("<dt>");
+                    sb.Append(kv.Key);
+                    sb.Append("</dt><dd>");
+                    sb.Append(kv.Value as string ?? "<pre>" + JsonSerializer.Serialize(kv.Value, new JsonSerializerOptions { WriteIndented = true }) + "</pre>");
+                    sb.Append("</dd>");
+                }
+
+                sb.Append("</dl>");
+            }
+
             return sb.ToString();
         }
     }

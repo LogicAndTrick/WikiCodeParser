@@ -64,7 +64,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         break;
                 }
             }
-            if (credit.WaybackUrl != null && credit.Url != null && !credit.WaybackUrl.StartsWith("http://") && !credit.WaybackUrl.StartsWith("https://") && int.TryParse(credit.WaybackUrl, out _))
+            if (credit.WaybackUrl != null && credit.Url != null && !credit.WaybackUrl.StartsWith("http://") && !credit.WaybackUrl.StartsWith("https://") && long.TryParse(credit.WaybackUrl, out _))
             {
                 credit.WaybackUrl = $"https://web.archive.org/web/{credit.WaybackUrl}/{credit.Url}";
             }

@@ -20,25 +20,27 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var level = Math.Min(6, res.Groups[1].Value.Length);
             var text = res.Groups[2].Value.Trim();
 
-            var id = GenerateUniqueHeaderID(data, text);
+            var id = GetUniqueAnchor(data, text);
             return new HeadingNode(level, id, parser.ParseTags(data, text, scope, "inline"));
         }
 
-        private static string GenerateUniqueHeaderID(ParseData data, string text)
+        private static string GetUniqueAnchor(ParseData data, string text)
         {
-            text = text.ToLower().Replace(' ', '-');
-            text = Regex.Replace(text, @"[^0-9a-z\-]", "");
-            text = Regex.Replace(text, @"\-{2,}", "-");
-            if (text.Length < 3) text = "h" + Guid.NewGuid().ToString("N").Substring(6, 12).ToLower();
-            if (Char.IsDigit(text[0])) text = "_" + text;
-
             const string key = nameof(MdHeadingElement) + ".IdList";
-            var list = data.Get(key, () => new List<string>());
-            var id = text;
-            var num = 2;
-            while (list.Contains(id)) id = text + "-" + num++;
-            list.Add(id);
-            return id;
+            var anchors = data.Get(key, () => new HashSet<string>());
+
+            var id = Regex.Replace(text, @"[^\da-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase);
+            var anchor = id;
+            var inc = 1;
+            do {
+                // Increment if we have a duplicate
+                if (!anchors.Contains(anchor)) break;
+                inc++;
+                anchor = $"{id}_{inc}";
+            } while (true);
+
+            anchors.Add(anchor);
+            return anchor;
         }
 
         public class HeadingNode : INode

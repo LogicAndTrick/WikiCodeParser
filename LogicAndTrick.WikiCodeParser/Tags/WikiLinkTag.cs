@@ -45,8 +45,15 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var page = System.Web.HttpUtility.HtmlDecode(match.Groups[1].Value);
             var text = match.Groups[2].Success ? match.Groups[2].Value : page;
+            var hash = "";
+            if (page.Contains("#"))
+            {
+                var spl = page.Split(new[] { '#' }, 2);
+                page = spl[0];
+                hash = "#" + spl[1];
+            }
             
-            var url = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(page)}");
+            var url = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(page)}") + hash;
             var before = $"<a href=\"{url}\">";
             var after = "</a>";
             

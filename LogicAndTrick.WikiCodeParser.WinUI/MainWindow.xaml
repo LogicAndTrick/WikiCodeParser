@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LogicAndTrick.WikiCodeParser.WinUI"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1200">
+        Title="TWHL WikiCode Preview" Height="600" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -14,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <TextBox Grid.Column="0" Margin="10" Name="TextBox" FontFamily="Consolas" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto"></TextBox>
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="#ffc993" Background="#fffcf9" Margin="10">
-            <wv2:WebView2 Grid.Column="1" Margin="10" Name="WebView"></wv2:WebView2>
+            <wv2:WebView2 Grid.Column="1" Name="WebView"></wv2:WebView2>
         </Border>
     </Grid>
 </Window>
