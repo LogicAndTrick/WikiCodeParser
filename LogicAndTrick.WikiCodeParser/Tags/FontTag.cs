@@ -20,10 +20,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (options.ContainsKey("color") || options.ContainsKey("colour") || options.ContainsKey("size"))
             {
                 before += " style=\"";
-                if (options.ContainsKey("color") && Colours.IsValidColor(options["color"])) before += "color: " + options["color"] + ";";
-                else if (options.ContainsKey("colour") && Colours.IsValidColor(options["colour"])) before += "color: " + options["colour"] + ";";
-                if (options.ContainsKey("size") && IsValidSize(options["size"])) before += "font-size: " + options["size"] + "px;";
-                before += "\"";
+                if (options.ContainsKey("color") && Colours.IsValidColor(options["color"])) before += "color: " + options["color"] + "; ";
+                else if (options.ContainsKey("colour") && Colours.IsValidColor(options["colour"])) before += "color: " + options["colour"] + "; ";
+                if (options.ContainsKey("size") && IsValidSize(options["size"])) before += "font-size: " + options["size"] + "px; ";
+                before = before.TrimEnd(' ') + "\"";
             }
             before += ">";
             var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
