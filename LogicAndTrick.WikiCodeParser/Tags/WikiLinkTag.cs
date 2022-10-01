@@ -50,7 +50,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             {
                 var spl = page.Split(new[] { '#' }, 2);
                 page = spl[0];
-                hash = "#" + spl[1];
+                hash = "#" + Regex.Replace(spl[1], @"[^\da-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase);
             }
             
             var url = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(page)}") + hash;
