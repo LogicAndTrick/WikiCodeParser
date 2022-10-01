@@ -25,9 +25,6 @@ public class BigEverythingTest
         var expectedLines = output.Split('\n');
         var actualLines = resultHtml.Split('\n');
 
-        File.WriteAllText(@"D:\Downloads\expected.txt", output);
-        File.WriteAllText(@"D:\Downloads\actual.txt", resultHtml);
-
         for (var i = 0; i < expectedLines.Length; i++)
         {
             var ex = expectedLines[i];
