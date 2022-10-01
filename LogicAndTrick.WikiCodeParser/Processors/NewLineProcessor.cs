@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
@@ -19,21 +20,55 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             text = Regex.Replace(text, " *<br> *", "\n");
 
             var lines = text.Split('\n');
-            var prevLineIsBlank = false;
             for (var i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
-                if (string.IsNullOrEmpty(line))
+                yield return new PlainTextNode(line);
+                // Don't emit a line break after the final line of the text as it did not end with a newline
+                if (i < lines.Length - 1) yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
+            }
+        }
+    }
+
+    public class TrimWhitespaceAroundBlockNodesProcessor : INodeProcessor
+    {
+        public int Priority { get; set; } = 2;
+
+        public bool ShouldProcess(INode node, string scope)
+        {
+            return node is NodeCollection;
+        }
+
+        public IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope)
+        {
+            var coll = (NodeCollection) node;
+
+            var trimStart = false;
+            for (var i = 0; i < coll.Nodes.Count; i++)
+            {
+                var child = coll.Nodes[i];
+                var next = i < coll.Nodes.Count - 1 ? coll.Nodes[i + 1] : null;
+                if (child is PlainTextNode ptn)
                 {
-                    if (!prevLineIsBlank) yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
-                    prevLineIsBlank = true;
+                    var text = ptn.Text;
+                    if (trimStart) text = text.TrimStart();
+                    if (next is HtmlNode nht && nht.IsBlockNode) text = text.TrimEnd();
+                    ptn.Text = text;
+                }
+
+                child = parser.RunProcessor(child, this, data, scope);
+
+                if (child is HtmlNode html && html.IsBlockNode)
+                {
+                    trimStart = true;
+                    yield return UnprocessablePlainTextNode.NewLine;
+                    yield return child;
+                    yield return UnprocessablePlainTextNode.NewLine;
                 }
                 else
                 {
-                    prevLineIsBlank = false;
-                    yield return new PlainTextNode(line);
-                    // Don't emit a line break after the final line of the text as it did not end with a newline
-                    if (i < lines.Length - 1) yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
+                    trimStart = false;
+                    yield return child;
                 }
             }
         }

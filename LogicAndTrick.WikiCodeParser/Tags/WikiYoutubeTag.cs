@@ -73,14 +73,17 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             ) { PlainBefore = "[YouTube video] ", PlainAfter = "\n" };
 
             var before = $"<div class=\"{string.Join(" ", classes)}\">" +
-                         $" <div class=\"caption-panel\">" +
-                         $"  <div class=\"video-container caption-body\">" +
-                         $"   <div class=\"video-content\">" +
-                         $"    <div class=\"uninitialised\" data-youtube-id=\"{id}\" style=\"background-image: url('https://i.ytimg.com/vi/{id}/hqdefault.jpg');\"></div>" +
-                         $"   </div>" +
-                         $"  </div>";
+                          $"<div class=\"caption-panel\">" +
+                           $"<div class=\"video-container caption-body\">" +
+                            $"<div class=\"video-content\">" +
+                           $"<div class=\"uninitialised\" data-youtube-id=\"{id}\" style=\"background-image: url('https://i.ytimg.com/vi/{id}/hqdefault.jpg');\"></div>" +
+                          $"</div>" +
+                         $"</div>";
             var after = $"</div></div>";
-            return new HtmlNode(before, captionNode, after);
+            return new HtmlNode(before, captionNode, after)
+            {
+                IsBlockNode = true
+            };
         }
 
         private bool ValidateID(string id)

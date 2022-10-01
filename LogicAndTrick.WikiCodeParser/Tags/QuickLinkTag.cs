@@ -60,7 +60,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var before = $"<{Element} href=\"{url}\">";
             var after = $"</{Element}>";
 
-            var content = new PlainTextNode(text);
+            var content = new UnprocessablePlainTextNode(text);
             return new HtmlNode(before, content, after)
             {
                 PlainAfter = match.Groups[2].Length > 0 ? $" ({url})" : ""

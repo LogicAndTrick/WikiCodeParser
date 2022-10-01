@@ -68,7 +68,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                     var start = tracker[tokenIndex];
                     var end = i;
                     if (plainStart < start) yield return new PlainTextNode(text.Substring(plainStart, start - plainStart));
-                    yield return new HtmlNode(OpenTags[tokenIndex], new PlainTextNode(text.Substring(start + 1, end - start - 1)), CloseTags[tokenIndex]);
+                    yield return new HtmlNode(OpenTags[tokenIndex], new UnprocessablePlainTextNode(text.Substring(start + 1, end - start - 1)), CloseTags[tokenIndex]);
                     ResetTracker();
                     plainStart = i + 1;
                 }

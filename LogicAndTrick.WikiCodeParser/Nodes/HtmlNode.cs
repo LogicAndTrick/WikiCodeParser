@@ -14,6 +14,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
         public string PlainBefore { get; set; }
         public string PlainAfter { get; set; }
+        public bool IsBlockNode { get; set; }
 
         public HtmlNode(string htmlBefore, INode content, string htmlAfter)
         {

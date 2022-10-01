@@ -120,7 +120,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             before += '>';
             var after = "</" + Element + '>';
             var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
-            return new HtmlNode(before, content, after);
+            return new HtmlNode(before, content, after)
+            {
+                IsBlockNode = IsBlock
+            };
         }
     }
 }

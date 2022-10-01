@@ -29,7 +29,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
             return new HtmlNode(before, content, after)
             {
-                PlainBefore = options.ContainsKey("name") ? options["name"] + " said: " : ""
+                PlainBefore = options.ContainsKey("name") ? options["name"] + " said: " : "",
+                IsBlockNode = IsBlock
             };
         }
     }

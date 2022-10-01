@@ -7,7 +7,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
 {
     public class SmiliesProcessor : INodeProcessor
     {
-        public int Priority { get; set; } = 2;
+        public int Priority { get; set; } = 5;
 
         public string UrlFormatString { get; set; } = "https://twhl.info/images/smilies/{0}.png";
 

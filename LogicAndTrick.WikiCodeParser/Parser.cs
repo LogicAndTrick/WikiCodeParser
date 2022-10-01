@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
 using LogicAndTrick.WikiCodeParser.Processors;
 
@@ -66,7 +67,11 @@ namespace LogicAndTrick.WikiCodeParser
                     if (con == null) continue; // no result, guess this element wasn't valid after all
 
                     // if we have any plain text, create a node for it
-                    if (plain.Count > 0) root.Nodes.Add(ParseTags(data, String.Join("\n", plain), scope, "block"));
+                    if (plain.Count > 0)
+                    {
+                        root.Nodes.Add(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block"));
+                        root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Newline before next element
+                    }
                     plain.Clear();
 
                     root.Nodes.Add(con);
@@ -79,7 +84,13 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             // parse any plain text that might be left
-            if (plain.Count > 0) root.Nodes.Add(ParseTags(data, String.Join("\n", plain), scope, "block"));
+            if (plain.Count > 0) root.Nodes.Add(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block"));
+            
+            // Trim off any whitespace nodes at the end
+            while (root.Nodes.Count > 0 && root.Nodes[root.Nodes.Count - 1] is UnprocessablePlainTextNode ptn && string.IsNullOrWhiteSpace(ptn.Text))
+            {
+                root.Nodes.RemoveAt(root.Nodes.Count - 1);
+            }
 
             return root;
         }
@@ -94,6 +105,9 @@ namespace LogicAndTrick.WikiCodeParser
         /// <returns>The node of the parsed text</returns>
         internal INode ParseTags(ParseData data, string text, string scope, string type)
         {
+            // trim 3 or more newlines down to 2 newlines
+            text = Regex.Replace(text, "\n{3,}", "\n\n");
+
             var state = new State(text);
             var root = new NodeCollection();
             var inscope = Configuration.Tags.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
@@ -140,9 +154,9 @@ namespace LogicAndTrick.WikiCodeParser
             return node;
         }
 
-        private INode RunProcessor(INode node, INodeProcessor processor, ParseData data, string scope)
+        internal INode RunProcessor(INode node, INodeProcessor processor, ParseData data, string scope)
         {
-            // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessors if it's needed.
+            // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessor if it's needed.
             if (processor.ShouldProcess(node, scope))
             {
                 var result = processor.Process(this, data, node, scope).ToList();

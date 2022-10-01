@@ -32,7 +32,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                          $"   </div>" +
                          $"  </div>";
             var after = $"</div></div>";
-            return new HtmlNode(before, captionNode, after);
+            return new HtmlNode(before, captionNode, after)
+            {
+                IsBlockNode = true
+            };
         }
 
         public override bool Validate(Dictionary<string, string> options, string text)

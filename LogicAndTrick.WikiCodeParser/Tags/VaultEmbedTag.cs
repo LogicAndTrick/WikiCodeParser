@@ -56,7 +56,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             return new HtmlNode(before, PlainTextNode.Empty, after)
             {
                 PlainBefore = $"[TWHL vault item #{id}]",
-                PlainAfter = "\n"
+                PlainAfter = "\n",
+                IsBlockNode = true
             };
         }
     }

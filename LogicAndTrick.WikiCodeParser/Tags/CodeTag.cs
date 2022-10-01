@@ -13,7 +13,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
-            return new HtmlNode("<code>", new PlainTextNode(text), "</code>");
+            return new HtmlNode("<code>", new UnprocessablePlainTextNode(text), "</code>");
         }
     }
 }

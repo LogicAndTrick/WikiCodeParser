@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
@@ -26,12 +27,12 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var classes = new List<string>();
             if (ElementClass != null) classes.Add(ElementClass);
 
-            var before = $"<{Element} class=\"{String.Join(" ", classes)}\" href=\"{url}\">";
+            var before = $"<{Element} " + (classes.Any() ? $"class=\"{String.Join(" ", classes)}\" " : "") + $"href=\"{url}\">";
             var after = $"</{Element}>";
 
             var content = options.ContainsKey("url")
                 ? parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline")
-                : new PlainTextNode(text);
+                : new UnprocessablePlainTextNode(text);
             return new HtmlNode(before, content, after);
         }
 

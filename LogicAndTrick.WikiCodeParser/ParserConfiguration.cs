@@ -71,6 +71,7 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Processors.Add(new MarkdownTextProcessor());
             conf.Processors.Add(new AutoLinkingProcessor());
             conf.Processors.Add(new SmiliesProcessor().AddDefault());
+            conf.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
             conf.Processors.Add(new NewLineProcessor());
 
             return conf;

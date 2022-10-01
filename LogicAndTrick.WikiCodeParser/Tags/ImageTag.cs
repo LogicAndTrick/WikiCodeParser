@@ -40,7 +40,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var plainsp = element == "div" ? "\n" : "";
             return new HtmlNode(before, PlainTextNode.Empty, after)
             {
-                PlainBefore = $"{plainsp}[User posted image]{plainsp}"
+                PlainBefore = $"{plainsp}[User posted image]{plainsp}",
+                IsBlockNode = element == "div"
             };
         }
 

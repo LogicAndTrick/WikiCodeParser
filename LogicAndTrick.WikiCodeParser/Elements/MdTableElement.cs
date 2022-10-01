@@ -45,11 +45,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 else if (c == ']') level--;
                 else if ((c == '|' && level == 0) || i == len - 1)
                 {
-                    yield return text.Substring(last, (i - last) + (i == len - 1 ? 1 : 0));
+                    yield return text.Substring(last, (i - last) + (i == len - 1 ? 1 : 0)).Trim();
                     last = i + 1;
                 }
             }
-            if (last < len) yield return text.Substring(last, (i-last) + (i == len - 1 ? 1 : 0));
+            if (last < len) yield return text.Substring(last, (i-last) + (i == len - 1 ? 1 : 0)).Trim();
         }
 
         private static INode ResolveCell(string text, Parser parser, ParseData data, string scope)

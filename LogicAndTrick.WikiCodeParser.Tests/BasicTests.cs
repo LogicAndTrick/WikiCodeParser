@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LogicAndTrick.WikiCodeParser.Elements;
 using LogicAndTrick.WikiCodeParser.Nodes;
+using LogicAndTrick.WikiCodeParser.Processors;
 using LogicAndTrick.WikiCodeParser.Tags;
 
 namespace LogicAndTrick.WikiCodeParser.Tests;
@@ -44,9 +41,99 @@ public class BasicTests
         Assert.AreEqual("</a>", htnode.HtmlAfter);
         var content = CollapseCollections(htnode.Content);
         Assert.AreEqual(1, content.Count);
-        Assert.IsInstanceOfType(content[0], typeof(PlainTextNode));
-        var ptnode = (PlainTextNode)content[0];
+        Assert.IsInstanceOfType(content[0], typeof(UnprocessablePlainTextNode));
+        var ptnode = (UnprocessablePlainTextNode)content[0];
         Assert.AreEqual("ex&ple", ptnode.Text);
+    }
+
+    [TestMethod]
+    public void TestBlockNewLines()
+    {
+        var input = "a\n\n\n\n= b\n\n\n\nc\nd\n\ne";
+        var output = "a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne";
+
+        var config = new ParserConfiguration();
+        config.Elements.Add(new MdHeadingElement());
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestNewLineAfterTag()
+    {
+        var input = "A [code]B[/code]\n\nC";
+        var output = "A <code>B</code><br/>\n<br/>\nC";
+
+        var config = new ParserConfiguration();
+        config.Tags.Add(new CodeTag());
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestSmiliesList()
+    {
+        var input = ":aggrieved:\n:glad:\n";
+        var output = "<img class=\"smiley\" src=\"https://twhl.info/images/smilies/aggrieved.png\" alt=\":aggrieved:\" /><br/>\n<img class=\"smiley\" src=\"https://twhl.info/images/smilies/glad.png\" alt=\":glad:\" />";
+
+        var config = new ParserConfiguration();
+        config.Processors.Add(new SmiliesProcessor().AddDefault());
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestMultipleNewLines()
+    {
+        var input = "a\n\n\nb\n\nc\nd\n\n";
+        var output = "a<br/>\n<br/>\nb<br/>\n<br/>\nc<br/>\nd";
+
+        var config = new ParserConfiguration();
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestMultipleHeadings()
+    {
+        var input = "= One\n==Two";
+        var output = "<h1 id=\"One\">One</h1>\n<h2 id=\"Two\">Two</h2>";
+
+        var config = new ParserConfiguration();
+        config.Elements.Add(new MdHeadingElement());
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestQuoteNewLines()
+    {
+        var input = "before\n\n[quote]quote[/quote]\n\nafter";
+        var output = "before\n<blockquote>quote</blockquote>\nafter";
+
+        var config = new ParserConfiguration();
+        config.Tags.Add(new QuoteTag());
+        config.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
     }
 
     private static IList<INode> GetLeaves(INode root)

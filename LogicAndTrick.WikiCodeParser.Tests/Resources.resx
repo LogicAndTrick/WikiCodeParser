@@ -1,0 +1,657 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TwhlFormattingWikiPageHtml" xml:space="preserve">
+    <value>TWHL uses a custom text syntax that we call &lt;em&gt;WikiCode&lt;/em&gt;. It is a combination of Markdown and BBCode, with a few extra things to spice it up. If you&amp;#039;re familiar with either of these markup systems, you shouldn&amp;#039;t have too much trouble.
+&lt;h2 id="Basic_text_formatting"&gt;Basic text formatting&lt;/h2&gt;
+There are two ways to do basic text formatting - the &lt;em&gt;Markdown&lt;/em&gt; way and the &lt;em&gt;BBCode&lt;/em&gt; way. Markdown style is usually faster to type, but BBCode is generally more flexible.
+&lt;table class="table table-bordered"&gt;&lt;tr&gt;&lt;th&gt;Format&lt;/th&gt;&lt;th&gt;Markdown style&lt;/th&gt;&lt;th&gt;BBCode style&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;Bold text&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;*Bold text*&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[b]Bold text[/b]&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;em&gt;Italic text&lt;/em&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;/Italic text/&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[i]Italic text[/i]&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span class="underline"&gt;Underlined text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;_Underlined text_&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[u]Underlined text[/u]&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span class="strikethrough"&gt;Strikethrough text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;~Strikethrough text~&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[s]Strikethrough text[/s]&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;Inline code&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;`Inline code`&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[ code ]Inline code[ /code ]&lt;/code&gt; (remove extra spaces)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;h2 id="Smilies/emoticons/emoji"&gt;Smilies/emoticons/emoji&lt;/h2&gt;
+Before the land of smartphones and dedicated Unicode glyphs, emoji were known as &amp;#039;smilies&amp;#039;, and were not text, but images! Bizarre, I know. TWHL has complete Unicode support, so go nuts with your smartphone keyboards and you won&amp;#039;t have any issues with favourites such as &lt;code&gt;U+1F4A9: PILE OF POO&lt;/code&gt;: 💩. For us plebs using desktop browsers, though, you can also use the traditional smilies from the good ol&amp;#039; days.&lt;br&gt;&lt;br&gt;Here is TWHL&amp;#039;s library of smilies and their corresponding text representations. Simply type the text and it will be replaced with a smiley image in the post.&lt;br&gt;&lt;br&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/aggrieved.png" alt=":aggrieved:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/aghast.png" alt=":aghast:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/angry.png" alt=":x" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/badass.png" alt=":badass:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/confused.png" alt=":confused:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/cry.png" alt=":cry:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/cyclops.png" alt=":cyclops:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/lol.png" alt=":lol:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/frown.png" alt=":|" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/furious.png" alt=":furious:" /&gt;&lt;br&gt;&lt;img class="smiley" src="https://twhl.info/images/smilies/glad.png" alt=":glad:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/heart.png" alt=":heart:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/grin.png" alt=":D" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/nervous.png" alt=":nervous:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/nuke.png" alt=":nuke:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/nuts.png" alt=":nuts:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/quizzical.png" alt=":quizzical:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/rollseyes.png" alt=":roll:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/sad.png" alt=":(" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/smile.png" alt=":)" /&gt;&lt;br&gt;&lt;img class="smiley" src="https://twhl.info/images/smilies/surprised.png" alt=":o" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/thebox.png" alt=":thebox:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/thefinger.png" alt=":thefinger:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/tired.png" alt=":tired:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/tongue.png" alt=":P" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/toocool.png" alt=":cool:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/unsure.png" alt=":\" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/biggrin.png" alt=":biggrin:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/wink.png" alt=";)" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/zonked.png" alt=":zonked:" /&gt;&lt;br&gt;&lt;img class="smiley" src="https://twhl.info/images/smilies/sarcastic.png" alt=":sarcastic:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/combine.png" alt=":combine:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/gak.png" alt=":gak:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/animehappy.png" alt=":^_^:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/pwnt.png" alt=":pwned:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/target.png" alt=":target:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/ninja.png" alt=":ninja:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/hammer.png" alt=":hammer:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/pirate.png" alt=":pirate:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/walter.png" alt=":walter:" /&gt;&lt;br&gt;&lt;img class="smiley" src="https://twhl.info/images/smilies/plastered.png" alt=":plastered:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/bigmouth.png" alt=":zomg:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/brokenheart.png" alt=":heartbreak:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/ciggiesmilie.png" alt=":ciggie:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/combines.png" alt=":combines:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/crowbar.png" alt=":crowbar:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/death.png" alt=":death:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/freeman.png" alt=":freeman:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/hecu.png" alt=":hecu:" /&gt; &lt;img class="smiley" src="https://twhl.info/images/smilies/nya.png" alt=":nya:" /&gt;
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;:aggrieved:  :aghast:    :x            :badass:   :confused:  :cry:      :cyclops:    :lol:      :|        :furious:
+:glad:       :heart:     :D            :nervous:  :nuke:      :nuts:     :quizzical:  :roll:     :(        :)
+:o           :thebox:    :thefinger:   :tired:    :P          :cool:     :\           :biggrin:  ;)        :zonked:
+:sarcastic:  :combine:   :gak:         :^_^:      :pwned:     :target:   :ninja:      :hammer:   :pirate:  :walter:
+:plastered:  :zomg:      :heartbreak:  :ciggie:   :combines:  :crowbar:  :death:      :freeman:  :hecu:    :nya:&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Linking"&gt;Linking&lt;/h2&gt;
+On the web, linking is one of the more useful things you can do. So, of course there are multiple ways you can link to things using WikiCode. To use auto-linking, make sure the URL starts with &lt;code&gt;http://&lt;/code&gt;. Be careful, because some browsers don&amp;#039;t include this by default.
+&lt;table class="table table-bordered"&gt;&lt;tr&gt;&lt;th&gt;Link method&lt;/th&gt;&lt;th&gt;Markup&lt;/th&gt;&lt;th&gt;Result&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Standard link&lt;/td&gt;&lt;td&gt;&lt;code&gt;[url]http://example.com[/url]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="http://example.com"&gt;http://example.com&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Custom link&lt;/td&gt;&lt;td&gt;&lt;code&gt;[url=http://example.com]Example link[/url]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="http://example.com"&gt;Example link&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Standard email link&lt;/td&gt;&lt;td&gt;&lt;code&gt;[email]test@example.com[/email]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="mailto:test@example.com"&gt;test@example.com&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Custom email link&lt;/td&gt;&lt;td&gt;&lt;code&gt;[email=test@example.com]Example email link[/email]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="mailto:test@example.com"&gt;Example email link&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Quick link&lt;/td&gt;&lt;td&gt;&lt;code&gt;[http://example.com]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="http://example.com"&gt;http://example.com&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Custom quick link&lt;/td&gt;&lt;td&gt;&lt;code&gt;[http://example.com|Example link]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="http://example.com"&gt;Example link&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Link to TWHL wiki page&lt;/td&gt;&lt;td&gt;&lt;code&gt;[[Home]]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="https://twhl.info/wiki/page/Home"&gt;Home&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Custom link to TWHL wiki page&lt;/td&gt;&lt;td&gt;&lt;code&gt;[[Home|Example link]]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="https://twhl.info/wiki/page/Home"&gt;Example link&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Auto-link&lt;/td&gt;&lt;td&gt;&lt;code&gt;http://example.com&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href="http://example.com"&gt;http://example.com&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;h2 id="Images"&gt;Images&lt;/h2&gt;
+Embedding images is another useful thing to do, especially on a wiki. Because it&amp;#039;s important, there&amp;#039;s a few different ways that images can be added to a post. The output isn&amp;#039;t shown in this case because images can take a fair amount of space, but you can experiment by using the preview button when typing a post.
+&lt;table class="table table-bordered"&gt;&lt;tr&gt;&lt;th&gt;Format&lt;/th&gt;&lt;th&gt;Markup&lt;/th&gt;&lt;th&gt;Notes&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Normal image&lt;/td&gt;&lt;td&gt;&lt;code&gt;[img]http://example.com/example.jpg[/img]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Embed a normal image (breaks text top and bottom)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Link image&lt;/td&gt;&lt;td&gt;&lt;code&gt;[url=http://example.com][img]http://example.com/example.jpg[/img][/url]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Clickable to open a URL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Inline image&lt;/td&gt;&lt;td&gt;&lt;code&gt;[simg]http://example.com/example.jpg[/simg]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Embed a small image (inline with text)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Advanced image&lt;/td&gt;&lt;td&gt;&lt;code&gt;[img:http://example.com/example.jpg]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;See details on the advanced image format below&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Link to TWHL wiki image&lt;/td&gt;&lt;td&gt;&lt;code&gt;[img:example.jpg]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;example.jpg&lt;/code&gt; is the title of the wiki upload&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;h3 id="Pasting_images"&gt;Pasting images&lt;/h3&gt;
+If you have an image on your clipboard (usually from taking a screenshot with the &lt;code&gt;PrtSc&lt;/code&gt; key, snipping tool in Windows 7, or &lt;code&gt;Win+Shift+S&lt;/code&gt; in Windows 10), you can press &lt;code&gt;Ctrl+V&lt;/code&gt; into a TWHL textbox to upload the image and insert the required WikiCode to embed the image. This will not work if you have an image &lt;strong&gt;file&lt;/strong&gt; on your clipboard - it must be an actual image.
+&lt;h3 id="Using_the_advanced_image_tag"&gt;Using the advanced image tag&lt;/h3&gt;
+&lt;div class="embedded image small right" title="This image has a url, the size is &amp;#039;small&amp;#039;, and the position is &amp;#039;right&amp;#039;."&gt;&lt;a href="http://example.com"&gt;&lt;span class="caption-panel"&gt;&lt;img class="caption-body" src="https://via.placeholder.com/400" alt="This image has a url, the size is &amp;#039;small&amp;#039;, and the position is &amp;#039;right&amp;#039;." /&gt;&lt;span class="caption"&gt;This image has a url, the size is &amp;#039;small&amp;#039;, and the position is &amp;#039;right&amp;#039;.&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;Sometimes you wish you had more flexibility when embedding images. Well, now you do! The advanced image tag gives you a few options when adding images to your post.&lt;br&gt;&lt;br&gt;The syntax can look something like this: &lt;code&gt;[img:example.jpg|url:http://example.com|size_modifier|position_modifier|caption_text]&lt;/code&gt;&lt;br&gt;&lt;br&gt;Where every field aside from &lt;code&gt;img:&lt;/code&gt; is optional. An explanation of each option:
+&lt;ul&gt;&lt;li&gt;&lt;code&gt;url:&lt;/code&gt; - should explain itself. Use this to make the image link to a website when you click on it.&lt;/li&gt;&lt;li&gt;&lt;code&gt;size_modifier&lt;/code&gt; - by default, the image tries to fill the width of the page. You can use the size modifier to change it to a fixed size. Valid values are: &lt;code&gt;thumb&lt;/code&gt;, &lt;code&gt;small&lt;/code&gt;, &lt;code&gt;medium&lt;/code&gt;, and &lt;code&gt;large&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;&lt;code&gt;position_modifier&lt;/code&gt; - by default, the image is centered and text will be wrapped above and below the image. You can use the position modifier to change the position and make the text flow around the image. Valid values are &lt;code&gt;inline&lt;/code&gt;, &lt;code&gt;left&lt;/code&gt;, &lt;code&gt;right&lt;/code&gt;, and &lt;code&gt;center&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;&lt;code&gt;caption_text&lt;/code&gt; - if you type anything aside from the values above, it will be treated as a caption to the image. You can only use plain text in the caption.&lt;/li&gt;&lt;/ul&gt;
+As an aside, video and audio files may sometimes be uploaded to the wiki. You can embed these files on modern browsers using the advanced image tag. Just replace &lt;code&gt;[img:]&lt;/code&gt; with &lt;code&gt;[video:]&lt;/code&gt; or &lt;code&gt;[audio:]&lt;/code&gt; to use them. You can embed external video and audio as well, but note that some formats are not supported on some browsers, so it might not work for everyone. The safest formats to use are mp3 for audio, and mp4 for video.
+&lt;h2 id="Youtube"&gt;Youtube&lt;/h2&gt;
+&lt;div class='embedded video left medium'&gt;&lt;div class='caption-panel'&gt;&lt;div class='video-container caption-body'&gt;&lt;div class='video-content'&gt;&lt;div class='uninitialised' data-youtube-id='oGlhgVz5r6E' style='background-image: url("https://i.ytimg.com/vi/oGlhgVz5r6E/hqdefault.jpg");'&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;span class='caption'&gt;This is the caption text&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;Embedding Youtube videos was an often-requested feature in TWHL, and now everybody can do it. To embed the video, you first need to find the video ID. You can find this in the URL of any Youtube video - it&amp;#039;s a string of 10 or so letters and numbers. It&amp;#039;s underlined in the example below.&lt;br&gt;&lt;br&gt;youtube.com/watch?v=&lt;span class="underline"&gt;oGlhgVz5r6E&lt;/span&gt;&lt;br&gt;&lt;br&gt;Once you have the ID, you can use the &lt;code&gt;[youtube]&lt;/code&gt; tag to add it to your post:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[youtube]oGlhgVz5r6E[/youtube]&lt;/code&gt;&lt;/pre&gt;
+You may also use the advanced image syntax. The options are similar to the &lt;code&gt;[img:]&lt;/code&gt; tag, but you can&amp;#039;t use the &lt;code&gt;url:&lt;/code&gt;, &lt;code&gt;inline&lt;/code&gt;, or &lt;code&gt;thumb&lt;/code&gt; options in the tag. An example:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[youtube:oGlhgVz5r6E|left|medium|This is the caption text]&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Headings"&gt;Headings&lt;/h2&gt;
+Headings follow the HTML trend by having six levels. To use a heading, start a new line with &lt;code&gt;=&lt;/code&gt; symbols. The more symbols you use, the smaller the heading will be.
+&lt;div class="embed-panel card card-default"&gt;&lt;div class="card-body"&gt;&lt;h1 id="Heading_1_(Largest)"&gt;Heading 1 (Largest)&lt;/h1&gt;
+&lt;h2 id="Heading_2"&gt;Heading 2&lt;/h2&gt;
+&lt;h3 id="Heading_3"&gt;Heading 3&lt;/h3&gt;
+&lt;h4 id="Heading_4"&gt;Heading 4&lt;/h4&gt;
+&lt;h5 id="Heading_5"&gt;Heading 5&lt;/h5&gt;
+&lt;h6 id="Heading_6_(Smallest)"&gt;Heading 6 (Smallest)&lt;/h6&gt;&lt;/div&gt;&lt;/div&gt;
+These headings are generated by this code:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;= Heading 1 (Largest)
+== Heading 2
+=== Heading 3
+==== Heading 4
+===== Heading 5
+====== Heading 6 (Smallest)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Lists"&gt;Lists&lt;/h2&gt;
+You can make lists by using &lt;code&gt;*&lt;/code&gt; for bullet points or &lt;code&gt;#&lt;/code&gt; for ordered lists. You can create sub-lists by adding extra symbols. You can mix list types on each level.
+&lt;div class="embed-panel card card-default"&gt;&lt;div class="card-body"&gt;&lt;ul&gt;&lt;li&gt;List item 1&lt;/li&gt;&lt;li&gt;List item 2&lt;ul&gt;&lt;li&gt;List item 2.1&lt;/li&gt;&lt;li&gt;List item 2.2&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ol&gt;&lt;li&gt;Step 1&lt;/li&gt;&lt;li&gt;Step 2&lt;ul&gt;&lt;li&gt;Be sure to do step 1 before step 2!&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+The markup for the above looks like:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;* List item 1
+* List item 2
+** List item 2.1
+** List item 2.2
+
+# Step 1
+# Step 2
+#* Be sure to do step 1 before step 2!&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Quotes"&gt;Quotes&lt;/h2&gt;
+Often you want to quote another user when you are replying to them. Again, there are two different ways to quote users.
+&lt;blockquote&gt;Markdown style quotes&lt;br&gt;This is the second line of the quote&lt;/blockquote&gt;
+The code looks like this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;&amp;gt; Markdown style quotes
+&amp;gt; This is the second line of the quote&lt;/code&gt;&lt;/pre&gt;
+It&amp;#039;s important to note that additional lines in the quote must also start with the &amp;#039;&amp;gt;&amp;#039; character.&lt;br&gt;&lt;br&gt;Quotes can be nested quite easily:
+&lt;blockquote&gt;&lt;blockquote&gt;This is the parent quote&lt;/blockquote&gt;
+This is the child quote&lt;/blockquote&gt;
+And the markup:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; This is the parent quote
+&amp;gt; This is the child quote&lt;/code&gt;&lt;/pre&gt;
+The second way to quote users is to use the &lt;code&gt;[quote]&lt;/code&gt; BBCode tag. These quotes can be nested as well. The new lines are not required, they are simply there to make it easier to read the example.
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[quote]
+    [quote]This is the parent quote[/quote]
+    This is the child quote
+[/quote]&lt;/code&gt;&lt;/pre&gt;
+BBCode quotes have the advantage of adding the name of the person you are quoting:&lt;blockquote&gt;&lt;strong class="quote-name"&gt;GLaDOS said:&lt;/strong&gt;Oh, hi. So, how are you holding up? Because I&amp;#039;m a potato!&lt;/blockquote&gt;Which can be done like this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[quote=GLaDOS]Oh, hi. So, how are you holding up? Because I&amp;#039;m a potato![/quote]&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Panels"&gt;Panels&lt;/h2&gt;
+Panels are a simple way to separate some content into its own block. Panels can&amp;#039;t be nested within each other, but they can contain any other markup you want. To create a panel, simply mark the start of the content with &lt;code&gt;~~~&lt;/code&gt;. The end of the panel will be marked by the next line that starts with &lt;code&gt;~~~&lt;/code&gt;.&lt;br&gt;&lt;br&gt;If the first line of your panel content starts with &lt;code&gt;:&lt;/code&gt;, it will be used as the panel title.
+&lt;div class="embed-panel card card-default"&gt;&lt;div class="card-header"&gt;Panel Title&lt;/div&gt;&lt;div class="card-body"&gt;This is a panel.&lt;br&gt;The markup for a panel looks like this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;~~~
+:Panel Title
+This is a panel.
+~~~&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+Panels can have different colours as well. The options are: &lt;code&gt;message&lt;/code&gt; (green), &lt;code&gt;info&lt;/code&gt; (blue), &lt;code&gt;warning&lt;/code&gt; (yellow), and &lt;code&gt;error&lt;/code&gt; (red). To use these colours, put the option after the &lt;code&gt;~~~&lt;/code&gt; at the beginning of the panel.
+&lt;div class="embed-panel card card-info"&gt;&lt;div class="card-header"&gt;Information Panel&lt;/div&gt;&lt;div class="card-body"&gt;This is an &amp;#039;informative&amp;#039; panel, it is coloured blue.&lt;br&gt;The markup for an info panel looks like this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;~~~info
+:Information Panel
+This is an &amp;#039;informative&amp;#039; panel, it is coloured blue.
+~~~&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id="Horizontal_line"&gt;Horizontal line&lt;/h2&gt;
+This is a pretty simple one. Simply have a line of text that has nothing but &lt;code&gt;---&lt;/code&gt;. It&amp;#039;ll draw a line that&amp;#039;s useful for separating sections of text in a post. It looks like this:
+&lt;hr /&gt;
+
+&lt;h2 id="Wiki_category"&gt;Wiki category&lt;/h2&gt;
+This is the only tag that&amp;#039;s specific to the wiki. You can use it in other places, but it will just be ignored. Add this tag to categorise wiki pages. Make sure you spell the category correctly, or the page will link to the wrong category. Here&amp;#039;s some examples:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[cat:Put Category Name Here]
+[cat:Source Tutorials]
+[cat:Requires Further Detail]&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Embedded_vault"&gt;Embedded vault&lt;/h2&gt;
+If you&amp;#039;re posting on a WIP thread or want to show off your new map or mod, you can embed the map vault item into the post. This is also good for posting example maps on a wiki page. To embed a vault item you need to know the ID of the item. You can find this at the end of the URL on the vault page. For example: twhl.info/vault/view/&lt;span class="underline"&gt;1234&lt;/span&gt;&lt;br&gt;&lt;br&gt;Then you put that ID in a vault tag like this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[vault:1234]&lt;/code&gt;&lt;/pre&gt;
+The vault item will be added to the page as a screenshot slideshow, along with a link to the item. If you would like to see what it looks like, you can use the post preview function to experiment with this feature.
+&lt;h2 id="Tables"&gt;Tables&lt;/h2&gt;
+If you want to get really fancy with your post, you can insert a table. The contents of a table can only be inline - for example, inline images, text formatting, links, and so on. You can&amp;#039;t put stuff like Youtube videos or quotes in a table.&lt;br&gt;&lt;br&gt;To create a table, you use one line of text per table row. For a header row, start the line with &lt;code&gt;|=&lt;/code&gt;. For a normal row, start the line with &lt;code&gt;|-&lt;/code&gt;. After that, simply enter the contents of each column, separated by a &lt;code&gt;|&lt;/code&gt; character. For example:
+&lt;table class="table table-bordered"&gt;&lt;tr&gt;&lt;th&gt;Header 1&lt;/th&gt;&lt;th&gt;Header 2&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+This table can be created by typing this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;|= Header 1 | Header 2
+|- Value 1  | Value 2&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="Advanced_text_formatting"&gt;Advanced text formatting&lt;/h2&gt;
+These advanced text formatting techniques are not possible using the Markdown style.
+&lt;table class="table table-bordered"&gt;&lt;tr&gt;&lt;th&gt;Format&lt;/th&gt;&lt;th&gt;BBCode&lt;/th&gt;&lt;th&gt;Notes&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style="color: red;"&gt;Colour text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[font=red]Colour text[/font]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Can use any colour name from the &lt;a href="https://developer.mozilla.org/en/docs/Web/CSS/color_value#Color_keywords"&gt;CSS colour list&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style="color: #FEA320;"&gt;Colour text 2&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[font=#FEA320]Colour text 2[/font]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Can use any RGB hex value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style="font-size: 20px;"&gt;Large text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[font size=20]Large text[/font]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Can use sizes between 6px and 40px&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style="font-size: 8px;"&gt;Small text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[font size=8]Small text[/font]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;The standard text size is 14px&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style="color: red;font-size: 20px;"&gt;Large red text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[font color=red size=20]Large text[/font]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Both size and colour can be combined. Remember to use the American spelling for &amp;quot;color&amp;quot;.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span class="spoiler" title="Spoiler"&gt;Spoiler tag&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[spoiler]Spoiler tag[/spoiler]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Don&amp;#039;t spoil stuff for others!&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span class="spoiler" title="Half-Life"&gt;There&amp;#039;s a resonance cascade&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[spoiler=Half-Life]There&amp;#039;s a resonance cascade[/spoiler]&lt;/code&gt;&lt;/td&gt;&lt;td&gt;It&amp;#039;s polite to specify what game/movie/etc. the spoiler is for&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;h2 id="Code_blocks"&gt;Code blocks&lt;/h2&gt;
+You may be wondering how those text blocks appeared above without the BBCode inside them being formatted. This is one of the features of a code block - everything inside them is treated as plain text, and not formatted. This is good for posting snippets of code. To post a code block using the Markdown style, surround the code with three backtick characters (that&amp;#039;s the ` character). This will align the code block to the left to avoid unnecessary whitespace.
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;```
+Surround your text with three backticks like this to format it as code.
+```
+&lt;/code&gt;&lt;/pre&gt;
+If you don&amp;#039;t like backticks for some reason, the BBCode tag you want is &lt;code&gt;[pre]&lt;/code&gt;. It stands for &amp;quot;preformatted&amp;quot;. Unlike backtick blocks, preformatted blocks will retain all whitespace, including at the start of lines.
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[pre]All the text inside this tag will be a code block. All whitespace inside this block will be retained.[/pre]&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="Syntax_highlighting"&gt;Syntax highlighting&lt;/h3&gt;
+
+&lt;pre class="lang-js"&gt;&lt;code&gt;function javascript() { console.log(&amp;#039;hello!&amp;#039;); }&lt;/code&gt;&lt;/pre&gt;
+TWHL&amp;#039;s code highlighting feature will try to detect which programming language your code block contains, but for more control over which language to use, you can specify the language with the following syntax (using &lt;code&gt;js&lt;/code&gt; as the example language):
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;[pre=js]function javascript() { console.log(&amp;#039;hello!&amp;#039;); }[/pre]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;```js
+function javascript() { console.log(&amp;#039;hello!&amp;#039;); }
+```
+&lt;/code&gt;&lt;/pre&gt;
+The following languages are supported:
+&lt;ul&gt;&lt;li&gt;PHP - &lt;code&gt;php&lt;/code&gt;&lt;/li&gt;&lt;li&gt;Windows batch - &lt;code&gt;dos&lt;/code&gt;, &lt;code&gt;bat&lt;/code&gt;, &lt;code&gt;cmd&lt;/code&gt;&lt;/li&gt;&lt;li&gt;CSS - &lt;code&gt;css&lt;/code&gt;&lt;/li&gt;&lt;li&gt;C++ - &lt;code&gt;cpp&lt;/code&gt;, &lt;code&gt;c&lt;/code&gt;, &lt;code&gt;c++&lt;/code&gt;&lt;/li&gt;&lt;li&gt;C# - &lt;code&gt;cs&lt;/code&gt;&lt;/li&gt;&lt;li&gt;INI config - &lt;code&gt;ini&lt;/code&gt;&lt;/li&gt;&lt;li&gt;JSON - &lt;code&gt;json&lt;/code&gt;&lt;/li&gt;&lt;li&gt;HTML/XML - &lt;code&gt;xml&lt;/code&gt;, &lt;code&gt;html&lt;/code&gt;&lt;/li&gt;&lt;li&gt;AngelScript - &lt;code&gt;angelscript&lt;/code&gt;&lt;/li&gt;&lt;li&gt;JavaScript - &lt;code&gt;javascript&lt;/code&gt;, &lt;code&gt;js&lt;/code&gt;&lt;/li&gt;&lt;li&gt;Force no highlighting - &lt;code&gt;plaintext&lt;/code&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;h2 id="Columns"&gt;Columns&lt;/h2&gt;
+For complex stuff you might want to present some content in columns, side by side. You can do that by using the columns directive. It looks like this:
+&lt;pre class="lang-plaintext"&gt;&lt;code&gt;%%columns=6:3:3
+Column 1
+%%
+Column 2
+%%
+Column 3
+%%&lt;/code&gt;&lt;/pre&gt;
+Which looks like this:
+&lt;div class="embed-panel card card-default"&gt;&lt;div class="card-body"&gt;&lt;div class="row"&gt;&lt;div class="col-md-6"&gt;Column 1&lt;/div&gt;&lt;div class="col-md-3"&gt;Column 2&lt;/div&gt;&lt;div class="col-md-3"&gt;Column 3&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+Some things to note:
+&lt;ul&gt;&lt;li&gt;The column widths are specified in the first line, in this case, &lt;code&gt;6:3:3&lt;/code&gt;. These numbers are in respect to the page being 12 units wide. The column widths &lt;strong&gt;must&lt;/strong&gt; add up to a total of 12 or the columns will not work.&lt;/li&gt;&lt;li&gt;You need to specify the same number of content sections as columns in the first line, or the columns will not work.&lt;/li&gt;&lt;li&gt;On small resolution screens (phones, tablets), the columns will show underneath each other instead of side by side.&lt;/li&gt;&lt;/ul&gt;
+
+&lt;hr /&gt;
+Phew! That&amp;#039;s everything! I know there&amp;#039;s a lot of stuff here, but don&amp;#039;t worry too much about it. If you need to do a particular thing, just come back to this page later so you can refresh your memory.</value>
+  </data>
+  <data name="TwhlFormattingWikiPageInput" xml:space="preserve">
+    <value>[cat:Meta]
+
+TWHL uses a custom text syntax that we call /WikiCode/. It is a combination of Markdown and BBCode, with a few extra things to spice it up. If you're familiar with either of these markup systems, you shouldn't have too much trouble.
+
+== Basic text formatting
+
+There are two ways to do basic text formatting - the /Markdown/ way and the /BBCode/ way. Markdown style is usually faster to type, but BBCode is generally more flexible.
+
+|= Format | Markdown style | BBCode style
+|- *Bold text* | `*Bold text*` | [code][b]Bold text[/b][/code]
+|- /Italic text/ | `/Italic text/` | [code][i]Italic text[/i][/code]
+|- _Underlined text_ | `_Underlined text_` | [code][u]Underlined text[/u][/code]
+|- ~Strikethrough text~ | `~Strikethrough text~` | [code][s]Strikethrough text[/s][/code]
+|- `Inline code` | [code]`Inline code`[/code] | [code][ code ]Inline code[ /code ][/code] (remove extra spaces)
+
+== Smilies/emoticons/emoji
+
+Before the land of smartphones and dedicated Unicode glyphs, emoji were known as 'smilies', and were not text, but images! Bizarre, I know. TWHL has complete Unicode support, so go nuts with your smartphone keyboards and you won't have any issues with favourites such as `U+1F4A9: PILE OF POO`: 💩. For us plebs using desktop browsers, though, you can also use the traditional smilies from the good ol' days.
+
+Here is TWHL's library of smilies and their corresponding text representations. Simply type the text and it will be replaced with a smiley image in the post.
+
+ :aggrieved: :aghast: :x :badass: :confused: :cry: :cyclops: :lol: :| :furious:
+:glad: :heart: :D :nervous: :nuke: :nuts: :quizzical: :roll: :( :)
+:o :thebox: :thefinger: :tired: :P :cool: :\ :biggrin: ;) :zonked:
+:sarcastic: :combine: :gak: :^_^: :pwned: :target: :ninja: :hammer: :pirate: :walter:
+:plastered: :zomg: :heartbreak: :ciggie: :combines: :crowbar: :death: :freeman: :hecu: :nya: 
+
+```plaintext
+:aggrieved:  :aghast:    :x            :badass:   :confused:  :cry:      :cyclops:    :lol:      :|        :furious:
+:glad:       :heart:     :D            :nervous:  :nuke:      :nuts:     :quizzical:  :roll:     :(        :)
+:o           :thebox:    :thefinger:   :tired:    :P          :cool:     :\           :biggrin:  ;)        :zonked:
+:sarcastic:  :combine:   :gak:         :^_^:      :pwned:     :target:   :ninja:      :hammer:   :pirate:  :walter:
+:plastered:  :zomg:      :heartbreak:  :ciggie:   :combines:  :crowbar:  :death:      :freeman:  :hecu:    :nya:
+```
+
+== Linking
+
+On the web, linking is one of the more useful things you can do. So, of course there are multiple ways you can link to things using WikiCode. To use auto-linking, make sure the URL starts with `http://`. Be careful, because some browsers don't include this by default.
+
+|= Link method | Markup | Result
+|- Standard link | [code][url]http://example.com[/url][/code] | [url]http://example.com[/url]
+|- Custom link | [code][url=http://example.com]Example link[/url][/code] | [url=http://example.com]Example link[/url]
+|- Standard email link | [code][email]test@example.com[/email][/code] | [email]test@example.com[/email]
+|- Custom email link | [code][email=test@example.com]Example email link[/email][/code] | [email=test@example.com]Example email link[/email]
+|- Quick link | [code][http://example.com][/code] | [http://example.com]
+|- Custom quick link | [code][http://example.com|Example link][/code] | [http://example.com|Example link]
+|- Link to TWHL wiki page | [code][[Home]][/code] | [[Home]]
+|- Custom link to TWHL wiki page | [code][[Home|Example link]][/code] | [[Home|Example link]]
+|- Auto-link | `http://example.com` | http://example.com
+
+== Images
+
+Embedding images is another useful thing to do, especially on a wiki. Because it's important, there's a few different ways that images can be added to a post. The output isn't shown in this case because images can take a fair amount of space, but you can experiment by using the preview button when typing a post.
+
+|= Format | Markup | Notes
+|- Normal image | [code][img]http://example.com/example.jpg[/img][/code] | Embed a normal image (breaks text top and bottom)
+|- Link image | [code][url=http://example.com][img]http://example.com/example.jpg[/img][/url][/code] | Clickable to open a URL
+|- Inline image | [code][simg]http://example.com/example.jpg[/simg][/code] | Embed a small image (inline with text)
+|- Advanced image | [code][img:http://example.com/example.jpg][/code] | See details on the advanced image format below
+|- Link to TWHL wiki image | [code][img:example.jpg][/code] | `example.jpg` is the title of the wiki upload
+
+=== Pasting images
+
+If you have an image on your clipboard (usually from taking a screenshot with the `PrtSc` key, snipping tool in Windows 7, or `Win+Shift+S` in Windows 10), you can press `Ctrl+V` into a TWHL textbox to upload the image and insert the required WikiCode to embed the image. This will not work if you have an image *file* on your clipboard - it must be an actual image.
+
+=== Using the advanced image tag
+
+[img:https://via.placeholder.com/400|url:http://example.com|small|right|This image has a url, the size is 'small', and the position is 'right'.]
+
+Sometimes you wish you had more flexibility when embedding images. Well, now you do! The advanced image tag gives you a few options when adding images to your post.
+
+The syntax can look something like this: [code][img:example.jpg|url:http://example.com|size_modifier|position_modifier|caption_text][/code]
+
+Where every field aside from `img:` is optional. An explanation of each option:
+
+- `url:` - should explain itself. Use this to make the image link to a website when you click on it.
+- `size_modifier` - by default, the image tries to fill the width of the page. You can use the size modifier to change it to a fixed size. Valid values are: `thumb`, `small`, `medium`, and `large`.
+- `position_modifier` - by default, the image is centered and text will be wrapped above and below the image. You can use the position modifier to change the position and make the text flow around the image. Valid values are `inline`, `left`, `right`, and `center`.
+- `caption_text` - if you type anything aside from the values above, it will be treated as a caption to the image. You can only use plain text in the caption.
+
+As an aside, video and audio files may sometimes be uploaded to the wiki. You can embed these files on modern browsers using the advanced image tag. Just replace [code][img:][/code] with [code][video:][/code] or [code][audio:][/code] to use them. You can embed external video and audio as well, but note that some formats are not supported on some browsers, so it might not work for everyone. The safest formats to use are mp3 for audio, and mp4 for video.
+
+== Youtube
+
+[youtube:oGlhgVz5r6E|left|medium|This is the caption text]
+
+Embedding Youtube videos was an often-requested feature in TWHL, and now everybody can do it. To embed the video, you first need to find the video ID. You can find this in the URL of any Youtube video - it's a string of 10 or so letters and numbers. It's underlined in the example below.
+
+youtube.com/watch?v=[u]oGlhgVz5r6E[/u]
+
+Once you have the ID, you can use the [code][youtube][/code] tag to add it to your post:
+
+```plaintext
+[youtube]oGlhgVz5r6E[/youtube]
+```
+
+You may also use the advanced image syntax. The options are similar to the [code][img:][/code] tag, but you can't use the `url:`, `inline`, or `thumb` options in the tag. An example:
+
+```plaintext
+[youtube:oGlhgVz5r6E|left|medium|This is the caption text]
+```
+
+== Headings
+
+Headings follow the HTML trend by having six levels. To use a heading, start a new line with `=` symbols. The more symbols you use, the smaller the heading will be.
+
+~~~
+= Heading 1 (Largest)
+== Heading 2
+=== Heading 3
+==== Heading 4
+===== Heading 5
+====== Heading 6 (Smallest)
+~~~
+
+These headings are generated by this code:
+
+```plaintext
+= Heading 1 (Largest)
+== Heading 2
+=== Heading 3
+==== Heading 4
+===== Heading 5
+====== Heading 6 (Smallest)
+```
+
+== Lists
+
+You can make lists by using `*` for bullet points or `#` for ordered lists. You can create sub-lists by adding extra symbols. You can mix list types on each level.
+
+~~~
+* List item 1
+* List item 2
+** List item 2.1
+** List item 2.2
+
+# Step 1
+# Step 2
+#* Be sure to do step 1 before step 2!
+~~~
+
+The markup for the above looks like:
+
+```plaintext
+* List item 1
+* List item 2
+** List item 2.1
+** List item 2.2
+
+# Step 1
+# Step 2
+#* Be sure to do step 1 before step 2!
+```
+
+== Quotes
+
+Often you want to quote another user when you are replying to them. Again, there are two different ways to quote users.
+
+&gt; Markdown style quotes
+&gt; This is the second line of the quote
+
+The code looks like this:
+
+```plaintext
+&gt; Markdown style quotes
+&gt; This is the second line of the quote
+```
+
+It's important to note that additional lines in the quote must also start with the '&gt;' character.
+
+Quotes can be nested quite easily:
+
+&gt;&gt; This is the parent quote
+&gt; This is the child quote
+
+And the markup:
+
+```plaintext
+&gt;&gt; This is the parent quote
+&gt; This is the child quote
+```
+
+The second way to quote users is to use the [code][quote][/code] BBCode tag. These quotes can be nested as well. The new lines are not required, they are simply there to make it easier to read the example.
+
+```plaintext
+[quote]
+    [quote]This is the parent quote[/quote]
+    This is the child quote
+[/quote]
+```
+
+BBCode quotes have the advantage of adding the name of the person you are quoting:
+
+[quote=GLaDOS]Oh, hi. So, how are you holding up? Because I'm a potato![/quote]
+
+Which can be done like this:
+
+```plaintext
+[quote=GLaDOS]Oh, hi. So, how are you holding up? Because I'm a potato![/quote]
+```
+
+== Panels
+
+Panels are a simple way to separate some content into its own block. Panels can't be nested within each other, but they can contain any other markup you want. To create a panel, simply mark the start of the content with `~~~`. The end of the panel will be marked by the next line that starts with `~~~`.
+
+If the first line of your panel content starts with `:`, it will be used as the panel title.
+
+~~~
+:Panel Title
+This is a panel.
+The markup for a panel looks like this:
+```plaintext
+    ~~~
+    :Panel Title
+    This is a panel.
+    ~~~
+```
+~~~
+
+Panels can have different colours as well. The options are: `message` (green), `info` (blue), `warning` (yellow), and `error` (red). To use these colours, put the option after the `~~~` at the beginning of the panel.
+
+~~~info
+:Information Panel
+This is an 'informative' panel, it is coloured blue.
+The markup for an info panel looks like this:
+```plaintext
+    ~~~info
+    :Information Panel
+    This is an 'informative' panel, it is coloured blue.
+    ~~~
+```
+~~~
+
+== Horizontal line
+
+This is a pretty simple one. Simply have a line of text that has nothing but `---`. It'll draw a line that's useful for separating sections of text in a post. It looks like this:
+
+---
+
+== Wiki category
+
+This is the only tag that's specific to the wiki. You can use it in other places, but it will just be ignored. Add this tag to categorise wiki pages. Make sure you spell the category correctly, or the page will link to the wrong category. Here's some examples:
+
+```plaintext
+[cat:Put Category Name Here]
+[cat:Source Tutorials]
+[cat:Requires Further Detail]
+```
+
+== Embedded vault
+
+If you're posting on a WIP thread or want to show off your new map or mod, you can embed the map vault item into the post. This is also good for posting example maps on a wiki page. To embed a vault item you need to know the ID of the item. You can find this at the end of the URL on the vault page. For example: twhl.info/vault/view/[u]1234[/u]
+
+Then you put that ID in a vault tag like this:
+
+```plaintext
+[vault:1234]
+```
+
+The vault item will be added to the page as a screenshot slideshow, along with a link to the item. If you would like to see what it looks like, you can use the post preview function to experiment with this feature.
+
+== Tables
+
+If you want to get really fancy with your post, you can insert a table. The contents of a table can only be inline - for example, inline images, text formatting, links, and so on. You can't put stuff like Youtube videos or quotes in a table.
+
+To create a table, you use one line of text per table row. For a header row, start the line with `|=`. For a normal row, start the line with `|-`. After that, simply enter the contents of each column, separated by a `|` character. For example:
+
+|= Header 1 | Header 2
+|- Value 1 | Value 2
+
+This table can be created by typing this:
+
+```plaintext
+|= Header 1 | Header 2
+|- Value 1  | Value 2
+```
+
+== Advanced text formatting
+
+These advanced text formatting techniques are not possible using the Markdown style.
+
+|= Format | BBCode | Notes
+|- [font=red]Colour text[/font] | [code][font=red]Colour text[/font][/code] | Can use any colour name from the [https://developer.mozilla.org/en/docs/Web/CSS/color_value#Color_keywords|CSS colour list]
+|- [font=#FEA320]Colour text 2[/font] | [code][font=#FEA320]Colour text 2[/font][/code] | Can use any RGB hex value
+|- [font size=20]Large text[/font] | [code][font size=20]Large text[/font][/code] | Can use sizes between 6px and 40px
+|- [font size=8]Small text[/font] | [code][font size=8]Small text[/font][/code] | The standard text size is 14px
+|- [font color=red size=20]Large red text[/font] | [code][font color=red size=20]Large text[/font][/code] | Both size and colour can be combined. Remember to use the American spelling for "color".
+|- [spoiler]Spoiler tag[/spoiler] | [code][spoiler]Spoiler tag[/spoiler][/code] | Don't spoil stuff for others!
+|- [spoiler=Half-Life]There's a resonance cascade[/spoiler] | [code][spoiler=Half-Life]There's a resonance cascade[/spoiler][/code] | It's polite to specify what game/movie/etc. the spoiler is for
+
+== Code blocks
+
+You may be wondering how those text blocks appeared above without the BBCode inside them being formatted. This is one of the features of a code block - everything inside them is treated as plain text, and not formatted. This is good for posting snippets of code. To post a code block using the Markdown style, surround the code with three backtick characters (that's the ` character). This will align the code block to the left to avoid unnecessary whitespace.
+
+[pre=plaintext]
+```
+Surround your text with three backticks like this to format it as code.
+```
+[/pre]
+
+If you don't like backticks for some reason, the BBCode tag you want is [code][pre][/code]. It stands for "preformatted". Unlike backtick blocks, preformatted blocks will retain all whitespace, including at the start of lines.
+
+```plaintext
+[pre]All the text inside this tag will be a code block. All whitespace inside this block will be retained.[/pre]
+```
+
+=== Syntax highlighting
+
+```js
+function javascript() { console.log('hello!'); }
+```
+
+TWHL's code highlighting feature will try to detect which programming language your code block contains, but for more control over which language to use, you can specify the language with the following syntax (using `js` as the example language):
+
+```plaintext
+[pre=js]function javascript() { console.log('hello!'); }[/pre]
+
+```
+[pre=plaintext]
+```js
+function javascript() { console.log('hello!'); }
+```
+[/pre]
+
+The following languages are supported:
+
+- PHP - `php`
+- Windows batch - `dos`, `bat`, `cmd`
+- CSS - `css`
+- C++ - `cpp`, `c`, `c++`
+- C# - `cs`
+- INI config - `ini`
+- JSON - `json`
+- HTML/XML - `xml`, `html`
+- AngelScript - `angelscript`
+- JavaScript - `javascript`, `js`
+- Force no highlighting - `plaintext`
+
+== Columns
+
+For complex stuff you might want to present some content in columns, side by side. You can do that by using the columns directive. It looks like this:
+
+```plaintext
+%%columns=6:3:3
+Column 1
+%%
+Column 2
+%%
+Column 3
+%%
+```
+
+Which looks like this:
+
+~~~
+%%columns=6:3:3
+Column 1
+%%
+Column 2
+%%
+Column 3
+%%
+~~~
+
+Some things to note:
+
+* The column widths are specified in the first line, in this case, `6:3:3`. These numbers are in respect to the page being 12 units wide. The column widths *must* add up to a total of 12 or the columns will not work.
+* You need to specify the same number of content sections as columns in the first line, or the columns will not work.
+* On small resolution screens (phones, tablets), the columns will show underneath each other instead of side by side.
+
+---
+
+Phew! That's everything! I know there's a lot of stuff here, but don't worry too much about it. If you need to do a particular thing, just come back to this page later so you can refresh your memory.</value>
+  </data>
+</root>

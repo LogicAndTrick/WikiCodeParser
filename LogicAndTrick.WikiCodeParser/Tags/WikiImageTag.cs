@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using LogicAndTrick.WikiCodeParser.Elements;
 using LogicAndTrick.WikiCodeParser.Models;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
@@ -91,7 +92,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             if (tag == "img" && url != null && ValidateUrl(url))
             {
-                if (Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))
+                if (!Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))
                 {
                     url = System.Web.HttpUtility.HtmlDecode(url);
                     content.Nodes.Add(new MetadataNode("WikiLink", url));
@@ -116,14 +117,17 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (embed != null) content.Nodes.Add(embed);
             if (caption != null) content.Nodes.Add(new HtmlNode("<span class=\"caption\">", new PlainTextNode(caption), "</span>") { PlainAfter = "\n" });
 
-            var before = $" <{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{caption}\"" : "") + ">"
+            var before = $"<{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{System.Web.HttpUtility.HtmlAttributeEncode(caption)}\"" : "") + ">"
                          + (url.Length > 0 ? "<a href=\"" + System.Web.HttpUtility.HtmlAttributeEncode(url) + "\">" : "")
                          + "<span class=\"caption-panel\">";
             var after = "</span>"
                         + (url.Length > 0 ? "</a>" : "")
-                        + $"</{el}> ";
+                        + $"</{el}>";
 
-            return new HtmlNode(before, content, after);
+            return new HtmlNode(before, content, after)
+            {
+                IsBlockNode = el == "div"
+            };
         }
 
         private INode GetEmbedObject(string tag, string url, string caption, bool loop)
