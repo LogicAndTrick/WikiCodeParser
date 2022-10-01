@@ -52,9 +52,17 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var current = lines.Current();
+
             // Put all the subtrees into a dummy item node
             var item = new ListItemNode(PlainTextNode.Empty);
             var _ = CreateListItems(item, "", parser, data, lines, scope).ToList();
+
+            if (!item.Subtrees.Any())
+            {
+                lines.SetCurrent(current);
+                return null;
+            }
 
             // Pull the subtrees out again for the result
             if (item.Subtrees.Count == 1) return item.Subtrees[0];
@@ -88,7 +96,26 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 if (value.Length > 1 && value[0] == ' ' && prefix.Length > 0) // don't allow this if we're parsing at level 0
                 {
                     // List item
-                    value = value.Trim();
+                    value = value.TrimStart();
+
+                    // Support for continuations
+                    while (value.EndsWith("^"))
+                    {
+                        if (value.EndsWith("\\^")) // super basic way to escape continuations
+                        {
+                            value = value.Substring(0, value.Length - 2) + "^";
+                            break;
+                        }
+                        else if (lines.Next())
+                        {
+                            value = value.Substring(0, value.Length - 1).Trim() + "\n" + lines.Value().TrimStart();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
                     var pt = parser.ParseTags(data, value.Trim(), scope, "inline");
                     lastItemNode = new ListItemNode(pt);
                     yield return lastItemNode;

@@ -58,8 +58,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             if (res.Success)
             {
                 var name = res.Groups[1].Value;
-                var node = data.Get<INode>($"Ref::{name}", () => null);
-                if (node != null) return node;
+                return new RefNode(data, name);
             }
             return parser.ParseTags(data, text, scope, "inline");
         }

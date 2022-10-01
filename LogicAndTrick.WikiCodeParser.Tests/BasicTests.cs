@@ -136,6 +136,24 @@ public class BasicTests
         Assert.AreEqual(output, result.ToHtml());
     }
 
+    [TestMethod]
+    public void TestListsAndTables()
+    {
+        var input = "- one ^\n" +
+                    "  two";
+        var output = "<ul>\n<li>one<br/>\ntwo</li>\n</ul>\n";
+
+        var config = new ParserConfiguration();
+        config.Elements.Add(new MdTableElement());
+        config.Elements.Add(new MdListElement());
+        config.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
     private static IList<INode> GetLeaves(INode root)
     {
         var list = new List<INode>();

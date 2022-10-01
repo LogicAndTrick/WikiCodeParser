@@ -33,7 +33,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 return null;
             }
 
-            line = line.Substring(0, res.Value.Length);
+            line = line.Substring(res.Value.Length);
             string lang = null;
             var hl = false;
             if (res.Groups[1].Success) {
@@ -49,6 +49,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
             else
             {
+                if (line.Length > 0) arr.Add(line);
                 var found = false;
                 while (lines.Next())
                 {

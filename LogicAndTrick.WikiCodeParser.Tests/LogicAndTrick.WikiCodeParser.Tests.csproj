@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Elements\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LogicAndTrick.WikiCodeParser\LogicAndTrick.WikiCodeParser.csproj" />
   </ItemGroup>
 
