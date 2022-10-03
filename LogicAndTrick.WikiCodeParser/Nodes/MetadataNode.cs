@@ -19,7 +19,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
         public string ToHtml() => string.Empty;
         public string ToPlainText() => string.Empty;
-        public IList<INode> GetChildren() => new INode[0];
+        public IList<INode> GetChildren() => Array.Empty<INode>();
         public void ReplaceChild(int i, INode node) => throw new InvalidOperationException();
         public bool HasContent() => false;
     }

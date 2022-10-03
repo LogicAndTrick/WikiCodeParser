@@ -14,13 +14,13 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             return null;
         }
 
-        public override bool Matches(State state, string token)
+        public override bool Matches(State state, string token, TagParseContext context)
         {
             var tag = GetTag(state);
             return tag != null;
         }
 
-        public override INode Parse(Parser parser, ParseData data, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
 

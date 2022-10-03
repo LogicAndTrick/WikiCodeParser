@@ -52,6 +52,7 @@ namespace LogicAndTrick.WikiCodeParser
 
         public char Next()
         {
+            if (Index >= Length) return '\0';
             return Text[Index++];
         }
 

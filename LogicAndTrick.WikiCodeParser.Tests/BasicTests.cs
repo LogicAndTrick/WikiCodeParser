@@ -199,6 +199,7 @@ public class BasicTests
         // these are block tags and shouldn't be allowed in inline tags
         DefaultConfigurationTest("[font=blue][img]https://example.com/example.png[/img][/font]", @"<span style=""color: blue;"">[img]https://example.com/example.png[/img]</span>");
         DefaultConfigurationTest("[font=blue][youtube]123[/youtube][/font]", @"<span style=""color: blue;"">[youtube]123[/youtube]</span>");
+        DefaultConfigurationTest("[font=blue][pre]123[/pre][/font]", @"<span style=""color: blue;"">[pre]123[/pre]</span>");
     }
 
     [TestMethod]
@@ -215,6 +216,28 @@ public class BasicTests
         DefaultConfigurationTest("[font=blue][simg]https://example.com/example.png[/simg][/font]", @"<span style=""color: blue;""><span class=""embedded image inline""><span class=""caption-panel""><img class=""caption-body"" src=""https://example.com/example.png"" alt=""User posted image"" /></span></span></span>");
         DefaultConfigurationTest("[font=blue][url]https://example.com[/url][/font]", @"<span style=""color: blue;""><a href=""https://example.com"">https://example.com</a></span>");
         DefaultConfigurationTest("[font=blue][https://example.com][/font]", @"<span style=""color: blue;""><a href=""https://example.com"">https://example.com</a></span>");
+    }
+
+    [TestMethod]
+    public void TestAllowNestedFontTags()
+    {
+        var input = "A[font=red]B[font=blue]C[/font]D[/font]E";
+        var expected = "A<span style=\"color: red;\">B<span style=\"color: blue;\">C</span>D</span>E";
+
+        var config = ParserConfiguration.Default();
+        config.Tags.Find(x => x is FontTag)!.IsNested = true;
+
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+        Assert.AreEqual(expected, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestPreventErrors()
+    {
+        var input = "[font=\n[pre]test[/pre]";
+        var expected = "[font=\n<pre><code>test</code></pre>";
+        DefaultConfigurationTest(input, expected);
     }
 
     private static void DefaultConfigurationTest(string input, string expected)

@@ -27,5 +27,11 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             tag.ElementClass = elementClass;
             return tag;
         }
+
+        public static Tag WithBlock(this Tag tag, bool isBlock)
+        {
+            tag.IsBlock = isBlock;
+            return tag;
+        }
     }
 }

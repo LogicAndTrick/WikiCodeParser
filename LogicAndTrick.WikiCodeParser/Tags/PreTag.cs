@@ -11,6 +11,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             Token = "pre";
             Element = "pre";
+            IsBlock = true;
         }
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)

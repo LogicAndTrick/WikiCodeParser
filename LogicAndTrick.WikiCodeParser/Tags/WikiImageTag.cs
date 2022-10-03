@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Models;
@@ -28,13 +29,13 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             return null;
         }
 
-        public override bool Matches(State state, string token)
+        public override bool Matches(State state, string token, TagParseContext context)
         {
             var tag = GetTag(state);
             return tag != null;
         }
 
-        public override INode Parse(Parser parser, ParseData data, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
 
@@ -64,7 +65,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var content = new NodeCollection();
 
             var image = match.Groups[1].Value;
-            var @params = match.Groups[2].Success ? match.Groups[2].Value.Trim().Split('|') : new string[0];
+            var @params = match.Groups[2].Success ? match.Groups[2].Value.Trim().Split('|') : Array.Empty<string>();
             var src = image;
             if (!image.Contains("/"))
             {
@@ -102,6 +103,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             var el = "span";
+
+            // Force inline if we are in an inline context
+            if (context == TagParseContext.Inline && !classes.Contains("inline")) classes.Add("inline");
 
             // Non-inline images should eat any whitespace after them
             if (!classes.Contains("inline"))

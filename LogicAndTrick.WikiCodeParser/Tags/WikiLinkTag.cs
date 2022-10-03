@@ -11,14 +11,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = null;
         }
 
-        public override bool Matches(State state, string token)
+        public override bool Matches(State state, string token, TagParseContext context)
         {
             var pt = state.PeekTo("]]");
             return pt?.Length > 1 && pt[1] == '[' && !pt.Contains("\n")
                    && Regex.IsMatch(pt.Substring(2), @"([^\]]*?)(?:\|([^\]]*?))?", RegexOptions.IgnoreCase);
         }
 
-        public override INode Parse(Parser parser, ParseData data, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
 

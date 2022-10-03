@@ -11,14 +11,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Element = "";
         }
 
-        public override bool Matches(State state, string token)
+        public override bool Matches(State state, string token, TagParseContext context)
         {
             var peekTag = state.Peek(8);
             var pt = state.PeekTo("]");
             return peekTag == "[credit:" && pt != null && pt.Length > 8 && !pt.Contains("\n");
         }
 
-        public override INode Parse(Parser parser, ParseData data, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
             if (state.Next() != '[')

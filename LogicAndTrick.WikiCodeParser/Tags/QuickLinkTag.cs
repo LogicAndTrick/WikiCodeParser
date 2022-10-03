@@ -14,7 +14,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Options = new[] {"url"};
         }
 
-        public override bool Matches(State state, string token)
+        public override bool Matches(State state, string token, TagParseContext context)
         {
             var pt = state.PeekTo("]");
             if (string.IsNullOrEmpty(pt)) return false;
@@ -23,7 +23,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             return pt.Length > 0 && !pt.Contains("\n") && Regex.IsMatch(pt, @"^([a-z]{2,10}://[^\]]*?)(?:\|([^\]]*?))?", RegexOptions.IgnoreCase);
         }
 
-        public override INode Parse(Parser parser, ParseData data, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
 

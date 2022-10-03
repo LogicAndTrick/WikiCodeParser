@@ -39,7 +39,7 @@ namespace LogicAndTrick.WikiCodeParser
 
             // Embedded
             conf.Tags.Add(new ImageTag());
-            conf.Tags.Add(new ImageTag().WithToken("simg"));
+            conf.Tags.Add(new ImageTag().WithToken("simg").WithBlock(false));
             conf.Tags.Add(new WikiImageTag());
             conf.Tags.Add(new YoutubeTag());
             conf.Tags.Add(new WikiYoutubeTag());

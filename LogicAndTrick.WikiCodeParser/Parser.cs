@@ -158,9 +158,9 @@ namespace LogicAndTrick.WikiCodeParser
                 var found = false;
                 foreach (var t in inscope)
                 {
-                    if (t.Matches(state, token))
+                    if (t.Matches(state, token, context))
                     {
-                        var parsed = t.Parse(this, data, state, scope);
+                        var parsed = t.Parse(this, data, state, scope, context);
                         if (parsed != null)
                         {
                             root.Nodes.Add(parsed);

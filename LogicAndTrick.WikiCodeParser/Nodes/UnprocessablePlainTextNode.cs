@@ -17,7 +17,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
         public string ToHtml() => HtmlHelper.Encode(Text);
         public string ToPlainText() => Text;
-        public IList<INode> GetChildren() => new INode[0];
+        public IList<INode> GetChildren() => Array.Empty<INode>();
         public void ReplaceChild(int i, INode node) => throw new InvalidOperationException();
         public bool HasContent() => !String.IsNullOrWhiteSpace(Text);
     }

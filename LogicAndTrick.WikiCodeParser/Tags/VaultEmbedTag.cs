@@ -12,14 +12,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Options = new[] {"id"};
         }
 
-        public override bool Matches(State state, string token)
+        public override bool Matches(State state, string token, TagParseContext context)
         {
             var peekTag = state.Peek(7);
             var pt = state.PeekTo("]");
-            return peekTag == "[vault:" && pt?.Length > 7 && !pt.Contains("\n");
+            return context == TagParseContext.Block && peekTag == "[vault:" && pt?.Length > 7 && !pt.Contains("\n");
         }
 
-        public override INode Parse(Parser parser, ParseData data, State state, string scope)
+        public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
 

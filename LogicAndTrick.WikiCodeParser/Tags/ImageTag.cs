@@ -10,9 +10,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         public ImageTag()
         {
             Token = "img";
-            Element = "span";
+            Element = "div";
             MainOption = "url";
             Options = new[] {"url"};
+            IsBlock = true;
         }
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
@@ -24,13 +25,16 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var classes = new List<string>{"embedded", "image"};
             if (ElementClass != null) classes.Add(ElementClass);
-            if (Token == "simg") classes.Add("inline");
-
             var element = Element;
-            if (!classes.Contains("inline"))
+
+            if (!IsBlock)
+            {
+                element = "span";
+                classes.Add("inline");
+            }
+            else
             {
                 state.SkipWhitespace();
-                element = "div";
             }
 
             var before = $"<{element} class=\"{String.Join(" ", classes)}\">" +

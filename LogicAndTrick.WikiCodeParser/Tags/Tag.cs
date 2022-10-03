@@ -24,7 +24,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         protected Tag()
         {
-            Options = new string[0];
+            Options = Array.Empty<string>();
             Scopes = new List<string>();
         }
 
@@ -35,12 +35,11 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             ElementClass = elementClass;
         }
 
-        public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) ||
-                                                     Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
+        public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) || Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
 
-        public virtual bool Matches(State state, string token) => token?.ToLower() == Token;
+        public virtual bool Matches(State state, string token, TagParseContext context) => token?.ToLower() == Token && (context == TagParseContext.Block || !IsBlock);
 
-        public virtual INode Parse(Parser parser, ParseData data, State state, string scope)
+        public virtual INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
             var tokenLength = Token.Length;
