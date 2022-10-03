@@ -181,6 +181,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             {
                 Items[i] = (ListItemNode) node;
             }
+
+            public bool HasContent()
+            {
+                return true;
+            }
         }
 
         public class ListItemNode : INode
@@ -225,6 +230,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             {
                 if (i == 0) Content = node;
                 else Subtrees[i - 1] = (ListNode) node;
+            }
+
+            public bool HasContent()
+            {
+                return true;
             }
         }
     }

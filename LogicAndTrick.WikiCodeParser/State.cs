@@ -18,9 +18,9 @@ namespace LogicAndTrick.WikiCodeParser
             Index = 0;
         }
 
-        public string ScanTo(string find)
+        public string ScanTo(string find, StringComparison comparison = StringComparison.Ordinal)
         {
-            var pos = Text.IndexOf(find, Index, StringComparison.Ordinal);
+            var pos = Text.IndexOf(find, Index, comparison);
             if (pos < 0) pos = Length;
             var ret = Text.Substring(Index, pos - Index);
             Index = pos;

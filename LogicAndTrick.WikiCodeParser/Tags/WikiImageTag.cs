@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using LogicAndTrick.WikiCodeParser.Elements;
 using LogicAndTrick.WikiCodeParser.Models;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
@@ -69,9 +68,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var src = image;
             if (!image.Contains("/"))
             {
-                image = System.Web.HttpUtility.HtmlDecode(image);
                 content.Nodes.Add(new MetadataNode("WikiUpload", image));
-                src = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/embed/{WikiRevision.CreateSlug(image)}");
+                src = $"https://twhl.info/wiki/embed/{WikiRevision.CreateSlug(image)}";
             }
 
             string url = null;
@@ -94,9 +92,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             {
                 if (!Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))
                 {
-                    url = System.Web.HttpUtility.HtmlDecode(url);
                     content.Nodes.Add(new MetadataNode("WikiLink", url));
-                    url = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(url)}");
+                    url = $"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(url)}";
                 }
             }
             else
@@ -117,8 +114,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (embed != null) content.Nodes.Add(embed);
             if (caption != null) content.Nodes.Add(new HtmlNode("<span class=\"caption\">", new PlainTextNode(caption), "</span>") { PlainAfter = "\n" });
 
-            var before = $"<{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{System.Web.HttpUtility.HtmlAttributeEncode(caption)}\"" : "") + ">"
-                         + (url.Length > 0 ? "<a href=\"" + System.Web.HttpUtility.HtmlAttributeEncode(url) + "\">" : "")
+            var before = $"<{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{HtmlHelper.AttributeEncode(caption)}\"" : "") + ">"
+                         + (url.Length > 0 ? "<a href=\"" + HtmlHelper.AttributeEncode(url) + "\">" : "")
                          + "<span class=\"caption-panel\">";
             var after = "</span>"
                         + (url.Length > 0 ? "</a>" : "")
@@ -132,12 +129,12 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         private INode GetEmbedObject(string tag, string url, string caption, bool loop)
         {
-            url = System.Web.HttpUtility.HtmlAttributeEncode(url);
+            url = HtmlHelper.AttributeEncode(url);
             switch (tag)
             {
                 case "img":
                     caption = caption ?? "User posted image";
-                    var cap = System.Web.HttpUtility.HtmlAttributeEncode(caption);
+                    var cap = HtmlHelper.AttributeEncode(caption);
                     return new HtmlNode($"<img class=\"caption-body\" src=\"{url}\" alt=\"{cap}\" />", PlainTextNode.Empty, "")
                     {
                         PlainBefore = "[Image] "

@@ -21,5 +21,6 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         public string ToPlainText() => string.Empty;
         public IList<INode> GetChildren() => new INode[0];
         public void ReplaceChild(int i, INode node) => throw new InvalidOperationException();
+        public bool HasContent() => false;
     }
 }

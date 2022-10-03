@@ -79,6 +79,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 if (i != 0) throw new ArgumentOutOfRangeException();
                 Text = node;
             }
+
+            public bool HasContent()
+            {
+                return true;
+            }
         }
     }
 }

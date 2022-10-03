@@ -29,12 +29,12 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (match.Groups["url"].Success)
                 {
                     var url = match.Groups["url"].Value;
-                    yield return new HtmlNode($"<a href=\"{System.Web.HttpUtility.HtmlAttributeEncode(url)}\">", new PlainTextNode(url), "</a>");
+                    yield return new HtmlNode($"<a href=\"{HtmlHelper.AttributeEncode(url)}\">", new PlainTextNode(url), "</a>");
                 }
                 else if (match.Groups["email"].Success)
                 {
                     var email = match.Groups["email"].Value;
-                    yield return new HtmlNode($"<a href=\"mailto:{System.Web.HttpUtility.HtmlAttributeEncode(email)}\">", new PlainTextNode(email), "</a>");
+                    yield return new HtmlNode($"<a href=\"mailto:{HtmlHelper.AttributeEncode(email)}\">", new PlainTextNode(email), "</a>");
                 }
                 start = match.Index + match.Length;
             }

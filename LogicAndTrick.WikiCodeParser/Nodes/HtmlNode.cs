@@ -44,5 +44,10 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
             if (i != 0) throw new ArgumentOutOfRangeException();
             Content = node;
         }
+
+        public bool HasContent()
+        {
+            return true;
+        }
     }
 }

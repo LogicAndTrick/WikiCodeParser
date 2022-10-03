@@ -59,8 +59,8 @@ namespace LogicAndTrick.WikiCodeParser.Processors
 
                 // We have a smiley
                 if (start < index) yield return new PlainTextNode(text.Substring(start, index - start));
-                var src = System.Web.HttpUtility.HtmlAttributeEncode(String.Format(UrlFormatString, definition.Name));
-                var alt = System.Web.HttpUtility.HtmlAttributeEncode(token);
+                var src = HtmlHelper.AttributeEncode(String.Format(UrlFormatString, definition.Name));
+                var alt = HtmlHelper.AttributeEncode(token);
                 yield return new HtmlNode($"<img class=\"smiley\" src=\"{src}\" alt=\"{alt}\" />", PlainTextNode.Empty, "") { PlainBefore = token };
                 start = index + token.Length;
                 index += token.Length;

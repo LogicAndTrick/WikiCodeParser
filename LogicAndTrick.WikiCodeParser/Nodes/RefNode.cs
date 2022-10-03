@@ -38,5 +38,10 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         {
             throw new NotImplementedException();
         }
+
+        public bool HasContent()
+        {
+            return true;
+        }
     }
 }

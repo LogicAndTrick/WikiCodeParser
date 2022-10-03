@@ -20,7 +20,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];
             if (!Regex.IsMatch(url, "^([a-z]{2,10}://)", RegexOptions.IgnoreCase)) url = "http://" + url;
-            url = System.Web.HttpUtility.HtmlAttributeEncode(url);
+            url = HtmlHelper.AttributeEncode(url);
 
             var classes = new List<string>{"embedded", "image"};
             if (ElementClass != null) classes.Add(ElementClass);

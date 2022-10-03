@@ -59,6 +59,11 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 if (i != 0) throw new ArgumentOutOfRangeException();
                 SpoilerContent = node;
             }
+
+            public bool HasContent()
+            {
+                return true;
+            }
         }
     }
 }

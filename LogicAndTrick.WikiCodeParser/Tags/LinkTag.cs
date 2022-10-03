@@ -22,7 +22,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (options.ContainsKey("url")) url = options["url"];
             if (Token == "email") url = "mailto:" + url;
             else if (!Regex.IsMatch(url, "^([a-z]{2,10}://)", RegexOptions.IgnoreCase)) url = "http://" + url;
-            url = System.Web.HttpUtility.HtmlAttributeEncode(url);
+            url = HtmlHelper.AttributeEncode(url);
 
             var classes = new List<string>();
             if (ElementClass != null) classes.Add(ElementClass);

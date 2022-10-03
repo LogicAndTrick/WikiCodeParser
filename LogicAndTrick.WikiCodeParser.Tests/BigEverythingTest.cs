@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using LogicAndTrick.WikiCodeParser.Elements;
+using System.Text.RegularExpressions;
 
 namespace LogicAndTrick.WikiCodeParser.Tests;
 
@@ -10,8 +11,35 @@ public class BigEverythingTest
     {
         var input = Resources.TwhlFormattingWikiPageInput;
         var output = Resources.TwhlFormattingWikiPageHtml;
+        TestNormalised(input, output);
+    }
 
+    [TestMethod]
+    public void TestStandardWeaponsProgrammingPage()
+    {
+        var input = Resources.StandardWeaponsProgrammingPageInput;
+        var output = Resources.StandardWeaponsProgrammingPageHtml;
+        TestNormalised(input, output);
+    }
 
+    [TestMethod]
+    public void TestLightTutorialPage()
+    {
+        var input = Resources.LightTutorialInput;
+        var output = Resources.LightTutorialHtml;
+        TestNormalised(input, output);
+    }
+
+    [TestMethod]
+    public void TestAdvancedTerrainTutorialPage()
+    {
+        var input = Resources.AdvancedTerrainTutorialInput;
+        var output = Resources.AdvancedTerrainTutorialHtml;
+        TestNormalised(input, output);
+    }
+
+    private static void TestNormalised(string input, string output)
+    {
         var config = ParserConfiguration.Default();
         var parser = new Parser(config);
 
@@ -29,13 +57,13 @@ public class BigEverythingTest
         {
             var ex = expectedLines[i];
             var ac = actualLines[i];
-            Assert.AreEqual(ex, ac, $"\n\nMatch failed on line {i+1}.\n" +
+            Assert.AreEqual(ex, ac, $"\n\nMatch failed on line {i + 1}.\n" +
                                     $"Expected: {ex}\n" +
                                     $"Actual  : {ac}");
         }
     }
 
-    private string Normalise(string text)
+    private static string Normalise(string text)
     {
         text = text.Replace("\r", "");
         text = Regex.Replace(text, "&#0+([0-9a-eA-E]+);", "&#$1;");
@@ -58,6 +86,16 @@ public class BigEverythingTest
 
         text = Regex.Replace(text, "(color: .*?;)(font-size:)", "$1 $2");
         text = Regex.Replace(text, "```\n</code>", "```</code>");
+
+        text = Regex.Replace(text, "((?:href|src)=\"[^\"]*)%28", "$1(");
+        text = Regex.Replace(text, "((?:href|src)=\"[^\"]*)%29", "$1)");
+        text = Regex.Replace(text, "((?:href|src)=\"[^\"]*)%3A", "$1:");
+
+        text = text.Replace("http://localhost:82", "https://twhl.info");
+        text = text.Replace("localhost:82", "twhl.info");
+        text = text.Replace("°", "&#176;");
+
+        text = Regex.Replace(text, "(<pre[^>]*><code>)([^<]*)(</code></pre>)", match => match.Groups[1].Value + String.Join("\n", PreElement.FixCodeIndentation(match.Groups[2].Value.Split('\n').ToList())).Trim() + match.Groups[3].Value);
 
         return text;
     }

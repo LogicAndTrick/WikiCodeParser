@@ -43,7 +43,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 return null;
             }
 
-            var page = System.Web.HttpUtility.HtmlDecode(match.Groups[1].Value);
+            var page = match.Groups[1].Value;
             var text = match.Groups[2].Success ? match.Groups[2].Value : page;
             var hash = "";
             if (page.Contains("#"))
@@ -53,7 +53,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 hash = "#" + Regex.Replace(spl[1], @"[^\da-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase);
             }
             
-            var url = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(page)}") + hash;
+            var url = HtmlHelper.AttributeEncode($"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(page)}") + hash;
             var before = $"<a href=\"{url}\">";
             var after = "</a>";
             

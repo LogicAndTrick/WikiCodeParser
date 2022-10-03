@@ -34,7 +34,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests.Elements
         public void UsedRefTest1()
         {
             var input = "\n|-:ref=test\n[ref=test]aaaa[/ref]";
-            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>\n";
+            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>";
             var parser = CreateParser();
             var result = parser.ParseResult(input);
             Assert.AreEqual(output, result.ToHtml());
@@ -44,7 +44,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests.Elements
         public void UsedRefTest2()
         {
             var input = "\n|-:ref=test\n[ref=test]\naaaa[/ref]";
-            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>\n";
+            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>";
             var parser = CreateParser();
             var result = parser.ParseResult(input);
             Assert.AreEqual(output, result.ToHtml());
@@ -54,7 +54,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests.Elements
         public void UsedRefTest3()
         {
             var input = "\n|-:ref=test\n[ref=test]aaaa\n[/ref]";
-            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>\n";
+            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>";
             var parser = CreateParser();
             var result = parser.ParseResult(input);
             Assert.AreEqual(output, result.ToHtml());
@@ -64,7 +64,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests.Elements
         public void UsedRefTest4()
         {
             var input = "\n|-:ref=test\n[ref=test]\naaaa\n[/ref]";
-            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>\n";
+            var output = "<table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table>";
             var parser = CreateParser();
             var result = parser.ParseResult(input);
             Assert.AreEqual(output, result.ToHtml());

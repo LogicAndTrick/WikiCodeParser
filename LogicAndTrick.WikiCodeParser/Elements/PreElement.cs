@@ -124,6 +124,20 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 highlight.RemoveAll(x => x.numLines <= 0);
             }
 
+            arr = FixCodeIndentation(arr);
+
+            var highlights = string.Join("", highlight.Select(
+                h => $"<div class=\"line-highlight\" style=\"top: {h.firstLine}em; height: {h.numLines}em; background: {h.color};\"></div>")
+            );
+            var plain = new UnprocessablePlainTextNode(String.Join("\n", arr));
+            var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
+            var before = $"<pre{cls}><code>{highlights}";
+            var after = "</code></pre>";
+            return new HtmlNode(before, plain, after);
+        }
+
+        public static List<string> FixCodeIndentation(List<string> arr)
+        {
             // Replace all tabs with 4 spaces
             arr = arr.Select(x => x.Replace("\t", "    ")).ToList();
 
@@ -136,16 +150,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             });
 
             // Dedent all lines by the longest common whitespace
-            arr = arr.Select(a => a.Substring(Math.Min(longestWhitespace, a.Length))).ToList();
-
-            var highlights = string.Join("", highlight.Select(
-                h => $"<div class=\"line-highlight\" style=\"top: {h.firstLine}em; height: {h.numLines}em; background: {h.color};\"></div>")
-            );
-            var plain = new UnprocessablePlainTextNode(String.Join("\n", arr));
-            var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
-            var before = $"<pre{cls}><code>{highlights}";
-            var after = "</code></pre>";
-            return new HtmlNode(before, plain, after);
+            return arr.Select(a => a.Substring(Math.Min(longestWhitespace, a.Length))).ToList();
         }
     }
 }

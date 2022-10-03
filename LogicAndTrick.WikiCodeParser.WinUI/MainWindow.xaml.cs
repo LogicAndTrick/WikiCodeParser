@@ -55,6 +55,7 @@ information
             {
                 var parsed = _parser.ParseResult(text);
                 var content = "<div class=\"bbcode\">" + parsed.ToHtml() + "</div>" + HtmlMetadata(parsed.GetMetadata());
+                HtmlTextBox.Text = content;
                 var json = System.Text.Json.JsonSerializer.Serialize(new
                 {
                     content

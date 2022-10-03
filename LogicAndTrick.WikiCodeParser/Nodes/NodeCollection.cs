@@ -24,5 +24,6 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         public string ToPlainText() => string.Join("", Nodes.Select(x => x.ToPlainText()));
         public IList<INode> GetChildren() => Nodes;
         public void ReplaceChild(int i, INode node) => Nodes[i] = node;
+        public bool HasContent() => Nodes.Any(x => x.HasContent());
     }
 }

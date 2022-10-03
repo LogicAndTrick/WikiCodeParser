@@ -80,8 +80,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 {
                     text += state.ScanTo("[");
                     var tok = state.GetToken();
-                    if (tok == Token) stack++;
-                    if (tok == "/" + Token && state.Peek(tokenLength + 3) == "[/" + Token + "]") stack--;
+                    if (string.Equals(tok, Token, StringComparison.InvariantCultureIgnoreCase)) stack++;
+                    if (string.Equals(tok, "/" + Token, StringComparison.InvariantCultureIgnoreCase) && string.Equals(state.Peek(tokenLength + 3), "[/" + Token + "]", StringComparison.InvariantCultureIgnoreCase)) stack--;
                     if (stack == 0)
                     {
                         state.Seek(Token.Length + 3, false);
@@ -97,8 +97,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
             else
             {
-                var text = state.ScanTo("[/" + Token + "]");
-                if (state.Peek(tokenLength + 3).ToLower() == "[/" + Token + "]" && Validate(options, text))
+                var text = state.ScanTo("[/" + Token + "]", StringComparison.InvariantCultureIgnoreCase);
+                if (string.Equals(state.Peek(tokenLength + 3), "[/" + Token + "]", StringComparison.InvariantCultureIgnoreCase) && Validate(options, text))
                 {
                     state.Seek(Token.Length + 3, false);
                     return FormatResult(parser, data, state, scope, options, text);

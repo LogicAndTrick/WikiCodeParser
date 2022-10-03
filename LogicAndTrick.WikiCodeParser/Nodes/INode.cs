@@ -8,5 +8,6 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         string ToPlainText();
         IList<INode> GetChildren();
         void ReplaceChild(int i, INode node);
+        bool HasContent();
     }
 }

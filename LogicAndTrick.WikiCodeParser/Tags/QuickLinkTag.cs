@@ -56,7 +56,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 return null;
             }
 
-            url = System.Web.HttpUtility.HtmlAttributeEncode(url);
+            url = HtmlHelper.AttributeEncode(url);
             var before = $"<{Element} href=\"{url}\">";
             var after = $"</{Element}>";
 

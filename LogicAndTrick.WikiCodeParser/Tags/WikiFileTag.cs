@@ -47,13 +47,13 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 return null;
             }
 
-            var page = System.Web.HttpUtility.HtmlDecode(match.Groups[1].Value);
+            var page = match.Groups[1].Value;
             var text = match.Groups[2].Value.Length > 0 ? match.Groups[2].Value : page;
             var slug = WikiRevision.CreateSlug(page);
-            var url = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/embed/{slug}");
-            var infoUrl = System.Web.HttpUtility.HtmlAttributeEncode($"https://twhl.info/wiki/embed-info/{slug}");
+            var url = HtmlHelper.AttributeEncode($"https://twhl.info/wiki/embed/{slug}");
+            var infoUrl = HtmlHelper.AttributeEncode($"https://twhl.info/wiki/embed-info/{slug}");
 
-            var before = $"<span class=\"embedded-inline download\" data-info=\"{infoUrl}\"><a href=\"{url}\"><span class=\"fa fa-download\"></span>";
+            var before = $"<span class=\"embedded-inline download\" data-info=\"{infoUrl}\"><a href=\"{url}\"><span class=\"fa fa-download\"></span> ";
             var after = "</a></span>";
 
             var content = new NodeCollection();

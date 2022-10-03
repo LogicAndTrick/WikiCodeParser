@@ -110,6 +110,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             {
                 Cells[i] = node;
             }
+
+            public bool HasContent()
+            {
+                return true;
+            }
         }
     }
 }

@@ -69,7 +69,7 @@ namespace LogicAndTrick.WikiCodeParser
                     // if we have any plain text, create a node for it
                     if (plain.Count > 0)
                     {
-                        root.Nodes.Add(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block"));
+                        root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block")));
                         root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Newline before next element
                     }
                     plain.Clear();
@@ -84,7 +84,7 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             // parse any plain text that might be left
-            if (plain.Count > 0) root.Nodes.Add(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block"));
+            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block")));
             
             // Trim off any whitespace nodes at the end
             while (root.Nodes.Count > 0 && root.Nodes[root.Nodes.Count - 1] is UnprocessablePlainTextNode ptn && string.IsNullOrWhiteSpace(ptn.Text))
@@ -92,7 +92,43 @@ namespace LogicAndTrick.WikiCodeParser
                 root.Nodes.RemoveAt(root.Nodes.Count - 1);
             }
 
-            return root;
+            FlattenNestedNodeCollections(root);
+            return TrimWhitespace(root);
+        }
+
+        // ReSharper disable once MemberCanBePrivate.Global
+        internal static INode TrimWhitespace(INode node, bool start = true, bool end = true)
+        {
+            var removeNodes = new List<INode>();
+
+            if (start)
+            {
+                node.Walk(x =>
+                {
+                    if (x is NodeCollection) return true;
+                    if (x.HasContent()) return false;
+                    if (x is UnprocessablePlainTextNode || x is PlainTextNode) removeNodes.Add(x);
+                    return true;
+                });
+            }
+
+            if (end)
+            {
+                node.WalkBack(x =>
+                {
+                    if (x is NodeCollection) return true;
+                    if (x.HasContent()) return false;
+                    if (x is UnprocessablePlainTextNode || x is PlainTextNode) removeNodes.Add(x);
+                    return true;
+                });
+            }
+
+            foreach (var rem in removeNodes)
+            {
+                node.Remove(rem);
+            }
+
+            return node;
         }
 
         /// <summary>
@@ -142,6 +178,22 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             return root;
+        }
+
+        internal void FlattenNestedNodeCollections(INode node)
+        {
+            if (node is NodeCollection coll)
+            {
+                while (coll.Nodes.Any(x => x is NodeCollection))
+                {
+                    coll.Nodes = coll.Nodes.SelectMany(x => x is NodeCollection nc ? nc.Nodes : new List<INode> { x }).ToList();
+                }
+            }
+
+            foreach (var child in node.GetChildren())
+            {
+                FlattenNestedNodeCollections(child);
+            }
         }
 
         internal INode RunProcessors(INode node, ParseData data, string scope)

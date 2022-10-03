@@ -154,6 +154,45 @@ public class BasicTests
         Assert.AreEqual(output, result.ToHtml());
     }
 
+    [TestMethod]
+    public void TestNewLinesBeforeImage()
+    {
+        var input = "Before\n\n[img]https://example.com/example.png[/img]\n\nAfter";
+        var output = "Before\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter";
+
+        var config = ParserConfiguration.Default();
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestBoldAndNewLinesBeforeImage()
+    {
+        var input = "*Bold*\n\n[img]https://example.com/example.png[/img]\n\nAfter";
+        var output = "<strong>Bold</strong>\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter";
+
+        var config = ParserConfiguration.Default();
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
+    public void TestCategoriesAndWhitespace()
+    {
+        var input = "[cat:A]\n[cat:B]\n\n= Heading";
+        var output = "<h1 id=\"Heading\">Heading</h1>";
+
+        var config = ParserConfiguration.Default();
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
     private static IList<INode> GetLeaves(INode root)
     {
         var list = new List<INode>();

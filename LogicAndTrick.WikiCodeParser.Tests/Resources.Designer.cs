@@ -61,6 +61,89 @@ namespace LogicAndTrick.WikiCodeParser.Tests {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;h1 id=&quot;Advanced_Terrain_Creation&quot;&gt;Advanced Terrain Creation&lt;/h1&gt;
+        ///&lt;div class=&quot;embedded image&quot; title=&quot;Mmm, landscape :3&quot;&gt;&lt;span class=&quot;caption-panel&quot;&gt;&lt;img class=&quot;caption-body&quot; src=&quot;https://i.imgur.com/Rjwoq2s.png&quot; alt=&quot;Mmm, landscape :3&quot; /&gt;&lt;span class=&quot;caption&quot;&gt;Mmm, landscape :3&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;Terrain is one of the more challenging things in GoldSrc mapping. There are many ways to make terrain, and not just with terrain generators, but by hand. It sounds complicated, but making terrain by hand is actuall [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AdvancedTerrainTutorialHtml {
+            get {
+                return ResourceManager.GetString("AdvancedTerrainTutorialHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [cat:Goldsource Tutorials]
+        ///[cat:Tutorials]
+        ///[cat:Intermediate Tutorials]
+        ///[cat:Mapping]
+        ///
+        ///= Advanced Terrain Creation
+        ///
+        ///[img:https://i.imgur.com/Rjwoq2s.png|Mmm, landscape :3]
+        ///
+        ///Terrain is one of the more challenging things in GoldSrc mapping. There are many ways to make terrain, and not just with terrain generators, but by hand. It sounds complicated, but making terrain by hand is actually kind of easy if you know how to do it. I won&apos;t show how to use a terrain generator, since they probably don&apos;t need [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AdvancedTerrainTutorialInput {
+            get {
+                return ResourceManager.GetString("AdvancedTerrainTutorialInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some of the basics of lighting were covered in &lt;a href=&quot;https://twhl.info/wiki/page/Tutorial%3A_In_the_Beginning_Part_4&quot;&gt;In the Beginning Part 4: Basic Lighting&lt;/a&gt; but people are still asking questions about lighting and texlights. So this tutorial is going to cover the basics and some more advanced stuff to help you get some good lighting in your maps.&lt;br&gt;&lt;br&gt;&lt;span style=&quot;color: blue;&quot;&gt;Note&lt;/span&gt;: The value of any tutorial is in direct proportion to the effort YOU put into learning the material. If you j [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LightTutorialHtml {
+            get {
+                return ResourceManager.GetString("LightTutorialHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [cat:Tutorials]
+        ///[cat:Intermediate Tutorials]
+        ///[cat:Goldsource Tutorials]
+        ///[cat:Mapping]
+        ///
+        ///Some of the basics of lighting were covered in [[Tutorial: In the Beginning Part 4|In the Beginning Part 4: Basic Lighting]] but people are still asking questions about lighting and texlights. So this tutorial is going to cover the basics and some more advanced stuff to help you get some good lighting in your maps.
+        ///
+        ///[font=blue]Note[/font]: The value of any tutorial is in direct proportion to the effort YOU put into [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LightTutorialInput {
+            get {
+                return ResourceManager.GetString("LightTutorialInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;embed-panel card card-info&quot;&gt;&lt;div class=&quot;card-header&quot;&gt;NOTICE&lt;/div&gt;&lt;div class=&quot;card-body&quot;&gt;If you are programming for a single player mod and looking for a simpler approach, refer &lt;a href=&quot;https://twhl.info/wiki/page/Tutorial%3A_Add_a_new_simple_weapon_%28straightforward_way%29&quot;&gt;Tutorial: Add a new simple weapon (straightforward way)&lt;/a&gt;.&lt;/div&gt;&lt;/div&gt;
+        ///This guide will walk through how to add a &amp;quot;regular&amp;quot; weapon to your Half-Life mod. In this case, &amp;quot;regular&amp;quot; means a gun that shoots [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string StandardWeaponsProgrammingPageHtml {
+            get {
+                return ResourceManager.GetString("StandardWeaponsProgrammingPageHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [cat:Tutorials]
+        ///[cat:Programming]
+        ///[cat:Goldsource Tutorials]
+        ///[book:Half-Life Programming|chapter:Weapons Programming|chapternumber:2|pagenumber:3]
+        ///[credit:Original author|user:1983]
+        ///
+        ///~~~info
+        ///:NOTICE
+        ///If you are programming for a single player mod and looking for a simpler approach, refer [[Tutorial: Add a new simple weapon (straightforward way)]].
+        ///~~~
+        ///
+        ///This guide will walk through how to add a &quot;regular&quot; weapon to your Half-Life mod. In this case, &quot;regular&quot; means a gun that shoots bullets and reloa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string StandardWeaponsProgrammingPageInput {
+            get {
+                return ResourceManager.GetString("StandardWeaponsProgrammingPageInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TWHL uses a custom text syntax that we call &lt;em&gt;WikiCode&lt;/em&gt;. It is a combination of Markdown and BBCode, with a few extra things to spice it up. If you&amp;#039;re familiar with either of these markup systems, you shouldn&amp;#039;t have too much trouble.
         ///&lt;h2 id=&quot;Basic_text_formatting&quot;&gt;Basic text formatting&lt;/h2&gt;
         ///There are two ways to do basic text formatting - the &lt;em&gt;Markdown&lt;/em&gt; way and the &lt;em&gt;BBCode&lt;/em&gt; way. Markdown style is usually faster to type, but BBCode is generally more flexible.

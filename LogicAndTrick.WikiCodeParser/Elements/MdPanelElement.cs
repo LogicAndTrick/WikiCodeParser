@@ -14,7 +14,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         {
             var current = lines.Current();
 
-            var meta = lines.Value().Substring(3);
+            var meta = lines.Value().Substring(3).Trim();
             var title = "";
 
             var found = false;
@@ -46,7 +46,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             else cls = "card-default";
 
             var before = $"<div class=\"embed-panel card {cls}\">" +
-                         (title != "" ? $"<div class=\"card-header\">{System.Web.HttpUtility.HtmlEncode(title)}</div>" : "") +
+                         (title != "" ? $"<div class=\"card-header\">{HtmlHelper.Encode(title)}</div>" : "") +
                          "<div class=\"card-body\">";
             var content = parser.ParseElements(data, string.Join("\n", arr), scope);
             var after = "</div></div>";
