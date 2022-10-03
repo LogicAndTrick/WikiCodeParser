@@ -31,7 +31,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var after = $"</{Element}>";
 
             var content = options.ContainsKey("url")
-                ? parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline")
+                ? parser.ParseTags(data, text, scope, TagContext)
                 : new UnprocessablePlainTextNode(text);
             return new HtmlNode(before, content, after);
         }

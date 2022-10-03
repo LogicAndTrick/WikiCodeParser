@@ -116,7 +116,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                         }
                     }
 
-                    var pt = parser.ParseTags(data, value.Trim(), scope, "inline");
+                    var pt = parser.ParseTags(data, value.Trim(), scope, TagParseContext.Block);
                     lastItemNode = new ListItemNode(pt);
                     yield return lastItemNode;
                 }

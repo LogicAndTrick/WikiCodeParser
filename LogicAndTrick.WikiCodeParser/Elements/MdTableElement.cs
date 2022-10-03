@@ -60,7 +60,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var name = res.Groups[1].Value;
                 return new RefNode(data, name);
             }
-            return parser.ParseTags(data, text, scope, "inline");
+            return parser.ParseTags(data, text, scope, TagParseContext.Block);
         }
 
         private class TableRow : INode

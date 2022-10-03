@@ -21,7 +21,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var text = res.Groups[2].Value.Trim();
 
             var id = GetUniqueAnchor(data, text);
-            return new HeadingNode(level, id, parser.ParseTags(data, text, scope, "inline"));
+            return new HeadingNode(level, id, parser.ParseTags(data, text, scope, TagParseContext.Inline));
         }
 
         private static string GetUniqueAnchor(ParseData data, string text)

@@ -25,7 +25,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += $" title=\"{visibleText}\">";
             var after = "</" + Element + '>';
-            return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline")), after);
+            return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, TagContext)), after);
         }
 
         private class SpoilerNode : INode

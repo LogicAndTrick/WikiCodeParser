@@ -20,6 +20,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         public List<string> Scopes { get; set; }
         public int Priority { get; set; } = 0;
 
+        protected TagParseContext TagContext => IsBlock ? TagParseContext.Block : TagParseContext.Inline;
+
         protected Tag()
         {
             Options = new string[0];
@@ -119,7 +121,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += '>';
             var after = "</" + Element + '>';
-            var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
+            var content = parser.ParseTags(data, text, scope, TagContext);
             return new HtmlNode(before, content, after)
             {
                 IsBlockNode = IsBlock

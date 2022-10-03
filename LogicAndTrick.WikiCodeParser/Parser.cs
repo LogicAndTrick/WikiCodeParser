@@ -69,7 +69,7 @@ namespace LogicAndTrick.WikiCodeParser
                     // if we have any plain text, create a node for it
                     if (plain.Count > 0)
                     {
-                        root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block")));
+                        root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, TagParseContext.Block)));
                         root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Newline before next element
                     }
                     plain.Clear();
@@ -84,7 +84,7 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             // parse any plain text that might be left
-            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, "block")));
+            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, TagParseContext.Block)));
             
             // Trim off any whitespace nodes at the end
             while (root.Nodes.Count > 0 && root.Nodes[root.Nodes.Count - 1] is UnprocessablePlainTextNode ptn && string.IsNullOrWhiteSpace(ptn.Text))
@@ -137,9 +137,9 @@ namespace LogicAndTrick.WikiCodeParser
         /// <param name="data"></param>
         /// <param name="text">The text to parse</param>
         /// <param name="scope">The scope to parse in</param>
-        /// <param name="type">The type of tags to parse - block or inline</param>
+        /// <param name="context">The parse context - block or inline</param>
         /// <returns>The node of the parsed text</returns>
-        internal INode ParseTags(ParseData data, string text, string scope, string type)
+        public INode ParseTags(ParseData data, string text, string scope, TagParseContext context)
         {
             // trim 3 or more newlines down to 2 newlines
             text = Regex.Replace(text, "\n{3,}", "\n\n");
@@ -180,7 +180,7 @@ namespace LogicAndTrick.WikiCodeParser
             return root;
         }
 
-        internal void FlattenNestedNodeCollections(INode node)
+        private static void FlattenNestedNodeCollections(INode node)
         {
             if (node is NodeCollection coll)
             {
@@ -196,7 +196,7 @@ namespace LogicAndTrick.WikiCodeParser
             }
         }
 
-        internal INode RunProcessors(INode node, ParseData data, string scope)
+        private INode RunProcessors(INode node, ParseData data, string scope)
         {
             foreach (var processor in Configuration.Processors.OrderByDescending(x => x.Priority))
             {

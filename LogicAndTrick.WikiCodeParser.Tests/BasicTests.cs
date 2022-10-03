@@ -193,6 +193,41 @@ public class BasicTests
         Assert.AreEqual(output, result.ToHtml());
     }
 
+    [TestMethod]
+    public void TestNestedBlockTagsInsideInline()
+    {
+        // these are block tags and shouldn't be allowed in inline tags
+        DefaultConfigurationTest("[font=blue][img]https://example.com/example.png[/img][/font]", @"<span style=""color: blue;"">[img]https://example.com/example.png[/img]</span>");
+        DefaultConfigurationTest("[font=blue][youtube]123[/youtube][/font]", @"<span style=""color: blue;"">[youtube]123[/youtube]</span>");
+    }
+
+    [TestMethod]
+    public void TestNestedTagsInsideCodeTag()
+    {
+        // all syntax should be ignored inside a code tag
+        DefaultConfigurationTest("[code][font=red]test[/font][/code]", @"<code>[font=red]test[/font]</code>");
+    }
+
+    [TestMethod]
+    public void TestNestedInlineTagsInsideInline()
+    {
+        // these are inline, should be allowed
+        DefaultConfigurationTest("[font=blue][simg]https://example.com/example.png[/simg][/font]", @"<span style=""color: blue;""><span class=""embedded image inline""><span class=""caption-panel""><img class=""caption-body"" src=""https://example.com/example.png"" alt=""User posted image"" /></span></span></span>");
+        DefaultConfigurationTest("[font=blue][url]https://example.com[/url][/font]", @"<span style=""color: blue;""><a href=""https://example.com"">https://example.com</a></span>");
+        DefaultConfigurationTest("[font=blue][https://example.com][/font]", @"<span style=""color: blue;""><a href=""https://example.com"">https://example.com</a></span>");
+    }
+
+    private static void DefaultConfigurationTest(string input, string expected)
+    {
+        input = input.Replace("\r", "");
+        expected = expected.Replace("\r", "");
+
+        var config = ParserConfiguration.Default();
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+        Assert.AreEqual(expected, result.ToHtml());
+    }
+    
     private static IList<INode> GetLeaves(INode root)
     {
         var list = new List<INode>();

@@ -26,7 +26,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 before = before.TrimEnd(' ') + "\"";
             }
             before += ">";
-            var content = parser.ParseTags(data, text, scope, IsBlock ? "block" : "inline");
+            var content = parser.ParseTags(data, text, scope, TagContext);
             var after = "</" + Element + ">";
             return new HtmlNode(before, content, after);
         }
