@@ -31,17 +31,18 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
         public IList<INode> GetChildren()
         {
-            return new List<INode>();
+            return new List<INode>{ GetNode() };
         }
 
         public void ReplaceChild(int i, INode node)
         {
-            throw new NotImplementedException();
+            if (i != 0) throw new IndexOutOfRangeException();
+            Data.Set(Name, node);
         }
 
         public bool HasContent()
         {
-            return true;
+            return GetNode().HasContent();
         }
     }
 }

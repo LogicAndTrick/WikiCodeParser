@@ -155,6 +155,22 @@ public class BasicTests
     }
 
     [TestMethod]
+    public void TestRefElement()
+    {
+        DefaultConfigurationTest(@"
+|- :ref=cell1
+[ref=cell1]1
+2[/ref]
+".Trim(), @"
+<table class=""table table-bordered""><tr>
+<td>1<br/>
+2</td>
+</tr>
+</table>
+".Trim());
+    }
+
+    [TestMethod]
     public void TestNewLinesBeforeImage()
     {
         var input = "Before\n\n[img]https://example.com/example.png[/img]\n\nAfter";

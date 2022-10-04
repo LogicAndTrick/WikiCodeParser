@@ -9,7 +9,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         public override bool Matches(Lines lines)
         {
             var value = lines.Value().Trim();
-            return value.Length > 4 && value.StartsWith("[ref=") && Regex.IsMatch(value, @"\[ref=[a-z]+\]", RegexOptions.IgnoreCase);
+            return value.Length > 4 && value.StartsWith("[ref=") && Regex.IsMatch(value, @"\[ref=[a-z0-9 ]+\]", RegexOptions.IgnoreCase);
         }
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
@@ -18,7 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var arr = new List<string>();
 
             var line = lines.Value().Trim();
-            var res = Regex.Match(line, @"\[ref=([a-z ]+)\]", RegexOptions.IgnoreCase);
+            var res = Regex.Match(line, @"\[ref=([a-z0-9 ]+)\]", RegexOptions.IgnoreCase);
             if (!res.Success)
             {
                 lines.SetCurrent(current);

@@ -54,7 +54,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         private static INode ResolveCell(string text, Parser parser, ParseData data, string scope)
         {
-            var res = Regex.Match(text.Trim(), "^:ref=([a-z ]+)$", RegexOptions.IgnoreCase);
+            var res = Regex.Match(text.Trim(), "^:ref=([a-z0-9 ]+)$", RegexOptions.IgnoreCase);
             if (res.Success)
             {
                 var name = res.Groups[1].Value;
