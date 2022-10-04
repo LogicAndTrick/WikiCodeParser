@@ -240,6 +240,49 @@ public class BasicTests
         DefaultConfigurationTest(input, expected);
     }
 
+    [TestMethod]
+    public void TestCaseInsensitive()
+    {
+        DefaultConfigurationTest("[FONT=RED]a[/font]", "<span style=\"color: RED;\">a</span>");
+        DefaultConfigurationTest("[FONT=#AAbb11]a[/font]", "<span style=\"color: #AAbb11;\">a</span>");
+        DefaultConfigurationTest_MustChange("[FONT=RED]a[/font]");
+        DefaultConfigurationTest_MustChange("[B]a[/B]");
+        DefaultConfigurationTest_MustChange("[IMG]https://example.com/example.png[/IMG]");
+        DefaultConfigurationTest_MustChange("[URL]https://example.com[/URL]");
+        DefaultConfigurationTest_MustChange("[URL=https://example.com]a[/URL]");
+        DefaultConfigurationTest_MustChange("[QUOTE]a[/QUOTE]");
+        DefaultConfigurationTest_MustChange("[SPOILER]a[/SPOILER]");
+        DefaultConfigurationTest_MustChange("[YOUTUBE]aaaaaaaaa[/YOUTUBE]");
+    }
+
+    [TestMethod]
+    public void TestNestedMarkdown()
+    {
+        DefaultConfigurationTest("a /Test/ b", "a <em>Test</em> b");
+
+        // Bold/italic/underline/strikethrough can be nested
+        DefaultConfigurationTest("a /*Test*/ b ", "a <em><strong>Test</strong></em> b");
+        DefaultConfigurationTest("a */Test/* b ", "a <strong><em>Test</em></strong> b");
+        DefaultConfigurationTest("a */Test*/ b ", "a <strong>/Test</strong>/ b");
+        DefaultConfigurationTest("a /*Test/* b ", "a <em>*Test</em>* b");
+
+        // Code cannot have nested markdown
+        DefaultConfigurationTest("`*Test*`", "<code>*Test*</code>");
+        DefaultConfigurationTest("*`Test`*", "<strong><code>Test</code></strong>");
+        DefaultConfigurationTest("`*Test`*", "<code>*Test</code>*");
+        DefaultConfigurationTest("*`Test*`", "<strong>`Test</strong>`");
+    }
+
+    private static void DefaultConfigurationTest_MustChange(string input)
+    {
+        input = input.Replace("\r", "");
+
+        var config = ParserConfiguration.Default();
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+        Assert.AreNotEqual(input, result.ToHtml());
+    }
+
     private static void DefaultConfigurationTest(string input, string expected)
     {
         input = input.Replace("\r", "");

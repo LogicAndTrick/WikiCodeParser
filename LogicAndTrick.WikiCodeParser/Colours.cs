@@ -32,7 +32,7 @@ namespace LogicAndTrick.WikiCodeParser
         public static bool IsValidColor(string text)
         {
             if (Regex.IsMatch(text, "^#(?:[0-9A-F]{3}){1,2}$", RegexOptions.IgnoreCase)) return true;
-            return Array.IndexOf(ColorNames, text) >= 0;
+            return Array.IndexOf(ColorNames, text.ToLower()) >= 0;
         }
     }
 }

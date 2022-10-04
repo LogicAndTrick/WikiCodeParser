@@ -89,6 +89,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 else caption = p.Trim();
             }
 
+            if (String.IsNullOrWhiteSpace(caption)) caption = null;
+
             if (tag == "img" && url != null && ValidateUrl(url))
             {
                 if (!Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))

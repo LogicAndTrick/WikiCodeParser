@@ -196,7 +196,7 @@ namespace LogicAndTrick.WikiCodeParser
             }
         }
 
-        private INode RunProcessors(INode node, ParseData data, string scope)
+        public INode RunProcessors(INode node, ParseData data, string scope)
         {
             foreach (var processor in Configuration.Processors.OrderByDescending(x => x.Priority))
             {
@@ -206,7 +206,7 @@ namespace LogicAndTrick.WikiCodeParser
             return node;
         }
 
-        internal INode RunProcessor(INode node, INodeProcessor processor, ParseData data, string scope)
+        public INode RunProcessor(INode node, INodeProcessor processor, ParseData data, string scope)
         {
             // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessor if it's needed.
             if (processor.ShouldProcess(node, scope))

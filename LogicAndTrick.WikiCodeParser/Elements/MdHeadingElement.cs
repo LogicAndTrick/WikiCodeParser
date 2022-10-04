@@ -20,8 +20,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var level = Math.Min(6, res.Groups[1].Value.Length);
             var text = res.Groups[2].Value.Trim();
 
-            var id = GetUniqueAnchor(data, text);
-            return new HeadingNode(level, id, parser.ParseTags(data, text, scope, TagParseContext.Inline));
+            var contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
+            contents = parser.RunProcessors(contents, data, scope);
+            var id = GetUniqueAnchor(data, contents.ToPlainText());
+            return new HeadingNode(level, id, contents);
         }
 
         private static string GetUniqueAnchor(ParseData data, string text)

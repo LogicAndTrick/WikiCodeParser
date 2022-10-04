@@ -66,6 +66,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 else caption = p.Trim();
             }
 
+            if (string.IsNullOrWhiteSpace(caption)) caption = null;
+
             var captionNode = new HtmlNode(
                 caption != null ? "<span class=\"caption\">" : "",
                 new PlainTextNode(caption ?? ""),
