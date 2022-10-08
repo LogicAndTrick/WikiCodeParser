@@ -44,7 +44,7 @@ namespace LogicAndTrick.WikiCodeParser
         /// <param name="text">The text to parse</param>
         /// <param name="scope">The scope to parse in</param>
         /// <returns>The nodes of the parsed text</returns>
-        internal INode ParseElements(ParseData data, string text, string scope)
+        public INode ParseElements(ParseData data, string text, string scope)
         {
             var root = new NodeCollection();
 
@@ -97,7 +97,7 @@ namespace LogicAndTrick.WikiCodeParser
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        internal static INode TrimWhitespace(INode node, bool start = true, bool end = true)
+        public static INode TrimWhitespace(INode node, bool start = true, bool end = true)
         {
             var removeNodes = new List<INode>();
 
@@ -180,13 +180,26 @@ namespace LogicAndTrick.WikiCodeParser
             return root;
         }
 
-        private static void FlattenNestedNodeCollections(INode node)
+        // ReSharper disable once MemberCanBePrivate.Global
+        public static void FlattenNestedNodeCollections(INode node)
         {
             if (node is NodeCollection coll)
             {
                 while (coll.Nodes.Any(x => x is NodeCollection))
                 {
                     coll.Nodes = coll.Nodes.SelectMany(x => x is NodeCollection nc ? nc.Nodes : new List<INode> { x }).ToList();
+                }
+            }
+            else
+            {
+                var ch = node.GetChildren();
+                for (var i = 0; i < ch.Count; i++)
+                {
+                    while (ch[i] is NodeCollection chcoll && chcoll.Nodes.Count == 1)
+                    {
+                        node.ReplaceChild(i, chcoll.Nodes[0]);
+                        ch[i] = chcoll.Nodes[0];
+                    }
                 }
             }
 

@@ -5,8 +5,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 {
     public class UnprocessablePlainTextNode : INode
     {
-        public static readonly INode Empty = new UnprocessablePlainTextNode(string.Empty);
-        public static readonly INode NewLine = new UnprocessablePlainTextNode("\n");
+        public static INode Empty => new UnprocessablePlainTextNode(string.Empty);
+        public static INode NewLine => new UnprocessablePlainTextNode("\n");
 
         public string Text { get; set; }
 

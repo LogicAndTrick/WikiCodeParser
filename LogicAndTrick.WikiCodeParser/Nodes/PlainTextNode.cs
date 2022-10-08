@@ -8,7 +8,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
     /// </summary>
     public class PlainTextNode : INode
     {
-        public static readonly INode Empty = new PlainTextNode(string.Empty);
+        public static INode Empty => new PlainTextNode(string.Empty);
 
         public string Text { get; set; }
 
