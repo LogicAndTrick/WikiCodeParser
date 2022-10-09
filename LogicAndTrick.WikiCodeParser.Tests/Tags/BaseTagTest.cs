@@ -24,12 +24,12 @@ public abstract class BaseTagTest<T> where T : Tag
     protected ParseResult Parse(string input, string scope = "") => GetParser().ParseResult(input, scope);
 
     // ReSharper disable once MemberCanBePrivate.Global
-    protected void TestSimpleTransform(TagTestData data, Func<string, string> transform)
+    protected void TestSimpleTransform(TagTestData data, Func<TagTestData, string, string> transform)
     {
         var parser = GetParser();
-        var input = transform(data.Input);
-        var html = transform(data.ExpectedHtml);
-        var plain = transform(data.ExpectedPlaintext);
+        var input = transform(data, data.Input);
+        var html = transform(data, data.ExpectedHtml);
+        var plain = transform(data, data.ExpectedPlaintext);
         var result = parser.ParseResult(input);
         Assert.AreEqual(html, result.ToHtml());
         Assert.AreEqual(plain, result.ToPlainText());
@@ -46,7 +46,7 @@ public abstract class BaseTagTest<T> where T : Tag
     }
 
     // ReSharper disable once MemberCanBePrivate.Global
-    protected void TestSimpleTransform(IEnumerable<TagTestData> data, Func<string, string> transform)
+    protected void TestSimpleTransform(IEnumerable<TagTestData> data, Func<TagTestData, string, string> transform)
     {
         foreach (var d in data)
         {
@@ -58,34 +58,34 @@ public abstract class BaseTagTest<T> where T : Tag
     public void TestStandalone()
     {
         var data = GetTestData();
-        TestSimpleTransform(data, x => x);
+        TestSimpleTransform(data, (d, x) => x);
     }
 
     [TestMethod]
     public void TestBefore()
     {
         var data = GetTestData();
-        TestSimpleTransform(data, x => $"before {x}");
+        TestSimpleTransform(data, (d, x) => $"before{d.BlockSpace}{x}");
     }
 
     [TestMethod]
     public void TestAfter()
     {
         var data = GetTestData();
-        TestSimpleTransform(data, x => $"{x} after");
+        TestSimpleTransform(data, (d, x) => $"{x}{d.BlockSpace}after");
     }
 
     [TestMethod]
     public void TestBeforeAndAfter()
     {
         var data = GetTestData();
-        TestSimpleTransform(data, x => $"before {x} after");
+        TestSimpleTransform(data, (d, x) => $"before{d.BlockSpace}{x}{d.BlockSpace}after");
     }
 
     [TestMethod]
     public void TestNewLine()
     {
         var data = GetTestData();
-        TestSimpleTransform(data, x => $"before\n{x}\nafter");
+        TestSimpleTransform(data, (d, x) => $"before{d.BlockNewLine}{x}{d.BlockNewLine}after");
     }
 }
