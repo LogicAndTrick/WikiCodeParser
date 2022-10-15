@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "noImplicitAny": true,
+      "outDir": "build",
+      "module": "CommonJS",
+      "target": "ES6",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "allowJs": true,
+      "sourceMap": true,
+      "declaration": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "lib": ["ES2019", "DOM"]
+    },
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+}

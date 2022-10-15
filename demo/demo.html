@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Demo</title>
+    <script src='../build/browser/twhl-wikicode-parser.js'></script>
+    <style>
+        body {
+            padding: 1rem;
+        }
+        .slot {
+            background-color: #fffcf9 !important;
+            border: 1px solid #ffc993 !important;
+            color: #000 !important;
+        }
+    </style>
+    <link href="https://twhl.info/css/app.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="row w-100">
+        <div class="col-6">
+            <textarea class="w-100" rows="30" id="text">Type here</textarea>
+        </div>
+        <div class="col-6">
+            <div class="slot">
+                <div class="bbcode" id="out"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const text = document.getElementById('text');
+        const out = document.getElementById('out');
+        const parser = new TwhlWikiCodeParser.Parser(TwhlWikiCodeParser.ParserConfiguration.Default());
+        const render = () => {
+            const result = parser.ParseResult(text.value);
+            out.innerHTML = result.Content.ToHtml();
+        };
+        text.addEventListener('input', render);
+        render();
+    </script>
+</body>
+</html>
