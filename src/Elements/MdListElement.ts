@@ -127,7 +127,7 @@ export class MdListElement extends Element {
 
         // Put all the subtrees into a dummy item node
         const item = new ListItemNode(PlainTextNode.Empty());
-        const _ = this.CreateListItems(item, '', parser, data, lines, scope);
+        this.CreateListItems(item, '', parser, data, lines, scope);
 
         if (item.Subtrees.length == 0) {
             lines.SetCurrent(current);

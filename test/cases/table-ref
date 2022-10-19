@@ -1,0 +1,11 @@
+|- :ref=one | :ref=two
+[ref=one]1[/ref]
+[ref=two]2[/ref]
+
+###
+
+<table class="table table-bordered"><tr>
+<td>1</td>
+<td>2</td>
+</tr>
+</table>

@@ -68,6 +68,9 @@ describe('Isolated tests', () => {
     it('list-nested', () => RunTestCase('list-nested'));
     it('list-continuation', () => RunTestCase('list-continuation'));
 
+    it('table-simple', () => RunTestCase('table-simple', true));
+    it('table-ref', () => RunTestCase('table-ref'));
+
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });
 
