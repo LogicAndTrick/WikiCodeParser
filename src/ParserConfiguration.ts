@@ -1,5 +1,8 @@
 import { Element } from './Elements/Element';
+import { MdCodeElement } from './Elements/MdCodeElement';
+import { MdColumnsElement } from './Elements/MdColumnsElement';
 import { MdHeadingElement } from './Elements/MdHeadingElement';
+import { MdLineElement } from './Elements/MdLineElement';
 import { PreElement } from './Elements/PreElement';
 import { RefElement } from './Elements/RefElement';
 import { INodeProcessor } from './Processors/INodeProcessor';
@@ -52,15 +55,15 @@ export class ParserConfiguration {
         // conf.Tags.push(new CodeTag().WithScopes("excerpt"));
 
         // Elements
-        //conf.Elements.push(new MdCodeElement());
+        conf.Elements.push(new MdCodeElement());
         conf.Elements.push(new PreElement());
         conf.Elements.push(new MdHeadingElement());
-        //conf.Elements.push(new MdLineElement());
+        conf.Elements.push(new MdLineElement());
         //conf.Elements.push(new MdQuoteElement());
         //conf.Elements.push(new MdListElement());
         //conf.Elements.push(new MdTableElement());
         //conf.Elements.push(new MdPanelElement());
-        //conf.Elements.push(new MdColumnsElement());
+        conf.Elements.push(new MdColumnsElement());
         conf.Elements.push(new RefElement());
 
         // // Processors

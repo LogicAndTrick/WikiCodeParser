@@ -9,7 +9,7 @@ import { Element } from './Element';
 
 export class PreElement extends Element {
 
-    private static AllowedLanguages: string[] = [
+    public static AllowedLanguages: string[] = [
         'php', 'dos', 'bat', 'cmd', 'css', 'cpp', 'c', 'c++', 'cs', 'ini', 'json', 'xml', 'html', 'angelscript',
         'javascript', 'js', 'plaintext'
     ];

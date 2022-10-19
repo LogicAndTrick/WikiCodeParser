@@ -1,0 +1,13 @@
+%%columns=3:9
+one
+%%
+two
+%%
+
+###
+
+<div class="row"><div class="col-md-3">
+one</div>
+<div class="col-md-9">
+two</div>
+</div>

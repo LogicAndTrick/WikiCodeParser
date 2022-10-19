@@ -49,7 +49,15 @@ describe('Isolated tests', () => {
     it('pre-lang', () => RunTestCase('pre-lang'));
     it('pre-highlight', () => RunTestCase('pre-highlight'));
 
-    it('heading-simple', () => RunTestCase('heading-simple', true));
+    it('mdcode-simple', () => RunTestCase('mdcode-simple'));
+    it('mdcode-lang', () => RunTestCase('mdcode-lang'));
+
+    it('heading-simple', () => RunTestCase('heading-simple'));
+
+    it('mdline-simple', () => RunTestCase('mdline-simple'));
+
+    it('columns-simple', () => RunTestCase('columns-simple', true));
+    it('columns-invalid', () => RunTestCase('columns-invalid'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });
