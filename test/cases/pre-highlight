@@ -1,0 +1,16 @@
+A
+
+[pre=cpp highlight]
+@@red:2
+test1
+test2
+[/pre]
+
+B
+
+###
+
+A
+<pre class="lang-cpp"><code><div class="line-highlight" style="top: 0em; height: 2em; background: red;"></div>test1
+test2</code></pre>
+B

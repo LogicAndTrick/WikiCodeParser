@@ -1,0 +1,396 @@
+<div class="bbcode">TWHL uses a custom text syntax that we call <em>WikiCode</em>. It is a combination of Markdown and BBCode, with a few extra things to spice it up. If you&#39;re familiar with either of these markup systems, you shouldn&#39;t have too much trouble.
+<h2 id="Basic_text_formatting">Basic text formatting</h2>
+There are two ways to do basic text formatting - the <em>Markdown</em> way and the <em>BBCode</em> way. Markdown style is usually faster to type, but BBCode is generally more flexible.
+<table class="table table-bordered"><tr>
+<th>Format</th>
+<th>Markdown style</th>
+<th>BBCode style</th>
+</tr>
+<tr>
+<td><strong>Bold text</strong></td>
+<td><code>*Bold text*</code></td>
+<td><code>[b]Bold text[/b]</code></td>
+</tr>
+<tr>
+<td><em>Italic text</em></td>
+<td><code>/Italic text/</code></td>
+<td><code>[i]Italic text[/i]</code></td>
+</tr>
+<tr>
+<td><span class="underline">Underlined text</span></td>
+<td><code>_Underlined text_</code></td>
+<td><code>[u]Underlined text[/u]</code></td>
+</tr>
+<tr>
+<td><span class="strikethrough">Strikethrough text</span></td>
+<td><code>~Strikethrough text~</code></td>
+<td><code>[s]Strikethrough text[/s]</code></td>
+</tr>
+<tr>
+<td><code>Inline code</code></td>
+<td><code>`Inline code`</code></td>
+<td><code>[ code ]Inline code[ /code ]</code> (remove extra spaces)</td>
+</tr>
+</table>
+
+<h2 id="Smilies/emoticons/emoji">Smilies/emoticons/emoji</h2>
+Before the land of smartphones and dedicated Unicode glyphs, emoji were known as &#39;smilies&#39;, and were not text, but images! Bizarre, I know. TWHL has complete Unicode support, so go nuts with your smartphone keyboards and you won&#39;t have any issues with favourites such as <code>U+1F4A9: PILE OF POO</code>: &#128169;. For us plebs using desktop browsers, though, you can also use the traditional smilies from the good ol&#39; days.<br/>
+<br/>
+Here is TWHL&#39;s library of smilies and their corresponding text representations. Simply type the text and it will be replaced with a smiley image in the post.<br/>
+<br/>
+ <img class="smiley" src="https://twhl.info/images/smilies/aggrieved.png" alt=":aggrieved:" /> <img class="smiley" src="https://twhl.info/images/smilies/aghast.png" alt=":aghast:" /> <img class="smiley" src="https://twhl.info/images/smilies/angry.png" alt=":x" /> <img class="smiley" src="https://twhl.info/images/smilies/badass.png" alt=":badass:" /> <img class="smiley" src="https://twhl.info/images/smilies/confused.png" alt=":confused:" /> <img class="smiley" src="https://twhl.info/images/smilies/cry.png" alt=":cry:" /> <img class="smiley" src="https://twhl.info/images/smilies/cyclops.png" alt=":cyclops:" /> <img class="smiley" src="https://twhl.info/images/smilies/lol.png" alt=":lol:" /> <img class="smiley" src="https://twhl.info/images/smilies/frown.png" alt=":|" /> <img class="smiley" src="https://twhl.info/images/smilies/furious.png" alt=":furious:" /><br/>
+<img class="smiley" src="https://twhl.info/images/smilies/glad.png" alt=":glad:" /> <img class="smiley" src="https://twhl.info/images/smilies/heart.png" alt=":heart:" /> <img class="smiley" src="https://twhl.info/images/smilies/grin.png" alt=":D" /> <img class="smiley" src="https://twhl.info/images/smilies/nervous.png" alt=":nervous:" /> <img class="smiley" src="https://twhl.info/images/smilies/nuke.png" alt=":nuke:" /> <img class="smiley" src="https://twhl.info/images/smilies/nuts.png" alt=":nuts:" /> <img class="smiley" src="https://twhl.info/images/smilies/quizzical.png" alt=":quizzical:" /> <img class="smiley" src="https://twhl.info/images/smilies/rollseyes.png" alt=":roll:" /> <img class="smiley" src="https://twhl.info/images/smilies/sad.png" alt=":(" /> <img class="smiley" src="https://twhl.info/images/smilies/smile.png" alt=":)" /><br/>
+<img class="smiley" src="https://twhl.info/images/smilies/surprised.png" alt=":o" /> <img class="smiley" src="https://twhl.info/images/smilies/thebox.png" alt=":thebox:" /> <img class="smiley" src="https://twhl.info/images/smilies/thefinger.png" alt=":thefinger:" /> <img class="smiley" src="https://twhl.info/images/smilies/tired.png" alt=":tired:" /> <img class="smiley" src="https://twhl.info/images/smilies/tongue.png" alt=":P" /> <img class="smiley" src="https://twhl.info/images/smilies/toocool.png" alt=":cool:" /> <img class="smiley" src="https://twhl.info/images/smilies/unsure.png" alt=":\" /> <img class="smiley" src="https://twhl.info/images/smilies/biggrin.png" alt=":biggrin:" /> <img class="smiley" src="https://twhl.info/images/smilies/wink.png" alt=";)" /> <img class="smiley" src="https://twhl.info/images/smilies/zonked.png" alt=":zonked:" /><br/>
+<img class="smiley" src="https://twhl.info/images/smilies/sarcastic.png" alt=":sarcastic:" /> <img class="smiley" src="https://twhl.info/images/smilies/combine.png" alt=":combine:" /> <img class="smiley" src="https://twhl.info/images/smilies/gak.png" alt=":gak:" /> <img class="smiley" src="https://twhl.info/images/smilies/animehappy.png" alt=":^_^:" /> <img class="smiley" src="https://twhl.info/images/smilies/pwnt.png" alt=":pwned:" /> <img class="smiley" src="https://twhl.info/images/smilies/target.png" alt=":target:" /> <img class="smiley" src="https://twhl.info/images/smilies/ninja.png" alt=":ninja:" /> <img class="smiley" src="https://twhl.info/images/smilies/hammer.png" alt=":hammer:" /> <img class="smiley" src="https://twhl.info/images/smilies/pirate.png" alt=":pirate:" /> <img class="smiley" src="https://twhl.info/images/smilies/walter.png" alt=":walter:" /><br/>
+<img class="smiley" src="https://twhl.info/images/smilies/plastered.png" alt=":plastered:" /> <img class="smiley" src="https://twhl.info/images/smilies/bigmouth.png" alt=":zomg:" /> <img class="smiley" src="https://twhl.info/images/smilies/brokenheart.png" alt=":heartbreak:" /> <img class="smiley" src="https://twhl.info/images/smilies/ciggiesmilie.png" alt=":ciggie:" /> <img class="smiley" src="https://twhl.info/images/smilies/combines.png" alt=":combines:" /> <img class="smiley" src="https://twhl.info/images/smilies/crowbar.png" alt=":crowbar:" /> <img class="smiley" src="https://twhl.info/images/smilies/death.png" alt=":death:" /> <img class="smiley" src="https://twhl.info/images/smilies/freeman.png" alt=":freeman:" /> <img class="smiley" src="https://twhl.info/images/smilies/hecu.png" alt=":hecu:" /> <img class="smiley" src="https://twhl.info/images/smilies/nya.png" alt=":nya:" />
+<pre class="lang-plaintext"><code>:aggrieved:  :aghast:    :x            :badass:   :confused:  :cry:      :cyclops:    :lol:      :|        :furious:
+:glad:       :heart:     :D            :nervous:  :nuke:      :nuts:     :quizzical:  :roll:     :(        :)
+:o           :thebox:    :thefinger:   :tired:    :P          :cool:     :\           :biggrin:  ;)        :zonked:
+:sarcastic:  :combine:   :gak:         :^_^:      :pwned:     :target:   :ninja:      :hammer:   :pirate:  :walter:
+:plastered:  :zomg:      :heartbreak:  :ciggie:   :combines:  :crowbar:  :death:      :freeman:  :hecu:    :nya:</code></pre>
+
+<h2 id="Linking">Linking</h2>
+On the web, linking is one of the more useful things you can do. So, of course there are multiple ways you can link to things using WikiCode. To use auto-linking, make sure the URL starts with <code>http://</code>. Be careful, because some browsers don&#39;t include this by default.
+<table class="table table-bordered"><tr>
+<th>Link method</th>
+<th>Markup</th>
+<th>Result</th>
+</tr>
+<tr>
+<td>Standard link</td>
+<td><code>[url]http://example.com[/url]</code></td>
+<td><a href="http://example.com">http://example.com</a></td>
+</tr>
+<tr>
+<td>Custom link</td>
+<td><code>[url=http://example.com]Example link[/url]</code></td>
+<td><a href="http://example.com">Example link</a></td>
+</tr>
+<tr>
+<td>Standard email link</td>
+<td><code>[email]test@example.com[/email]</code></td>
+<td><a href="mailto:test@example.com">test@example.com</a></td>
+</tr>
+<tr>
+<td>Custom email link</td>
+<td><code>[email=test@example.com]Example email link[/email]</code></td>
+<td><a href="mailto:test@example.com">Example email link</a></td>
+</tr>
+<tr>
+<td>Quick link</td>
+<td><code>[http://example.com]</code></td>
+<td><a href="http://example.com">http://example.com</a></td>
+</tr>
+<tr>
+<td>Custom quick link</td>
+<td><code>[http://example.com|Example link]</code></td>
+<td><a href="http://example.com">Example link</a></td>
+</tr>
+<tr>
+<td>Link to TWHL wiki page</td>
+<td><code>[[Home]]</code></td>
+<td><a href="https://twhl.info/wiki/page/Home">Home</a></td>
+</tr>
+<tr>
+<td>Custom link to TWHL wiki page</td>
+<td><code>[[Home|Example link]]</code></td>
+<td><a href="https://twhl.info/wiki/page/Home">Example link</a></td>
+</tr>
+<tr>
+<td>Auto-link</td>
+<td><code>http://example.com</code></td>
+<td><a href="http://example.com">http://example.com</a></td>
+</tr>
+</table>
+
+<h2 id="Images">Images</h2>
+Embedding images is another useful thing to do, especially on a wiki. Because it&#39;s important, there&#39;s a few different ways that images can be added to a post. The output isn&#39;t shown in this case because images can take a fair amount of space, but you can experiment by using the preview button when typing a post.
+<table class="table table-bordered"><tr>
+<th>Format</th>
+<th>Markup</th>
+<th>Notes</th>
+</tr>
+<tr>
+<td>Normal image</td>
+<td><code>[img]http://example.com/example.jpg[/img]</code></td>
+<td>Embed a normal image (breaks text top and bottom)</td>
+</tr>
+<tr>
+<td>Link image</td>
+<td><code>[url=http://example.com][img]http://example.com/example.jpg[/img][/url]</code></td>
+<td>Clickable to open a URL</td>
+</tr>
+<tr>
+<td>Inline image</td>
+<td><code>[simg]http://example.com/example.jpg[/simg]</code></td>
+<td>Embed a small image (inline with text)</td>
+</tr>
+<tr>
+<td>Advanced image</td>
+<td><code>[img:http://example.com/example.jpg]</code></td>
+<td>See details on the advanced image format below</td>
+</tr>
+<tr>
+<td>Link to TWHL wiki image</td>
+<td><code>[img:example.jpg]</code></td>
+<td><code>example.jpg</code> is the title of the wiki upload</td>
+</tr>
+</table>
+
+<h3 id="Pasting_images">Pasting images</h3>
+If you have an image on your clipboard (usually from taking a screenshot with the <code>PrtSc</code> key, snipping tool in Windows 7, or <code>Win+Shift+S</code> in Windows 10), you can press <code>Ctrl+V</code> into a TWHL textbox to upload the image and insert the required WikiCode to embed the image. This will not work if you have an image <strong>file</strong> on your clipboard - it must be an actual image.
+<h3 id="Using_the_advanced_image_tag">Using the advanced image tag</h3>
+
+<div class="embedded image small right" title="This image has a url, the size is &#39;small&#39;, and the position is &#39;right&#39;."><a href="http://example.com"><span class="caption-panel"><img class="caption-body" src="https://via.placeholder.com/400" alt="This image has a url, the size is &#39;small&#39;, and the position is &#39;right&#39;." /><span class="caption">This image has a url, the size is &#39;small&#39;, and the position is &#39;right&#39;.</span></span></a></div>
+Sometimes you wish you had more flexibility when embedding images. Well, now you do! The advanced image tag gives you a few options when adding images to your post.<br/>
+<br/>
+The syntax can look something like this: <code>[img:example.jpg|url:http://example.com|size_modifier|position_modifier|caption_text]</code><br/>
+<br/>
+Where every field aside from <code>img:</code> is optional. An explanation of each option:
+<ul>
+<li><code>url:</code> - should explain itself. Use this to make the image link to a website when you click on it.</li>
+<li><code>size_modifier</code> - by default, the image tries to fill the width of the page. You can use the size modifier to change it to a fixed size. Valid values are: <code>thumb</code>, <code>small</code>, <code>medium</code>, and <code>large</code>.</li>
+<li><code>position_modifier</code> - by default, the image is centered and text will be wrapped above and below the image. You can use the position modifier to change the position and make the text flow around the image. Valid values are <code>inline</code>, <code>left</code>, <code>right</code>, and <code>center</code>.</li>
+<li><code>caption_text</code> - if you type anything aside from the values above, it will be treated as a caption to the image. You can only use plain text in the caption.</li>
+</ul>
+
+As an aside, video and audio files may sometimes be uploaded to the wiki. You can embed these files on modern browsers using the advanced image tag. Just replace <code>[img:]</code> with <code>[video:]</code> or <code>[audio:]</code> to use them. You can embed external video and audio as well, but note that some formats are not supported on some browsers, so it might not work for everyone. The safest formats to use are mp3 for audio, and mp4 for video.
+<h2 id="Youtube">Youtube</h2>
+
+<div class="embedded video left medium"><div class="caption-panel"><div class="video-container caption-body"><div class="video-content"><div class="uninitialised" data-youtube-id="oGlhgVz5r6E" style="background-image: url('https://i.ytimg.com/vi/oGlhgVz5r6E/hqdefault.jpg');"></div></div></div><span class="caption">This is the caption text</span></div></div>
+Embedding Youtube videos was an often-requested feature in TWHL, and now everybody can do it. To embed the video, you first need to find the video ID. You can find this in the URL of any Youtube video - it&#39;s a string of 10 or so letters and numbers. It&#39;s underlined in the example below.<br/>
+<br/>
+youtube.com/watch?v=<span class="underline">oGlhgVz5r6E</span><br/>
+<br/>
+Once you have the ID, you can use the <code>[youtube]</code> tag to add it to your post:
+<pre class="lang-plaintext"><code>[youtube]oGlhgVz5r6E[/youtube]</code></pre>
+You may also use the advanced image syntax. The options are similar to the <code>[img:]</code> tag, but you can&#39;t use the <code>url:</code>, <code>inline</code>, or <code>thumb</code> options in the tag. An example:
+<pre class="lang-plaintext"><code>[youtube:oGlhgVz5r6E|left|medium|This is the caption text]</code></pre>
+
+<h2 id="Headings">Headings</h2>
+Headings follow the HTML trend by having six levels. To use a heading, start a new line with <code>=</code> symbols. The more symbols you use, the smaller the heading will be.
+<div class="embed-panel card card-default"><div class="card-body"><h1 id="Heading_1_(Largest)">Heading 1 (Largest)</h1>
+<h2 id="Heading_2">Heading 2</h2>
+<h3 id="Heading_3">Heading 3</h3>
+<h4 id="Heading_4">Heading 4</h4>
+<h5 id="Heading_5">Heading 5</h5>
+<h6 id="Heading_6_(Smallest)">Heading 6 (Smallest)</h6></div></div>
+These headings are generated by this code:
+<pre class="lang-plaintext"><code>= Heading 1 (Largest)
+== Heading 2
+=== Heading 3
+==== Heading 4
+===== Heading 5
+====== Heading 6 (Smallest)</code></pre>
+
+<h2 id="Lists">Lists</h2>
+You can make lists by using <code>*</code> for bullet points or <code>#</code> for ordered lists. You can create sub-lists by adding extra symbols. You can mix list types on each level.
+<div class="embed-panel card card-default"><div class="card-body"><ul>
+<li>List item 1</li>
+<li>List item 2<ul>
+<li>List item 2.1</li>
+<li>List item 2.2</li>
+</ul>
+</li>
+</ul>
+
+
+<ol>
+<li>Step 1</li>
+<li>Step 2<ul>
+<li>Be sure to do step 1 before step 2!</li>
+</ul>
+</li>
+</ol>
+</div></div>
+The markup for the above looks like:
+<pre class="lang-plaintext"><code>* List item 1
+* List item 2
+** List item 2.1
+** List item 2.2
+
+# Step 1
+# Step 2
+#* Be sure to do step 1 before step 2!</code></pre>
+
+<h2 id="Quotes">Quotes</h2>
+Often you want to quote another user when you are replying to them. Again, there are two different ways to quote users.
+<blockquote>Markdown style quotes<br/>
+This is the second line of the quote</blockquote>
+The code looks like this:
+<pre class="lang-plaintext"><code>&gt; Markdown style quotes
+&gt; This is the second line of the quote</code></pre>
+It&#39;s important to note that additional lines in the quote must also start with the &#39;&gt;&#39; character.<br/>
+<br/>
+Quotes can be nested quite easily:
+<blockquote><blockquote>This is the parent quote</blockquote>
+This is the child quote</blockquote>
+And the markup:
+<pre class="lang-plaintext"><code>&gt;&gt; This is the parent quote
+&gt; This is the child quote</code></pre>
+The second way to quote users is to use the <code>[quote]</code> BBCode tag. These quotes can be nested as well. The new lines are not required, they are simply there to make it easier to read the example.
+<pre class="lang-plaintext"><code>[quote]
+    [quote]This is the parent quote[/quote]
+    This is the child quote
+[/quote]</code></pre>
+BBCode quotes have the advantage of adding the name of the person you are quoting:
+<blockquote><strong class="quote-name">GLaDOS said:</strong>Oh, hi. So, how are you holding up? Because I&#39;m a potato!</blockquote>
+Which can be done like this:
+<pre class="lang-plaintext"><code>[quote=GLaDOS]Oh, hi. So, how are you holding up? Because I&#39;m a potato![/quote]</code></pre>
+
+<h2 id="Panels">Panels</h2>
+Panels are a simple way to separate some content into its own block. Panels can&#39;t be nested within each other, but they can contain any other markup you want. To create a panel, simply mark the start of the content with <code>~~~</code>. The end of the panel will be marked by the next line that starts with <code>~~~</code>.<br/>
+<br/>
+If the first line of your panel content starts with <code>:</code>, it will be used as the panel title.
+<div class="embed-panel card card-default"><div class="card-header">Panel Title</div><div class="card-body">This is a panel.<br/>
+The markup for a panel looks like this:
+<pre class="lang-plaintext"><code>~~~
+:Panel Title
+This is a panel.
+~~~</code></pre></div></div>
+Panels can have different colours as well. The options are: <code>message</code> (green), <code>info</code> (blue), <code>warning</code> (yellow), and <code>error</code> (red). To use these colours, put the option after the <code>~~~</code> at the beginning of the panel.
+<div class="embed-panel card card-info"><div class="card-header">Information Panel</div><div class="card-body">This is an &#39;informative&#39; panel, it is coloured blue.<br/>
+The markup for an info panel looks like this:
+<pre class="lang-plaintext"><code>~~~info
+:Information Panel
+This is an &#39;informative&#39; panel, it is coloured blue.
+~~~</code></pre></div></div>
+
+<h2 id="Horizontal_line">Horizontal line</h2>
+This is a pretty simple one. Simply have a line of text that has nothing but <code>---</code>. It&#39;ll draw a line that&#39;s useful for separating sections of text in a post. It looks like this:
+<hr />
+
+<h2 id="Wiki_category">Wiki category</h2>
+This is the only tag that&#39;s specific to the wiki. You can use it in other places, but it will just be ignored. Add this tag to categorise wiki pages. Make sure you spell the category correctly, or the page will link to the wrong category. Here&#39;s some examples:
+<pre class="lang-plaintext"><code>[cat:Put Category Name Here]
+[cat:Source Tutorials]
+[cat:Requires Further Detail]</code></pre>
+
+<h2 id="Embedded_vault">Embedded vault</h2>
+If you&#39;re posting on a WIP thread or want to show off your new map or mod, you can embed the map vault item into the post. This is also good for posting example maps on a wiki page. To embed a vault item you need to know the ID of the item. You can find this at the end of the URL on the vault page. For example: twhl.info/vault/view/<span class="underline">1234</span><br/>
+<br/>
+Then you put that ID in a vault tag like this:
+<pre class="lang-plaintext"><code>[vault:1234]</code></pre>
+The vault item will be added to the page as a screenshot slideshow, along with a link to the item. If you would like to see what it looks like, you can use the post preview function to experiment with this feature.
+<h2 id="Tables">Tables</h2>
+If you want to get really fancy with your post, you can insert a table. The contents of a table can only be inline - for example, inline images, text formatting, links, and so on. You can&#39;t put stuff like Youtube videos or quotes in a table.<br/>
+<br/>
+To create a table, you use one line of text per table row. For a header row, start the line with <code>|=</code>. For a normal row, start the line with <code>|-</code>. After that, simply enter the contents of each column, separated by a <code>|</code> character. For example:
+<table class="table table-bordered"><tr>
+<th>Header 1</th>
+<th>Header 2</th>
+</tr>
+<tr>
+<td>Value 1</td>
+<td>Value 2</td>
+</tr>
+</table>
+This table can be created by typing this:
+<pre class="lang-plaintext"><code>|= Header 1 | Header 2
+|- Value 1  | Value 2</code></pre>
+
+<h2 id="Advanced_text_formatting">Advanced text formatting</h2>
+These advanced text formatting techniques are not possible using the Markdown style.
+<table class="table table-bordered"><tr>
+<th>Format</th>
+<th>BBCode</th>
+<th>Notes</th>
+</tr>
+<tr>
+<td><span style="color: red;">Colour text</span></td>
+<td><code>[font=red]Colour text[/font]</code></td>
+<td>Can use any colour name from the <a href="https://developer.mozilla.org/en/docs/Web/CSS/color_value#Color_keywords">CSS colour list</a></td>
+</tr>
+<tr>
+<td><span style="color: #FEA320;">Colour text 2</span></td>
+<td><code>[font=#FEA320]Colour text 2[/font]</code></td>
+<td>Can use any RGB hex value</td>
+</tr>
+<tr>
+<td><span style="font-size: 20px;">Large text</span></td>
+<td><code>[font size=20]Large text[/font]</code></td>
+<td>Can use sizes between 6px and 40px</td>
+</tr>
+<tr>
+<td><span style="font-size: 8px;">Small text</span></td>
+<td><code>[font size=8]Small text[/font]</code></td>
+<td>The standard text size is 14px</td>
+</tr>
+<tr>
+<td><span style="color: red; font-size: 20px;">Large red text</span></td>
+<td><code>[font color=red size=20]Large text[/font]</code></td>
+<td>Both size and colour can be combined. Remember to use the American spelling for &quot;color&quot;.</td>
+</tr>
+<tr>
+<td><span class="spoiler" title="Spoiler">Spoiler tag</span></td>
+<td><code>[spoiler]Spoiler tag[/spoiler]</code></td>
+<td>Don&#39;t spoil stuff for others!</td>
+</tr>
+<tr>
+<td><span class="spoiler" title="Half-Life">There&#39;s a resonance cascade</span></td>
+<td><code>[spoiler=Half-Life]There&#39;s a resonance cascade[/spoiler]</code></td>
+<td>It&#39;s polite to specify what game/movie/etc. the spoiler is for</td>
+</tr>
+</table>
+
+<h2 id="Code_blocks">Code blocks</h2>
+You may be wondering how those text blocks appeared above without the BBCode inside them being formatted. This is one of the features of a code block - everything inside them is treated as plain text, and not formatted. This is good for posting snippets of code. To post a code block using the Markdown style, surround the code with three backtick characters (that&#39;s the ` character). This will align the code block to the left to avoid unnecessary whitespace.
+<pre class="lang-plaintext"><code>```
+Surround your text with three backticks like this to format it as code.
+```</code></pre>
+If you don&#39;t like backticks for some reason, the BBCode tag you want is <code>[pre]</code>. It stands for &quot;preformatted&quot;. Unlike backtick blocks, preformatted blocks will retain all whitespace, including at the start of lines.
+<pre class="lang-plaintext"><code>[pre]All the text inside this tag will be a code block. All whitespace inside this block will be retained.[/pre]</code></pre>
+
+<h3 id="Syntax_highlighting">Syntax highlighting</h3>
+
+<pre class="lang-js"><code>function javascript() { console.log(&#39;hello!&#39;); }</code></pre>
+TWHL&#39;s code highlighting feature will try to detect which programming language your code block contains, but for more control over which language to use, you can specify the language with the following syntax (using <code>js</code> as the example language):
+<pre class="lang-plaintext"><code>[pre=js]function javascript() { console.log(&#39;hello!&#39;); }[/pre]</code></pre>
+<pre class="lang-plaintext"><code>```js
+function javascript() { console.log(&#39;hello!&#39;); }
+```</code></pre>
+The following languages are supported:
+<ul>
+<li>PHP - <code>php</code></li>
+<li>Windows batch - <code>dos</code>, <code>bat</code>, <code>cmd</code></li>
+<li>CSS - <code>css</code></li>
+<li>C++ - <code>cpp</code>, <code>c</code>, <code>c++</code></li>
+<li>C# - <code>cs</code></li>
+<li>INI config - <code>ini</code></li>
+<li>JSON - <code>json</code></li>
+<li>HTML/XML - <code>xml</code>, <code>html</code></li>
+<li>AngelScript - <code>angelscript</code></li>
+<li>JavaScript - <code>javascript</code>, <code>js</code></li>
+<li>Force no highlighting - <code>plaintext</code></li>
+</ul>
+
+
+<h2 id="Columns">Columns</h2>
+For complex stuff you might want to present some content in columns, side by side. You can do that by using the columns directive. It looks like this:
+<pre class="lang-plaintext"><code>%%columns=6:3:3
+Column 1
+%%
+Column 2
+%%
+Column 3
+%%</code></pre>
+Which looks like this:
+<div class="embed-panel card card-default"><div class="card-body"><div class="row"><div class="col-md-6">
+Column 1</div>
+<div class="col-md-3">
+Column 2</div>
+<div class="col-md-3">
+Column 3</div>
+</div></div></div>
+Some things to note:
+<ul>
+<li>The column widths are specified in the first line, in this case, <code>6:3:3</code>. These numbers are in respect to the page being 12 units wide. The column widths <strong>must</strong> add up to a total of 12 or the columns will not work.</li>
+<li>You need to specify the same number of content sections as columns in the first line, or the columns will not work.</li>
+<li>On small resolution screens (phones, tablets), the columns will show underneath each other instead of side by side.</li>
+</ul>
+
+
+<hr />
+Phew! That&#39;s everything! I know there&#39;s a lot of stuff here, but don&#39;t worry too much about it. If you need to do a particular thing, just come back to this page later so you can refresh your memory.</div>
+<ul class="wiki-categories inline-bullet">
+    <li class="header">Categories</li><li><a href="https://twhl.info/wiki/page/category:Meta">Meta</a></li></ul>
