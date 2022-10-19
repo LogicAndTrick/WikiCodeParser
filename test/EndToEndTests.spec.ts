@@ -9,7 +9,7 @@ function Test(input: string, expectedOutput: string, split = false): void {
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);
-    const resultHtml = result.ToHtml();
+    const resultHtml = result.ToHtml().trim();
 
     if (split) {
         const expectedLines = expectedOutput.split('\n');
@@ -56,8 +56,17 @@ describe('Isolated tests', () => {
 
     it('mdline-simple', () => RunTestCase('mdline-simple'));
 
-    it('columns-simple', () => RunTestCase('columns-simple', true));
+    it('columns-simple', () => RunTestCase('columns-simple'));
     it('columns-invalid', () => RunTestCase('columns-invalid'));
+
+    it('panel-simple', () => RunTestCase('panel-simple'));
+
+    it('mdquote-simple', () => RunTestCase('mdquote-simple'));
+    it('mdquote-nested', () => RunTestCase('mdquote-nested'));
+    
+    it('list-simple', () => RunTestCase('list-simple'));
+    it('list-nested', () => RunTestCase('list-nested'));
+    it('list-continuation', () => RunTestCase('list-continuation'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });
