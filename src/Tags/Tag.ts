@@ -22,7 +22,6 @@ export class Tag {
         return this.IsBlock ? TagParseContext.Block : TagParseContext.Inline;
     }
 
-    constructor();
     constructor(token = '', element = '', elementClass: string | null = null) {
         this.Token = token;
         this.Element = element;
@@ -110,13 +109,46 @@ export class Tag {
     }
 
     public FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
-        let before = '<' + Element;
+        let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += '>';
-        const after = '</' + Element + '>';
+        const after = '</' + this.Element + '>';
         const content = parser.ParseTags(data, text, scope, this.TagContext());
         const ret = new HtmlNode(before, content, after);
         ret.IsBlockNode = this.IsBlock;
         return ret;
+    }
+
+
+    // Extensions
+    
+    public WithScopes(...scopes : string[])
+    {
+        this.Scopes = scopes;
+        return this;
+    }
+
+    public WithToken(token : string)
+    {
+        this.Token = token;
+        return this;
+    }
+
+    public WithElement(element : string)
+    {
+        this.Element = element;
+        return this;
+    }
+
+    public WithElementClass(elementClass : string)
+    {
+        this.ElementClass = elementClass;
+        return this;
+    }
+
+    public WithBlock(isBlock : boolean)
+    {
+        this.IsBlock = isBlock;
+        return this;
     }
 }

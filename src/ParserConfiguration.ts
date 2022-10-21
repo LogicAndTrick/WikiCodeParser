@@ -11,7 +11,13 @@ import { PreElement } from './Elements/PreElement';
 import { RefElement } from './Elements/RefElement';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { NewLineProcessor } from './Processors/NewLineProcessor';
+import { TrimWhitespaceAroundBlockNodesProcessor } from './Processors/TrimWhitespaceAroundBlockNodesProcessor';
+import { CodeTag } from './Tags/CodeTag';
+import { FontTag } from './Tags/FontTag';
+import { PreTag } from './Tags/PreTag';
+import { QuoteTag } from './Tags/QuoteTag';
 import { Tag } from './Tags/Tag';
+import { WikiCategoryTag } from './Tags/WikiCategoryTag';
 
 export class ParserConfiguration {
 
@@ -19,19 +25,19 @@ export class ParserConfiguration {
         const conf = new ParserConfiguration();
 
         // // Standard inline
-        // conf.Tags.push(new Tag("b", "strong").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("i", "em").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("u", "span", "underline").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("s", "span", "strikethrough").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("green", "span", "green").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("blue", "span", "blue").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("red", "span", "red").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("purple", "span", "purple").WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new Tag("yellow", "span", "yellow").WithScopes("inline", "excerpt"));
+        conf.Tags.push(new Tag('b', 'strong').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('i', 'em').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('u', 'span', 'underline').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('s', 'span', 'strikethrough').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('green', 'span', 'green').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('blue', 'span', 'blue').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('red', 'span', 'red').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('purple', 'span', 'purple').WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new Tag('yellow', 'span', 'yellow').WithScopes('inline', 'excerpt'));
 
         // // Standard block
-        // conf.Tags.push(new PreTag());
-        // conf.Tags.push(new Tag("h", "h3"));
+        conf.Tags.push(new PreTag());
+        conf.Tags.push(new Tag('h', 'h3').WithBlock(true));
 
         // // Links
         // conf.Tags.push(new LinkTag().WithScopes("excerpt"));
@@ -49,14 +55,14 @@ export class ParserConfiguration {
         // conf.Tags.push(new VaultEmbedTag());
 
         // // Custom
-        // conf.Tags.push(new QuoteTag());
-        // conf.Tags.push(new FontTag().WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new WikiCategoryTag().WithScopes("inline", "excerpt"));
+        conf.Tags.push(new QuoteTag());
+        conf.Tags.push(new FontTag().WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new WikiCategoryTag().WithScopes('inline', 'excerpt'));
         // conf.Tags.push(new WikiBookTag().WithScopes("inline", "excerpt"));
         // conf.Tags.push(new WikiCreditTag().WithScopes("inline", "excerpt"));
         // conf.Tags.push(new WikiArchiveTag().WithScopes("inline", "excerpt"));
         // conf.Tags.push(new SpoilerTag().WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new CodeTag().WithScopes("excerpt"));
+        conf.Tags.push(new CodeTag().WithScopes('excerpt'));
 
         // Elements
         conf.Elements.push(new MdCodeElement());
@@ -74,7 +80,7 @@ export class ParserConfiguration {
         // conf.Processors.push(new MarkdownTextProcessor());
         // conf.Processors.push(new AutoLinkingProcessor());
         // conf.Processors.push(new SmiliesProcessor().pushDefault());
-        // conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
+        conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
         conf.Processors.push(new NewLineProcessor());
 
         return conf;

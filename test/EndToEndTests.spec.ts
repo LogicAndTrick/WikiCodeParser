@@ -4,12 +4,13 @@ import { describe } from 'mocha';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
 
-function Test(input: string, expectedOutput: string, split = false): void {
+function Test(input: string, expectedOutput: string, expectedMeta : string | undefined, split = false): void {
     const config = ParserConfiguration.Default();
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);
     const resultHtml = result.ToHtml().trim();
+    const resultMeta = result.GetMetadata().map(x => `${x.Key}=${x.Value}`).join('\n');
 
     if (split) {
         const expectedLines = expectedOutput.split('\n');
@@ -23,21 +24,30 @@ function Test(input: string, expectedOutput: string, split = false): void {
     } else {
         assert.equal(resultHtml, expectedOutput);
     }
+
+    if (expectedMeta) {
+        assert.equal(resultMeta, expectedMeta);
+    }
 }
 
 function RunTestCase(name: string, split = false) {
     let _in : string;
     let _out : string;
+    let _meta : string | undefined = undefined;
     if (existsSync(`${__dirname}/cases/${name}`)) {
         const text = readFileSync(`${__dirname}/cases/${name}`, 'utf-8');
-        [_in, _out] = text.split('###').map(x => x.trim());
+        [_in, _out, _meta] = text.split('###').map(x => x.trim());
     } else {
         _in = readFileSync(`${__dirname}/cases/${name}.in`, 'utf-8');
         _out = readFileSync(`${__dirname}/cases/${name}.out`, 'utf-8');
+        if (existsSync(`${__dirname}/cases/${name}.meta`)) {
+            _meta = readFileSync(`${__dirname}/cases/${name}.meta`, 'utf-8');
+        }
     }
     _in = _in.replace(/\r/g, '');
     _out = _out.replace(/\r/g, '');
-    Test(_in, _out, split);
+    _meta = _meta?.replace(/\r/g, '');
+    Test(_in, _out, _meta, split);
 }
 
 describe('Isolated tests', () => {
@@ -68,8 +78,16 @@ describe('Isolated tests', () => {
     it('list-nested', () => RunTestCase('list-nested'));
     it('list-continuation', () => RunTestCase('list-continuation'));
 
-    it('table-simple', () => RunTestCase('table-simple', true));
+    it('table-simple', () => RunTestCase('table-simple'));
     it('table-ref', () => RunTestCase('table-ref'));
+
+    it('tags-plain', () => RunTestCase('tags-plain'));
+    it('code-tag', () => RunTestCase('code-tag'));
+    it('font-tag', () => RunTestCase('font-tag'));
+    it('h-tag', () => RunTestCase('h-tag'));
+    it('pre-tag', () => RunTestCase('pre-tag'));
+    it('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
+    it('quote-tag', () => RunTestCase('quote-tag'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });

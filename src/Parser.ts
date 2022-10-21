@@ -120,7 +120,7 @@ export class Parser {
 
         while (!state.Done) {
             let plain = state.ScanTo('[');
-            if (plain && plain.trim() != '') root.Nodes.push(new PlainTextNode(plain));
+            if (plain && plain != '') root.Nodes.push(new PlainTextNode(plain));
             if (state.Done) break;
 
             const token = state.GetToken();
@@ -138,7 +138,7 @@ export class Parser {
 
             if (!found) {
                 plain = state.Next();
-                if (plain && plain.trim() != '') root.Nodes.push(new PlainTextNode(plain));
+                if (plain && plain != '') root.Nodes.push(new PlainTextNode(plain));
             }
         }
 

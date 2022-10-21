@@ -1,0 +1,19 @@
+[font]A[/font]
+[font=red]B[/font]
+[font=#aaa]C[/font]
+[font=#AABBCC]D[/font]
+[font size=10]E[/font]
+[font color=blue size=10]F[/font]
+[font size=10 colour=blue]G[/font]
+[font=green size=10]H[/font]
+
+###
+
+<span>A</span><br/>
+<span style="color: red;">B</span><br/>
+<span style="color: #aaa;">C</span><br/>
+<span style="color: #AABBCC;">D</span><br/>
+<span style="font-size: 10px;">E</span><br/>
+<span style="color: blue; font-size: 10px;">F</span><br/>
+<span style="color: blue; font-size: 10px;">G</span><br/>
+<span style="color: green; font-size: 10px;">H</span>
