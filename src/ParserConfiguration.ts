@@ -14,10 +14,16 @@ import { NewLineProcessor } from './Processors/NewLineProcessor';
 import { TrimWhitespaceAroundBlockNodesProcessor } from './Processors/TrimWhitespaceAroundBlockNodesProcessor';
 import { CodeTag } from './Tags/CodeTag';
 import { FontTag } from './Tags/FontTag';
+import { ImageTag } from './Tags/ImageTag';
+import { LinkTag } from './Tags/LinkTag';
 import { PreTag } from './Tags/PreTag';
+import { QuickLinkTag } from './Tags/QuickLinkTag';
 import { QuoteTag } from './Tags/QuoteTag';
+import { SpoilerTag } from './Tags/SpoilerTag';
 import { Tag } from './Tags/Tag';
+import { VaultEmbedTag } from './Tags/VaultEmbedTag';
 import { WikiCategoryTag } from './Tags/WikiCategoryTag';
+import { YoutubeTag } from './Tags/YoutubeTag';
 
 export class ParserConfiguration {
 
@@ -35,33 +41,33 @@ export class ParserConfiguration {
         conf.Tags.push(new Tag('purple', 'span', 'purple').WithScopes('inline', 'excerpt'));
         conf.Tags.push(new Tag('yellow', 'span', 'yellow').WithScopes('inline', 'excerpt'));
 
-        // // Standard block
+        // Standard block
         conf.Tags.push(new PreTag());
         conf.Tags.push(new Tag('h', 'h3').WithBlock(true));
 
-        // // Links
-        // conf.Tags.push(new LinkTag().WithScopes("excerpt"));
-        // conf.Tags.push(new LinkTag().WithScopes("excerpt").WithToken("email"));
-        // conf.Tags.push(new QuickLinkTag());
+        // Links
+        conf.Tags.push(new LinkTag().WithScopes('excerpt'));
+        conf.Tags.push(new LinkTag().WithScopes('excerpt').WithToken('email'));
+        conf.Tags.push(new QuickLinkTag());
         // conf.Tags.push(new WikiLinkTag());
         // conf.Tags.push(new WikiFileTag());
 
-        // // Embedded
-        // conf.Tags.push(new ImageTag());
-        // conf.Tags.push(new ImageTag().WithToken("simg").WithBlock(false));
+        // Embedded
+        conf.Tags.push(new ImageTag());
+        conf.Tags.push(new ImageTag().WithToken('simg').WithBlock(false));
         // conf.Tags.push(new WikiImageTag());
-        // conf.Tags.push(new YoutubeTag());
+        conf.Tags.push(new YoutubeTag());
         // conf.Tags.push(new WikiYoutubeTag());
-        // conf.Tags.push(new VaultEmbedTag());
+        conf.Tags.push(new VaultEmbedTag());
 
-        // // Custom
+        // Custom
         conf.Tags.push(new QuoteTag());
         conf.Tags.push(new FontTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new WikiCategoryTag().WithScopes('inline', 'excerpt'));
         // conf.Tags.push(new WikiBookTag().WithScopes("inline", "excerpt"));
         // conf.Tags.push(new WikiCreditTag().WithScopes("inline", "excerpt"));
         // conf.Tags.push(new WikiArchiveTag().WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new SpoilerTag().WithScopes("inline", "excerpt"));
+        conf.Tags.push(new SpoilerTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new CodeTag().WithScopes('excerpt'));
 
         // Elements
@@ -76,7 +82,7 @@ export class ParserConfiguration {
         conf.Elements.push(new MdColumnsElement());
         conf.Elements.push(new RefElement());
 
-        // // Processors
+        // Processors
         // conf.Processors.push(new MarkdownTextProcessor());
         // conf.Processors.push(new AutoLinkingProcessor());
         // conf.Processors.push(new SmiliesProcessor().pushDefault());

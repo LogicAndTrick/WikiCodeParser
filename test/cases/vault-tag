@@ -1,0 +1,7 @@
+A [vault:1234] B
+
+###
+
+A
+<div class="embedded vault"><div class="embed-container"><div class="embed-content"><div class="uninitialised" data-embed-type="vault" data-vault-id="1234">Loading embedded content: Vault Item #1234</div></div></div></div>
+B

@@ -88,6 +88,12 @@ describe('Isolated tests', () => {
     it('pre-tag', () => RunTestCase('pre-tag'));
     it('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
     it('quote-tag', () => RunTestCase('quote-tag'));
+    it('image-tag', () => RunTestCase('image-tag'));
+    it('link-tag', () => RunTestCase('link-tag'));
+    it('vault-tag', () => RunTestCase('vault-tag'));
+    it('quick-link-tag', () => RunTestCase('quick-link-tag'));
+    it('spoiler-tag', () => RunTestCase('spoiler-tag'));
+    it('youtube-tag', () => RunTestCase('youtube-tag'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });

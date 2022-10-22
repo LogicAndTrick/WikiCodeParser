@@ -1,0 +1,11 @@
+[spoiler]Test[/spoiler]
+[spoiler=One]Two
+three
+four[/spoiler]
+
+###
+
+<span class="spoiler" title="Spoiler">Test</span><br/>
+<span class="spoiler" title="One">Two<br/>
+three<br/>
+four</span>

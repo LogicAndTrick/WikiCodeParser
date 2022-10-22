@@ -97,7 +97,7 @@ describe('State tests', () => {
 
 describe('Basic tests', () => {
     it('test html escaping outside tag', () => {
-        const parser = new Parser(ParserConfiguration.Default());
+        const parser = new Parser(new ParserConfiguration());
         const result = parser.ParseResult('1 & 2');
         assert.isTrue(result.Content instanceof NodeCollection);
         const leaves = GetLeaves(result.Content);
