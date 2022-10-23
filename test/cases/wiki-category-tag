@@ -5,5 +5,5 @@
 
 ###
 
-WikiCategory=Test1
-WikiCategory=Test2
+WikiCategory="Test1"
+WikiCategory="Test2"

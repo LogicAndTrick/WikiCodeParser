@@ -3,9 +3,9 @@ import { INode } from './INode';
 export class MetadataNode implements INode {
 
     public Key : string;
-    public Value : string;
+    public Value : any;
 
-    constructor(key : string, value : string) {
+    constructor(key : string, value : any) {
         this.Key = key;
         this.Value = value;
     }

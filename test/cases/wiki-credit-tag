@@ -1,0 +1,15 @@
+[credit:test1]
+[credit:test2|user:123]
+[credit:test3|name:hi]
+[credit:test4|url:http://example.com]
+[credit:test5|user:456|name:zzz|url:http://example.com]
+
+###
+
+###
+
+WikiCredit={"Type":"c","Description":"test1"}
+WikiCredit={"Type":"c","Description":"test2","UserID":123}
+WikiCredit={"Type":"c","Description":"test3","Name":"hi"}
+WikiCredit={"Type":"c","Description":"test4","Url":"http://example.com"}
+WikiCredit={"Type":"c","Description":"test5","UserID":456,"Name":"zzz","Url":"http://example.com"}

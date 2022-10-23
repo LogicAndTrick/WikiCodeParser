@@ -10,7 +10,7 @@ function Test(input: string, expectedOutput: string, expectedMeta : string | und
 
     const result = parser.ParseResult(input);
     const resultHtml = result.ToHtml().trim();
-    const resultMeta = result.GetMetadata().map(x => `${x.Key}=${x.Value}`).join('\n');
+    const resultMeta = result.GetMetadata().map(x => `${x.Key}=${JSON.stringify(x.Value)}`).join('\n');
 
     if (split) {
         const expectedLines = expectedOutput.split('\n');
@@ -86,7 +86,6 @@ describe('Isolated tests', () => {
     it('font-tag', () => RunTestCase('font-tag'));
     it('h-tag', () => RunTestCase('h-tag'));
     it('pre-tag', () => RunTestCase('pre-tag'));
-    it('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
     it('quote-tag', () => RunTestCase('quote-tag'));
     it('image-tag', () => RunTestCase('image-tag'));
     it('link-tag', () => RunTestCase('link-tag'));
@@ -94,6 +93,12 @@ describe('Isolated tests', () => {
     it('quick-link-tag', () => RunTestCase('quick-link-tag'));
     it('spoiler-tag', () => RunTestCase('spoiler-tag'));
     it('youtube-tag', () => RunTestCase('youtube-tag'));
+    
+    it('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
+    it('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
+    it('wiki-file-tag', () => RunTestCase('wiki-file-tag'));
+    it('wiki-credit-tag', () => RunTestCase('wiki-credit-tag'));
+    it('wiki-book-tag', () => RunTestCase('wiki-book-tag'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });

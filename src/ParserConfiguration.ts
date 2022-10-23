@@ -9,6 +9,10 @@ import { MdQuoteElement } from './Elements/MdQuoteElement';
 import { MdTableElement } from './Elements/MdTableElement';
 import { PreElement } from './Elements/PreElement';
 import { RefElement } from './Elements/RefElement';
+import { WikiBookTag } from './Nodes/WikiBookTag';
+import { WikiCreditTag } from './Nodes/WikiCreditTag';
+import { WikiFileTag } from './Nodes/WikiFileTag';
+import { WikiImageTag } from './Nodes/WikiImageTag';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { NewLineProcessor } from './Processors/NewLineProcessor';
 import { TrimWhitespaceAroundBlockNodesProcessor } from './Processors/TrimWhitespaceAroundBlockNodesProcessor';
@@ -50,12 +54,12 @@ export class ParserConfiguration {
         conf.Tags.push(new LinkTag().WithScopes('excerpt').WithToken('email'));
         conf.Tags.push(new QuickLinkTag());
         // conf.Tags.push(new WikiLinkTag());
-        // conf.Tags.push(new WikiFileTag());
+        conf.Tags.push(new WikiFileTag());
 
         // Embedded
         conf.Tags.push(new ImageTag());
         conf.Tags.push(new ImageTag().WithToken('simg').WithBlock(false));
-        // conf.Tags.push(new WikiImageTag());
+        conf.Tags.push(new WikiImageTag());
         conf.Tags.push(new YoutubeTag());
         // conf.Tags.push(new WikiYoutubeTag());
         conf.Tags.push(new VaultEmbedTag());
@@ -64,8 +68,8 @@ export class ParserConfiguration {
         conf.Tags.push(new QuoteTag());
         conf.Tags.push(new FontTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new WikiCategoryTag().WithScopes('inline', 'excerpt'));
-        // conf.Tags.push(new WikiBookTag().WithScopes("inline", "excerpt"));
-        // conf.Tags.push(new WikiCreditTag().WithScopes("inline", "excerpt"));
+        conf.Tags.push(new WikiBookTag().WithScopes('inline', 'excerpt'));
+        conf.Tags.push(new WikiCreditTag().WithScopes('inline', 'excerpt'));
         // conf.Tags.push(new WikiArchiveTag().WithScopes("inline", "excerpt"));
         conf.Tags.push(new SpoilerTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new CodeTag().WithScopes('excerpt'));
