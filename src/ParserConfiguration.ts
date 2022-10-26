@@ -9,8 +9,11 @@ import { MdQuoteElement } from './Elements/MdQuoteElement';
 import { MdTableElement } from './Elements/MdTableElement';
 import { PreElement } from './Elements/PreElement';
 import { RefElement } from './Elements/RefElement';
+import { AutoLinkingProcessor } from './Processors/AutoLinkingProcessor';
 import { INodeProcessor } from './Processors/INodeProcessor';
+import { MarkdownTextProcessor } from './Processors/MarkdownTextProcessor';
 import { NewLineProcessor } from './Processors/NewLineProcessor';
+import { SmiliesProcessor } from './Processors/SmiliesProcessor';
 import { TrimWhitespaceAroundBlockNodesProcessor } from './Processors/TrimWhitespaceAroundBlockNodesProcessor';
 import { CodeTag } from './Tags/CodeTag';
 import { FontTag } from './Tags/FontTag';
@@ -90,9 +93,9 @@ export class ParserConfiguration {
         conf.Elements.push(new RefElement());
 
         // Processors
-        // conf.Processors.push(new MarkdownTextProcessor());
-        // conf.Processors.push(new AutoLinkingProcessor());
-        // conf.Processors.push(new SmiliesProcessor().pushDefault());
+        conf.Processors.push(new MarkdownTextProcessor());
+        conf.Processors.push(new AutoLinkingProcessor());
+        conf.Processors.push(new SmiliesProcessor().AddDefault());
         conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
         conf.Processors.push(new NewLineProcessor());
 

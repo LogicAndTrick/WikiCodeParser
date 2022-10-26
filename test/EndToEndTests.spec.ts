@@ -104,6 +104,10 @@ describe('Isolated tests', () => {
     it('wiki-link-tag', () => RunTestCase('wiki-link-tag'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
+    it('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
+    it('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany'));
+    it('processor-markdowntext', () => RunTestCase('processor-markdowntext'));
+    it('processor-autolinking', () => RunTestCase('processor-autolinking', true));
 });
 
 describe('End to end tests', () => {

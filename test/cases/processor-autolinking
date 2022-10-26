@@ -1,0 +1,13 @@
+http://example.com
+https://example.com
+ftp://example.com
+test@example.com
+test@test@example.com
+
+###
+
+<a href="http://example.com">http://example.com</a><br/>
+<a href="https://example.com">https://example.com</a><br/>
+ftp://example.com<br/>
+<a href="mailto:test@example.com">test@example.com</a><br/>
+test@test@example.com

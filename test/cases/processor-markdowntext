@@ -1,0 +1,19 @@
+*bold* /italic/ _underline_ ~strikethrough~ `code`
+`code with *escaped* markdown`
+*nested /markdown ~formatting~/*
+invalid:
+/ starting whitespace/
+~ending whitespace ~
+a_no starting whitespace_
+*no ending whitespace*a
+
+###
+
+<strong>bold</strong> <em>italic</em> <span class="underline">underline</span> <span class="strikethrough">strikethrough</span> <code>code</code><br/>
+<code>code with *escaped* markdown</code><br/>
+<strong>nested <em>markdown <span class="strikethrough">formatting</span></em></strong><br/>
+invalid:<br/>
+/ starting whitespace/<br/>
+~ending whitespace ~<br/>
+a_no starting whitespace_<br/>
+*no ending whitespace*a
