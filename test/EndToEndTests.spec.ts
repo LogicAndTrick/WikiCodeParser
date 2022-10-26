@@ -99,6 +99,9 @@ describe('Isolated tests', () => {
     it('wiki-file-tag', () => RunTestCase('wiki-file-tag'));
     it('wiki-credit-tag', () => RunTestCase('wiki-credit-tag'));
     it('wiki-book-tag', () => RunTestCase('wiki-book-tag'));
+    it('wiki-archive-tag', () => RunTestCase('wiki-archive-tag'));
+    it('wiki-youtube-tag', () => RunTestCase('wiki-youtube-tag'));
+    it('wiki-link-tag', () => RunTestCase('wiki-link-tag'));
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
 });

@@ -1,0 +1,17 @@
+[archive:test1]
+[archive:test2|description:123]
+[archive:test3|url:http://example.com]
+[archive:test4|url:http://example.com|wayback:1111122222333]
+[archive:test5|full]
+[archive:test6|description:zzz|url:http://example.com|wayback:12345|full]
+
+###
+
+###
+
+WikiCredit={"Type":"a","Name":"test1"}
+WikiCredit={"Type":"a","Name":"test2","Description":"123"}
+WikiCredit={"Type":"a","Name":"test3","Url":"http://example.com"}
+WikiCredit={"Type":"a","Name":"test4","Url":"http://example.com","WaybackUrl":"https://web.archive.org/web/1111122222333/http://example.com"}
+WikiCredit={"Type":"f","Name":"test5"}
+WikiCredit={"Type":"f","Name":"test6","Description":"zzz","Url":"http://example.com","WaybackUrl":"https://web.archive.org/web/12345/http://example.com"}

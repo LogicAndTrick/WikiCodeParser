@@ -22,11 +22,14 @@ import { QuoteTag } from './Tags/QuoteTag';
 import { SpoilerTag } from './Tags/SpoilerTag';
 import { Tag } from './Tags/Tag';
 import { VaultEmbedTag } from './Tags/VaultEmbedTag';
+import { WikiArchiveTag } from './Tags/WikiArchiveTag';
 import { WikiBookTag } from './Tags/WikiBookTag';
 import { WikiCategoryTag } from './Tags/WikiCategoryTag';
 import { WikiCreditTag } from './Tags/WikiCreditTag';
 import { WikiFileTag } from './Tags/WikiFileTag';
 import { WikiImageTag } from './Tags/WikiImageTag';
+import { WikiLinkTag } from './Tags/WikiLinkTag';
+import { WikiYoutubeTag } from './Tags/WikiYoutubeTag';
 import { YoutubeTag } from './Tags/YoutubeTag';
 
 export class ParserConfiguration {
@@ -53,7 +56,7 @@ export class ParserConfiguration {
         conf.Tags.push(new LinkTag().WithScopes('excerpt'));
         conf.Tags.push(new LinkTag().WithScopes('excerpt').WithToken('email'));
         conf.Tags.push(new QuickLinkTag());
-        // conf.Tags.push(new WikiLinkTag());
+        conf.Tags.push(new WikiLinkTag());
         conf.Tags.push(new WikiFileTag());
 
         // Embedded
@@ -61,7 +64,7 @@ export class ParserConfiguration {
         conf.Tags.push(new ImageTag().WithToken('simg').WithBlock(false));
         conf.Tags.push(new WikiImageTag());
         conf.Tags.push(new YoutubeTag());
-        // conf.Tags.push(new WikiYoutubeTag());
+        conf.Tags.push(new WikiYoutubeTag());
         conf.Tags.push(new VaultEmbedTag());
 
         // Custom
@@ -70,7 +73,7 @@ export class ParserConfiguration {
         conf.Tags.push(new WikiCategoryTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new WikiBookTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new WikiCreditTag().WithScopes('inline', 'excerpt'));
-        // conf.Tags.push(new WikiArchiveTag().WithScopes("inline", "excerpt"));
+        conf.Tags.push(new WikiArchiveTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new SpoilerTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new CodeTag().WithScopes('excerpt'));
 

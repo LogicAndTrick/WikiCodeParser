@@ -1,0 +1,15 @@
+[[Test1]]
+[[Test2|AAA]]
+[[Test3#Anchor|BBB]]
+
+###
+
+<a href="https://twhl.info/wiki/page/Test1">Test1</a><br/>
+<a href="https://twhl.info/wiki/page/Test2">AAA</a><br/>
+<a href="https://twhl.info/wiki/page/Test3#Anchor">BBB</a>
+
+###
+
+WikiLink="Test1"
+WikiLink="Test2"
+WikiLink="Test3"
