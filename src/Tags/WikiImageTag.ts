@@ -1,15 +1,15 @@
 import { Parser } from '..';
 import { HtmlHelper } from '../HtmlHelper';
 import { WikiRevision } from '../Models/WikiRevision';
+import { HtmlNode } from '../Nodes/HtmlNode';
+import { INode } from '../Nodes/INode';
+import { MetadataNode } from '../Nodes/MetadataNode';
+import { NodeCollection } from '../Nodes/NodeCollection';
+import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
-import { Tag } from '../Tags/Tag';
-import { HtmlNode } from './HtmlNode';
-import { INode } from './INode';
-import { MetadataNode } from './MetadataNode';
-import { NodeCollection } from './NodeCollection';
-import { PlainTextNode } from './PlainTextNode';
+import { Tag } from './Tag';
 
 export class WikiImageTag extends Tag {
     constructor() {

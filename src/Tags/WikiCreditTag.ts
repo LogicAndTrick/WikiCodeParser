@@ -1,11 +1,11 @@
 import { Parser } from '..';
 import { WikiRevisionCredit } from '../Models/WikiRevisionCredit';
+import { INode } from '../Nodes/INode';
+import { MetadataNode } from '../Nodes/MetadataNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
-import { Tag } from '../Tags/Tag';
-import { INode } from './INode';
-import { MetadataNode } from './MetadataNode';
+import { Tag } from './Tag';
 
 export class WikiCreditTag extends Tag {
     constructor() {

@@ -9,10 +9,6 @@ import { MdQuoteElement } from './Elements/MdQuoteElement';
 import { MdTableElement } from './Elements/MdTableElement';
 import { PreElement } from './Elements/PreElement';
 import { RefElement } from './Elements/RefElement';
-import { WikiBookTag } from './Nodes/WikiBookTag';
-import { WikiCreditTag } from './Nodes/WikiCreditTag';
-import { WikiFileTag } from './Nodes/WikiFileTag';
-import { WikiImageTag } from './Nodes/WikiImageTag';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { NewLineProcessor } from './Processors/NewLineProcessor';
 import { TrimWhitespaceAroundBlockNodesProcessor } from './Processors/TrimWhitespaceAroundBlockNodesProcessor';
@@ -26,7 +22,11 @@ import { QuoteTag } from './Tags/QuoteTag';
 import { SpoilerTag } from './Tags/SpoilerTag';
 import { Tag } from './Tags/Tag';
 import { VaultEmbedTag } from './Tags/VaultEmbedTag';
+import { WikiBookTag } from './Tags/WikiBookTag';
 import { WikiCategoryTag } from './Tags/WikiCategoryTag';
+import { WikiCreditTag } from './Tags/WikiCreditTag';
+import { WikiFileTag } from './Tags/WikiFileTag';
+import { WikiImageTag } from './Tags/WikiImageTag';
 import { YoutubeTag } from './Tags/YoutubeTag';
 
 export class ParserConfiguration {
