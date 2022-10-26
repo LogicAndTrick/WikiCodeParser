@@ -36,15 +36,16 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             line = line.Substring(res.Value.Length);
             string lang = null;
             var hl = false;
-            if (res.Groups[1].Success) {
+            if (res.Groups[1].Success)
+            {
                 var spl = res.Groups[1].Value.Split(' ');
                 hl = spl.Contains("highlight");
-                lang = spl.FirstOrDefault(x => x != "highlight");
+                lang = spl.FirstOrDefault(x => x != "highlight")?.ToLower();
+                if (!AllowedLanguages.Contains(lang)) lang = null;
             }
 
             if (line.EndsWith("[/pre]"))
             {
-                lines.Next();
                 arr.Add(line.Substring(0, line.Length - 6));
             }
             else

@@ -48,14 +48,14 @@ information
 
         private async void Render()
         {
-            if (!_webViewInitialised) return;
-
             var text = TextBox.Text;
             try
             {
                 var parsed = _parser.ParseResult(text);
-                var content = "<div class=\"bbcode\">" + parsed.ToHtml() + "</div>" + HtmlMetadata(parsed.GetMetadata());
-                HtmlTextBox.Text = content;
+                var html = parsed.ToHtml();
+                var content = "<div class=\"bbcode\">" + html + "</div>" + HtmlMetadata(parsed.GetMetadata());
+                HtmlTextBox.Text = html;
+                if (!_webViewInitialised) return;
                 var json = System.Text.Json.JsonSerializer.Serialize(new
                 {
                     content
@@ -64,6 +64,7 @@ information
             }
             catch (Exception ex)
             {
+                if (!_webViewInitialised) return;
                 var json = System.Text.Json.JsonSerializer.Serialize(new
                 {
                     message = ex.Message,

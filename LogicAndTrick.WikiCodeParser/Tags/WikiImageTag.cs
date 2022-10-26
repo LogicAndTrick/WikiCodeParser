@@ -133,7 +133,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             };
         }
 
-        private INode GetEmbedObject(string tag, string url, string caption, bool loop)
+        private static INode GetEmbedObject(string tag, string url, string caption, bool loop)
         {
             url = HtmlHelper.AttributeEncode(url);
             switch (tag)
@@ -158,7 +158,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             return null;
         }
 
-        private bool ValidateUrl(string url)
+        private static bool ValidateUrl(string url)
         {
             return !url.Contains("<script");
         }

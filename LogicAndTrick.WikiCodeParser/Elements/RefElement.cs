@@ -31,7 +31,6 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
             if (line.EndsWith("[/ref]"))
             {
-                lines.Next();
                 arr.Add(line.Substring(0, line.Length - 6));
             }
             else

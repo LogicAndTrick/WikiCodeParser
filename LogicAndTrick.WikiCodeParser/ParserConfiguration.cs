@@ -28,7 +28,7 @@ namespace LogicAndTrick.WikiCodeParser
 
             // Standard block
             conf.Tags.Add(new PreTag());
-            conf.Tags.Add(new Tag("h", "h3"));
+            conf.Tags.Add(new Tag("h", "h3").WithBlock(true));
 
             // Links
             conf.Tags.Add(new LinkTag().WithScopes("excerpt"));

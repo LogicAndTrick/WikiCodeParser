@@ -37,7 +37,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         public void ReplaceChild(int i, INode node)
         {
             if (i != 0) throw new IndexOutOfRangeException();
-            Data.Set(Name, node);
+            Data.Set($"Ref::{Name}", node);
         }
 
         public bool HasContent()

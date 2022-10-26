@@ -21,7 +21,7 @@ namespace LogicAndTrick.WikiCodeParser
         {
             return HttpUtility.HtmlAttributeEncode(attributeText)
                 .Replace(">", "&gt;")
-                .Replace("'", "&quot;");
+                .Replace("'", "&#39;");
         }
     }
 }
