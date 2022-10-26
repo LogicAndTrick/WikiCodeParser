@@ -1,11 +1,16 @@
 
+function escapeEmoji(str : string) {
+    return str.replace(/\p{Emoji_Presentation}/ugm, s => '&#' +s.codePointAt(0) + ';');
+}
+
 export class HtmlHelper {
     public static Encode(text: string): string {
-        return text.replace('&', '&amp;')
-            .replace('<', '&lt;')
-            .replace('>', '&gt;')
-            .replace('"', '&quot;')
-            .replace('\\', '&#39;');
+        text = text.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        return escapeEmoji(text);
     }
 
     public static UrlEncode(text: string): string {
@@ -13,10 +18,11 @@ export class HtmlHelper {
     }
 
     public static AttributeEncode(text: string): string {
-        return text.replace('&', '&amp;')
-            .replace('<', '&lt;')
-            .replace('>', '&gt;')
-            .replace('"', '&quot;')
-            .replace('\\', '&#39;');
+        text = text.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        return escapeEmoji(text);
     }
 }

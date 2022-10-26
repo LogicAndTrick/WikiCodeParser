@@ -52,6 +52,7 @@ function RunTestCase(name: string, split = false) {
 
 describe('Isolated tests', () => {
     it('missing-tag', () => RunTestCase('missing-tag'));
+    it('unicode-escape', () => RunTestCase('unicode-escape'));
     
     it('ref-simple', () => RunTestCase('ref-simple'));
     
@@ -105,11 +106,11 @@ describe('Isolated tests', () => {
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
     it('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
-    it('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany'));
+    it('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany', true));
     it('processor-markdowntext', () => RunTestCase('processor-markdowntext'));
     it('processor-autolinking', () => RunTestCase('processor-autolinking', true));
 });
 
 describe('End to end tests', () => {
-    //it('wikicode-page', () => RunTestCase('wikicode-page', true));
+    it('wikicode-page', () => RunTestCase('wikicode-page', true));
 });
