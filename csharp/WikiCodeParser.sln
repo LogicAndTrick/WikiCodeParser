@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicAndTrick.WikiCodeParse
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicAndTrick.WikiCodeParser.Sandbox", "LogicAndTrick.WikiCodeParser.Sandbox\LogicAndTrick.WikiCodeParser.Sandbox.csproj", "{D652A10A-48C6-4EF2-9211-45421ED688BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicAndTrick.WikiCodeParser.Tests", "LogicAndTrick.WikiCodeParser.Tests\LogicAndTrick.WikiCodeParser.Tests.csproj", "{5C80585B-E166-4DB7-ACFD-686654B006AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicAndTrick.WikiCodeParser.Tests", "LogicAndTrick.WikiCodeParser.Tests\LogicAndTrick.WikiCodeParser.Tests.csproj", "{5C80585B-E166-4DB7-ACFD-686654B006AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicAndTrick.WikiCodeParser.WinUI", "LogicAndTrick.WikiCodeParser.WinUI\LogicAndTrick.WikiCodeParser.WinUI.csproj", "{135F1F04-73F1-4711-A265-4DF8412CCD97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicAndTrick.WikiCodeParser.WinUI", "LogicAndTrick.WikiCodeParser.WinUI\LogicAndTrick.WikiCodeParser.WinUI.csproj", "{135F1F04-73F1-4711-A265-4DF8412CCD97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,7 +32,6 @@ Global
 		{135F1F04-73F1-4711-A265-4DF8412CCD97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{135F1F04-73F1-4711-A265-4DF8412CCD97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{135F1F04-73F1-4711-A265-4DF8412CCD97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{135F1F04-73F1-4711-A265-4DF8412CCD97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
