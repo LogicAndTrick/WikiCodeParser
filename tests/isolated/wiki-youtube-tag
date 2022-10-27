@@ -1,0 +1,17 @@
+[youtube]aaaaaaa[/youtube]
+[youtube:aaaaaaa]
+[youtube:bbbbbbb|caption]
+[youtube:ccccccc|small]
+[youtube:ddddddd|right]
+
+###
+
+<div class="embedded video"> <div class="caption-panel">  <div class="video-container caption-body">   <div class="video-content">    <div class="uninitialised" data-youtube-id="aaaaaaa" style="background-image: url('https://i.ytimg.com/vi/aaaaaaa/hqdefault.jpg');"></div>   </div>  </div></div></div>
+
+<div class="embedded video"><div class="caption-panel"><div class="video-container caption-body"><div class="video-content"><div class="uninitialised" data-youtube-id="aaaaaaa" style="background-image: url('https://i.ytimg.com/vi/aaaaaaa/hqdefault.jpg');"></div></div></div></div></div>
+
+<div class="embedded video"><div class="caption-panel"><div class="video-container caption-body"><div class="video-content"><div class="uninitialised" data-youtube-id="bbbbbbb" style="background-image: url('https://i.ytimg.com/vi/bbbbbbb/hqdefault.jpg');"></div></div></div><span class="caption">caption</span></div></div>
+
+<div class="embedded video small"><div class="caption-panel"><div class="video-container caption-body"><div class="video-content"><div class="uninitialised" data-youtube-id="ccccccc" style="background-image: url('https://i.ytimg.com/vi/ccccccc/hqdefault.jpg');"></div></div></div></div></div>
+
+<div class="embedded video right"><div class="caption-panel"><div class="video-container caption-body"><div class="video-content"><div class="uninitialised" data-youtube-id="ddddddd" style="background-image: url('https://i.ytimg.com/vi/ddddddd/hqdefault.jpg');"></div></div></div></div></div>

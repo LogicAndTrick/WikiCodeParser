@@ -1,0 +1,21 @@
+[img:test1]
+[img:test2|caption]
+[img:test3|small]
+[img:test4|right]
+
+###
+
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test1" alt="User posted image" /></span></div>
+
+<div class="embedded image" title="caption"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test2" alt="caption" /><span class="caption">caption</span></span></div>
+
+<div class="embedded image small"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test3" alt="User posted image" /></span></div>
+
+<div class="embedded image right"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test4" alt="User posted image" /></span></div>
+
+###
+
+WikiUpload="test1"
+WikiUpload="test2"
+WikiUpload="test3"
+WikiUpload="test4"

@@ -1,0 +1,9 @@
+[book:test1|chapter:aaa|chapternumber:2|pagenumber:3]
+[book:test2|chapter:bbb|chapternumber:7|pagenumber:99]
+
+###
+
+###
+
+WikiBook={"BookName":"test1","ChapterName":"aaa","ChapterNumber":2,"PageNumber":3}
+WikiBook={"BookName":"test2","ChapterName":"bbb","ChapterNumber":7,"PageNumber":99}

@@ -1,0 +1,16 @@
+{
+    "eslint.enable": true,
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
+    "eslint.packageManager": "yarn",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true
+    },
+    "mochaExplorer.require": [
+        "ts-node/register"
+    ],
+    "testExplorer.useNativeTesting": true
+}

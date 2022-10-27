@@ -1,0 +1,15 @@
+[quote=test]
+hi
+[quote]
+hello
+[/quote]
+[/quote]
+
+###
+
+<blockquote><strong class="quote-name">test said:</strong><br/>
+hi
+<blockquote><br/>
+hello<br/>
+</blockquote>
+</blockquote>

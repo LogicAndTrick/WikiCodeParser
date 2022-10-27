@@ -1,0 +1,12 @@
+[file:test1]
+[file:test2|caption]
+
+###
+
+<span class="embedded-inline download" data-info="https://twhl.info/wiki/embed-info/test1"><a href="https://twhl.info/wiki/embed/test1"><span class="fa fa-download"></span> test1</a></span><br/>
+<span class="embedded-inline download" data-info="https://twhl.info/wiki/embed-info/test2"><a href="https://twhl.info/wiki/embed/test2"><span class="fa fa-download"></span> caption</a></span>
+
+###
+
+WikiUpload="test1"
+WikiUpload="test2"

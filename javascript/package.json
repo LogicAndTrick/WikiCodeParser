@@ -1,0 +1,32 @@
+{
+  "name": "twhl-wikicode-parser",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "/build"
+  ],
+  "author": "Logic & Trick",
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {
+    "build": "node --no-warnings scripts/build.mjs",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.5",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "browserify": "^17.0.0",
+    "chai": "^4.3.6",
+    "eslint": "^8.25.0",
+    "exorcist": "^2.0.0",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.9.1",
+    "tsify": "^5.0.4",
+    "typescript": "^4.8.4",
+    "uglify-js": "^3.17.3"
+  }
+}

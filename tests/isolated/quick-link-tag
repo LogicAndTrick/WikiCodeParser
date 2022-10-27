@@ -1,0 +1,7 @@
+[http://example.com]
+[http://example.com|Test]
+
+###
+
+<a href="http://example.com">http://example.com</a><br/>
+<a href="http://example.com">Test</a>
