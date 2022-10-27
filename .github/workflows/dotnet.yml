@@ -18,13 +18,13 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore csharp/
     - name: Build
-      run: dotnet build csharp/--configuration Release --no-restore
+      run: dotnet build csharp/ --configuration Release --no-restore
     - name: Test
-      run: dotnet test csharp/--configuration Release --no-build --verbosity normal
+      run: dotnet test csharp/ --configuration Release --no-build --verbosity normal
     - name: Create packages
-      run: dotnet pack csharp/--configuration Release --no-build --output . --include-symbols -p:SymbolPackageFormat=snupkg
+      run: dotnet pack csharp/ --configuration Release --no-build --output . --include-symbols -p:SymbolPackageFormat=snupkg
 #    - name: Publish packages
 #      run: dotnet nuget push csharp/*.nupkg --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate
     - name: Upload a Build Artifact
