@@ -30,18 +30,19 @@ function Test(input: string, expectedOutput: string, expectedMeta : string | und
     }
 }
 
-function RunTestCase(name: string, split = false) {
+function RunTestCaseInFolder(folder: string, name: string, split = false) {
+    const dir = `${__dirname}/../../tests/${folder}`;
     let _in : string;
     let _out : string;
     let _meta : string | undefined = undefined;
-    if (existsSync(`${__dirname}/cases/${name}`)) {
-        const text = readFileSync(`${__dirname}/cases/${name}`, 'utf-8');
+    if (existsSync(`${dir}/${name}`)) {
+        const text = readFileSync(`${dir}/${name}`, 'utf-8');
         [_in, _out, _meta] = text.split('###').map(x => x.trim());
     } else {
-        _in = readFileSync(`${__dirname}/cases/${name}.in`, 'utf-8');
-        _out = readFileSync(`${__dirname}/cases/${name}.out`, 'utf-8');
-        if (existsSync(`${__dirname}/cases/${name}.meta`)) {
-            _meta = readFileSync(`${__dirname}/cases/${name}.meta`, 'utf-8');
+        _in = readFileSync(`${dir}/${name}.in`, 'utf-8');
+        _out = readFileSync(`${dir}/${name}.out`, 'utf-8');
+        if (existsSync(`${dir}/${name}.meta`)) {
+            _meta = readFileSync(`${dir}/${name}.meta`, 'utf-8');
         }
     }
     _in = _in.replace(/\r/g, '');
@@ -51,6 +52,8 @@ function RunTestCase(name: string, split = false) {
 }
 
 describe('Isolated tests', () => {
+    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder('isolated', name, split);
+
     it('missing-tag', () => RunTestCase('missing-tag'));
     it('unicode-escape', () => RunTestCase('unicode-escape'));
     
@@ -106,11 +109,12 @@ describe('Isolated tests', () => {
 
     it('processor-newlines', () => RunTestCase('processor-newlines'));
     it('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
-    it('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany', true));
+    it('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany'));
     it('processor-markdowntext', () => RunTestCase('processor-markdowntext'));
-    it('processor-autolinking', () => RunTestCase('processor-autolinking', true));
+    it('processor-autolinking', () => RunTestCase('processor-autolinking'));
 });
 
 describe('End to end tests', () => {
-    it('wikicode-page', () => RunTestCase('wikicode-page', true));
+    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder('endtoend', name, split);
+    it('wikicode-page', () => RunTestCase('wikicode-page'));
 });
