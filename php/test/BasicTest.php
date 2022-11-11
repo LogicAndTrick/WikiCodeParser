@@ -3,6 +3,8 @@
 namespace LogicAndTrick\WikiCodeParser;
 
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
+use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
+use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use PHPUnit\Framework\TestCase;
 
 
@@ -29,12 +31,12 @@ class BasicTest extends TestCase
     public function testHtmlEscapingOutsideTag() {
         $parser = new Parser(new ParserConfiguration());
         $result = $parser->ParseResult('1 & 2');
-        self::assertInstanceOf('NodeCollection', $result->Content);
-        $leaves = self::GetLeaves($result->Content);
+        self::assertInstanceOf(NodeCollection::class, $result->content);
+        $leaves = self::GetLeaves($result->content);
         self::assertCount(1, $leaves);
         $node = $leaves[0];
-        self::assertInstanceOf('PlainTextNode', $node);
-        self::assertEquals("1 & 2", $node->Text);
+        self::assertInstanceOf(PlainTextNode::class, $node);
+        self::assertEquals("1 & 2", $node->text);
         self::assertEquals("1 &amp; 2", $node->ToHtml());
         self::assertEquals("1 & 2", $node->ToPlainText());
     }

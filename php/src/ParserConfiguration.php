@@ -3,7 +3,9 @@
 namespace LogicAndTrick\WikiCodeParser;
 
 use LogicAndTrick\WikiCodeParser\Elements\MdCodeElement;
+use LogicAndTrick\WikiCodeParser\Elements\MdHeadingElement;
 use LogicAndTrick\WikiCodeParser\Elements\PreElement;
+use LogicAndTrick\WikiCodeParser\Elements\RefElement;
 use LogicAndTrick\WikiCodeParser\Processors\NewLineProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\TrimWhitespaceAroundBlockNodesProcessor;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
@@ -57,14 +59,14 @@ class ParserConfiguration
         // Elements
         $conf->elements[] = new MdCodeElement();
         $conf->elements[] = new PreElement();
-//        $conf->elements[] = new MdHeadingElement();
+        $conf->elements[] = new MdHeadingElement();
 //        $conf->elements[] = new MdLineElement();
 //        $conf->elements[] = new MdQuoteElement();
 //        $conf->elements[] = new MdListElement();
 //        $conf->elements[] = new MdTableElement();
 //        $conf->elements[] = new MdPanelElement();
 //        $conf->elements[] = new MdColumnsElement();
-//        $conf->elements[] = new RefElement();
+        $conf->elements[] = new RefElement();
 
         // Processors
 //        $conf->processors[] = new MarkdownTextProcessor();
