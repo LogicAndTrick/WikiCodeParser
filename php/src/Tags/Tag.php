@@ -50,7 +50,7 @@ class Tag
 
     public function Matches(State $state, string $token, TagParseContext $context): bool
     {
-        return strtolower($token) == $token && ($context == TagParseContext::Block || !$this->isBlock);
+        return strtolower($token) == $this->token && ($context == TagParseContext::Block || !$this->isBlock);
     }
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null

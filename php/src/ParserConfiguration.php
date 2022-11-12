@@ -8,6 +8,12 @@ use LogicAndTrick\WikiCodeParser\Elements\PreElement;
 use LogicAndTrick\WikiCodeParser\Elements\RefElement;
 use LogicAndTrick\WikiCodeParser\Processors\NewLineProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\TrimWhitespaceAroundBlockNodesProcessor;
+use LogicAndTrick\WikiCodeParser\Tags\CodeTag;
+use LogicAndTrick\WikiCodeParser\Tags\FontTag;
+use LogicAndTrick\WikiCodeParser\Tags\ImageTag;
+use LogicAndTrick\WikiCodeParser\Tags\LinkTag;
+use LogicAndTrick\WikiCodeParser\Tags\PreTag;
+use LogicAndTrick\WikiCodeParser\Tags\QuoteTag;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
 
 class ParserConfiguration
@@ -27,34 +33,34 @@ class ParserConfiguration
         $conf->tags[] = (new Tag('yellow', 'span', 'yellow'))->WithScopes('inline', 'excerpt');
 
         // Standard block
-//        $conf->tags[] = new PreTag();
+        $conf->tags[] = new PreTag();
         $conf->tags[] = (new Tag('h', 'h3'))->WithBlock(true);
 
 
         // Links
-//        $conf->tags[] = new LinkTag()->WithScopes('excerpt');
-//        $conf->tags[] = new LinkTag()->WithScopes('excerpt')->WithToken('email');
+        $conf->tags[] = (new LinkTag())->WithScopes('excerpt');
+        $conf->tags[] = (new LinkTag())->WithScopes('excerpt')->WithToken('email');
 //        $conf->tags[] = new QuickLinkTag();
 //        $conf->tags[] = new WikiLinkTag();
 //        $conf->tags[] = new WikiFileTag();
 
         // Embedded
-//        $conf->tags[] = new ImageTag();
-//        $conf->tags[] = new ImageTag()->WithToken('simg')->WithBlock(false);
+        $conf->tags[] = new ImageTag();
+        $conf->tags[] = (new ImageTag())->WithToken('simg')->WithBlock(false);
 //        $conf->tags[] = new WikiImageTag();
 //        $conf->tags[] = new YoutubeTag();
 //        $conf->tags[] = new WikiYoutubeTag();
 //        $conf->tags[] = new VaultEmbedTag();
 
         // Custom
-//        $conf->tags[] = new QuoteTag();
-//        $conf->tags[] = new FontTag()->WithScopes('inline', 'excerpt');
+        $conf->tags[] = new QuoteTag();
+        $conf->tags[] = (new FontTag())->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new WikiCategoryTag()->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new WikiBookTag()->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new WikiCreditTag()->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new WikiArchiveTag()->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new SpoilerTag()->WithScopes('inline', 'excerpt');
-//        $conf->tags[] = new CodeTag()->WithScopes('excerpt');
+        $conf->tags[] = (new CodeTag())->WithScopes('excerpt');
 
         // Elements
         $conf->elements[] = new MdCodeElement();

@@ -11,7 +11,7 @@ class TestCaseUtils
         $parser = new Parser($config);
 
         $result = $parser->ParseResult($input);
-        $resultHtml = $result->ToHtml();
+        $resultHtml = trim($result->ToHtml());
 
         if ($split) {
             $expectedLines = explode("\n", $expectedOutput);

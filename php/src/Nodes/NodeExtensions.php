@@ -7,7 +7,7 @@ class NodeExtensions
     public static function Remove(INode $root, INode $remove): bool {
         $children = $root->GetChildren();
         $idx = array_search($remove, $children, true);
-        if ($idx >= 0) {
+        if ($idx !== false && $idx >= 0) {
             $root->ReplaceChild($idx, new RemovedNode($remove));
             return true;
         }
