@@ -37,7 +37,7 @@ class State
 
     public function PeekTo(string $find) : string | null
     {
-        $pos = strpos($this->text, $find);
+        $pos = strpos($this->text, $find, $this->index);
         if ($pos === false) return null;
         return substr($this->text, $this->index, $pos - $this->index);
     }

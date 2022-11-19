@@ -16,11 +16,10 @@ class ParseResult
         $this->content = new NodeCollection();
     }
 
-    /** @noinspection PhpArrayUsedOnlyForWriteInspection */
     public function GetMetadata(): array
     {
         $list = [];
-        NodeExtensions::Walk($this->content, function (INode $n) use ($list) {
+        NodeExtensions::Walk($this->content, function (INode $n) use (&$list) {
             if ($n instanceof MetadataNode) $list[] = ['key' => $n->key, 'value' => $n->value];
             return true;
         });

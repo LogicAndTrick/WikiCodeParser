@@ -13,8 +13,10 @@ use LogicAndTrick\WikiCodeParser\Tags\FontTag;
 use LogicAndTrick\WikiCodeParser\Tags\ImageTag;
 use LogicAndTrick\WikiCodeParser\Tags\LinkTag;
 use LogicAndTrick\WikiCodeParser\Tags\PreTag;
+use LogicAndTrick\WikiCodeParser\Tags\QuickLinkTag;
 use LogicAndTrick\WikiCodeParser\Tags\QuoteTag;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiLinkTag;
 
 class ParserConfiguration
 {
@@ -40,8 +42,8 @@ class ParserConfiguration
         // Links
         $conf->tags[] = (new LinkTag())->WithScopes('excerpt');
         $conf->tags[] = (new LinkTag())->WithScopes('excerpt')->WithToken('email');
-//        $conf->tags[] = new QuickLinkTag();
-//        $conf->tags[] = new WikiLinkTag();
+        $conf->tags[] = new QuickLinkTag();
+        $conf->tags[] = new WikiLinkTag();
 //        $conf->tags[] = new WikiFileTag();
 
         // Embedded

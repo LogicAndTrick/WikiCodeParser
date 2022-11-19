@@ -28,7 +28,31 @@ class TestCaseUtils
         }
 
         if ($expectedMeta != null) {
-            throw new \Exception("not implemented yet");
+            $resultMetaObjects = $result->GetMetadata(); //.Select(x => new { x.Key, Value = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(x.Value)) }).ToList();
+            $expectedMetaObjects = array_map(function(string $x) {
+                //.Select(x => x.Trim().Split('=', 2)).Select(x => new { Key = x[0], Value = JsonConvert.DeserializeObject(x[1]) }).ToList();
+                $x = trim($x);
+                $spl = explode('=', $x, 2);
+                return [ 'key' => $spl[0], 'value' => json_decode($spl[1]) ];
+            }, explode("\n", $expectedMeta));
+            Assert::assertEquals(count($expectedMetaObjects), count($resultMetaObjects));
+            for ($i = 0; $i < count($resultMetaObjects); $i++)
+            {
+                $rmo = $resultMetaObjects[$i];
+                $emo = $expectedMetaObjects[$i];
+                Assert::assertEquals($emo['key'], $rmo['key']);
+                if ($emo['value'] == $rmo['value']) continue;
+                throw new \Exception("not implemented yet");
+//                var robj = (JObject)rmo.Value;
+//                var eobj = (JObject)rmo.Value;
+//                foreach (var ep in eobj.Properties())
+//                {
+//                    var rp = robj.Property(ep.Name);
+//                    var ev = ep.Value?.ToString();
+//                    var rv = rp.Value?.ToString();
+//                    Assert.AreEqual(ev, rv);
+//                }
+            }
         }
     }
 

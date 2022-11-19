@@ -48,7 +48,7 @@ class Tag
         return !$scope || trim($scope) == '' || in_array($scope, $this->scopes, true);
     }
 
-    public function Matches(State $state, string $token, TagParseContext $context): bool
+    public function Matches(State $state, ?string $token, TagParseContext $context): bool
     {
         return strtolower($token) == $this->token && ($context == TagParseContext::Block || !$this->isBlock);
     }

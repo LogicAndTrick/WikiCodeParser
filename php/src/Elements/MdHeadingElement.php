@@ -2,13 +2,14 @@
 
 namespace LogicAndTrick\WikiCodeParser\Elements;
 
+use Exception;
 use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
-use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 
+/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class HeadingNode implements INode {
     public int $level;
     public string $id;
@@ -26,15 +27,18 @@ class HeadingNode implements INode {
 
     public function ToPlainText(): string {
         $plain = $this->text->ToPlainText();
-        return $plain + '\n' + str_repeat('-', strlen($plain));
+        return $plain . '\n' . str_repeat('-', strlen($plain));
     }
 
     public function GetChildren(): array {
         return [ $this->text ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function ReplaceChild(int $i, INode $node): void {
-        if ($i != 0) throw new \Exception('Argument out of range');
+        if ($i != 0) throw new Exception('Argument out of range');
         $this->text = $node;
     }
 

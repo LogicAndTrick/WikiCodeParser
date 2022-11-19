@@ -41,7 +41,7 @@ describe('State tests', () => {
         assert.equal(st.Index, 4);
     });
     it('PeekTo', () => {
-        const st = new State('A B C');
+        let st = new State('A B C');
         assert.equal(st.PeekTo('B'), 'A ');
         assert.equal(st.PeekTo('C'), 'A B ');
         assert.equal(st.PeekTo('D'), null);
@@ -49,6 +49,13 @@ describe('State tests', () => {
         assert.equal(st.PeekTo('B'), '');
         assert.equal(st.PeekTo('C'), 'B ');
         assert.equal(st.PeekTo('D'), null);
+
+        st = new State('Hello, [[AAAAA]] [[BB]]');
+        assert.equal(st.ScanTo('[['), 'Hello, ');
+        st.Seek(2, false);
+        assert.equal(st.ScanTo(']]'), 'AAAAA');
+        st.Seek(3, false);
+        assert.equal(st.PeekTo(']]'), '[[BB');
     });
     it('Seek', () => {
         const st = new State('A B C');

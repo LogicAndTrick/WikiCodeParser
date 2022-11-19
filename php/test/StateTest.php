@@ -37,6 +37,13 @@ class StateTest extends TestCase
         self::assertEquals("", $st->PeekTo("B"));
         self::assertEquals("B ", $st->PeekTo("C"));
         self::assertEquals(null, $st->PeekTo("D"));
+
+        $st = new State("Hello, [[AAAAA]] [[BB]]");
+        self::assertEquals("Hello, ", $st->ScanTo('[['));
+        $st->Seek(2, false);
+        self::assertEquals("AAAAA", $st->ScanTo(']]'));
+        $st->Seek(3, false);
+        self::assertEquals("[[BB", $st->PeekTo(']]'));
     }
 
     public function testSeek()
