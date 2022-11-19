@@ -8,12 +8,12 @@ class WikiRevisionCredit
     public const TypeArchive = 'a';
     public const TypeFull = 'f';
 
-    public ?int $id;
-    public string $type;
-    public ?int $revisionId;
-    public ?string $description;
-    public ?int $userId;
-    public ?string $name;
-    public ?string $url;
-    public ?string $waybackUrl;
+    public ?int $ID = null;
+    public string $Type;
+    public ?int $RevisionID = null;
+    public ?string $Description = null;
+    public ?int $UserID = null;
+    public ?string $Name = null;
+    public ?string $Url = null;
+    public ?string $WaybackUrl = null;
 }

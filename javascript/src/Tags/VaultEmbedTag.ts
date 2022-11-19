@@ -22,7 +22,7 @@ export class VaultEmbedTag extends Tag {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {        
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
         const index = state.Index;
 
         if (state.ScanTo(':') != '[vault' || state.Next() != ':') {

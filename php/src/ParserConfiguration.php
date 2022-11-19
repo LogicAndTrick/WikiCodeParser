@@ -21,7 +21,10 @@ use LogicAndTrick\WikiCodeParser\Tags\LinkTag;
 use LogicAndTrick\WikiCodeParser\Tags\PreTag;
 use LogicAndTrick\WikiCodeParser\Tags\QuickLinkTag;
 use LogicAndTrick\WikiCodeParser\Tags\QuoteTag;
+use LogicAndTrick\WikiCodeParser\Tags\SpoilerTag;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
+use LogicAndTrick\WikiCodeParser\Tags\VaultEmbedTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiArchiveTag;
 use LogicAndTrick\WikiCodeParser\Tags\WikiLinkTag;
 
 class ParserConfiguration
@@ -58,7 +61,7 @@ class ParserConfiguration
 //        $conf->tags[] = new WikiImageTag();
 //        $conf->tags[] = new YoutubeTag();
 //        $conf->tags[] = new WikiYoutubeTag();
-//        $conf->tags[] = new VaultEmbedTag();
+        $conf->tags[] = new VaultEmbedTag();
 
         // Custom
         $conf->tags[] = new QuoteTag();
@@ -66,8 +69,8 @@ class ParserConfiguration
 //        $conf->tags[] = new WikiCategoryTag()->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new WikiBookTag()->WithScopes('inline', 'excerpt');
 //        $conf->tags[] = new WikiCreditTag()->WithScopes('inline', 'excerpt');
-//        $conf->tags[] = new WikiArchiveTag()->WithScopes('inline', 'excerpt');
-//        $conf->tags[] = new SpoilerTag()->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new WikiArchiveTag())->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new SpoilerTag())->WithScopes('inline', 'excerpt');
         $conf->tags[] = (new CodeTag())->WithScopes('excerpt');
 
         // Elements
