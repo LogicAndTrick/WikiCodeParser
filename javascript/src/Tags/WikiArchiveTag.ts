@@ -18,7 +18,7 @@ export class WikiArchiveTag extends Tag {
     public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
         const peekTag = state.Peek(9);
         const pt = state.PeekTo(']');
-        return peekTag == '[archive:' && pt != null && pt.length > 8 && !pt.includes('\n');
+        return peekTag == '[archive:' && pt != null && pt.length > 9 && !pt.includes('\n');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

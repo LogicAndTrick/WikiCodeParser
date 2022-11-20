@@ -18,7 +18,7 @@ export class WikiBookTag extends Tag {
     public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
         const peekTag = state.Peek(6);
         const pt = state.PeekTo(']');
-        return peekTag == '[book:' && pt != null && pt.length > 8 && !pt.includes('\n');
+        return peekTag == '[book:' && pt != null && pt.length > 6 && !pt.includes('\n');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

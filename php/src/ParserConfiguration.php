@@ -25,7 +25,14 @@ use LogicAndTrick\WikiCodeParser\Tags\SpoilerTag;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
 use LogicAndTrick\WikiCodeParser\Tags\VaultEmbedTag;
 use LogicAndTrick\WikiCodeParser\Tags\WikiArchiveTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiBookTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiCategoryTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiCreditTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiFileTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiImageTag;
 use LogicAndTrick\WikiCodeParser\Tags\WikiLinkTag;
+use LogicAndTrick\WikiCodeParser\Tags\WikiYoutubeTag;
+use LogicAndTrick\WikiCodeParser\Tags\YoutubeTag;
 
 class ParserConfiguration
 {
@@ -53,22 +60,22 @@ class ParserConfiguration
         $conf->tags[] = (new LinkTag())->WithScopes('excerpt')->WithToken('email');
         $conf->tags[] = new QuickLinkTag();
         $conf->tags[] = new WikiLinkTag();
-//        $conf->tags[] = new WikiFileTag();
+        $conf->tags[] = new WikiFileTag();
 
         // Embedded
         $conf->tags[] = new ImageTag();
         $conf->tags[] = (new ImageTag())->WithToken('simg')->WithBlock(false);
-//        $conf->tags[] = new WikiImageTag();
-//        $conf->tags[] = new YoutubeTag();
-//        $conf->tags[] = new WikiYoutubeTag();
+        $conf->tags[] = new WikiImageTag();
+        $conf->tags[] = new YoutubeTag();
+        $conf->tags[] = new WikiYoutubeTag();
         $conf->tags[] = new VaultEmbedTag();
 
         // Custom
         $conf->tags[] = new QuoteTag();
         $conf->tags[] = (new FontTag())->WithScopes('inline', 'excerpt');
-//        $conf->tags[] = new WikiCategoryTag()->WithScopes('inline', 'excerpt');
-//        $conf->tags[] = new WikiBookTag()->WithScopes('inline', 'excerpt');
-//        $conf->tags[] = new WikiCreditTag()->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new WikiCategoryTag())->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new WikiBookTag())->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new WikiCreditTag())->WithScopes('inline', 'excerpt');
         $conf->tags[] = (new WikiArchiveTag())->WithScopes('inline', 'excerpt');
         $conf->tags[] = (new SpoilerTag())->WithScopes('inline', 'excerpt');
         $conf->tags[] = (new CodeTag())->WithScopes('excerpt');
