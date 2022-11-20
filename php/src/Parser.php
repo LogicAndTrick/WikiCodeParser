@@ -176,7 +176,8 @@ class Parser
     }
 
     public function RunProcessors(INode $node, ParseData $data, string $scope) : INode {
-        foreach (Util::OrderByDescending($this->configuration->processors, fn (INodeProcessor $x) => $x->Priority()) as $processor) {
+        $processors = Util::OrderByDescending($this->configuration->processors, fn (INodeProcessor $x) => $x->Priority());
+        foreach ($processors as $processor) {
             $node = self::RunProcessor($node, $processor, $data, $scope);
         }
 

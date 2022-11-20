@@ -11,12 +11,18 @@ class Util {
     }
 
     public static function OrderBy(array $array, callable $selector) : array {
-        usort($array, $selector);
+        usort($array, function ($a, $b) use ($selector) {
+            $av = call_user_func($selector, $a);
+            $bv = call_user_func($selector, $b);
+            if ($av < $bv) return -1;
+            if ($av > $bv) return 1;
+            return 0;
+        });
         return $array;
     }
 
     public static function OrderByDescending(array $array, callable $selector) : array {
-        usort($array, $selector);
+        $array = self::OrderBy($array, $selector);
         return array_reverse($array);
     }
 
