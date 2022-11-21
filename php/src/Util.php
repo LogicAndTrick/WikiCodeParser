@@ -30,13 +30,14 @@ class Util {
         $min = -1;
         foreach ($searchStrings as $searchString) {
             $idx = strpos($str, $searchString, $position);
+            if ($idx === false) $idx = -1;
             if ($idx >= 0) $min = $min < 0 ? $idx : min($min, $idx);
         }
         return $min;
     }
 
     public static function Template(string $templateString, mixed $obj) {
-        return preg_replace_callback('/\{(.*?)\}/ig', function (array $matches) use ($obj) {
+        return preg_replace_callback('/\{(.*?)\}/i', function (array $matches) use ($obj) {
             return $obj[$matches[1]];
         }, $templateString);
     }

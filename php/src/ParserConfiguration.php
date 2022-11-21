@@ -13,7 +13,9 @@ use LogicAndTrick\WikiCodeParser\Elements\MdTableElement;
 use LogicAndTrick\WikiCodeParser\Elements\PreElement;
 use LogicAndTrick\WikiCodeParser\Elements\RefElement;
 use LogicAndTrick\WikiCodeParser\Processors\AutoLinkingProcessor;
+use LogicAndTrick\WikiCodeParser\Processors\MarkdownTextProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\NewLineProcessor;
+use LogicAndTrick\WikiCodeParser\Processors\SmiliesProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\TrimWhitespaceAroundBlockNodesProcessor;
 use LogicAndTrick\WikiCodeParser\Tags\CodeTag;
 use LogicAndTrick\WikiCodeParser\Tags\FontTag;
@@ -94,9 +96,9 @@ class ParserConfiguration
         $conf->elements[] = new RefElement();
 
         // Processors
-//        $conf->processors[] = new MarkdownTextProcessor();
+        $conf->processors[] = new MarkdownTextProcessor();
         $conf->processors[] = new AutoLinkingProcessor();
-//        $conf->processors[] = new SmiliesProcessor()->AddDefault();
+        $conf->processors[] = (new SmiliesProcessor())->AddDefault();
         $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
         $conf->processors[] = new NewLineProcessor();
 
