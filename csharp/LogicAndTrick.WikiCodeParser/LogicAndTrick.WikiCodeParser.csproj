@@ -1,7 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>LogicAndTrick.WikiCodeParser</Title>
+    <Authors>LogicAndTrick</Authors>
+    <Description>A parser for TWHL WikiCode</Description>
+    <Copyright>2022 LogicAndTrick</Copyright>
+    <PackageProjectUrl>https://github.com/LogicAndTrick/WikiCodeParser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/LogicAndTrick/WikiCodeParser</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>0.9.0</Version>
   </PropertyGroup>
 
 </Project>
