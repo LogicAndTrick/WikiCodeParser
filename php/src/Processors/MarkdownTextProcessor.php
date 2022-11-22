@@ -84,7 +84,10 @@ class MarkdownTextProcessor implements INodeProcessor
 
         $endPosition = $endToken;
 
-        return new HtmlNode(self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
+        $ret = new HtmlNode(self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
+        $ret->plainBefore = $token;
+        $ret->plainAfter = $token;
+        return $ret;
     }
 
     /**

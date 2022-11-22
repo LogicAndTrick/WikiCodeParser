@@ -68,7 +68,10 @@ export class MarkdownTextProcessor implements INodeProcessor {
 
         endPositionObj.endPosition = endToken;
 
-        return new HtmlNode(MarkdownTextProcessor.OpenTags[tokenIndex], contents, MarkdownTextProcessor.CloseTags[tokenIndex]);
+        const ret = new HtmlNode(MarkdownTextProcessor.OpenTags[tokenIndex], contents, MarkdownTextProcessor.CloseTags[tokenIndex]);
+        ret.PlainBefore = token;
+        ret.PlainAfter = token;
+        return ret;
     }
 
     private static ParseTokens(tracker: number[], text: string): INode[] {

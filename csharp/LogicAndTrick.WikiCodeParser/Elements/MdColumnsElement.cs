@@ -85,7 +85,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
             public string ToPlainText()
             {
-                return Content.ToPlainText();
+                return Content.ToPlainText() + "\n\n";
             }
 
             public IList<INode> GetChildren()

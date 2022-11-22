@@ -118,7 +118,7 @@ class WikiImageTag extends Tag
 
         if ($caption != null) {
             $cn = new HtmlNode('<span class="caption">', new PlainTextNode($caption), '</span>');
-            $cn->plainAfter = '\n';
+            $cn->plainBefore = ' ';
             $content->nodes[] = $cn;
         }
 
@@ -143,7 +143,7 @@ class WikiImageTag extends Tag
                 $caption = $caption ?? 'User posted image';
                 $cap = HtmlHelper::AttributeEncode($caption);
                 $ret = new HtmlNode("<img class=\"caption-body\" src=\"$url\" alt=\"$cap\" />", PlainTextNode::Empty(), '');
-                $ret->plainBefore = '[Image] ';
+                $ret->plainBefore = '[Image]';
                 return $ret;
             case 'video':
             case 'audio':

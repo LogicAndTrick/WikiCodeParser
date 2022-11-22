@@ -62,7 +62,11 @@ namespace LogicAndTrick.WikiCodeParser.Processors
 
             endPosition = endToken;
 
-            return new HtmlNode(OpenTags[tokenIndex], contents, CloseTags[tokenIndex]);
+            return new HtmlNode(OpenTags[tokenIndex], contents, CloseTags[tokenIndex])
+            {
+                PlainBefore = token.ToString(),
+                PlainAfter = token.ToString()
+            };
         }
 
         private static IEnumerable<INode> ParseTokens(int[] tracker, string text)

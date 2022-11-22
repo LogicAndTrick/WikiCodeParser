@@ -17,3 +17,14 @@ invalid:<br/>
 ~ending whitespace ~<br/>
 a_no starting whitespace_<br/>
 *no ending whitespace*a
+
+###
+
+*bold* /italic/ _underline_ ~strikethrough~ `code`
+`code with *escaped* markdown`
+*nested /markdown ~formatting~/*
+invalid:
+/ starting whitespace/
+~ending whitespace ~
+a_no starting whitespace_
+*no ending whitespace*a

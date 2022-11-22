@@ -29,7 +29,10 @@ class MdQuoteElement extends Element
             $arr[] = trim(substr($value, 1));
         }
 
-        $text = implode("\n", $arr);
-        return new HtmlNode('<blockquote>', $parser->ParseElements($data, $text, $scope), '</blockquote>');
+        $text = trim(implode("\n", $arr));
+        $ret = new HtmlNode('<blockquote>', $parser->ParseElements($data, $text, $scope), '</blockquote>');
+        $ret->plainBefore = "[quote]\n";
+        $ret->plainAfter = "\n[/quote]";
+        return $ret;
     }
 }

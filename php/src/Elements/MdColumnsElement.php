@@ -25,7 +25,7 @@ class ColumnNode implements INode {
 
     function ToPlainText(): string
     {
-        return $this->content->ToPlainText();
+        return $this->content->ToPlainText() . "\n\n";
     }
 
     function GetChildren(): array

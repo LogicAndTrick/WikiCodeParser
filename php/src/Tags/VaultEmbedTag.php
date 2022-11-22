@@ -61,7 +61,7 @@ class VaultEmbedTag extends Tag
             "Loading embedded content: Vault Item #${id}";
         $after = '</div></div></div></div>';
         $ret = new HtmlNode($before, PlainTextNode::Empty(), $after);
-        $ret->plainBefore = '[TWHL vault item #{id}]';
+        $ret->plainBefore = "[TWHL vault item #$id]";
         $ret->plainAfter = "\n";
         $ret->isBlockNode = true;
         return $ret;

@@ -7,9 +7,17 @@ hello
 
 ###
 
-<blockquote><strong class="quote-name">test said:</strong><br/>
+<blockquote><strong class="quote-name">test said:</strong><br/>hi
+<blockquote>hello</blockquote>
+</blockquote>
+
+
+###
+
+test said: [quote]
 hi
-<blockquote><br/>
-hello<br/>
-</blockquote>
-</blockquote>
+[quote]
+hello
+[/quote]
+
+[/quote]

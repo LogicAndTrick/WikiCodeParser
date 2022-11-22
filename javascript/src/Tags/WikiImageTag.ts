@@ -112,7 +112,7 @@ export class WikiImageTag extends Tag {
 
         if (caption != null) {
             const cn = new HtmlNode('<span class="caption">', new PlainTextNode(caption), '</span>');
-            cn.PlainAfter = '\n';
+            cn.PlainBefore = ' ';
             content.Nodes.push(cn);
         }
 
@@ -136,7 +136,7 @@ export class WikiImageTag extends Tag {
                     caption = caption ?? 'User posted image';
                     const cap = HtmlHelper.AttributeEncode(caption);
                     const ret = new HtmlNode(`<img class="caption-body" src="${url}" alt="${cap}" />`, PlainTextNode.Empty(), '');
-                    ret.PlainBefore = '[Image] ';
+                    ret.PlainBefore = '[Image]';
                     return ret;
                 }
             case 'video':

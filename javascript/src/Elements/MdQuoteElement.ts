@@ -22,7 +22,10 @@ export class MdQuoteElement extends Element {
             arr.push(value.substring(1).trim());
         }
 
-        const text = arr.join('\n');
-        return new HtmlNode('<blockquote>', parser.ParseElements(data, text, scope), '</blockquote>');
+        const text = arr.join('\n').trim();
+        const ret = new HtmlNode('<blockquote>', parser.ParseElements(data, text, scope), '</blockquote>');
+        ret.PlainBefore = '[quote]\n';
+        ret.PlainAfter = '\n[/quote]';
+        return ret;
     }
 }

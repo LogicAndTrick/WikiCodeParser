@@ -118,7 +118,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var embed = GetEmbedObject(tag, src, caption, loop);
             if (embed != null) content.Nodes.Add(embed);
-            if (caption != null) content.Nodes.Add(new HtmlNode("<span class=\"caption\">", new PlainTextNode(caption), "</span>") { PlainAfter = "\n" });
+            if (caption != null) content.Nodes.Add(new HtmlNode("<span class=\"caption\">", new PlainTextNode(caption), "</span>") { PlainBefore = " " });
 
             var before = $"<{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{HtmlHelper.AttributeEncode(caption)}\"" : "") + ">"
                          + (url.Length > 0 ? "<a href=\"" + HtmlHelper.AttributeEncode(url) + "\">" : "")
@@ -143,7 +143,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                     var cap = HtmlHelper.AttributeEncode(caption);
                     return new HtmlNode($"<img class=\"caption-body\" src=\"{url}\" alt=\"{cap}\" />", PlainTextNode.Empty, "")
                     {
-                        PlainBefore = "[Image] "
+                        PlainBefore = "[Image]"
                     };
                 case "video":
                 case "audio":

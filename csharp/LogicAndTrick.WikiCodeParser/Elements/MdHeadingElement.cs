@@ -67,7 +67,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
             public string ToPlainText()
             {
-                var plain = Text.ToPlainText();
+                var plain = Text.ToPlainText().Replace("\n", " ");
                 return plain + "\n" + new string('-', plain.Length);
             }
 

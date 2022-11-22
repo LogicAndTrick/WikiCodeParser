@@ -13,6 +13,8 @@ export class MdLineElement extends Element {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public Consume(_parser: Parser, _data: ParseData, _lines: Lines, _scope: string): INode {
-        return new HtmlNode('<hr />', PlainTextNode.Empty(), '');
+        const ret = new HtmlNode('<hr />', PlainTextNode.Empty(), '');
+        ret.PlainBefore = '---';
+        return ret;
     }
 }

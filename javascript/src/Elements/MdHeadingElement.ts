@@ -20,7 +20,7 @@ class HeadingNode implements INode {
     }
 
     ToPlainText(): string {
-        const plain = this.Text.ToPlainText();
+        const plain = this.Text.ToPlainText().replace(/\n/g, ' ');
         return plain + '\n' + '-'.repeat(plain.length);
     }
 

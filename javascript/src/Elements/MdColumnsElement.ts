@@ -17,7 +17,7 @@ class ColumnNode implements INode {
         return `<div class="col-md-${this.Width}">\n${this.Content.ToHtml()}</div>\n`;
     }
     ToPlainText(): string {
-        return this.Content.ToPlainText();
+        return this.Content.ToPlainText() + '\n\n';
     }
     GetChildren(): INode[] {
         return [this.Content];

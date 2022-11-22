@@ -11,3 +11,11 @@ test@test@example.com
 ftp://example.com<br/>
 <a href="mailto:test@example.com">test@example.com</a><br/>
 test@test@example.com
+
+###
+
+http://example.com
+https://example.com
+ftp://example.com
+test@example.com
+test@test@example.com

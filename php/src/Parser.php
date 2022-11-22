@@ -116,7 +116,7 @@ class Parser
 
     public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context) : INode {
         // trim 3 or more newlines down to 2 newlines
-        $text = preg_replace('/\n{3,}/i', '\n\n', $text);
+        $text = preg_replace('/\n{3,}/i', "\n\n", $text);
 
         $state = new State($text);
         $root = new NodeCollection();

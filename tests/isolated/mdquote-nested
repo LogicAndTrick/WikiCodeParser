@@ -9,3 +9,14 @@ Test4
 <blockquote>Test2</blockquote>
 Test3</blockquote>
 Test4
+
+###
+
+[quote]
+Test
+[quote]
+Test2
+[/quote]
+Test3
+[/quote]
+Test4

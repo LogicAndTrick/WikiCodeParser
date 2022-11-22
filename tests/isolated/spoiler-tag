@@ -9,3 +9,8 @@ four[/spoiler]
 <span class="spoiler" title="One">Two<br/>
 three<br/>
 four</span>
+
+###
+
+[Spoiler](spoiler text)
+[One](spoiler text)

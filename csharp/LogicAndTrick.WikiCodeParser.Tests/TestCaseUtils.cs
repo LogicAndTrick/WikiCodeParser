@@ -5,30 +5,38 @@ namespace LogicAndTrick.WikiCodeParser.Tests;
 
 public static class TestCaseUtils
 {
-    private static void Test(string input, string expectedOutput, string? expectedMeta, bool split = false)
+    private static void AssertSame(string name, string expected, string actual, bool split)
+    {
+        if (split)
+        {
+            var expectedLines = expected.Split('\n');
+            var actualLines = actual.Split('\n');
+
+            for (var i = 0; i < expectedLines.Length; i++)
+            {
+                var ex = expectedLines[i];
+                var ac = actualLines[i];
+                Assert.AreEqual(ex, ac, $"[{name}] \n\nMatch failed on line {i + 1}.\nExpected: {ex}\nActual  : {ac}");
+            }
+        }
+        else
+        {
+            Assert.AreEqual(expected, actual, $"[{name}] Match failed.");
+        }
+    }
+
+    private static void Test(string input, string expectedOutput, string? expectedPlain, string? expectedMeta, bool split = false)
     {
         var config = ParserConfiguration.Default();
         var parser = new Parser(config);
 
         var result = parser.ParseResult(input);
         var resultHtml = result.ToHtml().Trim();
+        var resultPlain = result.ToPlainText().Trim();
 
-        if (split)
-        {
-            var expectedLines = expectedOutput.Split('\n');
-            var actualLines = resultHtml.Split('\n');
+        AssertSame("html", expectedOutput, resultHtml, split);
+        if (expectedPlain != null) AssertSame("plain", expectedPlain, resultPlain, split);
 
-            for (var i = 0; i < expectedLines.Length; i++)
-            {
-                var ex = expectedLines[i];
-                var ac = actualLines[i];
-                Assert.AreEqual(ex, ac, $"\n\nMatch failed on line {i + 1}.\nExpected: {ex}\nActual  : {ac}");
-            }
-        }
-        else
-        {
-            Assert.AreEqual(expectedOutput, resultHtml);
-        }
 
         if (expectedMeta != null)
         {
@@ -80,6 +88,7 @@ public static class TestCaseUtils
         var dir = GetTestCaseDirectory(folder);
         string _in;
         string _out;
+        string? _plain = null;
         string? _meta = null;
         if (File.Exists($"{dir}/{name}"))
         {
@@ -87,12 +96,17 @@ public static class TestCaseUtils
             var spl = text.Split("###").Select(x => x.Trim()).ToArray();
             _in = spl[0];
             _out = spl[1];
-            if (spl.Length > 2) _meta = spl[2];
+            if (spl.Length > 2) _plain = spl[2];
+            if (spl.Length > 3) _meta = spl[3];
         }
         else
         {
             _in = File.ReadAllText($"{dir}/{name}.in");
             _out = File.ReadAllText($"{dir}/{name}.out");
+            if (File.Exists($"{dir}/{name}.plain"))
+            {
+                _plain = File.ReadAllText($"{dir}/{name}.plain");
+            }
             if (File.Exists($"{dir}/{name}.meta"))
             {
                 _meta = File.ReadAllText($"{dir}/{name}.meta");
@@ -101,8 +115,9 @@ public static class TestCaseUtils
 
         _in = _in.Replace("\r", "");
         _out = _out.Replace("\r", "");
+        _plain = _plain?.Replace("\r", "");
         _meta = _meta?.Replace("\r", "");
-        Test(_in, _out, _meta, split);
+        Test(_in, _out, _plain, _meta, split);
     }
     // ReSharper restore InconsistentNaming
 }

@@ -27,7 +27,8 @@ class HeadingNode implements INode {
 
     public function ToPlainText(): string {
         $plain = $this->text->ToPlainText();
-        return $plain . '\n' . str_repeat('-', strlen($plain));
+        $plain = str_replace("\n", ' ', $plain);
+        return $plain . "\n" . str_repeat('-', strlen($plain));
     }
 
     public function GetChildren(): array {

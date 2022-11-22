@@ -23,13 +23,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             before += '>';
             if (options.ContainsKey("name"))
             {
-                before += "<strong class=\"quote-name\">" + options["name"] + " said:</strong>";
+                before += "<strong class=\"quote-name\">" + options["name"] + " said:</strong><br/>";
             }
             var after = "</" + Element + '>';
-            var content = parser.ParseTags(data, text, scope, TagContext);
+            var content = parser.ParseTags(data, text?.Trim(), scope, TagContext);
             return new HtmlNode(before, content, after)
             {
-                PlainBefore = options.ContainsKey("name") ? options["name"] + " said: " : "",
+                PlainBefore = (options.ContainsKey("name") ? options["name"] + " said: " : "") + "[quote]\n",
+                PlainAfter = "\n[/quote]",
                 IsBlockNode = IsBlock
             };
         }

@@ -54,7 +54,7 @@ export class VaultEmbedTag extends Tag {
             `Loading embedded content: Vault Item #${id}`;
         const after = '</div></div></div></div>';
         const ret = new HtmlNode(before, PlainTextNode.Empty(), after);
-        ret.PlainBefore = '[TWHL vault item #{id}]';
+        ret.PlainBefore = `[TWHL vault item #${id}]`;
         ret.PlainAfter = '\n';
         ret.IsBlockNode = true;
         return ret;

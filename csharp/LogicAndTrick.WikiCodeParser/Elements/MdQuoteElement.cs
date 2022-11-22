@@ -30,8 +30,12 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 arr.Add(value.Substring(1).Trim());
             }
 
-            var text = String.Join("\n", arr);
-            return new HtmlNode("<blockquote>", parser.ParseElements(data, text, scope), "</blockquote>");
+            var text = String.Join("\n", arr).Trim();
+            return new HtmlNode("<blockquote>", parser.ParseElements(data, text, scope), "</blockquote>")
+            {
+                PlainBefore = "[quote]\n",
+                PlainAfter = "\n[/quote]"
+            };
         }
     }
 }

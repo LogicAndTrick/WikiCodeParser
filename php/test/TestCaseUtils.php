@@ -6,26 +6,33 @@ use PHPUnit\Framework\Assert;
 
 class TestCaseUtils
 {
-    private static function Test(string $input, string $expectedOutput, ?string $expectedMeta, bool $split = false) : void {
-        $config = ParserConfiguration::Default();
-        $parser = new Parser($config);
-
-        $result = $parser->ParseResult($input);
-        $resultHtml = trim($result->ToHtml());
-
+    public static function AssertSame(string $name, string $expected, string $actual, bool $split) : void
+    {
         if ($split) {
-            $expectedLines = explode("\n", $expectedOutput);
-            $actualLines = explode("\n", $resultHtml);
+            $expectedLines = explode("\n", $expected);
+            $actualLines = explode("\n", $actual);
 
             for ($i = 0; $i < count($expectedLines); $i++) {
                 $ex = $expectedLines[$i];
                 $ac = $actualLines[$i];
                 $line = $i + 1;
-                Assert::assertEquals($ex, $ac, "Match failed on line $line.\nExpected: $ex\nActual  : $ac");
+                Assert::assertEquals($ex, $ac, "[$name] Match failed on line $line.\nExpected: $ex\nActual  : $ac");
             }
         } else {
-            Assert::assertEquals($expectedOutput, $resultHtml);
+            Assert::assertEquals($expected, $actual, "[$name] Match failed.");
         }
+    }
+
+    private static function Test(string $input, string $expectedOutput, ?string $expectedPlain, ?string $expectedMeta, bool $split = false) : void {
+        $config = ParserConfiguration::Default();
+        $parser = new Parser($config);
+
+        $result = $parser->ParseResult($input);
+        $resultHtml = trim($result->ToHtml());
+        $resultPlain = trim($result->ToPlainText());
+
+        self::AssertSame('html', $expectedOutput, $resultHtml, $split);
+        if ($expectedPlain !== null) self::AssertSame('plain', $expectedPlain, $resultPlain, $split);
 
         if ($expectedMeta != null) {
             $resultMetaObjects = $result->GetMetadata();
@@ -59,16 +66,21 @@ class TestCaseUtils
         $dir = TestCaseUtils::GetTestCaseDirectory($folder);
         $_in = '';
         $_out = '';
+        $_plain = null;
         $_meta = null;
         if (file_exists("$dir/$name")) {
             $text = file_get_contents("$dir/$name");
             $spl = array_map(fn($x) => trim($x), explode('###', $text));
             $_in = $spl[0];
             $_out = $spl[1];
-            if (count($spl) > 2) $_meta = $spl[2];
+            if (count($spl) > 2) $_plain = $spl[2];
+            if (count($spl) > 3) $_meta = $spl[3];
         } else {
             $_in = file_get_contents("$dir/$name.in");
             $_out = file_get_contents("$dir/$name.out");
+            if (file_exists("$dir/$name.plain")) {
+                $_plain = file_get_contents("$dir/$name.plain");
+            }
             if (file_exists("$dir/$name.meta")) {
                 $_meta = file_get_contents("$dir/$name.meta");
             }
@@ -76,7 +88,8 @@ class TestCaseUtils
 
         $_in = str_replace("\r", '', $_in);
         $_out = str_replace("\r", '', $_out);
-        $_meta = str_replace("\r", '', $_meta);
-        TestCaseUtils::Test($_in, $_out, $_meta, $split);
+        $_plain = $_plain ? str_replace("\r", '', $_plain) : $_plain;
+        $_meta = $_meta ? str_replace("\r", '', $_meta) : $_meta;
+        TestCaseUtils::Test($_in, $_out, $_plain, $_meta, $split);
     }
 }

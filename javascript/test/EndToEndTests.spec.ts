@@ -4,26 +4,32 @@ import { describe } from 'mocha';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
 
-function Test(input: string, expectedOutput: string, expectedMeta : string | undefined, split = false): void {
+function AssertSame(name : string, expected : string, actual : string, split : boolean) : void {
+    if (split) {
+        const expectedLines = expected.split('\n');
+        const actualLines = actual.split('\n');
+
+        for (let i = 0; i < expectedLines.length; i++) {
+            const ex = expectedLines[i];
+            const ac = actualLines[i];
+            assert.equal(ac, ex, `[${name}] \n\nMatch failed on line ${i + 1}.\nExpected: ${ex}\nActual  : ${ac}`);
+        }
+    } else {
+        assert.equal(actual, expected, `[${name}] Match failed.`);
+    }
+}
+
+function Test(input: string, expectedOutput: string, expectedPlain : string | undefined, expectedMeta : string | undefined, split = false): void {
     const config = ParserConfiguration.Default();
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);
     const resultHtml = result.ToHtml().trim();
+    const resultPlain = result.ToPlainText().trim();
     const resultMeta = result.GetMetadata().map(x => `${x.Key}=${JSON.stringify(x.Value)}`).join('\n');
 
-    if (split) {
-        const expectedLines = expectedOutput.split('\n');
-        const actualLines = resultHtml.split('\n');
-
-        for (let i = 0; i < expectedLines.length; i++) {
-            const ex = expectedLines[i];
-            const ac = actualLines[i];
-            assert.equal(ac, ex, `\n\nMatch failed on line ${i + 1}.\nExpected: ${ex}\nActual  : ${ac}`);
-        }
-    } else {
-        assert.equal(resultHtml, expectedOutput);
-    }
+    AssertSame('html', expectedOutput, resultHtml, split);
+    if (expectedPlain !== undefined) AssertSame('plain', expectedPlain, resultPlain, split);
 
     if (expectedMeta) {
         assert.equal(resultMeta, expectedMeta);
@@ -34,21 +40,26 @@ function RunTestCaseInFolder(folder: string, name: string, split = false) {
     const dir = `${__dirname}/../../tests/${folder}`;
     let _in : string;
     let _out : string;
+    let _plain : string | undefined = undefined;
     let _meta : string | undefined = undefined;
     if (existsSync(`${dir}/${name}`)) {
         const text = readFileSync(`${dir}/${name}`, 'utf-8');
-        [_in, _out, _meta] = text.split('###').map(x => x.trim());
+        [_in, _out, _plain, _meta] = text.split('###').map(x => x.trim());
     } else {
         _in = readFileSync(`${dir}/${name}.in`, 'utf-8');
         _out = readFileSync(`${dir}/${name}.out`, 'utf-8');
+        if (existsSync(`${dir}/${name}.plain`)) {
+            _plain = readFileSync(`${dir}/${name}.plain`, 'utf-8');
+        }
         if (existsSync(`${dir}/${name}.meta`)) {
             _meta = readFileSync(`${dir}/${name}.meta`, 'utf-8');
         }
     }
     _in = _in.replace(/\r/g, '');
     _out = _out.replace(/\r/g, '');
+    _plain = _plain?.replace(/\r/g, '');
     _meta = _meta?.replace(/\r/g, '');
-    Test(_in, _out, _meta, split);
+    Test(_in, _out, _plain, _meta, split);
 }
 
 describe('Isolated tests', () => {

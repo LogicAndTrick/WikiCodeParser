@@ -89,7 +89,7 @@ class ListItemNode implements INode
     public function ToPlainTextPrefixed(string $prefix): string
     {
         $sb = $prefix . ' ';
-        $sb .= $this->content->ToPlainText() . '\n';
+        $sb .= $this->content->ToPlainText() . "\n";
         foreach ($this->subtrees as $st) $sb .= $st->ToPlainTextPrefixed($prefix);
         return $sb;
     }

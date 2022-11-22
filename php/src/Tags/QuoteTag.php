@@ -28,12 +28,13 @@ class QuoteTag extends Tag
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';
         $before .= '>';
         if (isset($options['name'])) {
-            $before .= '<strong class="quote-name">' . $options['name'] . ' said:</strong>';
+            $before .= '<strong class="quote-name">' . $options['name'] . ' said:</strong><br/>';
         }
         $after = '</' . $this->element . '>';
-        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());
+        $content = $parser->ParseTags($data, trim($text), $scope, $this->TagContext());
         $ret = new HtmlNode($before, $content, $after);
-        $ret->plainBefore = isset($options['name']) ? $options['name'] . ' said: ' : '';
+        $ret->plainBefore = (isset($options['name']) ? $options['name'] . ' said: ' : '') . "[quote]\n";
+        $ret->plainAfter = "\n[/quote]";
         $ret->isBlockNode = $this->isBlock;
         return $ret;
     }

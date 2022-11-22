@@ -22,12 +22,13 @@ export class QuoteTag extends Tag {
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += '>';
         if (options['name']) {
-            before += '<strong class="quote-name">' + options['name'] + ' said:</strong>';
+            before += '<strong class="quote-name">' + options['name'] + ' said:</strong><br/>';
         }
         const after = '</' + this.Element + '>';
-        const content = parser.ParseTags(data, text, scope, this.TagContext());
+        const content = parser.ParseTags(data, text?.trim(), scope, this.TagContext());
         const ret = new HtmlNode(before, content, after);
-        ret.PlainBefore = options['name'] ? options['name'] + ' said: ' : '';
+        ret.PlainBefore = (options['name'] ? options['name'] + ' said: ' : '') + '[quote]\n';
+        ret.PlainAfter = '\n[/quote]';
         ret.IsBlockNode = this.IsBlock;
         return ret;
     }
