@@ -1,6 +1,8 @@
 |- :ref=one | :ref=two
 [ref=one]1[/ref]
-[ref=two]2[/ref]
+[ref=two]
+2
+[/ref]
 
 ###
 
