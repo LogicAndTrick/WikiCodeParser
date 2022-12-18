@@ -71,7 +71,7 @@ class Tag
                 $options[$this->mainOption] = substr($optionsString, 1);
             } else {
                 if ($optionsString[0] == '=') $optionsString = $this->mainOption . $optionsString;
-                preg_match_all('/(?=\s|^)\s*([^ ]+?)=([^\s]*)\b(?!=)/im', $optionsString, $matches, PREG_SET_ORDER);
+                preg_match_all('/(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/im', $optionsString, $matches, PREG_SET_ORDER);
                 for ($i = 0; $i < count($matches); $i++) {
                     $match = $matches[$i];
                     $name = trim($match[1]);

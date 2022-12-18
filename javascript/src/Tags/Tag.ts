@@ -59,7 +59,7 @@ export class Tag {
             }
             else {
                 if (optionsString[0] == '=') optionsString = this.MainOption + optionsString;
-                const myregexp = /(?=\s|^)\s*([^ ]+?)=([^\s]*)\b(?!=)/img;
+                const myregexp = /(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/img;
                 let m = myregexp.exec(optionsString);
                 while (m != null) {
                     const name = m[1].trim();

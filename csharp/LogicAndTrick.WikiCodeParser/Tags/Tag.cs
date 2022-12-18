@@ -62,7 +62,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 else
                 {
                     if (optionsString[0] == '=') optionsString = MainOption + optionsString;
-                    var matches = Regex.Matches(optionsString, @"(?=\s|^)\s*([^ ]+?)=([^\s]*)\b(?!=)",
+                    var matches = Regex.Matches(optionsString, @"(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)",
                         RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
                     foreach (Match m in matches)
                     {

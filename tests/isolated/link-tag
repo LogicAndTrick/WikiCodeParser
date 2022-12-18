@@ -1,12 +1,15 @@
 [url=example.com]A[/url]
 [email=example@example.com]B[/email]
+[url=https://this.ends.with/slash/]C[/url]
 
 ###
 
 <a href="http://example.com">A</a><br/>
-<a href="mailto:example@example.com">B</a>
+<a href="mailto:example@example.com">B</a><br/>
+<a href="https://this.ends.with/slash/">C</a>
 
 ###
 
 A
 B
+C
