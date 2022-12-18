@@ -39,7 +39,7 @@ use LogicAndTrick\WikiCodeParser\Tags\YoutubeTag;
 
 class ParserConfiguration
 {
-    public static function Default() : ParserConfiguration {
+    public static function Twhl() : ParserConfiguration {
         $conf = new ParserConfiguration();
 
         // Standard inline

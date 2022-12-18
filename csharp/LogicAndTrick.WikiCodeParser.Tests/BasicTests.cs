@@ -176,7 +176,7 @@ public class BasicTests
         var input = "Before\n\n[img]https://example.com/example.png[/img]\n\nAfter";
         var output = "Before\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter";
 
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
@@ -189,7 +189,7 @@ public class BasicTests
         var input = "*Bold*\n\n[img]https://example.com/example.png[/img]\n\nAfter";
         var output = "<strong>Bold</strong>\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter";
 
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
@@ -202,7 +202,7 @@ public class BasicTests
         var input = "[cat:A]\n[cat:B]\n\n= Heading";
         var output = "<h1 id=\"Heading\">Heading</h1>";
 
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
@@ -240,7 +240,7 @@ public class BasicTests
         var input = "A[font=red]B[font=blue]C[/font]D[/font]E";
         var expected = "A<span style=\"color: red;\">B<span style=\"color: blue;\">C</span>D</span>E";
 
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         config.Tags.Find(x => x is FontTag)!.IsNested = true;
 
         var parser = new Parser(config);
@@ -293,7 +293,7 @@ public class BasicTests
     {
         input = input.Replace("\r", "");
 
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
         Assert.AreNotEqual(input, result.ToHtml());
@@ -304,7 +304,7 @@ public class BasicTests
         input = input.Replace("\r", "");
         expected = expected.Replace("\r", "");
 
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
         Assert.AreEqual(expected, result.ToHtml());

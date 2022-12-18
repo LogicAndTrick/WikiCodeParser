@@ -20,7 +20,7 @@ function AssertSame(name : string, expected : string, actual : string, split : b
 }
 
 function Test(input: string, expectedOutput: string, expectedPlain : string | undefined, expectedMeta : string | undefined, split = false): void {
-    const config = ParserConfiguration.Default();
+    const config = ParserConfiguration.Twhl();
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);

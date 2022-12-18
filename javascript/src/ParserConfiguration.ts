@@ -37,7 +37,7 @@ import { YoutubeTag } from './Tags/YoutubeTag';
 
 export class ParserConfiguration {
 
-    public static Default(): ParserConfiguration {
+    public static Twhl(): ParserConfiguration {
         const conf = new ParserConfiguration();
 
         // // Standard inline

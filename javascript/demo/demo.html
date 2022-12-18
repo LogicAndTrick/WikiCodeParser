@@ -30,7 +30,7 @@
     <script>
         const text = document.getElementById('text');
         const out = document.getElementById('out');
-        const parser = new TwhlWikiCodeParser.Parser(TwhlWikiCodeParser.ParserConfiguration.Default());
+        const parser = new TwhlWikiCodeParser.Parser(TwhlWikiCodeParser.ParserConfiguration.Twhl());
         const render = () => {
             const result = parser.ParseResult(text.value);
             out.innerHTML = result.Content.ToHtml();

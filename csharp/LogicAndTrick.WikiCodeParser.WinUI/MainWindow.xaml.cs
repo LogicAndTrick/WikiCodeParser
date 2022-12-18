@@ -18,7 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.WinUI
 
         public MainWindow()
         {
-            _parser = new Parser(ParserConfiguration.Default());
+            _parser = new Parser(ParserConfiguration.Twhl());
 
             InitializeComponent();
             WebView.CoreWebView2InitializationCompleted += (_, _) =>

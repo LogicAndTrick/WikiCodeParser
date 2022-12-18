@@ -11,7 +11,7 @@ namespace LogicAndTrick.WikiCodeParser
         /// Create an instance of configuration that matches the configuration of the TWHL website.
         /// </summary>
         /// <returns>Default configuration</returns>
-        public static ParserConfiguration Default()
+        public static ParserConfiguration Twhl()
         {
             var conf = new ParserConfiguration();
 

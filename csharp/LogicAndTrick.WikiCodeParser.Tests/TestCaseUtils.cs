@@ -27,7 +27,7 @@ public static class TestCaseUtils
 
     private static void Test(string input, string expectedOutput, string? expectedPlain, string? expectedMeta, bool split = false)
     {
-        var config = ParserConfiguration.Default();
+        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
 
         var result = parser.ParseResult(input);

@@ -24,7 +24,7 @@ class TestCaseUtils
     }
 
     private static function Test(string $input, string $expectedOutput, ?string $expectedPlain, ?string $expectedMeta, bool $split = false) : void {
-        $config = ParserConfiguration::Default();
+        $config = ParserConfiguration::Twhl();
         $parser = new Parser($config);
 
         $result = $parser->ParseResult($input);
