@@ -87,7 +87,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             return this;
         }
 
-        public SmiliesProcessor AddDefault()
+        public SmiliesProcessor AddTwhl()
         {
             Add("aggrieved"   , ":aggrieved:"              );
             Add("aghast"      , ":aghast:"                 );
@@ -139,6 +139,105 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             Add("freeman"     , ":freeman:"                );
             Add("hecu"        , ":hecu:"                   );
             Add("nya"         , ":nya:"                    );
+            return this;
+        }
+
+        public SmiliesProcessor AddSnarkpit()
+        {
+            Add("icon_biggrin"    , ":D");
+            Add("sailor"          , ":sailor:"      );
+            Add("icon_smile"      , ":)", ":-)"     );
+            Add("dorky"           , ":geek:"        );
+            Add("sad0019"         , ":("            );
+            Add("icon_eek"        , ":-o"           );
+            Add("grenade"         , ":grenade:"     );
+            Add("confused"        , ":confused:"    );
+            Add("icon_cool"       , "-)"            );
+            Add("kitty"           , "k1tt3h:"       );
+            Add("laughing"        , ":lol:"         );
+            Add("leper"           , ":leper:"       );
+            Add("mad"             , ":mad:"         );
+            Add("tongue0010"      , ":p"            );
+            Add("popcorn"         , ":popcorn:"     );
+            Add("icon_redface"    , ":oops:"        );
+            Add("icon_cry"        , ":cry:"         );
+            Add("icon_twisted"    , ":evil:"        );
+            Add("rolleye0011"     , ":roll:"        );
+            Add("shocked"         , ":scream:"      );
+            Add("icon_wink"       , "];)"           );
+            Add("dead"            , ":dead:"        );
+            Add("pimp"            , ":pimp:"        );
+            Add("beerchug"        , ":beer:"        );
+            Add("chainsaw"        , ":chainsaw:"    );
+            Add("arse"            , ":moonie:"      );
+            Add("angel"           , ":angel:"       );
+            Add("bday"            , ":bday:"        );
+            Add("clap"            , ":clap:"        );
+            Add("computer"        , ":computer:"    );
+            Add("crash"           , ":pccrash:"     );
+            Add("dizzy"           , ":dizzy:"       );
+            Add("dodgy"           , ":naughty:"     );
+            Add("drink"           , ":drink:"       );
+            Add("facelick"        , ":lick:"        );
+            Add("frown"           , ">:("           );
+            Add("heee"            , ":hee:"         );
+            Add("imwithstupid"    , ":imwithstupid:");
+            Add("jawdrop"         , ":jawdrop:"     );
+            Add("king"            , ":king:"        );
+            Add("ladysman"        , ":ladysman:"    );
+            Add("mrT"             , ":mrt:"         );
+            Add("nurse"           , ":nurse:"       );
+            Add("outtahere"       , ":outtahere:"   );
+            Add("aaatrigger"      , ":aaatrigger:"  );
+            Add("repuke"          , ":repuke:"      );
+            Add("rofl"            , ":rofl:"        );
+            Add("rolling"         , ":rolling2:"    );
+            Add("santa"           , ":santa:"       );
+            Add("smash"           , ":smash:"       );
+            Add("toilet"          , ":toilet:"      );
+            Add("44"              , "~o)"           );
+            Add("wavey"           , ":wavey:"       );
+            Add("upyours"         , ":stfu:"        );
+            Add("fart"            , ":fart:"        );
+            Add("trout"           , ":trout:"       );
+            Add("ar15firing"      , ":machinegun:"  );
+            Add("microwave"       , ":microwave:"   );
+            Add("guillotine"      , ":guillotine:"  );
+            Add("poke"            , ":poke:"        );
+            Add("sniper"          , ":sniper:"      );
+            Add("monkee"          , ":monkee:"      );
+            Add("bandit"          , ":gringo:"      );
+            Add("wtf"             , ":wtf:"         );
+            Add("azelito"         , ":azelito:"     );
+            Add("crate"           , ":crate:"       );
+            Add("argh"            , ":-&"           );
+            Add("swear"           , ":swear:"       );
+            Add("rocketwhore"     , ":launcher:"    );
+            Add("skull"           , ":skull:"       );
+            Add("munky"           , ":munky:"       );
+            Add("evilgrin"        , ":E"            );
+            Add("banghead"        , ":brickwall:"   );
+            Add("wcc"             , ":wcc:"         );
+            Add("smiley_sherlock" , ":sherlock:"    );
+            Add("nag"             , ":nag:"         );
+            Add("rolling_eyes"    , ":rolling:"     );
+            Add("angryfire"       , ":flame:"       );
+            Add("character"       , ":ghost:"       );
+            Add("character0007"   , ":pirate:"      );
+            Add("indifferent0016" , ":zzz:"         );
+            Add("indifferent0002" , ":|"            );
+            Add("love0012"        , ":love:"        );
+            Add("rolleye0006"     , ":lookup:"      );
+            Add("sad0006"         , "];("           );
+            Add("scared0005"      , ":scared:"      );
+            Add("flail"           , ":flail:"       );
+            Add("emot-cowjump"    , ":cowjump:"     );
+            Add("emot-eng101"     , ":teach:"       );
+            Add("uncertain"       , ":uncertain:"   );
+            Add("1sm071potstir"   , ":stirring:"    );
+            Add("thumbs_up"       , ":thumbsup:"    );
+            Add("happy_open"      , ":happy:"       );
+            Add("snark_topic_icon", ":snark:"       );
             return this;
         }
 

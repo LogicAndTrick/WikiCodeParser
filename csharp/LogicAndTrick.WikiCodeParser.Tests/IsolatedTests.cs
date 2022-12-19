@@ -51,6 +51,17 @@ public class IsolatedTests
     [DataRow("processor-autolinking")]
     public void IsolatedTest(string name)
     {
-        TestCaseUtils.RunTestCase("isolated", name);
+        TestCaseUtils.RunTestCase(ParserConfiguration.Twhl(), "isolated", name);
+    }
+
+    [DataTestMethod]
+    [DataRow("pre-simple")]
+    [DataRow("pre-lang")]
+    [DataRow("pre-highlight")]
+    [DataRow("code-tag")]
+    [DataRow("pre-tag")]
+    public void IsolatedTestSnarkpit(string name)
+    {
+        TestCaseUtils.RunTestCase(ParserConfiguration.Snarkpit(), "isolated-sp", name);
     }
 }

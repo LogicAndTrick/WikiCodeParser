@@ -25,9 +25,8 @@ public static class TestCaseUtils
         }
     }
 
-    private static void Test(string input, string expectedOutput, string? expectedPlain, string? expectedMeta, bool split = false)
+    private static void Test(ParserConfiguration config, string input, string expectedOutput, string? expectedPlain, string? expectedMeta, bool split = false)
     {
-        var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
 
         var result = parser.ParseResult(input);
@@ -83,7 +82,7 @@ public static class TestCaseUtils
     }
 
     // ReSharper disable InconsistentNaming
-    public static void RunTestCase(string folder, string name, bool split = false)
+    public static void RunTestCase(ParserConfiguration config, string folder, string name, bool split = false)
     {
         var dir = GetTestCaseDirectory(folder);
         string _in;
@@ -117,7 +116,7 @@ public static class TestCaseUtils
         _out = _out.Replace("\r", "");
         _plain = _plain?.Replace("\r", "");
         _meta = _meta?.Replace("\r", "");
-        Test(_in, _out, _plain, _meta, split);
+        Test(config, _in, _out, _plain, _meta, split);
     }
     // ReSharper restore InconsistentNaming
 }

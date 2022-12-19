@@ -98,7 +98,7 @@ class ParserConfiguration
         // Processors
         $conf->processors[] = new MarkdownTextProcessor();
         $conf->processors[] = new AutoLinkingProcessor();
-        $conf->processors[] = (new SmiliesProcessor())->AddDefault();
+        $conf->processors[] = (new SmiliesProcessor())->AddTwhl();
         $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
         $conf->processors[] = new NewLineProcessor();
 

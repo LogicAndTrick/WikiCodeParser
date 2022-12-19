@@ -127,7 +127,7 @@ class SmiliesProcessor implements INodeProcessor
         return $this;
     }
 
-    public function AddDefault() : SmiliesProcessor
+    public function AddTwhl() : SmiliesProcessor
     {
         $this->Add('aggrieved'   , ':aggrieved:'              );
         $this->Add('aghast'      , ':aghast:'                 );

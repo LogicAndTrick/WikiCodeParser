@@ -95,7 +95,7 @@ export class ParserConfiguration {
         // Processors
         conf.Processors.push(new MarkdownTextProcessor());
         conf.Processors.push(new AutoLinkingProcessor());
-        conf.Processors.push(new SmiliesProcessor().AddDefault());
+        conf.Processors.push(new SmiliesProcessor().AddTwhl());
         conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
         conf.Processors.push(new NewLineProcessor());
 

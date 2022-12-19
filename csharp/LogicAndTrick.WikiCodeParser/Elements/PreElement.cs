@@ -14,10 +14,12 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             "javascript", "js", "plaintext"
         };
 
+        public string Token { get; set; } = "pre";
+
         public override bool Matches(Lines lines)
         {
             var value = lines.Value().Trim();
-            return value.Length > 4 && value.Substring(0, 4) == "[pre" && Regex.IsMatch(value, @"\[pre(=[a-z ]+)?\]", RegexOptions.IgnoreCase);
+            return value.Length > Token.Length + 1 && value.Substring(0, Token.Length + 1) == "[" + Token && Regex.IsMatch(value, @"\[" + Regex.Escape(Token) + @"(=[a-z ]+)?\]", RegexOptions.IgnoreCase);
         }
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
@@ -26,7 +28,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var arr = new List<string>();
 
             var line = lines.Value().Trim();
-            var res = Regex.Match(line, @"\[pre(?:=([a-z ]+))?\]", RegexOptions.IgnoreCase);
+            var res = Regex.Match(line, @"\[" + Regex.Escape(Token) + @"(?:=([a-z ]+))?\]", RegexOptions.IgnoreCase);
             if (!res.Success)
             {
                 lines.SetCurrent(current);
@@ -44,9 +46,9 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 if (!AllowedLanguages.Contains(lang)) lang = null;
             }
 
-            if (line.EndsWith("[/pre]"))
+            if (line.EndsWith("[/" + Token + "]"))
             {
-                arr.Add(line.Substring(0, line.Length - 6));
+                arr.Add(line.Substring(0, line.Length - (Token.Length + 3)));
             }
             else
             {
@@ -55,9 +57,9 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 while (lines.Next())
                 {
                     var value = lines.Value().TrimEnd();
-                    if (value.EndsWith("[/pre]"))
+                    if (value.EndsWith("[/" + Token + "]"))
                     {
-                        var lastLine = value.Substring(0, value.Length - 6);
+                        var lastLine = value.Substring(0, value.Length - (Token.Length + 3));
                         arr.Add(lastLine);
                         found = true;
                         break;

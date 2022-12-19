@@ -106,7 +106,7 @@ export class SmiliesProcessor implements INodeProcessor {
         return this;
     }
 
-    public AddDefault() : SmiliesProcessor {
+    public AddTwhl() : SmiliesProcessor {
         this.Add('aggrieved'   , ':aggrieved:'              );
         this.Add('aghast'      , ':aghast:'                 );
         this.Add('angry'       , ':x', ':-x', ':angry:'     );
