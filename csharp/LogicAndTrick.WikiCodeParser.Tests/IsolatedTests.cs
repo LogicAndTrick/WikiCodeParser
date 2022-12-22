@@ -64,6 +64,7 @@ public class IsolatedTests
     [DataRow("size-tag")]
     [DataRow("color-tag")]
     [DataRow("list-tag")]
+    [DataRow("wiki-image-tag")]
     public void IsolatedTestSnarkpit(string name)
     {
         TestCaseUtils.RunTestCase(ParserConfiguration.Snarkpit(), "isolated-sp", name);

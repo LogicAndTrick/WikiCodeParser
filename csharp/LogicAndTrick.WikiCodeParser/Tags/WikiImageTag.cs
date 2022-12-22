@@ -9,6 +9,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 {
     public class WikiImageTag : LinkTag
     {
+        public bool TwhlBehaviour { get; set; }
+
         public WikiImageTag()
         {
             Token = null;
@@ -69,8 +71,16 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var src = image;
             if (!image.Contains("/"))
             {
-                content.Nodes.Add(new MetadataNode("WikiUpload", image));
-                src = $"https://twhl.info/wiki/embed/{WikiRevision.CreateSlug(image)}";
+                if (TwhlBehaviour)
+                {
+                    content.Nodes.Add(new MetadataNode("WikiUpload", image));
+                    src = $"https://twhl.info/wiki/embed/{WikiRevision.CreateSlug(image)}";
+                }
+                else
+                {
+                    state.Seek(index, true);
+                    return null;
+                }
             }
 
             string url = null;
@@ -93,7 +103,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             if (tag == "img" && url != null && ValidateUrl(url))
             {
-                if (!Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))
+                if (TwhlBehaviour && !Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))
                 {
                     content.Nodes.Add(new MetadataNode("WikiLink", url));
                     url = $"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(url)}";
