@@ -83,7 +83,7 @@ public class BasicTests
         var output = "<img class=\"smiley\" src=\"https://twhl.info/images/smilies/aggrieved.png\" alt=\":aggrieved:\" /><br/>\n<img class=\"smiley\" src=\"https://twhl.info/images/smilies/glad.png\" alt=\":glad:\" />";
 
         var config = new ParserConfiguration();
-        config.Processors.Add(new SmiliesProcessor().AddTwhl());
+        config.Processors.Add(new SmiliesProcessor("https://twhl.info/images/smilies/{0}.png").AddTwhl());
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
         var result = parser.ParseResult(input);

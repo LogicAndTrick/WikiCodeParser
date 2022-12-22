@@ -9,7 +9,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
     {
         public int Priority { get; set; } = 5;
 
-        public string UrlFormatString { get; set; } = "https://twhl.info/images/smilies/{0}.png";
+        public string UrlFormatString { get; set; }
 
         private readonly List<SmileyDefinition> _definitions;
         private bool _initialised;
@@ -17,8 +17,9 @@ namespace LogicAndTrick.WikiCodeParser.Processors
 
         private const int MaxSmilies = 100;
 
-        public SmiliesProcessor()
+        public SmiliesProcessor(string urlFormatString)
         {
+            UrlFormatString = urlFormatString;
             _definitions = new List<SmileyDefinition>();
         }
 

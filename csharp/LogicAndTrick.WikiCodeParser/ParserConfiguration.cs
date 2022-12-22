@@ -70,7 +70,7 @@ namespace LogicAndTrick.WikiCodeParser
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());
             conf.Processors.Add(new AutoLinkingProcessor());
-            conf.Processors.Add(new SmiliesProcessor().AddTwhl());
+            conf.Processors.Add(new SmiliesProcessor("https://twhl.info/images/smilies/{0}.png").AddTwhl());
             conf.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
             conf.Processors.Add(new NewLineProcessor());
 
@@ -94,8 +94,8 @@ namespace LogicAndTrick.WikiCodeParser
             // Standard block
             conf.Tags.Add(new PreTag());
             conf.Tags.Add(new Tag("center", "div", "text-center").WithBlock(true));
-            // aligntag
-            // listtag
+            conf.Tags.Add(new AlignTag());
+            conf.Tags.Add(new ListTag());
             
             // Links
             conf.Tags.Add(new LinkTag().WithScopes("excerpt"));
@@ -112,8 +112,8 @@ namespace LogicAndTrick.WikiCodeParser
 
             // Custom
             conf.Tags.Add(new QuoteTag());
-            // color
-            // size
+            conf.Tags.Add(new ColorTag());
+            conf.Tags.Add(new SizeTag());
             conf.Tags.Add(new SpoilerTag().WithScopes("inline", "excerpt"));
 
             // Elements
@@ -131,7 +131,7 @@ namespace LogicAndTrick.WikiCodeParser
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());
             conf.Processors.Add(new AutoLinkingProcessor());
-            conf.Processors.Add(new SmiliesProcessor().AddSnarkpit());
+            conf.Processors.Add(new SmiliesProcessor("https://snarkpit.net/images/smilies/{0}.gif").AddSnarkpit());
             conf.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
             conf.Processors.Add(new NewLineProcessor());
 

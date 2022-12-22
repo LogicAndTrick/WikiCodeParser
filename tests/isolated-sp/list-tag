@@ -1,0 +1,31 @@
+[list]
+[*] A
+A
+AAA
+
+BBB
+[*] B
+[*] C
+[/list]
+
+###
+
+<ul>
+<li>A<br/>
+A<br/>
+AAA<br/>
+<br/>
+BBB</li>
+<li>B</li>
+<li>C</li>
+</ul>
+
+###
+
+* A
+A
+AAA
+
+BBB
+* B
+* C

@@ -1,0 +1,19 @@
+[align=left]1[/align]
+[align=center][b]2[/b][/align]
+[align=right]3[/align]
+
+###
+
+<div class="text-start">1</div>
+
+<div class="text-center"><strong>2</strong></div>
+
+<div class="text-end">3</div>
+
+###
+
+1
+
+2
+
+3

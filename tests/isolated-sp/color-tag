@@ -1,0 +1,15 @@
+[color=red]A[/color]
+[color=#aaa]B[/color]
+[color=#AABBCC]C[/color]
+
+###
+
+<span style="color: red;">A</span><br/>
+<span style="color: #aaa;">B</span><br/>
+<span style="color: #AABBCC;">C</span>
+
+###
+
+A
+B
+C

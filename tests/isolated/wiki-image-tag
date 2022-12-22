@@ -2,6 +2,7 @@
 [img:test2|caption]
 [img:test3|small]
 [img:test4|right]
+[img:test5|&]
 
 ###
 
@@ -13,6 +14,8 @@
 
 <div class="embedded image right"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test4" alt="User posted image" /></span></div>
 
+<div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test5" alt="&amp;" /><span class="caption">&amp;</span></span></div>
+
 ###
 
 [Image]
@@ -23,9 +26,12 @@
 
 [Image]
 
+[Image] &
+
 ###
 
 WikiUpload="test1"
 WikiUpload="test2"
 WikiUpload="test3"
 WikiUpload="test4"
+WikiUpload="test5"

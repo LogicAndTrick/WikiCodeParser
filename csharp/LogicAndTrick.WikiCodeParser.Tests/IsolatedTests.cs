@@ -60,6 +60,10 @@ public class IsolatedTests
     [DataRow("pre-highlight")]
     [DataRow("code-tag")]
     [DataRow("pre-tag")]
+    [DataRow("align-tag")]
+    [DataRow("size-tag")]
+    [DataRow("color-tag")]
+    [DataRow("list-tag")]
     public void IsolatedTestSnarkpit(string name)
     {
         TestCaseUtils.RunTestCase(ParserConfiguration.Snarkpit(), "isolated-sp", name);
