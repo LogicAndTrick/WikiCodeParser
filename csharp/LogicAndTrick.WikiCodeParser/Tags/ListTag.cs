@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
 namespace LogicAndTrick.WikiCodeParser.Tags
@@ -39,7 +38,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             var after = "</" + Element + ">";
-            return new HtmlNode(before, content, after);
+            return new HtmlNode(before, content, after) { IsBlockNode = true };
         }
     }
 }

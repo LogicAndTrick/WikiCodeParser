@@ -14,17 +14,25 @@ export class PreElement extends Element {
         'javascript', 'js', 'plaintext'
     ];
 
+    public Token  = 'pre';
+
     public Matches(lines: Lines): boolean {
         const value = lines.Value().trim();
-        return value.length > 4 && value.startsWith('[pre') && value.match(/\[pre(=[a-z ]+)?\]/i) != null;
+        return value.length > this.Token.length + 1 && value.startsWith('[' + this.Token) && value.match(this.getTokenRegex()) != null;
     }
+
+    private getTokenRegex() : RegExp {
+        const escapedToken = this.Token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return new RegExp('\\[' + escapedToken + '(?:=([a-z ]+))?\\]', 'i');
+    }
+    
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode {
         const current = lines.Current();
         let arr: string[] = [];
 
         let line = lines.Value().trim();
-        const res = line.match(/\[pre(?:=([a-z0-9 ]+))?\]/i);
+        const res = line.match(this.getTokenRegex());
         if (!res) {
             lines.SetCurrent(current);
             return null;
@@ -41,15 +49,15 @@ export class PreElement extends Element {
             if (!PreElement.AllowedLanguages.includes(lang)) lang = undefined;
         }
 
-        if (line.endsWith('[/pre]')) {
-            arr.push(line.substring(0, line.length - 6));
+        if (line.endsWith('[/' + this.Token + ']')) {
+            arr.push(line.substring(0, line.length - (this.Token.length + 3)));
         } else {
             if (line.length > 0) arr.push(line);
             let found = false;
             while (lines.Next()) {
                 const value = lines.Value().trimEnd();
-                if (value.endsWith('[/pre]')) {
-                    const lastLine = value.substring(0, value.length - 6);
+                if (value.endsWith('[/' + this.Token + ']')) {
+                    const lastLine = value.substring(0, value.length - (this.Token.length + 3));
                     arr.push(lastLine);
                     found = true;
                     break;

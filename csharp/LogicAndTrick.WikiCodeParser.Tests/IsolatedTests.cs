@@ -53,7 +53,7 @@ public class IsolatedTests
     {
         TestCaseUtils.RunTestCase(ParserConfiguration.Twhl(), "isolated", name);
     }
-
+    
     [DataTestMethod]
     [DataRow("pre-simple")]
     [DataRow("pre-lang")]

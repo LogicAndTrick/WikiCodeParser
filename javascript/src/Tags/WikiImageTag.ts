@@ -12,6 +12,9 @@ import { TagParseContext } from '../TagParseContext';
 import { Tag } from './Tag';
 
 export class WikiImageTag extends Tag {
+
+    public TwhlBehaviour = false;
+    
     constructor() {
         super();
         this.Token = null;
@@ -65,8 +68,13 @@ export class WikiImageTag extends Tag {
         const params = match[2] ? match[2].trim().split('|') : [];
         let src = image;
         if (!image.includes('/')) {
-            content.Nodes.push(new MetadataNode('WikiUpload', image));
-            src = `https://twhl.info/wiki/embed/${WikiRevision.CreateSlug(image)}`;
+            if (this.TwhlBehaviour) {
+                content.Nodes.push(new MetadataNode('WikiUpload', image));
+                src = `https://twhl.info/wiki/embed/${WikiRevision.CreateSlug(image)}`;
+            } else {
+                state.Seek(index, true);
+                return null;
+            }
         }
 
         let url: string | null = null;
@@ -87,12 +95,11 @@ export class WikiImageTag extends Tag {
         if (!caption || caption.trim() == '') caption = null;
 
         if (tag == 'img' && url != null && WikiImageTag.ValidateUrl(url)) {
-            if (!url.match(/^[a-z]{2,10}:\/\//i)) {
+            if (this.TwhlBehaviour && !url.match(/^[a-z]{2,10}:\/\//i)) {
                 content.Nodes.push(new MetadataNode('WikiLink', url));
                 url = `https://twhl.info/wiki/page/${WikiRevision.CreateSlug(url)}`;
             }
-        }
-        else {
+        } else {
             url = '';
         }
 

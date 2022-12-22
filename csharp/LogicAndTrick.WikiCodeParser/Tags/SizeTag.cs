@@ -21,18 +21,13 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (options.ContainsKey("size"))
             {
                 before += " style=\"";
-                if (options.ContainsKey("size") && IsValidSize(options["size"])) before += "font-size: " + options["size"] + "px; ";
+                if (options.ContainsKey("size") && FontTag.IsValidSize(options["size"])) before += "font-size: " + options["size"] + "px; ";
                 before = before.TrimEnd(' ') + "\"";
             }
             before += ">";
             var content = parser.ParseTags(data, text, scope, TagContext);
             var after = "</" + Element + ">";
             return new HtmlNode(before, content, after);
-        }
-
-        private static bool IsValidSize(string text)
-        {
-            return int.TryParse(text, out var num) && num >= 6 && num <= 40;
         }
     }
 }

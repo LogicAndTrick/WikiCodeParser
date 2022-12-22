@@ -28,7 +28,7 @@ class SmileyDefinition {
 
 export class SmiliesProcessor implements INodeProcessor {
     public Priority = 5;
-    public UrlFormatString = 'https://twhl.info/images/smilies/{0}.png';
+    public UrlFormatString : string;
 
     private _definitions : SmileyDefinition[];
     private _initialised : boolean;
@@ -36,7 +36,8 @@ export class SmiliesProcessor implements INodeProcessor {
 
     private static MaxSmilies = 100;
 
-    constructor() {
+    constructor(urlFormatString : string) {
+        this.UrlFormatString = urlFormatString;
         this._definitions = [];
         this._initialised = false;
     }
@@ -157,6 +158,104 @@ export class SmiliesProcessor implements INodeProcessor {
         this.Add('freeman'     , ':freeman:'                );
         this.Add('hecu'        , ':hecu:'                   );
         this.Add('nya'         , ':nya:'                    );
+        return this;
+    }
+    
+    public AddSnarkpit() : SmiliesProcessor {
+        this.Add('icon_biggrin'    , ':D');
+        this.Add('sailor'          , ':sailor:'      );
+        this.Add('icon_smile'      , ':)', ':-)'     );
+        this.Add('dorky'           , ':geek:'        );
+        this.Add('sad0019'         , ':('            );
+        this.Add('icon_eek'        , ':-o'           );
+        this.Add('grenade'         , ':grenade:'     );
+        this.Add('confused'        , ':confused:'    );
+        this.Add('icon_cool'       , '-)'            );
+        this.Add('kitty'           , 'k1tt3h:'       );
+        this.Add('laughing'        , ':lol:'         );
+        this.Add('leper'           , ':leper:'       );
+        this.Add('mad'             , ':mad:'         );
+        this.Add('tongue0010'      , ':p'            );
+        this.Add('popcorn'         , ':popcorn:'     );
+        this.Add('icon_redface'    , ':oops:'        );
+        this.Add('icon_cry'        , ':cry:'         );
+        this.Add('icon_twisted'    , ':evil:'        );
+        this.Add('rolleye0011'     , ':roll:'        );
+        this.Add('shocked'         , ':scream:'      );
+        this.Add('icon_wink'       , '];)'           );
+        this.Add('dead'            , ':dead:'        );
+        this.Add('pimp'            , ':pimp:'        );
+        this.Add('beerchug'        , ':beer:'        );
+        this.Add('chainsaw'        , ':chainsaw:'    );
+        this.Add('arse'            , ':moonie:'      );
+        this.Add('angel'           , ':angel:'       );
+        this.Add('bday'            , ':bday:'        );
+        this.Add('clap'            , ':clap:'        );
+        this.Add('computer'        , ':computer:'    );
+        this.Add('crash'           , ':pccrash:'     );
+        this.Add('dizzy'           , ':dizzy:'       );
+        this.Add('dodgy'           , ':naughty:'     );
+        this.Add('drink'           , ':drink:'       );
+        this.Add('facelick'        , ':lick:'        );
+        this.Add('frown'           , '>:('           );
+        this.Add('heee'            , ':hee:'         );
+        this.Add('imwithstupid'    , ':imwithstupid:');
+        this.Add('jawdrop'         , ':jawdrop:'     );
+        this.Add('king'            , ':king:'        );
+        this.Add('ladysman'        , ':ladysman:'    );
+        this.Add('mrT'             , ':mrt:'         );
+        this.Add('nurse'           , ':nurse:'       );
+        this.Add('outtahere'       , ':outtahere:'   );
+        this.Add('aaatrigger'      , ':aaatrigger:'  );
+        this.Add('repuke'          , ':repuke:'      );
+        this.Add('rofl'            , ':rofl:'        );
+        this.Add('rolling'         , ':rolling2:'    );
+        this.Add('santa'           , ':santa:'       );
+        this.Add('smash'           , ':smash:'       );
+        this.Add('toilet'          , ':toilet:'      );
+        this.Add('44'              , '~o)'           );
+        this.Add('wavey'           , ':wavey:'       );
+        this.Add('upyours'         , ':stfu:'        );
+        this.Add('fart'            , ':fart:'        );
+        this.Add('trout'           , ':trout:'       );
+        this.Add('ar15firing'      , ':machinegun:'  );
+        this.Add('microwave'       , ':microwave:'   );
+        this.Add('guillotine'      , ':guillotine:'  );
+        this.Add('poke'            , ':poke:'        );
+        this.Add('sniper'          , ':sniper:'      );
+        this.Add('monkee'          , ':monkee:'      );
+        this.Add('bandit'          , ':gringo:'      );
+        this.Add('wtf'             , ':wtf:'         );
+        this.Add('azelito'         , ':azelito:'     );
+        this.Add('crate'           , ':crate:'       );
+        this.Add('argh'            , ':-&'           );
+        this.Add('swear'           , ':swear:'       );
+        this.Add('rocketwhore'     , ':launcher:'    );
+        this.Add('skull'           , ':skull:'       );
+        this.Add('munky'           , ':munky:'       );
+        this.Add('evilgrin'        , ':E'            );
+        this.Add('banghead'        , ':brickwall:'   );
+        this.Add('wcc'             , ':wcc:'         );
+        this.Add('smiley_sherlock' , ':sherlock:'    );
+        this.Add('nag'             , ':nag:'         );
+        this.Add('rolling_eyes'    , ':rolling:'     );
+        this.Add('angryfire'       , ':flame:'       );
+        this.Add('character'       , ':ghost:'       );
+        this.Add('character0007'   , ':pirate:'      );
+        this.Add('indifferent0016' , ':zzz:'         );
+        this.Add('indifferent0002' , ':|'            );
+        this.Add('love0012'        , ':love:'        );
+        this.Add('rolleye0006'     , ':lookup:'      );
+        this.Add('sad0006'         , '];('           );
+        this.Add('scared0005'      , ':scared:'      );
+        this.Add('flail'           , ':flail:'       );
+        this.Add('emot-cowjump'    , ':cowjump:'     );
+        this.Add('emot-eng101'     , ':teach:'       );
+        this.Add('uncertain'       , ':uncertain:'   );
+        this.Add('1sm071potstir'   , ':stirring:'    );
+        this.Add('thumbs_up'       , ':thumbsup:'    );
+        this.Add('happy_open'      , ':happy:'       );
+        this.Add('snark_topic_icon', ':snark:'       );
         return this;
     }
 }

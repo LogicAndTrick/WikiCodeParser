@@ -19,8 +19,7 @@ function AssertSame(name : string, expected : string, actual : string, split : b
     }
 }
 
-function Test(input: string, expectedOutput: string, expectedPlain : string | undefined, expectedMeta : string | undefined, split = false): void {
-    const config = ParserConfiguration.Twhl();
+function Test(config : ParserConfiguration, input: string, expectedOutput: string, expectedPlain : string | undefined, expectedMeta : string | undefined, split = false): void {
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);
@@ -36,7 +35,7 @@ function Test(input: string, expectedOutput: string, expectedPlain : string | un
     }
 }
 
-function RunTestCaseInFolder(folder: string, name: string, split = false) {
+function RunTestCaseInFolder(config : ParserConfiguration, folder: string, name: string, split = false) {
     const dir = `${__dirname}/../../tests/${folder}`;
     let _in : string;
     let _out : string;
@@ -59,11 +58,11 @@ function RunTestCaseInFolder(folder: string, name: string, split = false) {
     _out = _out.replace(/\r/g, '');
     _plain = _plain?.replace(/\r/g, '');
     _meta = _meta?.replace(/\r/g, '');
-    Test(_in, _out, _plain, _meta, split);
+    Test(config, _in, _out, _plain, _meta, split);
 }
 
 describe('Isolated tests', () => {
-    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder('isolated', name, split);
+    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Twhl(), 'isolated', name, split);
 
     it('missing-tag', () => RunTestCase('missing-tag'));
     it('unicode-escape', () => RunTestCase('unicode-escape'));
@@ -125,7 +124,22 @@ describe('Isolated tests', () => {
     it('processor-autolinking', () => RunTestCase('processor-autolinking'));
 });
 
+describe('Isolated tests: snarkpit', () => {
+    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Snarkpit(), 'isolated-sp', name, split);
+
+    it('pre-simple', () => RunTestCase('pre-simple'));
+    it('pre-lang', () => RunTestCase('pre-lang'));
+    it('pre-highlight', () => RunTestCase('pre-highlight'));
+    it('code-tag', () => RunTestCase('code-tag'));
+    it('pre-tag', () => RunTestCase('pre-tag'));
+    it('align-tag', () => RunTestCase('align-tag'));
+    it('size-tag', () => RunTestCase('size-tag'));
+    it('color-tag', () => RunTestCase('color-tag'));
+    it('list-tag', () => RunTestCase('list-tag'));
+    it('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
+});
+
 describe('End to end tests', () => {
-    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder('endtoend', name, split);
+    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Twhl(), 'endtoend', name, split);
     it('wikicode-page', () => RunTestCase('wikicode-page'));
 });
