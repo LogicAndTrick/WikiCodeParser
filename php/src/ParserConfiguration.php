@@ -17,13 +17,17 @@ use LogicAndTrick\WikiCodeParser\Processors\MarkdownTextProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\NewLineProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\SmiliesProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\TrimWhitespaceAroundBlockNodesProcessor;
+use LogicAndTrick\WikiCodeParser\Tags\AlignTag;
 use LogicAndTrick\WikiCodeParser\Tags\CodeTag;
+use LogicAndTrick\WikiCodeParser\Tags\ColorTag;
 use LogicAndTrick\WikiCodeParser\Tags\FontTag;
 use LogicAndTrick\WikiCodeParser\Tags\ImageTag;
 use LogicAndTrick\WikiCodeParser\Tags\LinkTag;
+use LogicAndTrick\WikiCodeParser\Tags\ListTag;
 use LogicAndTrick\WikiCodeParser\Tags\PreTag;
 use LogicAndTrick\WikiCodeParser\Tags\QuickLinkTag;
 use LogicAndTrick\WikiCodeParser\Tags\QuoteTag;
+use LogicAndTrick\WikiCodeParser\Tags\SizeTag;
 use LogicAndTrick\WikiCodeParser\Tags\SpoilerTag;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
 use LogicAndTrick\WikiCodeParser\Tags\VaultEmbedTag;
@@ -68,7 +72,9 @@ class ParserConfiguration
         // Embedded
         $conf->tags[] = new ImageTag();
         $conf->tags[] = (new ImageTag())->WithToken('simg')->WithBlock(false);
-        $conf->tags[] = new WikiImageTag();
+        $wikiImageTag = new WikiImageTag();
+        $wikiImageTag->twhlBehaviour = true;
+        $conf->tags[] = $wikiImageTag;
         $conf->tags[] = new YoutubeTag();
         $conf->tags[] = new WikiYoutubeTag();
         $conf->tags[] = new VaultEmbedTag();
@@ -98,7 +104,65 @@ class ParserConfiguration
         // Processors
         $conf->processors[] = new MarkdownTextProcessor();
         $conf->processors[] = new AutoLinkingProcessor();
-        $conf->processors[] = (new SmiliesProcessor())->AddTwhl();
+        $conf->processors[] = (new SmiliesProcessor('https://twhl.info/images/smilies/{0}.png'))->AddTwhl();
+        $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
+        $conf->processors[] = new NewLineProcessor();
+
+        return $conf;
+    }
+
+    public static function Snarkpit(): ParserConfiguration {
+        $conf = new ParserConfiguration();
+
+        // Standard inline
+        $conf->tags[] = (new Tag('b', 'strong'))->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new Tag('i', 'em'))->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new Tag('u', 'span', 'underline'))->WithScopes('inline', 'excerpt');
+        $conf->tags[] = (new Tag('s', 'span', 'strikethrough'))->WithScopes('inline', 'excerpt');
+
+        // Standard block
+        $conf->tags[] = new PreTag();
+        $conf->tags[] = (new Tag('center', 'div', 'text-center'))->WithBlock(true);
+        $conf->tags[] = new AlignTag();
+        $conf->tags[] = new ListTag();
+
+        // Links
+        $conf->tags[] = (new LinkTag())->WithScopes('excerpt');
+        $conf->tags[] = (new LinkTag())->WithScopes('excerpt')->WithToken('email');
+        $conf->tags[] = new QuickLinkTag();
+
+        // Embedded
+        $conf->tags[] = new ImageTag();
+        $conf->tags[] = (new ImageTag())->WithToken('simg')->WithBlock(false);
+        $conf->tags[] = new WikiImageTag();
+
+        $conf->tags[] = new YoutubeTag();
+        $conf->tags[] = new WikiYoutubeTag();
+
+        // Custom
+        $conf->tags[] = new QuoteTag();
+        $conf->tags[] = new ColorTag();
+        $conf->tags[] = new SizeTag();
+        $conf->tags[] = (new SpoilerTag())->WithScopes('inline', 'excerpt');
+
+        // Elements
+        $conf->elements[] = new MdCodeElement();
+        $preElement = new PreElement();
+        $preElement->token = 'code';
+        $conf->elements[] = $preElement;
+        $conf->elements[] = new MdHeadingElement();
+        $conf->elements[] = new MdLineElement();
+        $conf->elements[] = new MdQuoteElement();
+        $conf->elements[] = new MdListElement();
+        $conf->elements[] = new MdTableElement();
+        $conf->elements[] = new MdPanelElement();
+        $conf->elements[] = new MdColumnsElement();
+        $conf->elements[] = new RefElement();
+
+        // Processors
+        $conf->processors[] = new MarkdownTextProcessor();
+        $conf->processors[] = new AutoLinkingProcessor();
+        $conf->processors[] = (new SmiliesProcessor('https://snarkpit.net/images/smilies/{0}.gif'))->AddSnarkpit();
         $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
         $conf->processors[] = new NewLineProcessor();
 

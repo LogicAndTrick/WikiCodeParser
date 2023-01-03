@@ -23,8 +23,7 @@ class TestCaseUtils
         }
     }
 
-    private static function Test(string $input, string $expectedOutput, ?string $expectedPlain, ?string $expectedMeta, bool $split = false) : void {
-        $config = ParserConfiguration::Twhl();
+    private static function Test(ParserConfiguration $config, string $input, string $expectedOutput, ?string $expectedPlain, ?string $expectedMeta, bool $split = false) : void {
         $parser = new Parser($config);
 
         $result = $parser->ParseResult($input);
@@ -62,7 +61,7 @@ class TestCaseUtils
         return __DIR__.'/../../tests/'.$folder;
     }
 
-    public static function RunTestCase(string $folder, string $name, bool $split = false) : void {
+    public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false) : void {
         $dir = TestCaseUtils::GetTestCaseDirectory($folder);
         $_in = '';
         $_out = '';
@@ -90,6 +89,6 @@ class TestCaseUtils
         $_out = str_replace("\r", '', $_out);
         $_plain = $_plain ? str_replace("\r", '', $_plain) : $_plain;
         $_meta = $_meta ? str_replace("\r", '', $_meta) : $_meta;
-        TestCaseUtils::Test($_in, $_out, $_plain, $_meta, $split);
+        TestCaseUtils::Test($config, $_in, $_out, $_plain, $_meta, $split);
     }
 }

@@ -20,10 +20,17 @@ class PreElement extends Element
         'javascript', 'js', 'plaintext'
     ];
 
+    public string $token = 'pre';
+
     public function Matches(Lines $lines): bool
     {
         $value = trim($lines->Value());
-        return strlen($value) > 4 && str_starts_with($value, '[pre') && preg_match('/\[pre(=[a-z ]+)?]/i', $value);
+        return strlen($value) > strlen($this->token) + 1 && str_starts_with($value, '['.$this->token) && preg_match($this->getTokenRegex(), $value);
+    }
+
+    private function getTokenRegex() : string {
+        $escapedToken = preg_quote($this->token);
+        return '/\[' . $escapedToken . '(?:=([a-z ]+))?]/i';
     }
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
@@ -32,7 +39,7 @@ class PreElement extends Element
         $arr = [];
 
         $line = trim($lines->Value());
-        $success = preg_match('/\[pre(?:=([a-z0-9 ]+))?]/i', $line, $res);
+        $success = preg_match($this->getTokenRegex(), $line, $res);
         if (!$success) {
             $lines->SetCurrent($current);
             return null;
@@ -49,15 +56,15 @@ class PreElement extends Element
             if (!in_array($lang, PreElement::$allowedLanguages)) $lang = null;
         }
 
-        if (str_ends_with($line, '[/pre]')) {
-            $arr[] = substr($line, 0, strlen($line) - 6);
+        if (str_ends_with($line, '[/' . $this->token . ']')) {
+            $arr[] = substr($line, 0, strlen($line) - (strlen($this->token) + 3));
         } else {
             if (strlen($line) > 0) $arr[] = $line;
             $found = false;
             while ($lines->Next()) {
                 $value = rtrim($lines->Value());
-                if (str_ends_with($value, '[/pre]')) {
-                    $lastLine = substr($value, 0, strlen($value) - 6);
+                if (str_ends_with($value, '[/' . $this->token . ']')) {
+                    $lastLine = substr($value, 0, strlen($value) - (strlen($this->token) + 3));
                     $arr[] = $lastLine;
                     $found = true;
                     break;

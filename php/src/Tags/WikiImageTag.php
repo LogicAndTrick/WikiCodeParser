@@ -16,6 +16,8 @@ use LogicAndTrick\WikiCodeParser\TagParseContext;
 
 class WikiImageTag extends Tag
 {
+    public bool $twhlBehaviour = false;
+
     public function __construct()
     {
         parent::__construct();
@@ -70,9 +72,14 @@ class WikiImageTag extends Tag
         $params = isset($match[2]) && strlen($match[2]) > 0 ? explode('|', trim($match[2])) : [];
         $src = $image;
         if (!str_contains($image, '/')) {
-            $content->nodes[] = new MetadataNode('WikiUpload', $image);
-            $slug = WikiRevision::CreateSlug($image);
-            $src = "https://twhl.info/wiki/embed/$slug";
+            if ($this->twhlBehaviour) {
+                $content->nodes[] = new MetadataNode('WikiUpload', $image);
+                $slug = WikiRevision::CreateSlug($image);
+                $src = "https://twhl.info/wiki/embed/$slug";
+            } else {
+                $state->Seek($index, true);
+                return null;
+            }
         }
 
         $url = null;
@@ -93,7 +100,7 @@ class WikiImageTag extends Tag
         if (!$caption || trim($caption) == '') $caption = null;
 
         if ($tag == 'img' && $url != null && self::ValidateUrl($url)) {
-            if (!preg_match('/^[a-z]{2,10}:\/\//i', $url)) {
+            if ($this->twhlBehaviour && !preg_match('/^[a-z]{2,10}:\/\//i', $url)) {
                 $content->nodes[] = new MetadataNode('WikiLink', $url);
                 $slug = WikiRevision::CreateSlug($url);
                 $url = "https://twhl.info/wiki/page/$slug";
