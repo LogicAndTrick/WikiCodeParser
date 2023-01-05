@@ -28,7 +28,7 @@ class ListTag extends Tag
         return parent::Validate($options, $text) && count($items) > 0;
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
     {
         $before = '<' . $this->element;
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';

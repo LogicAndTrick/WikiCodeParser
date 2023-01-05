@@ -20,7 +20,7 @@ class SizeTag extends Tag
         $this->allOptionsInMain = true;
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
     {
         $before = '<' . $this->element;
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';

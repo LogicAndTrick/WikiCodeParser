@@ -20,7 +20,7 @@ class YoutubeTag extends Tag
         $this->options = ['id'];
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
     {
         $id = $text;
         if (isset($options['id']) && $options['id']) $id = $options['id'];

@@ -22,7 +22,7 @@ class LinkTag extends Tag
         $this->options = ['url'];
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
     {
         $url = $text;
         if (isset($options['url'])) $url = $options['url'];

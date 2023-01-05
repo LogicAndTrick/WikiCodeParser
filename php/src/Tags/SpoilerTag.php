@@ -60,7 +60,7 @@ class SpoilerTag extends Tag
         $this->allOptionsInMain = true;
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
     {
         $visibleText = 'Spoiler';
         if (isset($options['text']) && strlen($options['text']) > 0) $visibleText = $options['text'];
