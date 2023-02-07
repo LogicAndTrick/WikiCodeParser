@@ -1,0 +1,21 @@
+name: JavaScript-release
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Build
+        run: (cd javascript && yarn install && yarn run build)
+      - name: Publish
+        run: (cd javascript && yarn publish --non-interactive)

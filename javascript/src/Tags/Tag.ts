@@ -88,6 +88,7 @@ export class Tag {
             }
 
             state.Seek(index, true);
+            console.log(2);
             return null;
         }
         else {
@@ -98,6 +99,7 @@ export class Tag {
             }
             else {
                 state.Seek(index, true);
+                console.log(3);
                 return null;
             }
         }

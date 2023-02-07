@@ -1,6 +1,10 @@
 {
-  "name": "twhl-wikicode-parser",
-  "version": "1.0.0",
+  "name": "@logicandtrick/twhl-wikicode-parser",
+  "version": "0.9.2",
+  "repository": "https://github.com/LogicAndTrick/WikiCodeParser.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
