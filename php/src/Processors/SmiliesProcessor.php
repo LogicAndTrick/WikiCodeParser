@@ -27,7 +27,11 @@ class SmileyDefinition
 
     public function GetMatchingToken(string $text, int $startIndex) : ?string {
         foreach ($this->tokens as $token) {
-            if (strpos($text, $token, $startIndex) === $startIndex) return $token;
+            if (strpos($text, $token, $startIndex) === $startIndex) {
+                // Must end with whitespace
+                if ($startIndex + strlen($token) < strlen($text) - 1 && trim($text[$startIndex + strlen($token)]) != '') continue;
+                return $token;
+            }
         }
         return null;
     }
@@ -193,8 +197,8 @@ class SmiliesProcessor implements INodeProcessor
         $this->Add('icon_eek'        , ':-o'           );
         $this->Add('grenade'         , ':grenade:'     );
         $this->Add('confused'        , ':confused:'    );
-        $this->Add('icon_cool'       , '-)'            );
-        $this->Add('kitty'           , 'k1tt3h:'       );
+        $this->Add('icon_cool'       , '8-)'           );
+        $this->Add('kitty'           , ':k1tt3h:'      );
         $this->Add('laughing'        , ':lol:'         );
         $this->Add('leper'           , ':leper:'       );
         $this->Add('mad'             , ':mad:'         );
@@ -205,7 +209,7 @@ class SmiliesProcessor implements INodeProcessor
         $this->Add('icon_twisted'    , ':evil:'        );
         $this->Add('rolleye0011'     , ':roll:'        );
         $this->Add('shocked'         , ':scream:'      );
-        $this->Add('icon_wink'       , '];)'           );
+        $this->Add('icon_wink'       , ';)'            );
         $this->Add('dead'            , ':dead:'        );
         $this->Add('pimp'            , ':pimp:'        );
         $this->Add('beerchug'        , ':beer:'        );
@@ -269,7 +273,7 @@ class SmiliesProcessor implements INodeProcessor
         $this->Add('indifferent0002' , ':|'            );
         $this->Add('love0012'        , ':love:'        );
         $this->Add('rolleye0006'     , ':lookup:'      );
-        $this->Add('sad0006'         , '];('           );
+        $this->Add('sad0006'         , ';('            );
         $this->Add('scared0005'      , ':scared:'      );
         $this->Add('flail'           , ':flail:'       );
         $this->Add('emot-cowjump'    , ':cowjump:'     );

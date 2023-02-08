@@ -18,4 +18,5 @@ class IsolatedSnarkpitTest extends TestCase
     public function testcolortag() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'color-tag'); }
     public function testlisttag() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'list-tag'); }
     public function testwikiimagetag() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'wiki-image-tag'); }
+    public function testprocessorsmiliesbasic() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'processor-smilies-basic'); }
 }

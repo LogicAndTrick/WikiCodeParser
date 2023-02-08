@@ -137,6 +137,7 @@ describe('Isolated tests: snarkpit', () => {
     it('color-tag', () => RunTestCase('color-tag'));
     it('list-tag', () => RunTestCase('list-tag'));
     it('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
+    it('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
 });
 
 describe('End to end tests', () => {

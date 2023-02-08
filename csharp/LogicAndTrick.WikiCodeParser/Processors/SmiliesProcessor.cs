@@ -153,8 +153,8 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             Add("icon_eek"        , ":-o"           );
             Add("grenade"         , ":grenade:"     );
             Add("confused"        , ":confused:"    );
-            Add("icon_cool"       , "-)"            );
-            Add("kitty"           , "k1tt3h:"       );
+            Add("icon_cool"       , "8-)"           );
+            Add("kitty"           , ":k1tt3h:"      );
             Add("laughing"        , ":lol:"         );
             Add("leper"           , ":leper:"       );
             Add("mad"             , ":mad:"         );
@@ -165,7 +165,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             Add("icon_twisted"    , ":evil:"        );
             Add("rolleye0011"     , ":roll:"        );
             Add("shocked"         , ":scream:"      );
-            Add("icon_wink"       , "];)"           );
+            Add("icon_wink"       , ";)"            );
             Add("dead"            , ":dead:"        );
             Add("pimp"            , ":pimp:"        );
             Add("beerchug"        , ":beer:"        );
@@ -229,7 +229,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             Add("indifferent0002" , ":|"            );
             Add("love0012"        , ":love:"        );
             Add("rolleye0006"     , ":lookup:"      );
-            Add("sad0006"         , "];("           );
+            Add("sad0006"         , ";("            );
             Add("scared0005"      , ":scared:"      );
             Add("flail"           , ":flail:"       );
             Add("emot-cowjump"    , ":cowjump:"     );
@@ -257,7 +257,11 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             {
                 foreach (var token in Tokens)
                 {
-                    if (text.IndexOf(token, startIndex, StringComparison.Ordinal) == startIndex) return token;
+                    if (text.IndexOf(token, startIndex, StringComparison.Ordinal) == startIndex) {
+                    // Must end with whitespace
+                    if (startIndex + token.Length < text.Length - 1 && !Char.IsWhiteSpace(text[startIndex + token.Length])) continue;
+                        return token;
+                    }
                 }
 
                 return null;
