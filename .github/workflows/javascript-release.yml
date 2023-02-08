@@ -15,7 +15,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build
         run: (cd javascript && yarn install && yarn run build)
       - name: Publish
-        run: (cd javascript && yarn publish --non-interactive)
+        run: (cd javascript && yarn publish --non-interactive --access public)
