@@ -1,21 +1,25 @@
 [[Test1]]
 [[Test2|AAA]]
 [[Test3#Anchor|BBB]]
+[[Recompiling Light Only]]
 
 ###
 
 <a href="https://twhl.info/wiki/page/Test1">Test1</a><br/>
 <a href="https://twhl.info/wiki/page/Test2">AAA</a><br/>
-<a href="https://twhl.info/wiki/page/Test3#Anchor">BBB</a>
+<a href="https://twhl.info/wiki/page/Test3#Anchor">BBB</a><br/>
+<a href="https://twhl.info/wiki/page/Recompiling_Light_Only">Recompiling Light Only</a>
 
 ###
 
 Test1
 AAA
 BBB
+Recompiling Light Only
 
 ###
 
 WikiLink="Test1"
 WikiLink="Test2"
 WikiLink="Test3"
+WikiLink="Recompiling Light Only"

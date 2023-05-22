@@ -1,6 +1,6 @@
 {
   "name": "@logicandtrick/twhl-wikicode-parser",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "repository": "https://github.com/LogicAndTrick/WikiCodeParser.git",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
