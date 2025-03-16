@@ -38,6 +38,15 @@ public class QuoteElementTest
     }
 
     [TestMethod]
+    [DynamicData(nameof(GetBalanceQuotesData), DynamicDataSourceType.Method)]
+    public void BalanceQuotesUpperCaseTest(string input, string? output)
+    {
+        var lines = new Lines(input.ToUpper());
+        lines.Next();
+        Assert.AreEqual(output?.ToUpper(), QuoteElement.BalanceQuotes(lines, out _, out _));
+    }
+
+    [TestMethod]
     public void BalanceQuotesWithNameTest()
     {
         var input = "[quote=Name]Test[/quote]";

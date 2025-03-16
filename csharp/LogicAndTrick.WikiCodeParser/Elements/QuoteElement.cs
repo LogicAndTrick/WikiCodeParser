@@ -13,7 +13,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         public override bool Matches(Lines lines)
         {
             var value = lines.Value().Trim();
-            return value.Length > 6 && value.StartsWith("[quote") && OpenQuote.IsMatch(value);
+            return value.Length > 6 && value.StartsWith("[quote", StringComparison.InvariantCultureIgnoreCase) && OpenQuote.IsMatch(value);
         }
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
