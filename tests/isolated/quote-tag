@@ -8,6 +8,7 @@ hello
 ###
 
 <blockquote><strong class="quote-name">test said:</strong><br/>hi
+
 <blockquote>hello</blockquote>
 </blockquote>
 
@@ -16,6 +17,7 @@ hello
 
 test said: [quote]
 hi
+
 [quote]
 hello
 [/quote]

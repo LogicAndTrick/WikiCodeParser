@@ -5,11 +5,11 @@
     <Title>LogicAndTrick.WikiCodeParser</Title>
     <Authors>LogicAndTrick</Authors>
     <Description>A parser for TWHL WikiCode</Description>
-    <Copyright>2022 LogicAndTrick</Copyright>
+    <Copyright>2024 LogicAndTrick</Copyright>
     <PackageProjectUrl>https://github.com/LogicAndTrick/WikiCodeParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/LogicAndTrick/WikiCodeParser</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.9.3</Version>
+    <Version>0.9.4</Version>
   </PropertyGroup>
 
 </Project>

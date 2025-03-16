@@ -1,0 +1,27 @@
+[quote]
+= H1
+== H2
+== H2
+=== H3<br>H3
+[/quote]
+
+###
+
+<blockquote><h1 id="H1">H1</h1>
+<h2 id="H2">H2</h2>
+<h2 id="H2_2">H2</h2>
+<h3 id="H3_H3">H3<br/>
+H3</h3></blockquote>
+
+###
+
+[quote]
+H1
+--
+H2
+--
+H2
+--
+H3 H3
+-----
+[/quote]

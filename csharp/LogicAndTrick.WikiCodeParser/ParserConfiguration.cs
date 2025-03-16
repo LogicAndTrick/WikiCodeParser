@@ -46,7 +46,6 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Tags.Add(new VaultEmbedTag());
 
             // Custom
-            conf.Tags.Add(new QuoteTag());
             conf.Tags.Add(new FontTag().WithScopes("inline", "excerpt"));
             conf.Tags.Add(new WikiCategoryTag().WithScopes("inline", "excerpt"));
             conf.Tags.Add(new WikiBookTag().WithScopes("inline", "excerpt"));
@@ -66,6 +65,7 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Elements.Add(new MdPanelElement());
             conf.Elements.Add(new MdColumnsElement());
             conf.Elements.Add(new RefElement());
+            conf.Elements.Add(new QuoteElement());
             
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());
@@ -111,7 +111,6 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Tags.Add(new WikiYoutubeTag());
 
             // Custom
-            conf.Tags.Add(new QuoteTag());
             conf.Tags.Add(new ColorTag());
             conf.Tags.Add(new SizeTag());
             conf.Tags.Add(new SpoilerTag().WithScopes("inline", "excerpt"));
@@ -127,6 +126,7 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Elements.Add(new MdPanelElement());
             conf.Elements.Add(new MdColumnsElement());
             conf.Elements.Add(new RefElement());
+            conf.Elements.Add(new QuoteElement());
 
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());

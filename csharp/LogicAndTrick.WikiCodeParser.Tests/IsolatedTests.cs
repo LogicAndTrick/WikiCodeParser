@@ -30,6 +30,7 @@ public class IsolatedTests
     [DataRow("h-tag")]
     [DataRow("pre-tag")]
     [DataRow("quote-tag")]
+    [DataRow("quote-with-headings")]
     [DataRow("image-tag")]
     [DataRow("link-tag")]
     [DataRow("vault-tag")]

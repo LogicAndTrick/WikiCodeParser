@@ -234,7 +234,9 @@ The second way to quote users is to use the <code>[quote]</code> BBCode tag. The
     This is the child quote
 [/quote]</code></pre>
 BBCode quotes have the advantage of adding the name of the person you are quoting:
+
 <blockquote><strong class="quote-name">GLaDOS said:</strong><br/>Oh, hi. So, how are you holding up? Because I&#39;m a potato!</blockquote>
+
 Which can be done like this:
 <pre class="lang-plaintext"><code>[quote=GLaDOS]Oh, hi. So, how are you holding up? Because I&#39;m a potato![/quote]</code></pre>
 
