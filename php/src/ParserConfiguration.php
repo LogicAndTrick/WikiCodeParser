@@ -11,6 +11,7 @@ use LogicAndTrick\WikiCodeParser\Elements\MdPanelElement;
 use LogicAndTrick\WikiCodeParser\Elements\MdQuoteElement;
 use LogicAndTrick\WikiCodeParser\Elements\MdTableElement;
 use LogicAndTrick\WikiCodeParser\Elements\PreElement;
+use LogicAndTrick\WikiCodeParser\Elements\QuoteElement;
 use LogicAndTrick\WikiCodeParser\Elements\RefElement;
 use LogicAndTrick\WikiCodeParser\Processors\AutoLinkingProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\MarkdownTextProcessor;
@@ -80,7 +81,6 @@ class ParserConfiguration
         $conf->tags[] = new VaultEmbedTag();
 
         // Custom
-        $conf->tags[] = new QuoteTag();
         $conf->tags[] = (new FontTag())->WithScopes('inline', 'excerpt');
         $conf->tags[] = (new WikiCategoryTag())->WithScopes('inline', 'excerpt');
         $conf->tags[] = (new WikiBookTag())->WithScopes('inline', 'excerpt');
@@ -100,6 +100,7 @@ class ParserConfiguration
         $conf->elements[] = new MdPanelElement();
         $conf->elements[] = new MdColumnsElement();
         $conf->elements[] = new RefElement();
+        $conf->elements[] = new QuoteElement();
 
         // Processors
         $conf->processors[] = new MarkdownTextProcessor();
@@ -140,7 +141,6 @@ class ParserConfiguration
         $conf->tags[] = new WikiYoutubeTag();
 
         // Custom
-        $conf->tags[] = new QuoteTag();
         $conf->tags[] = new ColorTag();
         $conf->tags[] = new SizeTag();
         $conf->tags[] = (new SpoilerTag())->WithScopes('inline', 'excerpt');
@@ -158,6 +158,7 @@ class ParserConfiguration
         $conf->elements[] = new MdPanelElement();
         $conf->elements[] = new MdColumnsElement();
         $conf->elements[] = new RefElement();
+        $conf->elements[] = new QuoteElement();
 
         // Processors
         $conf->processors[] = new MarkdownTextProcessor();

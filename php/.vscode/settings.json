@@ -1,3 +1,0 @@
-{
-    "phpunit.files": "{test,tests}/**/*Test.php"
-}

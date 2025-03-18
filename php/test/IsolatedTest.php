@@ -4,7 +4,7 @@ namespace LogicAndTrick\WikiCodeParser;
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__.'./TestCaseUtils.php';
+require_once __DIR__.'/TestCaseUtils.php';
 
 class IsolatedTest extends TestCase
 {
@@ -45,6 +45,7 @@ class IsolatedTest extends TestCase
     public function testhtag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'h-tag'); }
     public function testpretag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'pre-tag'); }
     public function testquotetag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'quote-tag'); }
+    public function testquotewithheadings() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'quote-with-headings'); }
     public function testimagetag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'image-tag'); }
     public function testlinktag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'link-tag'); }
     public function testvaulttag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'vault-tag'); }
