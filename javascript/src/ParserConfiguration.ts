@@ -8,6 +8,7 @@ import { MdPanelElement } from './Elements/MdPanelElement';
 import { MdQuoteElement } from './Elements/MdQuoteElement';
 import { MdTableElement } from './Elements/MdTableElement';
 import { PreElement } from './Elements/PreElement';
+import { QuoteElement } from './Elements/QuoteElement';
 import { RefElement } from './Elements/RefElement';
 import { AutoLinkingProcessor } from './Processors/AutoLinkingProcessor';
 import { INodeProcessor } from './Processors/INodeProcessor';
@@ -24,7 +25,6 @@ import { LinkTag } from './Tags/LinkTag';
 import { ListTag } from './Tags/ListTag';
 import { PreTag } from './Tags/PreTag';
 import { QuickLinkTag } from './Tags/QuickLinkTag';
-import { QuoteTag } from './Tags/QuoteTag';
 import { SizeTag } from './Tags/SizeTag';
 import { SpoilerTag } from './Tags/SpoilerTag';
 import { Tag } from './Tags/Tag';
@@ -77,7 +77,6 @@ export class ParserConfiguration {
         conf.Tags.push(new VaultEmbedTag());
 
         // Custom
-        conf.Tags.push(new QuoteTag());
         conf.Tags.push(new FontTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new WikiCategoryTag().WithScopes('inline', 'excerpt'));
         conf.Tags.push(new WikiBookTag().WithScopes('inline', 'excerpt'));
@@ -97,6 +96,7 @@ export class ParserConfiguration {
         conf.Elements.push(new MdPanelElement());
         conf.Elements.push(new MdColumnsElement());
         conf.Elements.push(new RefElement());
+        conf.Elements.push(new QuoteElement());
 
         // Processors
         conf.Processors.push(new MarkdownTextProcessor());
@@ -137,7 +137,6 @@ export class ParserConfiguration {
         conf.Tags.push(new WikiYoutubeTag());
 
         // Custom
-        conf.Tags.push(new QuoteTag());
         conf.Tags.push(new ColorTag());
         conf.Tags.push(new SizeTag());
         conf.Tags.push(new SpoilerTag().WithScopes('inline', 'excerpt'));
@@ -155,6 +154,7 @@ export class ParserConfiguration {
         conf.Elements.push(new MdPanelElement());
         conf.Elements.push(new MdColumnsElement());
         conf.Elements.push(new RefElement());
+        conf.Elements.push(new QuoteElement());
 
         // Processors
         conf.Processors.push(new MarkdownTextProcessor());

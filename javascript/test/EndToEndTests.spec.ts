@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'fs';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
 
-function AssertSame(name : string, expected : string, actual : string, split : boolean) : void {
+function AssertSame(name: string, expected: string, actual: string, split: boolean): void {
     if (split) {
         const expectedLines = expected.split('\n');
         const actualLines = actual.split('\n');
@@ -18,7 +18,7 @@ function AssertSame(name : string, expected : string, actual : string, split : b
     }
 }
 
-function Test(config : ParserConfiguration, input: string, expectedOutput: string, expectedPlain : string | undefined, expectedMeta : string | undefined, split = false): void {
+function Test(config: ParserConfiguration, input: string, expectedOutput: string, expectedPlain: string | undefined, expectedMeta: string | undefined, split = false): void {
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);
@@ -34,12 +34,12 @@ function Test(config : ParserConfiguration, input: string, expectedOutput: strin
     }
 }
 
-function RunTestCaseInFolder(config : ParserConfiguration, folder: string, name: string, split = false) {
+function RunTestCaseInFolder(config: ParserConfiguration, folder: string, name: string, split = false) {
     const dir = `${__dirname}/../../tests/${folder}`;
-    let _in : string;
-    let _out : string;
-    let _plain : string | undefined = undefined;
-    let _meta : string | undefined = undefined;
+    let _in: string;
+    let _out: string;
+    let _plain: string | undefined = undefined;
+    let _meta: string | undefined = undefined;
     if (existsSync(`${dir}/${name}`)) {
         const text = readFileSync(`${dir}/${name}`, 'utf-8');
         [_in, _out, _plain, _meta] = text.split('###').map(x => x.trim());
@@ -65,9 +65,9 @@ describe('Isolated tests', () => {
 
     test('missing-tag', () => RunTestCase('missing-tag'));
     test('unicode-escape', () => RunTestCase('unicode-escape'));
-    
+
     test('ref-simple', () => RunTestCase('ref-simple'));
-    
+
     test('pre-simple', () => RunTestCase('pre-simple'));
     test('pre-lang', () => RunTestCase('pre-lang'));
     test('pre-highlight', () => RunTestCase('pre-highlight'));
@@ -86,7 +86,7 @@ describe('Isolated tests', () => {
 
     test('mdquote-simple', () => RunTestCase('mdquote-simple'));
     test('mdquote-nested', () => RunTestCase('mdquote-nested'));
-    
+
     test('list-simple', () => RunTestCase('list-simple'));
     test('list-nested', () => RunTestCase('list-nested'));
     test('list-continuation', () => RunTestCase('list-continuation'));
@@ -100,13 +100,14 @@ describe('Isolated tests', () => {
     test('h-tag', () => RunTestCase('h-tag'));
     test('pre-tag', () => RunTestCase('pre-tag'));
     test('quote-tag', () => RunTestCase('quote-tag'));
+    test('quote-with-headings', () => RunTestCase('quote-with-headings'));
     test('image-tag', () => RunTestCase('image-tag'));
     test('link-tag', () => RunTestCase('link-tag'));
     test('vault-tag', () => RunTestCase('vault-tag'));
     test('quick-link-tag', () => RunTestCase('quick-link-tag'));
     test('spoiler-tag', () => RunTestCase('spoiler-tag'));
     test('youtube-tag', () => RunTestCase('youtube-tag'));
-    
+
     test('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
     test('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
     test('wiki-file-tag', () => RunTestCase('wiki-file-tag'));

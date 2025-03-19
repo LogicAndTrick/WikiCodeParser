@@ -16,6 +16,11 @@ export default {
             format: 'iife',
             name: 'TwhlWikiCodeParser',
             plugins: [terser()]
+        },
+        {
+            file: 'build/index.js',
+            sourcemap: false,
+            format: 'cjs'
         }
     ],
     plugins: [
