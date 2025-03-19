@@ -4,13 +4,9 @@
         "javascript",
         "typescript"
     ],
-    "eslint.packageManager": "yarn",
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit",
         "source.organizeImports": "explicit"
     },
-    "mochaExplorer.require": [
-        "ts-node/register"
-    ],
     "testExplorer.useNativeTesting": true
 }

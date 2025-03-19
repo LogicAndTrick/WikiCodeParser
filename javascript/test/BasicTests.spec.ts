@@ -1,5 +1,4 @@
-import { assert } from 'chai';
-import { describe } from 'mocha';
+import { describe, expect, test } from '@jest/globals';
 import { INode } from '../src/Nodes/INode';
 import { NodeCollection } from '../src/Nodes/NodeCollection';
 import { PlainTextNode } from '../src/Nodes/PlainTextNode';
@@ -23,96 +22,96 @@ function GetLeaves(root: INode): INode[] {
 }
 
 describe('State tests', () => {
-    it('ScanTo', () => {
+    test('ScanTo', () => {
         const st = new State('A B C');
-        assert.equal(st.ScanTo('B'), 'A ');
-        assert.equal(st.ScanTo('C'), 'B ');
-        assert.equal(st.ScanTo('D'), 'C');
+        expect(st.ScanTo('B')).toBe('A ');
+        expect(st.ScanTo('C')).toBe('B ');
+        expect(st.ScanTo('D')).toBe('C');
     });
-    it('SkipWhitespace', () => {
+    test('SkipWhitespace', () => {
         const st = new State('A B C');
         st.SkipWhitespace();
-        assert.equal(st.Index, 0);
+        expect(st.Index).toBe(0);
         st.Seek(1, false);
         st.SkipWhitespace();
-        assert.equal(st.Index, 2);
+        expect(st.Index).toBe(2);
         st.Seek(1, false);
         st.SkipWhitespace();
-        assert.equal(st.Index, 4);
+        expect(st.Index).toBe(4);
     });
-    it('PeekTo', () => {
+    test('PeekTo', () => {
         let st = new State('A B C');
-        assert.equal(st.PeekTo('B'), 'A ');
-        assert.equal(st.PeekTo('C'), 'A B ');
-        assert.equal(st.PeekTo('D'), null);
+        expect(st.PeekTo('B')).toBe('A ');
+        expect(st.PeekTo('C')).toBe('A B ');
+        expect(st.PeekTo('D')).toBeNull();
         st.Seek(2, false);
-        assert.equal(st.PeekTo('B'), '');
-        assert.equal(st.PeekTo('C'), 'B ');
-        assert.equal(st.PeekTo('D'), null);
+        expect(st.PeekTo('B')).toBe('');
+        expect(st.PeekTo('C')).toBe('B ');
+        expect(st.PeekTo('D')).toBeNull();
 
         st = new State('Hello, [[AAAAA]] [[BB]]');
-        assert.equal(st.ScanTo('[['), 'Hello, ');
+        expect(st.ScanTo('[[')).toBe('Hello, ');
         st.Seek(2, false);
-        assert.equal(st.ScanTo(']]'), 'AAAAA');
+        expect(st.ScanTo(']]')).toBe('AAAAA');
         st.Seek(3, false);
-        assert.equal(st.PeekTo(']]'), '[[BB');
+        expect(st.PeekTo(']]')).toBe('[[BB');
     });
-    it('Seek', () => {
+    test('Seek', () => {
         const st = new State('A B C');
-        assert.equal(st.Index, 0);
+        expect(st.Index).toBe(0);
         st.Seek(1, false);
-        assert.equal(st.Index, 1);
+        expect(st.Index).toBe(1);
         st.Seek(1, false);
-        assert.equal(st.Index, 2);
+        expect(st.Index).toBe(2);
         st.Seek(3, false);
-        assert.equal(st.Index, 5);
+        expect(st.Index).toBe(5);
         st.Seek(3, true);
-        assert.equal(st.Index, 3);
+        expect(st.Index).toBe(3);
     });
-    it('Peek', () => {
+    test('Peek', () => {
         const st = new State('A B C');
-        assert.equal(st.Peek(2), 'A ');
-        assert.equal(st.Peek(4), 'A B ');
-        assert.equal(st.Peek(6), 'A B C');
+        expect(st.Peek(2)).toBe('A ');
+        expect(st.Peek(4)).toBe('A B ');
+        expect(st.Peek(6)).toBe('A B C');
         st.Seek(2, false);
-        assert.equal(st.Peek(2), 'B ');
-        assert.equal(st.Peek(4), 'B C');
-        assert.equal(st.Peek(6), 'B C');
+        expect(st.Peek(2)).toBe('B ');
+        expect(st.Peek(4)).toBe('B C');
+        expect(st.Peek(6)).toBe('B C');
     });
-    it('Next', () => {
+    test('Next', () => {
         const st = new State('A B C');
-        assert.equal(st.Next(), 'A');
-        assert.equal(st.Next(), ' ');
-        assert.equal(st.Next(), 'B');
-        assert.equal(st.Next(), ' ');
-        assert.equal(st.Next(), 'C');
-        assert.equal(st.Next(), '\0');
-        assert.equal(st.Next(), '\0');
+        expect(st.Next()).toBe('A');
+        expect(st.Next()).toBe(' ');
+        expect(st.Next()).toBe('B');
+        expect(st.Next()).toBe(' ');
+        expect(st.Next()).toBe('C');
+        expect(st.Next()).toBe('\0');
+        expect(st.Next()).toBe('\0');
     });
-    it('GetToken', () => {
-        assert.equal(new State('none').GetToken(), null);
-        assert.equal(new State('[some]').GetToken(), 'some');
-        assert.equal(new State('[some=thing]').GetToken(), 'some');
-        assert.equal(new State('[some thing]').GetToken(), 'some');
+    test('GetToken', () => {
+        expect(new State('none').GetToken()).toBeNull();
+        expect(new State('[some]').GetToken()).toBe('some');
+        expect(new State('[some=thing]').GetToken()).toBe('some');
+        expect(new State('[some thing]').GetToken()).toBe('some');
         const st = new State('a [some] b');
         st.ScanTo('[');
-        assert.equal(st.Index, 2);
-        assert.equal(st.GetToken(), 'some');
-        assert.equal(st.Index, 2);
+        expect(st.Index).toBe(2);
+        expect(st.GetToken()).toBe('some');
+        expect(st.Index).toBe(2);
     });
 });
 
 describe('Basic tests', () => {
-    it('test html escaping outside tag', () => {
+    test('test html escaping outside tag', () => {
         const parser = new Parser(new ParserConfiguration());
         const result = parser.ParseResult('1 & 2');
-        assert.isTrue(result.Content instanceof NodeCollection);
+        expect(result.Content).toBeInstanceOf(NodeCollection);
         const leaves = GetLeaves(result.Content);
-        assert.equal(leaves.length, 1);
+        expect(leaves.length).toBe(1);
         const node = leaves[0] as PlainTextNode;
-        assert.isTrue(node instanceof PlainTextNode);
-        assert.equal(node.Text, '1 & 2');
-        assert.equal(node.ToHtml(), '1 &amp; 2');
-        assert.equal(node.ToPlainText(), '1 & 2');
+        expect(node).toBeInstanceOf(PlainTextNode);
+        expect(node.Text).toBe('1 & 2');
+        expect(node.ToHtml()).toBe('1 &amp; 2');
+        expect(node.ToPlainText()).toBe('1 & 2');
     });
 });

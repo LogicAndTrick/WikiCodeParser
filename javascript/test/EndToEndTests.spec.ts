@@ -1,6 +1,5 @@
-import { assert } from 'chai';
+import { describe, expect, test } from '@jest/globals';
 import { existsSync, readFileSync } from 'fs';
-import { describe } from 'mocha';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
 
@@ -12,10 +11,10 @@ function AssertSame(name : string, expected : string, actual : string, split : b
         for (let i = 0; i < expectedLines.length; i++) {
             const ex = expectedLines[i];
             const ac = actualLines[i];
-            assert.equal(ac, ex, `[${name}] \n\nMatch failed on line ${i + 1}.\nExpected: ${ex}\nActual  : ${ac}`);
+            expect(ac).toBe(ex);
         }
     } else {
-        assert.equal(actual, expected, `[${name}] Match failed.`);
+        expect(actual).toBe(expected);
     }
 }
 
@@ -31,7 +30,7 @@ function Test(config : ParserConfiguration, input: string, expectedOutput: strin
     if (expectedPlain !== undefined) AssertSame('plain', expectedPlain, resultPlain, split);
 
     if (expectedMeta) {
-        assert.equal(resultMeta, expectedMeta);
+        expect(resultMeta).toBe(expectedMeta);
     }
 }
 
@@ -64,83 +63,83 @@ function RunTestCaseInFolder(config : ParserConfiguration, folder: string, name:
 describe('Isolated tests', () => {
     const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Twhl(), 'isolated', name, split);
 
-    it('missing-tag', () => RunTestCase('missing-tag'));
-    it('unicode-escape', () => RunTestCase('unicode-escape'));
+    test('missing-tag', () => RunTestCase('missing-tag'));
+    test('unicode-escape', () => RunTestCase('unicode-escape'));
     
-    it('ref-simple', () => RunTestCase('ref-simple'));
+    test('ref-simple', () => RunTestCase('ref-simple'));
     
-    it('pre-simple', () => RunTestCase('pre-simple'));
-    it('pre-lang', () => RunTestCase('pre-lang'));
-    it('pre-highlight', () => RunTestCase('pre-highlight'));
+    test('pre-simple', () => RunTestCase('pre-simple'));
+    test('pre-lang', () => RunTestCase('pre-lang'));
+    test('pre-highlight', () => RunTestCase('pre-highlight'));
 
-    it('mdcode-simple', () => RunTestCase('mdcode-simple'));
-    it('mdcode-lang', () => RunTestCase('mdcode-lang'));
+    test('mdcode-simple', () => RunTestCase('mdcode-simple'));
+    test('mdcode-lang', () => RunTestCase('mdcode-lang'));
 
-    it('heading-simple', () => RunTestCase('heading-simple'));
+    test('heading-simple', () => RunTestCase('heading-simple'));
 
-    it('mdline-simple', () => RunTestCase('mdline-simple'));
+    test('mdline-simple', () => RunTestCase('mdline-simple'));
 
-    it('columns-simple', () => RunTestCase('columns-simple'));
-    it('columns-invalid', () => RunTestCase('columns-invalid'));
+    test('columns-simple', () => RunTestCase('columns-simple'));
+    test('columns-invalid', () => RunTestCase('columns-invalid'));
 
-    it('panel-simple', () => RunTestCase('panel-simple'));
+    test('panel-simple', () => RunTestCase('panel-simple'));
 
-    it('mdquote-simple', () => RunTestCase('mdquote-simple'));
-    it('mdquote-nested', () => RunTestCase('mdquote-nested'));
+    test('mdquote-simple', () => RunTestCase('mdquote-simple'));
+    test('mdquote-nested', () => RunTestCase('mdquote-nested'));
     
-    it('list-simple', () => RunTestCase('list-simple'));
-    it('list-nested', () => RunTestCase('list-nested'));
-    it('list-continuation', () => RunTestCase('list-continuation'));
+    test('list-simple', () => RunTestCase('list-simple'));
+    test('list-nested', () => RunTestCase('list-nested'));
+    test('list-continuation', () => RunTestCase('list-continuation'));
 
-    it('table-simple', () => RunTestCase('table-simple'));
-    it('table-ref', () => RunTestCase('table-ref'));
+    test('table-simple', () => RunTestCase('table-simple'));
+    test('table-ref', () => RunTestCase('table-ref'));
 
-    it('tags-plain', () => RunTestCase('tags-plain'));
-    it('code-tag', () => RunTestCase('code-tag'));
-    it('font-tag', () => RunTestCase('font-tag'));
-    it('h-tag', () => RunTestCase('h-tag'));
-    it('pre-tag', () => RunTestCase('pre-tag'));
-    it('quote-tag', () => RunTestCase('quote-tag'));
-    it('image-tag', () => RunTestCase('image-tag'));
-    it('link-tag', () => RunTestCase('link-tag'));
-    it('vault-tag', () => RunTestCase('vault-tag'));
-    it('quick-link-tag', () => RunTestCase('quick-link-tag'));
-    it('spoiler-tag', () => RunTestCase('spoiler-tag'));
-    it('youtube-tag', () => RunTestCase('youtube-tag'));
+    test('tags-plain', () => RunTestCase('tags-plain'));
+    test('code-tag', () => RunTestCase('code-tag'));
+    test('font-tag', () => RunTestCase('font-tag'));
+    test('h-tag', () => RunTestCase('h-tag'));
+    test('pre-tag', () => RunTestCase('pre-tag'));
+    test('quote-tag', () => RunTestCase('quote-tag'));
+    test('image-tag', () => RunTestCase('image-tag'));
+    test('link-tag', () => RunTestCase('link-tag'));
+    test('vault-tag', () => RunTestCase('vault-tag'));
+    test('quick-link-tag', () => RunTestCase('quick-link-tag'));
+    test('spoiler-tag', () => RunTestCase('spoiler-tag'));
+    test('youtube-tag', () => RunTestCase('youtube-tag'));
     
-    it('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
-    it('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
-    it('wiki-file-tag', () => RunTestCase('wiki-file-tag'));
-    it('wiki-credit-tag', () => RunTestCase('wiki-credit-tag'));
-    it('wiki-book-tag', () => RunTestCase('wiki-book-tag'));
-    it('wiki-archive-tag', () => RunTestCase('wiki-archive-tag'));
-    it('wiki-youtube-tag', () => RunTestCase('wiki-youtube-tag'));
-    it('wiki-link-tag', () => RunTestCase('wiki-link-tag'));
+    test('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
+    test('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
+    test('wiki-file-tag', () => RunTestCase('wiki-file-tag'));
+    test('wiki-credit-tag', () => RunTestCase('wiki-credit-tag'));
+    test('wiki-book-tag', () => RunTestCase('wiki-book-tag'));
+    test('wiki-archive-tag', () => RunTestCase('wiki-archive-tag'));
+    test('wiki-youtube-tag', () => RunTestCase('wiki-youtube-tag'));
+    test('wiki-link-tag', () => RunTestCase('wiki-link-tag'));
 
-    it('processor-newlines', () => RunTestCase('processor-newlines'));
-    it('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
-    it('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany'));
-    it('processor-markdowntext', () => RunTestCase('processor-markdowntext'));
-    it('processor-autolinking', () => RunTestCase('processor-autolinking'));
+    test('processor-newlines', () => RunTestCase('processor-newlines'));
+    test('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
+    test('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany'));
+    test('processor-markdowntext', () => RunTestCase('processor-markdowntext'));
+    test('processor-autolinking', () => RunTestCase('processor-autolinking'));
 });
 
 describe('Isolated tests: snarkpit', () => {
     const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Snarkpit(), 'isolated-sp', name, split);
 
-    it('pre-simple', () => RunTestCase('pre-simple'));
-    it('pre-lang', () => RunTestCase('pre-lang'));
-    it('pre-highlight', () => RunTestCase('pre-highlight'));
-    it('code-tag', () => RunTestCase('code-tag'));
-    it('pre-tag', () => RunTestCase('pre-tag'));
-    it('align-tag', () => RunTestCase('align-tag'));
-    it('size-tag', () => RunTestCase('size-tag'));
-    it('color-tag', () => RunTestCase('color-tag'));
-    it('list-tag', () => RunTestCase('list-tag'));
-    it('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
-    it('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
+    test('pre-simple', () => RunTestCase('pre-simple'));
+    test('pre-lang', () => RunTestCase('pre-lang'));
+    test('pre-highlight', () => RunTestCase('pre-highlight'));
+    test('code-tag', () => RunTestCase('code-tag'));
+    test('pre-tag', () => RunTestCase('pre-tag'));
+    test('align-tag', () => RunTestCase('align-tag'));
+    test('size-tag', () => RunTestCase('size-tag'));
+    test('color-tag', () => RunTestCase('color-tag'));
+    test('list-tag', () => RunTestCase('list-tag'));
+    test('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
+    test('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
 });
 
 describe('End to end tests', () => {
     const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Twhl(), 'endtoend', name, split);
-    it('wikicode-page', () => RunTestCase('wikicode-page'));
+    test('wikicode-page', () => RunTestCase('wikicode-page'));
 });

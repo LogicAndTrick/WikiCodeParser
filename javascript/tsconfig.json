@@ -2,14 +2,13 @@
     "compilerOptions": {
       "noImplicitAny": true,
       "outDir": "build",
-      "module": "CommonJS",
-      "target": "ES6",
-      "moduleResolution": "node",
+      "module": "ESNext",
+      "target": "ES2018",
+      "moduleResolution": "bundler",
       "esModuleInterop": true,
       "allowJs": true,
       "sourceMap": true,
       "declaration": true,
-      "suppressImplicitAnyIndexErrors": true,
       "lib": ["ES2019", "DOM"]
     },
     "include": [
@@ -17,5 +16,8 @@
     ],
     "exclude": [
       "node_modules"
-    ]
+    ],
+    "ts-node": {
+      "esm": true
+    }
 }

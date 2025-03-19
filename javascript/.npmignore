@@ -16,5 +16,6 @@ yarn-error.log*
 README.md
 .eslintignore
 .eslintrc.json
-.mocharc.json
+.jest.config.js
+rollup.config.mjs
 tsconfig.json
