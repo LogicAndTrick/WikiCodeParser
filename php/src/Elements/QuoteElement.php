@@ -63,7 +63,7 @@ class QuoteElement extends Element
 
         $line = ltrim($lines->value());
         if (!preg_match(self::OPEN_QUOTE_REGEX, $line, $openMat)) return null;
-        if ($openMat[1]) $name = $openMat[1];
+        if (isset($openMat[1])) $name = $openMat[1];
 
         $line = substr($line, strlen($openMat[0]));
         $arr = [];
