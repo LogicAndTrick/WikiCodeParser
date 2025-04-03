@@ -162,11 +162,11 @@ public class BasicTests
 [ref=cell1]1
 2[/ref]
 ".Trim(), @"
-<table class=""table table-bordered""><tr>
+<div class=""table-responsive""><table class=""table table-bordered""><tr>
 <td>1<br/>
 2</td>
 </tr>
-</table>
+</table></div>
 ".Trim());
     }
 

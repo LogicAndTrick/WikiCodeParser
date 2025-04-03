@@ -1,7 +1,7 @@
 TWHL uses a custom text syntax that we call <em>WikiCode</em>. It is a combination of Markdown and BBCode, with a few extra things to spice it up. If you&#39;re familiar with either of these markup systems, you shouldn&#39;t have too much trouble.
 <h2 id="Basic_text_formatting">Basic text formatting</h2>
 There are two ways to do basic text formatting - the <em>Markdown</em> way and the <em>BBCode</em> way. Markdown style is usually faster to type, but BBCode is generally more flexible.
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <th>Format</th>
 <th>Markdown style</th>
 <th>BBCode style</th>
@@ -31,7 +31,7 @@ There are two ways to do basic text formatting - the <em>Markdown</em> way and t
 <td><code>`Inline code`</code></td>
 <td><code>[ code ]Inline code[ /code ]</code> (remove extra spaces)</td>
 </tr>
-</table>
+</table></div>
 
 <h2 id="Smilies/emoticons/emoji">Smilies/emoticons/emoji</h2>
 Before the land of smartphones and dedicated Unicode glyphs, emoji were known as &#39;smilies&#39;, and were not text, but images! Bizarre, I know. TWHL has complete Unicode support, so go nuts with your smartphone keyboards and you won&#39;t have any issues with favourites such as <code>U+1F4A9: PILE OF POO</code>: &#128169;. For us plebs using desktop browsers, though, you can also use the traditional smilies from the good ol&#39; days.<br/>
@@ -51,7 +51,7 @@ Here is TWHL&#39;s library of smilies and their corresponding text representatio
 
 <h2 id="Linking">Linking</h2>
 On the web, linking is one of the more useful things you can do. So, of course there are multiple ways you can link to things using WikiCode. To use auto-linking, make sure the URL starts with <code>http://</code>. Be careful, because some browsers don&#39;t include this by default.
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <th>Link method</th>
 <th>Markup</th>
 <th>Result</th>
@@ -101,11 +101,11 @@ On the web, linking is one of the more useful things you can do. So, of course t
 <td><code>http://example.com</code></td>
 <td><a href="http://example.com">http://example.com</a></td>
 </tr>
-</table>
+</table></div>
 
 <h2 id="Images">Images</h2>
 Embedding images is another useful thing to do, especially on a wiki. Because it&#39;s important, there&#39;s a few different ways that images can be added to a post. The output isn&#39;t shown in this case because images can take a fair amount of space, but you can experiment by using the preview button when typing a post.
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <th>Format</th>
 <th>Markup</th>
 <th>Notes</th>
@@ -135,7 +135,7 @@ Embedding images is another useful thing to do, especially on a wiki. Because it
 <td><code>[img:example.jpg]</code></td>
 <td><code>example.jpg</code> is the title of the wiki upload</td>
 </tr>
-</table>
+</table></div>
 
 <h3 id="Pasting_images">Pasting images</h3>
 If you have an image on your clipboard (usually from taking a screenshot with the <code>PrtSc</code> key, snipping tool in Windows 7, or <code>Win+Shift+S</code> in Windows 10), you can press <code>Ctrl+V</code> into a TWHL textbox to upload the image and insert the required WikiCode to embed the image. This will not work if you have an image <strong>file</strong> on your clipboard - it must be an actual image.
@@ -278,7 +278,7 @@ The vault item will be added to the page as a screenshot slideshow, along with a
 If you want to get really fancy with your post, you can insert a table. The contents of a table can only be inline - for example, inline images, text formatting, links, and so on. You can&#39;t put stuff like Youtube videos or quotes in a table.<br/>
 <br/>
 To create a table, you use one line of text per table row. For a header row, start the line with <code>|=</code>. For a normal row, start the line with <code>|-</code>. After that, simply enter the contents of each column, separated by a <code>|</code> character. For example:
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <th>Header 1</th>
 <th>Header 2</th>
 </tr>
@@ -286,14 +286,14 @@ To create a table, you use one line of text per table row. For a header row, sta
 <td>Value 1</td>
 <td>Value 2</td>
 </tr>
-</table>
+</table></div>
 This table can be created by typing this:
 <pre class="lang-plaintext"><code>|= Header 1 | Header 2
 |- Value 1  | Value 2</code></pre>
 
 <h2 id="Advanced_text_formatting">Advanced text formatting</h2>
 These advanced text formatting techniques are not possible using the Markdown style.
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <th>Format</th>
 <th>BBCode</th>
 <th>Notes</th>
@@ -333,7 +333,7 @@ These advanced text formatting techniques are not possible using the Markdown st
 <td><code>[spoiler=Half-Life]There&#39;s a resonance cascade[/spoiler]</code></td>
 <td>It&#39;s polite to specify what game/movie/etc. the spoiler is for</td>
 </tr>
-</table>
+</table></div>
 
 <h2 id="Code_blocks">Code blocks</h2>
 You may be wondering how those text blocks appeared above without the BBCode inside them being formatted. This is one of the features of a code block - everything inside them is treated as plain text, and not formatted. This is good for posting snippets of code. To post a code block using the Markdown style, surround the code with three backtick characters (that&#39;s the ` character). This will align the code block to the left to avoid unnecessary whitespace.

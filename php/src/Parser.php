@@ -124,7 +124,7 @@ class Parser
 
         while (!$state->Done()) {
             $plain = $state->ScanTo('[');
-            if ($plain && $plain != '') $root->nodes[] = new PlainTextNode($plain);
+            if ($plain !== null && $plain !== '') $root->nodes[] = new PlainTextNode($plain);
             if ($state->Done()) break;
 
             $token = $state->GetToken();

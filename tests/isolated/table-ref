@@ -6,11 +6,11 @@
 
 ###
 
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <td>1</td>
 <td>2</td>
 </tr>
-</table>
+</table></div>
 
 ###
 

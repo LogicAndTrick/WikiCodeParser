@@ -21,6 +21,8 @@ public class IsolatedTests
     [DataRow("mdquote-nested")]
     [DataRow("list-simple")]
     [DataRow("list-nested")]
+    [DataRow("list-ref")]
+    [DataRow("list-block")]
     [DataRow("list-continuation")]
     [DataRow("table-simple")]
     [DataRow("table-ref")]

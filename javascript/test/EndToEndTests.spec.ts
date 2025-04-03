@@ -90,6 +90,8 @@ describe('Isolated tests', () => {
     test('list-simple', () => RunTestCase('list-simple'));
     test('list-nested', () => RunTestCase('list-nested'));
     test('list-continuation', () => RunTestCase('list-continuation'));
+    test('list-block', () => RunTestCase('list-block'));
+    test('list-ref', () => RunTestCase('list-ref'));
 
     test('table-simple', () => RunTestCase('table-simple'));
     test('table-ref', () => RunTestCase('table-ref'));

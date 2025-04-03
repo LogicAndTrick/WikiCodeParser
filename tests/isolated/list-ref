@@ -1,0 +1,25 @@
+- 0
+- :ref=one
+- :ref=two
+- 3
+
+[ref=one]1[/ref]
+[ref=two]
+2
+[/ref]
+
+###
+
+<ul>
+<li>0</li>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+
+###
+
+- 0
+- 1
+- 2
+- 3

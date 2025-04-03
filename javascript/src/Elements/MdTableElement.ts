@@ -68,7 +68,7 @@ export class MdTableElement extends Element {
             arr.push(new TableRow(value[1] == '=' ? 'th' : 'td', ...cells));
         } while (lines.Next());
 
-        return new HtmlNode('<table class="table table-bordered">', new NodeCollection(...arr), '</table>');
+        return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...arr), '</table></div>');
     }
 
     private static SplitTable(text: string): string[] {

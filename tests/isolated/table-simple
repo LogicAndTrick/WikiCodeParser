@@ -3,7 +3,7 @@
 
 ###
 
-<table class="table table-bordered"><tr>
+<div class="table-responsive"><table class="table table-bordered"><tr>
 <th>One</th>
 <th>Two</th>
 </tr>
@@ -11,7 +11,7 @@
 <td>Three</td>
 <td>Four</td>
 </tr>
-</table>
+</table></div>
 
 ###
 

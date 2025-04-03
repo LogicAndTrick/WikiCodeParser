@@ -6,6 +6,7 @@ use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
+use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
@@ -217,7 +218,16 @@ class MdListElement extends Element
                     }
                 }
 
-                $pt = $parser->ParseTags($data, trim($value), $scope, TagParseContext::Block);
+                $value = trim($value);
+
+                $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', $value, $res);
+                if ($success) {
+                    $name = $res[1];
+                    $pt = new RefNode($data, $name);
+                } else {
+                    $pt = $parser->ParseElements($data, $value, $scope);
+                }
+
                 $lastItemNode = new ListItemNode($pt);
                 $ret[] = $lastItemNode;
             } else if (strlen($value) > 2 && self::IsListToken($value[0]) && $value[1] == ' ' && $lastItemNode != null) {

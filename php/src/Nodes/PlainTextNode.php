@@ -45,6 +45,6 @@ class PlainTextNode implements INode
 
     function HasContent(): bool
     {
-        return $this->text && trim($this->text) != '';
+        return $this->text !== null && trim($this->text) !== '';
     }
 }

@@ -12,8 +12,11 @@ three
 <li>two<br/>
 three</li>
 <li>four^</li>
-<li>five<br/>
-- six</li>
+<li>five
+<ul>
+<li>six</li>
+</ul>
+</li>
 </ul>
 
 

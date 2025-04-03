@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LogicAndTrick.WikiCodeParser.Elements
 {
@@ -116,9 +118,24 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                         }
                     }
 
-                    var pt = parser.ParseTags(data, value.Trim(), scope, TagParseContext.Block);
+                    value = value.Trim();
+
+                    INode pt;
+
+                    var res = Regex.Match(value, "^:ref=([a-z0-9 ]+)$", RegexOptions.IgnoreCase);
+                    if (res.Success)
+                    {
+                        var name = res.Groups[1].Value;
+                        pt = new RefNode(data, name);
+                    }
+                    else
+                    {
+                        pt = parser.ParseElements(data, value, scope);
+                    }
+
                     lastItemNode = new ListItemNode(pt);
                     yield return lastItemNode;
+
                 }
                 else if (value.Length > 2 && IsListToken(value[0]) && value[1] == ' ' && lastItemNode != null)
                 {
@@ -135,7 +152,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 }
             } while (lines.Next());
         }
-        
+
         public class ListNode : INode
         {
             public string Tag { get; }

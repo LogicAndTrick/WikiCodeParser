@@ -3,8 +3,8 @@ import { Lines } from '../Lines';
 import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
+import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
-import { TagParseContext } from '../TagParseContext';
 import { Element } from './Element';
 
 class ListNode implements INode {
@@ -177,7 +177,18 @@ export class MdListElement extends Element {
                     }
                 }
 
-                const pt = parser.ParseTags(data, value.trim(), scope, TagParseContext.Block);
+                value = value.trim();
+
+                let pt: INode;
+
+                const res = /^:ref=([a-z0-9 ]+)$/i.exec(value);
+                if (res) {
+                    const name = res[1];
+                    pt = new RefNode(data, name);
+                } else {
+                    pt = parser.ParseElements(data, value, scope);
+                }
+
                 lastItemNode = new ListItemNode(pt);
                 ret.push(lastItemNode);
             } else if (value.length > 2 && MdListElement.IsListToken(value[0]) && value[1] == ' ' && lastItemNode != null) {

@@ -82,7 +82,7 @@ class MdTableElement extends Element
             $arr[] = new TableRow($value[1] == '=' ? 'th' : 'td', $cells);
         } while ($lines->Next());
 
-        return new HtmlNode('<table class="table table-bordered">', new NodeCollection(...$arr), '</table>');
+        return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');
     }
 
     private static function SplitTable(string $text) : array {

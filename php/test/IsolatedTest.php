@@ -35,6 +35,8 @@ class IsolatedTest extends TestCase
     public function testlistsimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'list-simple'); }
     public function testlistnested() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'list-nested'); }
     public function testlistcontinuation() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'list-continuation'); }
+    public function testlistblock() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'list-block'); }
+    public function testlistref() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'list-ref'); }
 
     public function testtablesimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'table-simple'); }
     public function testtableref() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'table-ref'); }
