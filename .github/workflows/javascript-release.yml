@@ -16,8 +16,14 @@ jobs:
         with:
           node-version: 20
       - name: Build
-        run: (cd javascript && yarn install && yarn run build)
+        run: |
+          cd javascript
+          yarn install
+          yarn run build
+          yarn run types
       - name: Publish
-        run: (cd javascript && yarn publish --non-interactive --access public)
+        run: |
+          cd javascript
+          yarn publish --non-interactive --access public
         env:
           NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

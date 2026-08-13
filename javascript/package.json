@@ -1,6 +1,6 @@
 {
   "name": "@logicandtrick/twhl-wikicode-parser",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "repository": "https://github.com/LogicAndTrick/WikiCodeParser.git",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -15,6 +15,7 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c",
+    "types": "tsc --emitDeclarationOnly",
     "test": "jest"
   },
   "devDependencies": {
