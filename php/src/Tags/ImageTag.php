@@ -24,10 +24,7 @@ class ImageTag extends Tag
 
     public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
     {
-        $url = $text;
-        if (isset($options['url'])) $url = $options['url'];
-        if (!preg_match('/^([a-z]{2,10}:\/\/)/i', $url)) $url = 'http://' . $url;
-        $url = HtmlHelper::AttributeEncode($url);
+        $url = HtmlHelper::AttributeEncode(self::BuildUrl($options, $text));
 
         $classes = ['embedded', 'image'];
         if ($this->elementClass != null) $classes[] = $this->elementClass;
@@ -53,8 +50,16 @@ class ImageTag extends Tag
 
     public function Validate(array $options, string $text): bool
     {
+        $url = self::BuildUrl($options, $text);
+        return HtmlHelper::ValidateUrl($url) && preg_match('/^[^\]"\n ]+$/i', $url);
+    }
+
+    private static function BuildUrl(array $options, string $text): string
+    {
         $url = $text;
         if (isset($options['url'])) $url = $options['url'];
-        return !str_contains($url, '<script') && preg_match('/^([a-z]{2,10}:\/\/)?([^\]"\n ]+?)$/i', $url);
+        $url = HtmlHelper::StripControlCharacters($url);
+        if (HtmlHelper::GetUrlScheme($url) == null) $url = 'http://' . $url;
+        return $url;
     }
 }

@@ -47,7 +47,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 return null;
             }
 
-            var url = match.Groups[1].Value;
+            var url = HtmlHelper.StripControlCharacters(match.Groups[1].Value);
             var text = match.Groups[2].Length > 0 ? match.Groups[2].Value : url;
             var options = new Dictionary<string, string> {{"url", url}};
             if (!Validate(options, text))
@@ -71,7 +71,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];
-            return !url.Contains("<script") && Regex.IsMatch(url, @"^([a-z]{2,10}://)?([^]""\n ]+?)", RegexOptions.IgnoreCase);
+            url = HtmlHelper.StripControlCharacters(url);
+            return HtmlHelper.ValidateUrl(url) && Regex.IsMatch(url, @"^[^\]""\n ]+$", RegexOptions.IgnoreCase);
         }
     }
 }

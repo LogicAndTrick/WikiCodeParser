@@ -3,6 +3,8 @@
 [img:test3|small]
 [img:test4|right]
 [img:test5|&]
+[img:https://example.com/example.png]
+[img:invalid://test.png]
 
 ###
 
@@ -16,6 +18,9 @@
 
 <div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test5" alt="&amp;" /><span class="caption">&amp;</span></span></div>
 
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
+[img:invalid://test.png]
+
 ###
 
 [Image]
@@ -27,6 +32,9 @@
 [Image]
 
 [Image] &
+
+[Image]
+[img:invalid://test.png]
 
 ###
 

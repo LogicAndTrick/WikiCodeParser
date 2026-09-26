@@ -80,6 +80,12 @@ class WikiImageTag extends Tag
                 $state->Seek($index, true);
                 return null;
             }
+        } else {
+            $src = HtmlHelper::StripControlCharacters($src);
+            if (!HtmlHelper::ValidateUrl($src)) {
+                $state->Seek($index, true);
+                return null;
+            }
         }
 
         $url = null;
@@ -99,8 +105,9 @@ class WikiImageTag extends Tag
 
         if (!$caption || trim($caption) == '') $caption = null;
 
-        if ($tag == 'img' && $url != null && self::ValidateUrl($url)) {
-            if ($this->twhlBehaviour && !preg_match('/^[a-z]{2,10}:\/\//i', $url)) {
+        if ($url != null) $url = HtmlHelper::StripControlCharacters($url);
+        if ($tag == 'img' && $url != null && HtmlHelper::ValidateUrl($url)) {
+            if ($this->twhlBehaviour && HtmlHelper::GetUrlScheme($url) == null) {
                 $content->nodes[] = new MetadataNode('WikiLink', $url);
                 $slug = WikiRevision::CreateSlug($url);
                 $url = "https://twhl.info/wiki/page/$slug";
@@ -162,11 +169,6 @@ class WikiImageTag extends Tag
         }
 
         return null;
-    }
-
-    private static function ValidateUrl(string $url): bool
-    {
-        return !str_contains($url, '<script');
     }
 
     private static array $validClasses = ['large', 'medium', 'small', 'thumb', 'left', 'right', 'center', 'inline'];

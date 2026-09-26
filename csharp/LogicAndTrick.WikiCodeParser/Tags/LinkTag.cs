@@ -18,10 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
         {
-            var url = text;
-            if (options.ContainsKey("url")) url = options["url"];
-            if (Token == "email") url = "mailto:" + url;
-            else if (!Regex.IsMatch(url, "^([a-z]{2,10}://)", RegexOptions.IgnoreCase)) url = "http://" + url;
+            var url = BuildUrl(options, text);
             url = HtmlHelper.AttributeEncode(url);
 
             var classes = new List<string>();
@@ -38,9 +35,18 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override bool Validate(Dictionary<string, string> options, string text)
         {
+            var url = BuildUrl(options, text);
+            return HtmlHelper.ValidateUrl(url) && Regex.IsMatch(url, @"^[^\]""\n ]+$", RegexOptions.IgnoreCase);
+        }
+
+        private string BuildUrl(Dictionary<string, string> options, string text)
+        {
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];
-            return !url.Contains("<script") && Regex.IsMatch(url, @"^([a-z]{2,10}://)?([^]""\n ]+?)$", RegexOptions.IgnoreCase);
+            url = HtmlHelper.StripControlCharacters(url);
+            if (Token == "email") url = "mailto:" + url;
+            else if (HtmlHelper.GetUrlScheme(url) == null) url = "http://" + url;
+            return url;
         }
     }
 }

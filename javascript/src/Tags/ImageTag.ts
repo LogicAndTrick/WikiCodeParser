@@ -18,10 +18,7 @@ export class ImageTag extends Tag {
     }
 
     public FormatResult(_parser: Parser, _data: ParseData, state: State, _scope: string, options: Record<string, string>, text: string): INode {
-        let url = text;
-        if (options['url']) url = options['url'];
-        if (!url.match(/^([a-z]{2,10}:\/\/)/i)) url = 'http://' + url;
-        url = HtmlHelper.AttributeEncode(url);
+        const url = HtmlHelper.AttributeEncode(ImageTag.BuildUrl(options, text));
 
         const classes = ['embedded', 'image'];
         if (this.ElementClass != null) classes.push(this.ElementClass);
@@ -46,8 +43,15 @@ export class ImageTag extends Tag {
     }
 
     public Validate(options: Record<string, string>, text: string): boolean {
+        const url = ImageTag.BuildUrl(options, text);
+        return HtmlHelper.ValidateUrl(url) && url.match(/^[^\]"\n ]+$/i) != null;
+    }
+
+    private static BuildUrl(options: Record<string, string>, text: string): string {
         let url = text;
         if (options['url']) url = options['url'];
-        return !url.includes('<script') && url.match(/^([a-z]{2,10}:\/\/)?([^\]"\n ]+?)$/i) != null;
+        url = HtmlHelper.StripControlCharacters(url);
+        if (HtmlHelper.GetUrlScheme(url) == null) url = 'http://' + url;
+        return url;
     }
 }

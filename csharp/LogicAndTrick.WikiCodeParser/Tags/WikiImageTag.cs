@@ -82,6 +82,15 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                     return null;
                 }
             }
+            else
+            {
+                src = HtmlHelper.StripControlCharacters(src);
+                if (!HtmlHelper.ValidateUrl(src))
+                {
+                    state.Seek(index, true);
+                    return null;
+                }
+            }
 
             string url = null;
             string caption = null;
@@ -101,9 +110,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             if (String.IsNullOrWhiteSpace(caption)) caption = null;
 
-            if (tag == "img" && url != null && ValidateUrl(url))
+            if (url != null) url = HtmlHelper.StripControlCharacters(url);
+            if (tag == "img" && url != null && HtmlHelper.ValidateUrl(url))
             {
-                if (TwhlBehaviour && !Regex.IsMatch(url, @"^[a-z]{2,10}://", RegexOptions.IgnoreCase))
+                if (TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null)
                 {
                     content.Nodes.Add(new MetadataNode("WikiLink", url));
                     url = $"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(url)}";
@@ -166,11 +176,6 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             return null;
-        }
-
-        private static bool ValidateUrl(string url)
-        {
-            return !url.Contains("<script");
         }
 
         private static readonly string[] ValidClasses = {"large", "medium", "small", "thumb", "left", "right", "center", "inline"};

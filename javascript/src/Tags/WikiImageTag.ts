@@ -75,6 +75,12 @@ export class WikiImageTag extends Tag {
                 state.Seek(index, true);
                 return null;
             }
+        } else {
+            src = HtmlHelper.StripControlCharacters(src);
+            if (!HtmlHelper.ValidateUrl(src)) {
+                state.Seek(index, true);
+                return null;
+            }
         }
 
         let url: string | null = null;
@@ -94,8 +100,9 @@ export class WikiImageTag extends Tag {
 
         if (!caption || caption.trim() == '') caption = null;
 
-        if (tag == 'img' && url != null && WikiImageTag.ValidateUrl(url)) {
-            if (this.TwhlBehaviour && !url.match(/^[a-z]{2,10}:\/\//i)) {
+        if (url != null) url = HtmlHelper.StripControlCharacters(url);
+        if (tag == 'img' && url != null && HtmlHelper.ValidateUrl(url)) {
+            if (this.TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null) {
                 content.Nodes.push(new MetadataNode('WikiLink', url));
                 url = `https://twhl.info/wiki/page/${WikiRevision.CreateSlug(url)}`;
             }
@@ -158,10 +165,6 @@ export class WikiImageTag extends Tag {
         }
 
         return null;
-    }
-
-    private static ValidateUrl(url: string): boolean {
-        return !url.includes('<script');
     }
 
     private static ValidClasses: string[] = ['large', 'medium', 'small', 'thumb', 'left', 'right', 'center', 'inline'];

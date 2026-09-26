@@ -47,7 +47,7 @@ export class QuickLinkTag extends Tag {
             return null;
         }
 
-        let url = match[1];
+        let url = HtmlHelper.StripControlCharacters(match[1]);
         const text = match[2]?.length > 0 ? match[2] : url;
         const options = { url };
         if (!this.Validate(options, text)) {
@@ -68,6 +68,7 @@ export class QuickLinkTag extends Tag {
     public override Validate(options: Record<string, string>, text: string): boolean {
         let url = text;
         if (options['url']) url = options['url'];
-        return !url.includes('<script') && url.match(/^([a-z]{2,10}:\/\/)?([^\]""\n ]+?)/i) != null;
+        url = HtmlHelper.StripControlCharacters(url);
+        return HtmlHelper.ValidateUrl(url) && url.match(/^[^\]"\n ]+$/i) != null;
     }
 }

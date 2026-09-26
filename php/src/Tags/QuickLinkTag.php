@@ -52,7 +52,7 @@ class QuickLinkTag extends Tag
             return null;
         }
 
-        $url = $match[1];
+        $url = HtmlHelper::StripControlCharacters($match[1]);
         $text = isset($match[2]) && strlen($match[2]) > 0 ? $match[2] : $url;
         $options = [ 'url' => $url ];
         if (!$this->Validate($options, $text)) {
@@ -74,6 +74,7 @@ class QuickLinkTag extends Tag
     {
         $url = $text;
         if (isset($options['url'])) $url = $options['url'];
-        return !str_contains($url, '<script') && preg_match('/^([a-z]{2,10}:\/\/)?([^\]"\n ]+?)$/i', $url);
+        $url = HtmlHelper::StripControlCharacters($url);
+        return HtmlHelper::ValidateUrl($url) && preg_match('/^[^\]"\n ]+$/i', $url);
     }
 }

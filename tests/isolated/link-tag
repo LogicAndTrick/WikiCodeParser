@@ -1,15 +1,21 @@
 [url=example.com]A[/url]
 [email=example@example.com]B[/email]
 [url=https://this.ends.with/slash/]C[/url]
+[url=invalid://example.com]
+[url=javascript://%0aalert('test')]click me[/url]
 
 ###
 
 <a href="http://example.com">A</a><br/>
 <a href="mailto:example@example.com">B</a><br/>
-<a href="https://this.ends.with/slash/">C</a>
+<a href="https://this.ends.with/slash/">C</a><br/>
+[url=invalid://example.com]<br/>
+[url=javascript://%0aalert(&#39;test&#39;)]click me[/url]
 
 ###
 
 A
 B
 C
+[url=invalid://example.com]
+[url=javascript://%0aalert('test')]click me[/url]

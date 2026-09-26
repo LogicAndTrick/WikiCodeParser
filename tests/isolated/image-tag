@@ -2,13 +2,18 @@
 
 [simg]example.com/example.png[/simg]
 
+[img]invalid://test.png[/img]
+
 ###
 
 <div class="embedded image"><span class="caption-panel"><img class="caption-body" src="http://example.com/example.png" alt="User posted image" /></span></div>
-<span class="embedded image inline"><span class="caption-panel"><img class="caption-body" src="http://example.com/example.png" alt="User posted image" /></span></span>
-
+<span class="embedded image inline"><span class="caption-panel"><img class="caption-body" src="http://example.com/example.png" alt="User posted image" /></span></span><br/>
+<br/>
+[img]invalid://test.png[/img]
 ###
 
 [User posted image]
 
 [User posted image]
+
+[img]invalid://test.png[/img]

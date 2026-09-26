@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/LogicAndTrick/WikiCodeParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/LogicAndTrick/WikiCodeParser</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.9.7</Version>
+    <Version>0.9.9</Version>
   </PropertyGroup>
 
 </Project>

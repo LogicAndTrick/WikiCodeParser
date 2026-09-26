@@ -1,12 +1,15 @@
 [http://example.com]
 [http://example.com|Test]
+[invalid://example.com]
 
 ###
 
 <a href="http://example.com">http://example.com</a><br/>
-<a href="http://example.com">Test</a>
+<a href="http://example.com">Test</a><br/>
+[invalid://example.com]
 
 ###
 
 http://example.com
 Test (http://example.com)
+[invalid://example.com]
