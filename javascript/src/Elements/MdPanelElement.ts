@@ -11,7 +11,7 @@ export class MdPanelElement extends Element {
         return lines.Value().startsWith('~~~');
     }
 
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
 
         const meta = lines.Value().substring(3).trim();
@@ -42,9 +42,7 @@ export class MdPanelElement extends Element {
         else if (meta == 'error') cls = 'card-danger';
         else cls = 'card-default';
 
-        const before = `<div class="embed-panel card ${cls}">` +
-            (title != '' ? `<div class="card-header">${HtmlHelper.Encode(title)}</div>` : '') +
-            '<div class="card-body">';
+        const before = `<div class="embed-panel card ${cls}">` + (title != '' ? `<div class="card-header">${HtmlHelper.Encode(title)}</div>` : '') + '<div class="card-body">';
         const content = parser.ParseElements(data, arr.join('\n'), scope);
         const after = '</div></div>';
 

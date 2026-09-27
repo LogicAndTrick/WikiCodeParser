@@ -9,13 +9,10 @@ import { INodeProcessor } from './INodeProcessor';
 export class AutoLinkingProcessor implements INodeProcessor {
     public Priority = 9;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ShouldProcess(node: INode, _scope: string): boolean {
-        return node instanceof PlainTextNode
-            && (node.Text.includes('http') || node.Text.includes('@'));
+        return node instanceof PlainTextNode && (node.Text.includes('http') || node.Text.includes('@'));
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Process(parser: Parser, data: ParseData, node: INode, _scope: string): INode[] {
         const text = (node as PlainTextNode).Text;
 
@@ -23,14 +20,14 @@ export class AutoLinkingProcessor implements INodeProcessor {
 
         const allMatches: RegExpExecArray[] = [];
 
-        const urlMatcher = /(?<=^|\s)(?<url>https?:\/\/[^\][""\s]+)(?=\s|$)/ig;
+        const urlMatcher = /(?<=^|\s)(?<url>https?:\/\/[^\][""\s]+)(?=\s|$)/gi;
         let urlMatch = urlMatcher.exec(text);
         while (urlMatch != null) {
             allMatches.push(urlMatch);
             urlMatch = urlMatcher.exec(text);
         }
 
-        const emailMatcher = /(?<=^|\s)(?<email>[^\][""\s@]+@[^\][""\s@]+\.[^\][""\s@]+)(?=\s|$)/ig;
+        const emailMatcher = /(?<=^|\s)(?<email>[^\][""\s@]+@[^\][""\s@]+\.[^\][""\s@]+)(?=\s|$)/gi;
         let emailMatch = emailMatcher.exec(text);
         while (emailMatch != null) {
             allMatches.push(emailMatch);
@@ -43,10 +40,10 @@ export class AutoLinkingProcessor implements INodeProcessor {
         for (const urlMatch of allMatches) {
             if (urlMatch.index < start) continue;
             if (urlMatch.index > start) ret.push(new PlainTextNode(text.substring(start, urlMatch.index)));
-            if (urlMatch.groups['url']) {
+            if (urlMatch.groups && urlMatch.groups['url']) {
                 const url = urlMatch.groups['url'];
                 ret.push(new HtmlNode(`<a href="${HtmlHelper.AttributeEncode(url)}">`, new PlainTextNode(url), '</a>'));
-            } else if (urlMatch.groups['email']) {
+            } else if (urlMatch.groups && urlMatch.groups['email']) {
                 const email = urlMatch.groups['email'];
                 ret.push(new HtmlNode(`<a href="mailto:${HtmlHelper.AttributeEncode(email)}">`, new PlainTextNode(email), '</a>'));
             }

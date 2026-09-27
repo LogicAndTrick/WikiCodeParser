@@ -6,10 +6,10 @@ import { TagParseContext } from '../TagParseContext';
 import { Element } from './Element';
 
 class HeadingNode implements INode {
-    public Level : number;
-    public ID : string;
-    public Text : INode;
-    constructor(level : number, id : string, text : INode) {
+    public Level: number;
+    public ID: string;
+    public Text: INode;
+    constructor(level: number, id: string, text: INode) {
         this.Level = level;
         this.ID = id;
         this.Text = text;
@@ -25,7 +25,7 @@ class HeadingNode implements INode {
     }
 
     GetChildren(): INode[] {
-        return [ this.Text ];
+        return [this.Text];
     }
 
     ReplaceChild(i: number, node: INode): void {
@@ -43,9 +43,10 @@ export class MdHeadingElement extends Element {
         const value = lines.Value();
         return value.length > 0 && value.startsWith('=');
     }
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const value = lines.Value().trim();
-        const res = /^(=+)(.*?)=*$/i.exec(value);
+        const res = /^(=+)(.*?)=*$/i.exec(value)!;
         const level = Math.min(6, res[1].length);
         const text = res[2].trim();
 
@@ -53,15 +54,13 @@ export class MdHeadingElement extends Element {
         contents = parser.RunProcessors(contents, data, scope);
         const id = MdHeadingElement.GetUniqueAnchor(data, contents.ToPlainText());
         return new HeadingNode(level, id, contents);
-        
     }
 
-    private static GetUniqueAnchor(data : ParseData, text : string) : string
-    {
+    private static GetUniqueAnchor(data: ParseData, text: string): string {
         const key = MdHeadingElement.name + '.IdList';
         const anchors = data.Get(key, () => new Set<string>());
 
-        const id = text.replace(/[^\da-z?/:@\-._~!$&'()*+,;=]/ig, '_');
+        const id = text.replace(/[^\da-z?/:@\-._~!$&'()*+,;=]/gi, '_');
         let anchor = id;
         let inc = 1;
         do {
@@ -69,7 +68,6 @@ export class MdHeadingElement extends Element {
             if (!anchors.has(anchor)) break;
             inc++;
             anchor = `${id}_${inc}`;
-        // eslint-disable-next-line no-constant-condition
         } while (true);
 
         anchors.add(anchor);

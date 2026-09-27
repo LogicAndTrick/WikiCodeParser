@@ -1,9 +1,8 @@
-
 export class Lines {
-    public Content : string[];
-    public Index : number;
+    public Content: string[];
+    public Index: number;
 
-    constructor(content : string) {
+    constructor(content: string) {
         this.Content = content.split('\n');
         this.Index = -1;
     }
@@ -11,16 +10,16 @@ export class Lines {
     public Back() {
         this.Index--;
     }
-    public Next() : boolean {
+    public Next(): boolean {
         return ++this.Index < this.Content.length;
     }
-    public Value() : string {
+    public Value(): string {
         return this.Content[this.Index];
     }
-    public Current() : number {
+    public Current(): number {
         return this.Index;
     }
-    public SetCurrent(index : number) {
+    public SetCurrent(index: number) {
         this.Index = index;
     }
 }

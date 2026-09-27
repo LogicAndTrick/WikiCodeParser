@@ -1,5 +1,4 @@
-
-export function OrderBy<T>(array : T[], selector : (arg : T) => any) {
+export function OrderBy<T>(array: T[], selector: (arg: T) => any) {
     const copy = Array.from(array);
     return copy.sort((a, b) => {
         const ka = selector(a);
@@ -10,7 +9,7 @@ export function OrderBy<T>(array : T[], selector : (arg : T) => any) {
     });
 }
 
-export function OrderByDescending<T>(array : T[], selector : (arg : T) => any) {
+export function OrderByDescending<T>(array: T[], selector: (arg: T) => any) {
     const copy = OrderBy(array, selector);
     return copy.reverse();
 }
@@ -25,7 +24,7 @@ export function IndexOfAny(str: string, searchStrings: Iterable<string>, positio
 }
 
 export function Template(template_string: string, obj: any) {
-    return template_string.replace(/\{(.*?)\}/ig, function (_match, name) {
+    return template_string.replace(/\{(.*?)\}/gi, function (_match, name) {
         return obj[name] || '';
     });
 }

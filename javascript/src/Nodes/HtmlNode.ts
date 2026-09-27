@@ -1,16 +1,15 @@
 import { INode } from './INode';
 
 export class HtmlNode implements INode {
+    public HtmlBefore: string;
+    public Content: INode;
+    public HtmlAfter: string;
 
-    public HtmlBefore : string;
-    public Content : INode;
-    public HtmlAfter : string;
-    
-    public PlainBefore : string;
-    public PlainAfter : string;
-    public IsBlockNode : boolean;
+    public PlainBefore: string;
+    public PlainAfter: string;
+    public IsBlockNode: boolean;
 
-    constructor(htmlBefore : string, content : INode, htmlAfter : string) {
+    constructor(htmlBefore: string, content: INode, htmlAfter: string) {
         this.HtmlBefore = htmlBefore;
         this.Content = content;
         this.HtmlAfter = htmlAfter;

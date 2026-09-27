@@ -30,11 +30,11 @@ export class AlignTag extends Tag {
         return ret;
     }
 
-    private static IsValidAlign(text : string) : boolean {
+    private static IsValidAlign(text: string): boolean {
         return text == 'left' || text == 'right' || text == 'center';
     }
 
-    private static ConvertAlign(text: string) : string {
+    private static ConvertAlign(text: string): string {
         if (text == 'left') return 'start';
         if (text == 'right') return 'end';
         return 'center';

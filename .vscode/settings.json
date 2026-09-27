@@ -1,6 +1,9 @@
 {
     "eslint.enable": true,
-    "eslint.validate": ["javascript", "typescript"],
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit",
         "source.organizeImports": "explicit"
@@ -8,9 +11,9 @@
     "testExplorer.useNativeTesting": true,
     "editor.formatOnSave": true,
     "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }

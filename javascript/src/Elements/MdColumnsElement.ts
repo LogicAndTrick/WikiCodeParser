@@ -36,7 +36,7 @@ export class MdColumnsElement extends Element {
         const value = lines.Value();
         return value.startsWith('%%columns=');
     }
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
 
         const meta = lines.Value().substring(10);

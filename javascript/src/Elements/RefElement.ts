@@ -10,7 +10,7 @@ export class RefElement extends Element {
         const value = lines.Value().trim();
         return value.length > 4 && value.startsWith('[ref=') && value.match(/\[ref=[a-z0-9 ]+\]/i) != null;
     }
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
         const arr: string[] = [];
 
@@ -37,8 +37,7 @@ export class RefElement extends Element {
                     arr.push(lastLine);
                     found = true;
                     break;
-                }
-                else {
+                } else {
                     arr.push(value);
                 }
             }

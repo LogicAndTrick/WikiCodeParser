@@ -56,7 +56,7 @@ export class MdTableElement extends Element {
         const value = lines.Value().trimEnd();
         return value.length >= 2 && value[0] == '|' && (value[1] == '=' || value[1] == '-');
     }
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const arr: TableRow[] = [];
         do {
             const value = lines.Value().trimEnd();

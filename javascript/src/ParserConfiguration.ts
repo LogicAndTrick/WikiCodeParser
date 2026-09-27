@@ -40,7 +40,6 @@ import { WikiYoutubeTag } from './Tags/WikiYoutubeTag';
 import { YoutubeTag } from './Tags/YoutubeTag';
 
 export class ParserConfiguration {
-
     public static Twhl(): ParserConfiguration {
         const conf = new ParserConfiguration();
 
@@ -107,7 +106,7 @@ export class ParserConfiguration {
 
         return conf;
     }
-    
+
     public static Snarkpit(): ParserConfiguration {
         const conf = new ParserConfiguration();
 
@@ -122,7 +121,7 @@ export class ParserConfiguration {
         conf.Tags.push(new Tag('center', 'div', 'text-center').WithBlock(true));
         conf.Tags.push(new AlignTag());
         conf.Tags.push(new ListTag());
-        
+
         // Links
         conf.Tags.push(new LinkTag().WithScopes('excerpt'));
         conf.Tags.push(new LinkTag().WithScopes('excerpt').WithToken('email'));

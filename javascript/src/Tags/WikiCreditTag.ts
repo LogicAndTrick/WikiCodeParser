@@ -14,15 +14,13 @@ export class WikiCreditTag extends Tag {
         this.Element = '';
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, _context: TagParseContext): boolean {
         const peekTag = state.Peek(8);
         const pt = state.PeekTo(']');
         return peekTag == '[credit:' && pt != null && pt.length > 8 && !pt.includes('\n');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
         if (state.Next() != '[') {
             state.Seek(index, true);
@@ -49,7 +47,7 @@ export class WikiCreditTag extends Tag {
                     credit.Description = val;
                     break;
                 case 'user':
-                    credit.UserID = parseInt(val, 10) || null;
+                    credit.UserID = parseInt(val, 10) || undefined;
                     break;
                 case 'name':
                     credit.Name = val;

@@ -15,7 +15,8 @@ export class ListTag extends Tag {
     }
 
     public override Validate(options: Record<string, string>, text: string): boolean {
-        const items = text.split('[*]')
+        const items = text
+            .split('[*]')
             .map(x => x.trim())
             .filter(x => x?.length > 0);
         return super.Validate(options, text) && items.length > 0;
@@ -27,7 +28,8 @@ export class ListTag extends Tag {
         before += '>\n';
 
         const content = new NodeCollection();
-        const items = text.split('[*]')
+        const items = text
+            .split('[*]')
             .map(x => x.trim())
             .filter(x => x?.length > 0);
         for (const item of items) {
@@ -36,7 +38,7 @@ export class ListTag extends Tag {
             node.PlainAfter = '\n';
             content.Nodes.push(node);
         }
-        
+
         const after = '</' + this.Element + '>';
         const ret = new HtmlNode(before, content, after);
         ret.IsBlockNode = true;

@@ -31,9 +31,7 @@ export class ImageTag extends Tag {
             state.SkipWhitespace();
         }
 
-        const before = `<${element} class="${classes.join(' ')}">` +
-            '<span class="caption-panel">' +
-            `<img class="caption-body" src="${url}" alt="User posted image" />`;
+        const before = `<${element} class="${classes.join(' ')}">` + '<span class="caption-panel">' + `<img class="caption-body" src="${url}" alt="User posted image" />`;
         const after = `</span></${element}>`;
         const plainsp = element == 'div' ? '\n' : '';
         const ret = new HtmlNode(before, PlainTextNode.Empty(), after);

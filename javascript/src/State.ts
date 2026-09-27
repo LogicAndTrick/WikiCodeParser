@@ -1,6 +1,4 @@
-
 export class State {
-
     public readonly Text: string;
     public get Length(): number {
         return this.Text.length;
@@ -16,9 +14,7 @@ export class State {
     }
 
     public ScanTo(find: string, ignoreCase = false): string {
-        let pos = ignoreCase
-            ? this.Text.toLowerCase().indexOf(find.toLowerCase(), this.Index)
-            : this.Text.indexOf(find, this.Index);
+        let pos = ignoreCase ? this.Text.toLowerCase().indexOf(find.toLowerCase(), this.Index) : this.Text.indexOf(find, this.Index);
         if (pos < 0) pos = this.Length;
         const ret = this.Text.substring(this.Index, pos);
         this.Index = pos;
@@ -49,7 +45,7 @@ export class State {
         return this.Text[this.Index++];
     }
 
-    public GetToken(): string {
+    public GetToken(): string | null {
         if (this.Done || this.Text[this.Index] != '[') return null;
         let found = false;
         let tok = '';

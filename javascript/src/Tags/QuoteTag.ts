@@ -29,7 +29,7 @@ export class QuoteTag extends Tag {
         const ret = new HtmlNode(before, content, after);
         ret.PlainBefore = (options['name'] ? options['name'] + ' said: ' : '') + '[quote]\n';
         ret.PlainAfter = '\n[/quote]';
-        ret.IsBlockNode = this.IsBlock;
+        ret.IsBlockNode = this.IsBlock === true;
         return ret;
     }
 }

@@ -8,26 +8,39 @@ import { ParseData } from '../ParseData';
 import { Element } from './Element';
 
 export class PreElement extends Element {
-
     public static AllowedLanguages: string[] = [
-        'php', 'dos', 'bat', 'cmd', 'css', 'cpp', 'c', 'c++', 'cs', 'ini', 'json', 'xml', 'html', 'angelscript',
-        'javascript', 'js', 'plaintext'
+        'php',
+        'dos',
+        'bat',
+        'cmd',
+        'css',
+        'cpp',
+        'c',
+        'c++',
+        'cs',
+        'ini',
+        'json',
+        'xml',
+        'html',
+        'angelscript',
+        'javascript',
+        'js',
+        'plaintext',
     ];
 
-    public Token  = 'pre';
+    public Token = 'pre';
 
     public Matches(lines: Lines): boolean {
         const value = lines.Value().trim();
         return value.length > this.Token.length + 1 && value.startsWith('[' + this.Token) && value.match(this.getTokenRegex()) != null;
     }
 
-    private getTokenRegex() : RegExp {
+    private getTokenRegex(): RegExp {
         const escapedToken = this.Token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         return new RegExp('\\[' + escapedToken + '(?:=([a-z ]+))?\\]', 'i');
     }
-    
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode {
+
+    public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode | null {
         const current = lines.Current();
         let arr: string[] = [];
 
@@ -46,7 +59,7 @@ export class PreElement extends Element {
             const spl = res[1].split(' ');
             hl = spl.includes('highlight');
             lang = spl.find(x => x != 'highlight')?.toLowerCase();
-            if (!PreElement.AllowedLanguages.includes(lang)) lang = undefined;
+            if (lang && !PreElement.AllowedLanguages.includes(lang)) lang = undefined;
         }
 
         if (line.endsWith('[/' + this.Token + ']')) {
@@ -79,7 +92,7 @@ export class PreElement extends Element {
         }
 
         // Process highlight commands
-        type HighlightCommand = { firstLine: number, numLines: number, color: string };
+        type HighlightCommand = { firstLine: number; numLines: number; color: string };
         let highlight: HighlightCommand[] = [];
         if (hl) {
             // Highlight commands get their own line so we need to keep track of which lines we're removing as we go
@@ -118,9 +131,7 @@ export class PreElement extends Element {
 
         arr = PreElement.FixCodeIndentation(arr);
 
-        const highlights = highlight
-            .map(h => `<div class="line-highlight" style="top: ${h.firstLine}em; height: ${h.numLines}em; background: ${h.color};"></div>`)
-            .join('');
+        const highlights = highlight.map(h => `<div class="line-highlight" style="top: ${h.firstLine}em; height: ${h.numLines}em; background: ${h.color};"></div>`).join('');
         const plain = new UnprocessablePlainTextNode(arr.join('\n'));
         const cls = !lang || lang.trim() == '' ? '' : ` class="lang-${lang}"`;
         const before = `<pre${cls}><code>${highlights}`;

@@ -24,7 +24,10 @@ function Test(config: ParserConfiguration, input: string, expectedOutput: string
     const result = parser.ParseResult(input);
     const resultHtml = result.ToHtml().trim();
     const resultPlain = result.ToPlainText().trim();
-    const resultMeta = result.GetMetadata().map(x => `${x.Key}=${JSON.stringify(x.Value)}`).join('\n');
+    const resultMeta = result
+        .GetMetadata()
+        .map(x => `${x.Key}=${JSON.stringify(x.Value)}`)
+        .join('\n');
 
     AssertSame('html', expectedOutput, resultHtml, split);
     if (expectedPlain !== undefined) AssertSame('plain', expectedPlain, resultPlain, split);

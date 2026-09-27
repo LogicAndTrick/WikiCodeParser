@@ -7,7 +7,6 @@ import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
 import { Tag } from './Tag';
 
-
 export class WikiYoutubeTag extends Tag {
     constructor() {
         super();
@@ -17,14 +16,13 @@ export class WikiYoutubeTag extends Tag {
         this.Options = ['id'];
     }
 
-    public override Matches(state: State, _token: string, context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, context: TagParseContext): boolean {
         const peekTag = state.Peek(9);
         const pt = state.PeekTo(']');
         return context == TagParseContext.Block && peekTag == '[youtube:' && pt != null && pt.length > 9 && !pt.includes('\n');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
         if (state.ScanTo(':') != '[youtube' || state.Next() != ':') {
             state.Seek(index, true);
@@ -64,15 +62,12 @@ export class WikiYoutubeTag extends Tag {
 
         if (!caption || caption.trim() == '') caption = null;
 
-        const captionNode = new HtmlNode(
-            caption != null ? '<span class="caption">' : '',
-            new PlainTextNode(caption ?? ''),
-            caption != null ? '</span>' : ''
-        );
+        const captionNode = new HtmlNode(caption != null ? '<span class="caption">' : '', new PlainTextNode(caption ?? ''), caption != null ? '</span>' : '');
         captionNode.PlainBefore = '[YouTube video] ';
         captionNode.PlainAfter = '\n';
 
-        const before = `<div class="${classes.join(' ')}">` +
+        const before =
+            `<div class="${classes.join(' ')}">` +
             '<div class="caption-panel">' +
             '<div class="video-container caption-body">' +
             '<div class="video-content">' +

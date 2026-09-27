@@ -12,9 +12,8 @@ import { TagParseContext } from '../TagParseContext';
 import { Tag } from './Tag';
 
 export class WikiImageTag extends Tag {
-
     public TwhlBehaviour = false;
-    
+
     constructor() {
         super();
         this.Token = null;
@@ -27,23 +26,22 @@ export class WikiImageTag extends Tag {
         for (const tag of this.Tags) {
             const peekTag = state.Peek(2 + tag.length);
             const pt = state.PeekTo(']');
-            if (peekTag == `[${tag}:` && pt?.length > 2 + tag.length && !pt.includes('\n')) return tag;
+            if (peekTag == `[${tag}:` && pt && pt.length > 2 + tag.length && !pt.includes('\n')) return tag;
         }
 
         return null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, _context: TagParseContext): boolean {
         const tag = WikiImageTag.GetTag(state);
         return tag != null;
     }
 
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, context: TagParseContext): INode | null {
         const index = state.Index;
 
         const tag = WikiImageTag.GetTag(state);
-        if (state.ScanTo(':') != `[${tag}` || state.Next() != ':') {
+        if (!tag || state.ScanTo(':') != `[${tag}` || state.Next() != ':') {
             state.Seek(index, true);
             return null;
         }
@@ -130,38 +128,41 @@ export class WikiImageTag extends Tag {
             content.Nodes.push(cn);
         }
 
-        const before = `<${el} class="${classes.join(' ')}"` + (caption?.length > 0 ? ` title="${HtmlHelper.AttributeEncode(caption)}"` : '') + '>'
-            + (url.length > 0 ? '<a href="' + HtmlHelper.AttributeEncode(url) + '">' : '')
-            + '<span class="caption-panel">';
-        const after = '</span>'
-            + (url.length > 0 ? '</a>' : '')
-            + `</${el}>`;
+        const before =
+            `<${el} class="${classes.join(' ')}"` +
+            (caption && caption.length > 0 ? ` title="${HtmlHelper.AttributeEncode(caption)}"` : '') +
+            '>' +
+            (url.length > 0 ? '<a href="' + HtmlHelper.AttributeEncode(url) + '">' : '') +
+            '<span class="caption-panel">';
+        const after = '</span>' + (url.length > 0 ? '</a>' : '') + `</${el}>`;
 
         const ret = new HtmlNode(before, content, after);
         ret.IsBlockNode = el == 'div';
         return ret;
     }
 
-    private static GetEmbedObject(tag: string, url: string, caption: string, loop: boolean): INode {
+    private static GetEmbedObject(tag: string, url: string, caption: string | null, loop: boolean): INode | null {
         url = HtmlHelper.AttributeEncode(url);
         switch (tag) {
-            case 'img':
-                {
-                    caption = caption ?? 'User posted image';
-                    const cap = HtmlHelper.AttributeEncode(caption);
-                    const ret = new HtmlNode(`<img class="caption-body" src="${url}" alt="${cap}" />`, PlainTextNode.Empty(), '');
-                    ret.PlainBefore = '[Image]';
-                    return ret;
-                }
+            case 'img': {
+                caption = caption ?? 'User posted image';
+                const cap = HtmlHelper.AttributeEncode(caption);
+                const ret = new HtmlNode(`<img class="caption-body" src="${url}" alt="${cap}" />`, PlainTextNode.Empty(), '');
+                ret.PlainBefore = '[Image]';
+                return ret;
+            }
             case 'video':
-            case 'audio':
-                {
-                    let auto = '';
-                    if (loop) auto = 'autoplay loop muted';
-                    const ret = new HtmlNode(`<${tag} class="caption-body" src="${url}" playsinline controls ${auto}>Your browser doesn't support embedded ${tag}.</${tag}>`, PlainTextNode.Empty(), '');
-                    ret.PlainBefore = tag.substring(0, 1).toUpperCase() + tag.substring(1);
-                    return ret;
-                }
+            case 'audio': {
+                let auto = '';
+                if (loop) auto = 'autoplay loop muted';
+                const ret = new HtmlNode(
+                    `<${tag} class="caption-body" src="${url}" playsinline controls ${auto}>Your browser doesn't support embedded ${tag}.</${tag}>`,
+                    PlainTextNode.Empty(),
+                    ''
+                );
+                ret.PlainBefore = tag.substring(0, 1).toUpperCase() + tag.substring(1);
+                return ret;
+            }
         }
 
         return null;

@@ -6,14 +6,14 @@ import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
 
 export class Tag {
-    public Token: string;
+    public Token: string | null;
     public Element: string;
     public ElementClass: string | null;
-    public MainOption: string;
+    public MainOption?: string;
     public Options: string[];
-    public AllOptionsInMain: boolean;
-    public IsBlock: boolean;
-    public IsNested: boolean;
+    public AllOptionsInMain?: boolean;
+    public IsBlock?: boolean;
+    public IsNested?: boolean;
 
     public Scopes: string[];
     public Priority = 0;
@@ -31,17 +31,17 @@ export class Tag {
     }
 
     public InScope(scope: string): boolean {
-        return !scope
-            || scope.trim() == ''
-            || this.Scopes.includes(scope);
+        return !scope || scope.trim() == '' || this.Scopes.includes(scope);
     }
 
-    public Matches(state: State, token: string, context: TagParseContext): boolean {
+    public Matches(state: State, token: string | null, context: TagParseContext): boolean {
         return token?.toLowerCase() == this.Token && (context == TagParseContext.Block || !this.IsBlock);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public Parse(parser: Parser, data: ParseData, state: State, scope: string, context: TagParseContext): INode {
+    public Parse(parser: Parser, data: ParseData, state: State, scope: string, _context: TagParseContext): INode | null {
+        // a null token requires the superclass to override this method
+        if (!this.Token) return null;
+
         const index = state.Index;
         const tokenLength = this.Token.length;
 
@@ -56,10 +56,9 @@ export class Tag {
         if (optionsString.length > 0) {
             if (optionsString[0] == '=' && this.AllOptionsInMain && this.MainOption != null) {
                 options[this.MainOption] = optionsString.substring(1);
-            }
-            else {
+            } else {
                 if (optionsString[0] == '=') optionsString = this.MainOption + optionsString;
-                const myregexp = /(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/img;
+                const myregexp = /(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/gim;
                 let m = myregexp.exec(optionsString);
                 while (m != null) {
                     const name = m[1].trim();
@@ -76,8 +75,8 @@ export class Tag {
             while (!state.Done) {
                 text += state.ScanTo('[');
                 const tok = state.GetToken();
-                if (tok.toLowerCase() == this.Token.toLowerCase()) stack++;
-                if (tok.toLowerCase() == '/' + this.Token.toLowerCase() && state.Peek(tokenLength + 3).trim() == '[/' + this.Token.toLowerCase() + ']') stack--;
+                if (tok && tok.toLowerCase() == this.Token.toLowerCase()) stack++;
+                if (tok && tok.toLowerCase() == '/' + this.Token.toLowerCase() && state.Peek(tokenLength + 3).trim() == '[/' + this.Token.toLowerCase() + ']') stack--;
                 if (stack == 0) {
                     state.Seek(this.Token.length + 3, false);
                     if (!this.Validate(options, text)) break;
@@ -89,14 +88,12 @@ export class Tag {
 
             state.Seek(index, true);
             return null;
-        }
-        else {
+        } else {
             const text = state.ScanTo('[/' + this.Token + ']', true);
             if (state.Peek(tokenLength + 3).trim() == '[/' + this.Token.toLowerCase() + ']' && this.Validate(options, text)) {
                 state.Seek(this.Token.length + 3, false);
                 return this.FormatResult(parser, data, state, scope, options, text);
-            }
-            else {
+            } else {
                 state.Seek(index, true);
                 return null;
             }
@@ -115,39 +112,33 @@ export class Tag {
         const after = '</' + this.Element + '>';
         const content = parser.ParseTags(data, text, scope, this.TagContext());
         const ret = new HtmlNode(before, content, after);
-        ret.IsBlockNode = this.IsBlock;
+        ret.IsBlockNode = this.IsBlock === true;
         return ret;
     }
 
-
     // Extensions
-    
-    public WithScopes(...scopes : string[])
-    {
+
+    public WithScopes(...scopes: string[]) {
         this.Scopes = scopes;
         return this;
     }
 
-    public WithToken(token : string)
-    {
+    public WithToken(token: string) {
         this.Token = token;
         return this;
     }
 
-    public WithElement(element : string)
-    {
+    public WithElement(element: string) {
         this.Element = element;
         return this;
     }
 
-    public WithElementClass(elementClass : string)
-    {
+    public WithElementClass(elementClass: string) {
         this.ElementClass = elementClass;
         return this;
     }
 
-    public WithBlock(isBlock : boolean)
-    {
+    public WithBlock(isBlock: boolean) {
         this.IsBlock = isBlock;
         return this;
     }

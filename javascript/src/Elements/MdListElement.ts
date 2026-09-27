@@ -122,7 +122,7 @@ export class MdListElement extends Element {
         return MdListElement.IsValidListItem(value, 0) > 0;
     }
 
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
 
         // Put all the subtrees into a dummy item node
@@ -158,7 +158,8 @@ export class MdListElement extends Element {
             // first character is list token, second character is whitespace: create sublist
             // anything else : not valid - stop parsing
 
-            if (value.length > 1 && value[0] == ' ' && prefix.length > 0) { // don't allow this if we're parsing at level 0
+            if (value.length > 1 && value[0] == ' ' && prefix.length > 0) {
+                // don't allow this if we're parsing at level 0
                 // List item
                 value = value.trimStart();
 
@@ -168,11 +169,9 @@ export class MdListElement extends Element {
                     {
                         value = value.substring(0, value.length - 2) + '^';
                         break;
-                    }
-                    else if (lines.Next()) {
+                    } else if (lines.Next()) {
                         value = value.substring(0, value.length - 1).trim() + '\n' + lines.Value().trimStart();
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }

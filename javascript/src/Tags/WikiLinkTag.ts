@@ -17,15 +17,12 @@ export class WikiLinkTag extends Tag {
         this.Token = null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, _context: TagParseContext): boolean {
         const pt = state.PeekTo(']]');
-        return pt?.length > 1 && pt[1] == '[' && !pt.includes('\n')
-            && pt.substring(2).match(/([^\]]*?)(?:\|([^\]]*?))?/i) != null;
+        return pt != null && pt.length > 1 && pt[1] == '[' && !pt.includes('\n') && pt.substring(2).match(/([^\]]*?)(?:\|([^\]]*?))?/i) != null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
 
         if (state.Next() != '[' || state.Next() != '[') {
@@ -53,7 +50,7 @@ export class WikiLinkTag extends Tag {
             const spl = page.split('#');
             page = spl[0];
             const anchor = spl.length > 1 ? spl.slice(1).join('#') : '';
-            hash = '#' + anchor.replace(/[^\da-z?/:@\-._~!$&'()*+,;=]/ig, '_');
+            hash = '#' + anchor.replace(/[^\da-z?/:@\-._~!$&'()*+,;=]/gi, '_');
         }
 
         const url = HtmlHelper.AttributeEncode(`https://twhl.info/wiki/page/${WikiRevision.CreateSlug(page)}`) + hash;

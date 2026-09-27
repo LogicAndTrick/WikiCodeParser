@@ -36,7 +36,10 @@ export class Parser {
         text = text.replace('\r', '');
 
         const lines = new Lines(text);
-        const inscope = OrderByDescending(this.Configuration.Elements.filter(x => x.InScope(scope)), x => x.Priority);
+        const inscope = OrderByDescending(
+            this.Configuration.Elements.filter(x => x.InScope(scope)),
+            x => x.Priority
+        );
         const plain: string[] = [];
 
         while (lines.Next()) {
@@ -116,7 +119,10 @@ export class Parser {
 
         const state = new State(text);
         const root = new NodeCollection();
-        const inscope = OrderByDescending(this.Configuration.Tags.filter(x => x.InScope(scope)), x => x.Priority);
+        const inscope = OrderByDescending(
+            this.Configuration.Tags.filter(x => x.InScope(scope)),
+            x => x.Priority
+        );
 
         while (!state.Done) {
             let plain = state.ScanTo('[');
@@ -125,6 +131,7 @@ export class Parser {
 
             const token = state.GetToken();
             let found = false;
+
             for (const t of inscope) {
                 if (t.Matches(state, token, context)) {
                     const parsed = t.Parse(this, data, state, scope, context);
@@ -149,10 +156,9 @@ export class Parser {
         if (node instanceof NodeCollection) {
             const coll: NodeCollection = node;
             while (coll.Nodes.some(x => x instanceof NodeCollection)) {
-                coll.Nodes = coll.Nodes.flatMap(x => x instanceof NodeCollection ? x.Nodes : [x]);
+                coll.Nodes = coll.Nodes.flatMap(x => (x instanceof NodeCollection ? x.Nodes : [x]));
             }
-        }
-        else {
+        } else {
             const ch = node.GetChildren();
             for (let i = 0; i < ch.length; i++) {
                 while (ch[i] instanceof NodeCollection && (ch[i] as NodeCollection).Nodes.length == 1) {

@@ -1,5 +1,4 @@
-
 export enum TagParseContext {
     Block,
-    Inline
+    Inline,
 }

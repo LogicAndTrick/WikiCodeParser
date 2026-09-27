@@ -14,15 +14,13 @@ export class WikiBookTag extends Tag {
         this.Element = '';
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, _context: TagParseContext): boolean {
         const peekTag = state.Peek(6);
         const pt = state.PeekTo(']');
         return peekTag == '[book:' && pt != null && pt.length > 6 && !pt.includes('\n');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
         if (state.Next() != '[') {
             state.Seek(index, true);
@@ -51,10 +49,10 @@ export class WikiBookTag extends Tag {
                     book.ChapterName = val;
                     break;
                 case 'chapternumber':
-                    book.ChapterNumber = parseInt(val, 10) || null;
+                    book.ChapterNumber = parseInt(val, 10) || undefined;
                     break;
                 case 'pagenumber':
-                    book.PageNumber = parseInt(val, 10) || null;
+                    book.PageNumber = parseInt(val, 10) || undefined;
                     break;
             }
         }

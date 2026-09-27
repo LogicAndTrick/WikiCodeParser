@@ -125,13 +125,13 @@ describe('QuoteElementTest', () => {
     }
 
     function* getBalanceQuotesData(): IterableIterator<[string, string | null]> {
-        yield ["[quote]Test[/quote]", "Test"];
-        yield ["[quote]Test[/quote][quote]Test[/quote]", "Test"];
-        yield ["[quote]Test\n[quote]Test[/quote][/quote]", "Test\n[quote]Test[/quote]"];
-        yield ["[quote]Test\n[quote]Test[/quote]Test[/quote]", "Test\n[quote]Test[/quote]Test"];
-        yield ["[quote]Test\n[quote]Test[/quote]Test\n[quote]Test[/quote]", null];
-        yield ["[quote][quote]Test[/quote]Test[/quote]", "[quote]Test[/quote]Test"];
-        yield ["[quote][quote]Test[/quote]\nTest[/quote]", "[quote]Test[/quote]\nTest"];
+        yield ['[quote]Test[/quote]', 'Test'];
+        yield ['[quote]Test[/quote][quote]Test[/quote]', 'Test'];
+        yield ['[quote]Test\n[quote]Test[/quote][/quote]', 'Test\n[quote]Test[/quote]'];
+        yield ['[quote]Test\n[quote]Test[/quote]Test[/quote]', 'Test\n[quote]Test[/quote]Test'];
+        yield ['[quote]Test\n[quote]Test[/quote]Test\n[quote]Test[/quote]', null];
+        yield ['[quote][quote]Test[/quote]Test[/quote]', '[quote]Test[/quote]Test'];
+        yield ['[quote][quote]Test[/quote]\nTest[/quote]', '[quote]Test[/quote]\nTest'];
     }
 
     const data = Array.from(getBalanceQuotesData());
@@ -151,9 +151,9 @@ describe('QuoteElementTest', () => {
     });
 
     test('BalanceQuotesWithNameTest', () => {
-        const input = "[quote=Name]Test[/quote]";
-        const output = "Test";
-        const author = "Name";
+        const input = '[quote=Name]Test[/quote]';
+        const output = 'Test';
+        const author = 'Name';
         const lines = new Lines(input);
         lines.Next();
         const { text: result, author: name } = QuoteElement.BalanceQuotes(lines);
@@ -162,9 +162,9 @@ describe('QuoteElementTest', () => {
     });
 
     test('BalanceQuotesWithPostfixTest', () => {
-        const input = "[quote]Test[/quote]ASDF";
-        const output = "Test";
-        const postfix = "ASDF";
+        const input = '[quote]Test[/quote]ASDF';
+        const output = 'Test';
+        const postfix = 'ASDF';
         const lines = new Lines(input);
         lines.Next();
         const { text: result, postfix: rest } = QuoteElement.BalanceQuotes(lines);
@@ -173,8 +173,8 @@ describe('QuoteElementTest', () => {
     });
 
     test('QuoteSimple', () => {
-        const input = "[quote]Test[/quote]";
-        const output = "\n<blockquote>Test</blockquote>\n";
+        const input = '[quote]Test[/quote]';
+        const output = '\n<blockquote>Test</blockquote>\n';
         const parser = createParser();
         const result = parser.ParseResult(input);
         expect(result.ToHtml()).toBe(output);

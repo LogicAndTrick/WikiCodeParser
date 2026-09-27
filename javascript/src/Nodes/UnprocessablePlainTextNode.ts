@@ -2,13 +2,16 @@ import { HtmlHelper } from '../HtmlHelper';
 import { INode } from './INode';
 
 export class UnprocessablePlainTextNode implements INode {
+    public static Empty(): INode {
+        return new UnprocessablePlainTextNode('');
+    }
+    public static NewLine(): INode {
+        return new UnprocessablePlainTextNode('\n');
+    }
 
-    public static Empty() : INode { return new UnprocessablePlainTextNode(''); }
-    public static NewLine() : INode { return new UnprocessablePlainTextNode('\n'); }
+    public Text: string;
 
-    public Text : string;
-
-    constructor(text : string) {
+    constructor(text: string) {
         this.Text = text;
     }
 
@@ -21,11 +24,11 @@ export class UnprocessablePlainTextNode implements INode {
     GetChildren(): INode[] {
         return [];
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     ReplaceChild(_i: number, _node: INode): void {
         throw new Error('Invalid operation');
     }
     HasContent(): boolean {
-        return this.Text && this.Text.trim() != '';
+        return !!this.Text && this.Text.trim() != '';
     }
 }

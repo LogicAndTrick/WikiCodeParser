@@ -8,25 +8,25 @@ export default {
             file: 'build/browser/twhl-wikicode-parser.js',
             sourcemap: true,
             format: 'iife',
-            name: 'TwhlWikiCodeParser'
+            name: 'TwhlWikiCodeParser',
         },
         {
             file: 'build/browser/twhl-wikicode-parser.min.js',
             sourcemap: true,
             format: 'iife',
             name: 'TwhlWikiCodeParser',
-            plugins: [terser()]
+            plugins: [terser()],
         },
         {
             file: 'build/index.js',
             sourcemap: false,
-            format: 'cjs'
-        }
+            format: 'cjs',
+        },
     ],
     plugins: [
         typescript({
             tsconfig: 'tsconfig.json',
             declaration: false,
-        })
-    ]
+        }),
+    ],
 };

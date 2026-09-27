@@ -10,7 +10,6 @@ import { INodeProcessor } from './INodeProcessor';
 export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
     Priority = 20;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ShouldProcess(node: INode, _scope: string): boolean {
         return node instanceof NodeCollection;
     }
@@ -38,8 +37,7 @@ export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
                 ret.push(UnprocessablePlainTextNode.NewLine());
                 ret.push(child);
                 ret.push(UnprocessablePlainTextNode.NewLine());
-            }
-            else {
+            } else {
                 trimStart = false;
                 ret.push(child);
             }

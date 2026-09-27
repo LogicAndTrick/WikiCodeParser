@@ -13,13 +13,13 @@ export class QuoteElement extends Element {
 
     Matches(lines: Lines): boolean {
         const value = lines.Value().trim();
-        return value.length > 6 && value.toLowerCase().startsWith("[quote") && QuoteElement.OpenQuote.test(value);
+        return value.length > 6 && value.toLowerCase().startsWith('[quote') && QuoteElement.OpenQuote.test(value);
     }
 
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
 
-        let line = lines.Value().trim();
+        const line = lines.Value().trim();
         const res = QuoteElement.OpenQuote.exec(line);
         if (!res) {
             lines.SetCurrent(current);
@@ -32,16 +32,16 @@ export class QuoteElement extends Element {
             return null;
         }
 
-        let before = "<blockquote>";
-        let plainBefore = "[quote]\n";
+        let before = '<blockquote>';
+        let plainBefore = '[quote]\n';
         if (author) {
             before += `<strong class="quote-name">${author} said:</strong><br/>`;
             plainBefore = `${author} said: ${plainBefore}`;
         }
 
-        const node = new HtmlNode(before, parser.ParseElements(data, text, scope), "</blockquote>");
+        const node = new HtmlNode(before, parser.ParseElements(data, text, scope), '</blockquote>');
         node.PlainBefore = plainBefore;
-        node.PlainAfter = "\n[/quote]";
+        node.PlainAfter = '\n[/quote]';
         node.IsBlockNode = true;
 
         if (postfix) {
@@ -50,10 +50,10 @@ export class QuoteElement extends Element {
         return node;
     }
 
-    public static BalanceQuotes(lines: Lines): { text: string | null, author: string | null, postfix: string | null } {
+    public static BalanceQuotes(lines: Lines): { text: string | null; author: string | null; postfix: string | null } {
         let name = null;
         let postfix = null;
-        
+
         const openQuote = new RegExp(QuoteElement.OpenQuote, 'iy');
 
         let line = lines.Value().trimStart();
@@ -72,19 +72,19 @@ export class QuoteElement extends Element {
                 openQuote.lastIndex = idx;
                 openMat = openQuote.exec(line);
                 const openMatIdx = openMat ? openMat.index : -1;
-                const closeMatIdx = line.toLowerCase().indexOf("[/quote]", idx);
+                const closeMatIdx = line.toLowerCase().indexOf('[/quote]', idx);
 
                 if (openMatIdx >= 0 && (closeMatIdx < 0 || closeMatIdx > openMatIdx)) {
                     // Open quote
                     currentLevel++;
-                    idx = openMat.index + openMat[0].length;
+                    idx = openMat!.index + openMat![0].length;
                 } else if (closeMatIdx >= 0) {
                     // Close quote
                     currentLevel--;
                     if (currentLevel === 0) {
                         if (line.length > closeMatIdx + QuoteElement.CloseQuoteLength) postfix = line.substring(closeMatIdx + QuoteElement.CloseQuoteLength);
                         arr.push(line.substring(0, closeMatIdx));
-                        return { text: arr.join("\n"), author: name, postfix };
+                        return { text: arr.join('\n'), author: name, postfix };
                     }
                     idx = closeMatIdx + QuoteElement.CloseQuoteLength;
                 } else {

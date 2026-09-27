@@ -11,8 +11,8 @@ export class MdLineElement extends Element {
         const value = lines.Value().trimEnd();
         return value.length >= 3 && value == '-'.repeat(value.length);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public Consume(_parser: Parser, _data: ParseData, _lines: Lines, _scope: string): INode {
+
+    public Consume(_parser: Parser, _data: ParseData, _lines: Lines, _scope: string): INode | null {
         const ret = new HtmlNode('<hr />', PlainTextNode.Empty(), '');
         ret.PlainBefore = '---';
         return ret;

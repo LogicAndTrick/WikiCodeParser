@@ -3,16 +3,16 @@ import { INode } from './INode';
 import { UnprocessablePlainTextNode } from './UnprocessablePlainTextNode';
 
 export class RefNode implements INode {
-    public Data : ParseData;
-    public Name : string;
+    public Data: ParseData;
+    public Name: string;
 
-    constructor(data : ParseData, name : string) {
+    constructor(data: ParseData, name: string) {
         this.Data = data;
         this.Name = name;
     }
 
-    private GetNode() : INode {
-        return this.Data.Get(`Ref::${this.Name}`, UnprocessablePlainTextNode.Empty);
+    private GetNode(): INode {
+        return this.Data.Get(`Ref::${this.Name}`, () => UnprocessablePlainTextNode.Empty());
     }
 
     ToHtml(): string {
@@ -22,7 +22,7 @@ export class RefNode implements INode {
         return this.GetNode().ToPlainText();
     }
     GetChildren(): INode[] {
-        return [this.GetNode() ];
+        return [this.GetNode()];
     }
     ReplaceChild(i: number, node: INode): void {
         if (i != 0) throw new Error('Index out of range');

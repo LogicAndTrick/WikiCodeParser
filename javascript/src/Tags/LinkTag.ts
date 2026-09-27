@@ -25,9 +25,7 @@ export class LinkTag extends Tag {
         const before = `<${this.Element} ` + (classes.length > 0 ? `class="${classes.join(' ')}" ` : '') + `href="${url}">`;
         const after = `</${this.Element}>`;
 
-        const content = options['url']
-            ? parser.ParseTags(data, text, scope, this.TagContext())
-            : new UnprocessablePlainTextNode(text);
+        const content = options['url'] ? parser.ParseTags(data, text, scope, this.TagContext()) : new UnprocessablePlainTextNode(text);
         return new HtmlNode(before, content, after);
     }
 

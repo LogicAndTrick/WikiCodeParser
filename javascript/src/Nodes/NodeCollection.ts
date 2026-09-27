@@ -1,9 +1,9 @@
 import { INode } from './INode';
 
 export class NodeCollection implements INode {
-    public Nodes : INode[];
+    public Nodes: INode[];
 
-    constructor(...nodes : INode[]) {
+    constructor(...nodes: INode[]) {
         this.Nodes = Array.from(nodes);
     }
 

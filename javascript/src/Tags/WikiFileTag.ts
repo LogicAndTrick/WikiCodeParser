@@ -14,23 +14,21 @@ import { Tag } from './Tag';
 export class WikiFileTag extends Tag {
     constructor() {
         super();
-
     }
-    private static GetTag(state: State): string {
+
+    private static GetTag(state: State): string | null {
         const peekTag = state.Peek(6);
         const pt = state.PeekTo(']');
-        if (peekTag == '[file:' && pt?.length > 6 && !pt.includes('\n')) return 'file';
+        if (peekTag == '[file:' && pt != null && pt.length > 6 && !pt.includes('\n')) return 'file';
         return null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, _context: TagParseContext): boolean {
         const tag = WikiFileTag.GetTag(state);
         return tag != null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
 
         const tag = WikiFileTag.GetTag(state);

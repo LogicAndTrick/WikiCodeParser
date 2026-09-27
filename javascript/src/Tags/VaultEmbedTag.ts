@@ -15,14 +15,13 @@ export class VaultEmbedTag extends Tag {
         this.Options = ['id'];
     }
 
-    public override Matches(state: State, _token: string, context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, context: TagParseContext): boolean {
         const peekTag = state.Peek(7);
         const pt = state.PeekTo(']');
-        return context == TagParseContext.Block && peekTag == '[vault:' && pt?.length > 7 && !pt.includes('\n');
+        return context == TagParseContext.Block && peekTag == '[vault:' && pt != null && pt.length > 7 && !pt.includes('\n');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
 
         if (state.ScanTo(':') != '[vault' || state.Next() != ':') {
@@ -47,7 +46,8 @@ export class VaultEmbedTag extends Tag {
 
         state.SkipWhitespace();
 
-        const before = `<div class="${classes.join(' ')}">` +
+        const before =
+            `<div class="${classes.join(' ')}">` +
             '<div class="embed-container">' +
             '<div class="embed-content">' +
             `<div class="uninitialised" data-embed-type="vault" data-vault-id="${id}">` +

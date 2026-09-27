@@ -14,15 +14,13 @@ export class WikiArchiveTag extends Tag {
         this.Element = '';
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Matches(state: State, _token: string, _context: TagParseContext): boolean {
+    public override Matches(state: State, _token: string | null, _context: TagParseContext): boolean {
         const peekTag = state.Peek(9);
         const pt = state.PeekTo(']');
         return peekTag == '[archive:' && pt != null && pt.length > 9 && !pt.includes('\n');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode {
+    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
         if (state.Next() != '[') {
             state.Seek(index, true);
@@ -62,7 +60,13 @@ export class WikiArchiveTag extends Tag {
                     break;
             }
         }
-        if (credit.WaybackUrl != null && credit.Url != null && !credit.WaybackUrl.startsWith('http://') && !credit.WaybackUrl.startsWith('https://') && parseInt(credit.WaybackUrl, 10)) {
+        if (
+            credit.WaybackUrl != null &&
+            credit.Url != null &&
+            !credit.WaybackUrl.startsWith('http://') &&
+            !credit.WaybackUrl.startsWith('https://') &&
+            parseInt(credit.WaybackUrl, 10)
+        ) {
             credit.WaybackUrl = `https://web.archive.org/web/${credit.WaybackUrl}/${credit.Url}`;
         }
 

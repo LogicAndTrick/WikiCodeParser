@@ -1,17 +1,12 @@
-
-function escapeEmoji(str : string) {
-    return str.replace(/\p{Emoji_Presentation}/ugm, s => '&#' +s.codePointAt(0) + ';');
+function escapeEmoji(str: string) {
+    return str.replace(/\p{Emoji_Presentation}/gmu, s => '&#' + s.codePointAt(0) + ';');
 }
 
 const ALLOWED_URL_SCHEMES = ['http', 'https', 'mailto', 'ftp'];
 
 export class HtmlHelper {
     public static Encode(text: string): string {
-        text = text.replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         return escapeEmoji(text);
     }
 
@@ -20,15 +15,12 @@ export class HtmlHelper {
     }
 
     public static AttributeEncode(text: string): string {
-        text = text.replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         return escapeEmoji(text);
     }
 
     public static StripControlCharacters(text: string): string {
+        // eslint-disable-next-line no-control-regex
         return text == null ? text : text.replace(/[\x00-\x1F\x7F]/g, '');
     }
 

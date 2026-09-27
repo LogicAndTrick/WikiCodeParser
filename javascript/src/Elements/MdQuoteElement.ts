@@ -10,7 +10,7 @@ export class MdQuoteElement extends Element {
         const value = lines.Value();
         return value.length > 0 && value.startsWith('>');
     }
-    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         let value = lines.Value();
         const arr = [value.substring(1).trim()];
         while (lines.Next()) {

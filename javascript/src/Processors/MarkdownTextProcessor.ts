@@ -19,7 +19,6 @@ export class MarkdownTextProcessor implements INodeProcessor {
     private static StartBreakChars: string[] = Array.from('!^()+=[]{}"\'<>?,. \t\r\n');
     private static ExtraEndBreakChars: string[] = Array.from(':;');
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ShouldProcess(node: INode, _scope: string): boolean {
         return node instanceof PlainTextNode && IndexOfAny(node.Text, MarkdownTextProcessor.Tokens) >= 0;
     }
@@ -34,7 +33,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
         return MarkdownTextProcessor.StartBreakChars.includes(c) || MarkdownTextProcessor.ExtraEndBreakChars.includes(c) || MarkdownTextProcessor.Tokens.includes(c);
     }
 
-    private static ParseToken(tracker: number[], text: string, position: number, endPositionObj: endPositionOutobject): INode {
+    private static ParseToken(tracker: number[], text: string, position: number, endPositionObj: endPositionOutobject): INode | null {
         endPositionObj.endPosition = -1;
         const token = text[position];
         const tokenIndex = MarkdownTextProcessor.GetTokenIndex(token);
@@ -47,8 +46,9 @@ export class MarkdownTextProcessor implements INodeProcessor {
         if (text.substring(position, endToken).indexOf('\n') >= 0) return null; // no newlines
 
         // Make sure we can close this token
-        const valid = (endToken + 1 == text.length || MarkdownTextProcessor.IsEndBreakChar(text[endToken + 1])) // end of string or before an end breaker
-            && text[endToken - 1].trim() != ''; // not whitespace previous
+        const valid =
+            (endToken + 1 == text.length || MarkdownTextProcessor.IsEndBreakChar(text[endToken + 1])) && // end of string or before an end breaker
+            text[endToken - 1].trim() != ''; // not whitespace previous
         if (!valid) return null;
 
         const str = text.substring(position + 1, endToken);
@@ -78,15 +78,16 @@ export class MarkdownTextProcessor implements INodeProcessor {
         const ret = [];
         let plainStart = 0;
         let index = 0;
-        // eslint-disable-next-line no-constant-condition
+
         while (true) {
             const nextIndex = IndexOfAny(text, MarkdownTextProcessor.Tokens, index);
             if (nextIndex < 0) break;
 
             // Make sure we can start a new token
-            const valid = (nextIndex == 0 || MarkdownTextProcessor.IsStartBreakChar(text[nextIndex - 1])) // start of string or after a start breaker
-                && nextIndex + 1 < text.length // not end of string
-                && text[nextIndex + 1].trim() != ''; // not whitespace next
+            const valid =
+                (nextIndex == 0 || MarkdownTextProcessor.IsStartBreakChar(text[nextIndex - 1])) && // start of string or after a start breaker
+                nextIndex + 1 < text.length && // not end of string
+                text[nextIndex + 1].trim() != ''; // not whitespace next
             if (!valid) {
                 index = nextIndex + 1;
                 continue;
@@ -96,8 +97,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
             const parsed = MarkdownTextProcessor.ParseToken(tracker, text, nextIndex, endIndexObj);
             if (parsed == null) {
                 index = nextIndex + 1; // no match, skip this token
-            }
-            else {
+            } else {
                 if (plainStart < nextIndex) ret.push(new PlainTextNode(text.substring(plainStart, nextIndex)));
                 ret.push(parsed);
                 index = plainStart = endIndexObj.endPosition + 1;
@@ -109,7 +109,6 @@ export class MarkdownTextProcessor implements INodeProcessor {
         return ret;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Process(_parser: Parser, _data: ParseData, node: INode, _scope: string): INode[] {
         const text = (node as PlainTextNode).Text;
 
@@ -123,14 +122,14 @@ export class MarkdownTextProcessor implements INodeProcessor {
         }
 
         /*
-            * Like everything else here, this isn't exactly markdown, but it's close.
-            * _underline_
-            * /italics/
-            * *bold*
-            * ~strikethrough~
-            * `code`
-            * Very simple rules: no newlines, must start/end on a word boundary, code tags cannot be nested
-            */
+         * Like everything else here, this isn't exactly markdown, but it's close.
+         * _underline_
+         * /italics/
+         * *bold*
+         * ~strikethrough~
+         * `code`
+         * Very simple rules: no newlines, must start/end on a word boundary, code tags cannot be nested
+         */
 
         // pre-condition: start of a line OR one of: !?^()+=[]{}"'<>,. OR whitespace
         // first and last character is NOT whitespace. everything else is fine except for newlines

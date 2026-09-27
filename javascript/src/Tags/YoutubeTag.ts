@@ -26,13 +26,14 @@ export class YoutubeTag extends Tag {
         captionNode.PlainBefore = '[YouTube video] ';
         captionNode.PlainAfter = '\n';
 
-        const before = `<div class="${classes.join(' ')}">` +
-                     ' <div class="caption-panel">' +
-                     '  <div class="video-container caption-body">' +
-                     '   <div class="video-content">' +
-                     `    <div class="uninitialised" data-youtube-id="${id}" style="background-image: url('https://i.ytimg.com/vi/${id}/hqdefault.jpg');"></div>` +
-                     '   </div>' +
-                     '  </div>';
+        const before =
+            `<div class="${classes.join(' ')}">` +
+            ' <div class="caption-panel">' +
+            '  <div class="video-container caption-body">' +
+            '   <div class="video-content">' +
+            `    <div class="uninitialised" data-youtube-id="${id}" style="background-image: url('https://i.ytimg.com/vi/${id}/hqdefault.jpg');"></div>` +
+            '   </div>' +
+            '  </div>';
         const after = '</div></div>';
         const ret = new HtmlNode(before, captionNode, after);
         ret.IsBlockNode = true;

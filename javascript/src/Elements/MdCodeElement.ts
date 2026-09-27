@@ -18,8 +18,7 @@ export class MdCodeElement extends Element {
         return value.startsWith('```');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode {
+    public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode | null {
         const current = lines.Current();
         let firstLine = lines.Value().substring(3).trimEnd();
 

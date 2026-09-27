@@ -1,23 +1,21 @@
 {
     "compilerOptions": {
-      "noImplicitAny": true,
-      "outDir": "build",
-      "module": "ESNext",
-      "target": "ES2018",
-      "moduleResolution": "bundler",
-      "esModuleInterop": true,
-      "allowJs": true,
-      "sourceMap": true,
-      "declaration": true,
-      "lib": ["ES2019", "DOM"]
+        "noImplicitAny": true,
+        "outDir": "build",
+        "rootDir": ".",
+        "module": "ESNext",
+        "target": "ES2018",
+        "moduleResolution": "bundler",
+        "esModuleInterop": true,
+        "allowJs": true,
+        "sourceMap": true,
+        "declaration": true,
+        "lib": ["ES2019", "DOM"],
+        "types": ["node"]
     },
-    "include": [
-      "src"
-    ],
-    "exclude": [
-      "node_modules"
-    ],
+    "include": ["src", "test"],
+    "exclude": ["node_modules"],
     "ts-node": {
-      "esm": true
+        "esm": true
     }
 }
