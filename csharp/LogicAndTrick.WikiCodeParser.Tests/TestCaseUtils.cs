@@ -46,12 +46,19 @@ public static class TestCaseUtils
             {
                 var rmo = resultMetaObjects[i];
                 var emo = expectedMetaObjects[i];
-                if (emo.Value.ToString() == rmo.Value.ToString()) continue;
-                var robj = (JObject)rmo.Value;
-                var eobj = (JObject)rmo.Value;
+
+                var robj = rmo.Value as JObject;
+                var eobj = emo.Value as JObject;
+
+                if (robj == eobj) continue;
+
+                Assert.IsNotNull(robj);
+                Assert.IsNotNull(eobj);
+
+                if (emo.Value?.ToString() == rmo.Value?.ToString()) continue;
                 foreach (var ep in eobj.Properties())
                 {
-                    var rp = robj.Property(ep.Name);
+                    var rp = robj.Property(ep.Name)!;
                     var ev = ep.Value?.ToString();
                     var rv = rp.Value?.ToString();
                     Assert.AreEqual(ev, rv);
