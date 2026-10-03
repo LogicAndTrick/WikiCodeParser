@@ -1,15 +1,21 @@
 [http://example.com]
 [http://example.com|Test]
 [invalid://example.com]
+[vbscript://msgbox(1)]
+[data://text/html,alert(1)]
 
 ###
 
 <a href="http://example.com">http://example.com</a><br/>
 <a href="http://example.com">Test</a><br/>
-[invalid://example.com]
+[invalid://example.com]<br/>
+[vbscript://msgbox(1)]<br/>
+[data://text/html,alert(1)]
 
 ###
 
 http://example.com
 Test (http://example.com)
 [invalid://example.com]
+[vbscript://msgbox(1)]
+[data://text/html,alert(1)]
