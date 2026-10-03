@@ -1,0 +1,23 @@
+parameters:
+    level: 9
+    paths:
+        - src
+        - test
+    bootstrapFiles:
+        - vendor/autoload.php
+    ignoreErrors:
+        -
+            identifiers:
+                - greaterOrEqual.alwaysTrue
+                - greater.alwaysTrue
+                - notIdentical.alwaysTrue
+                - notEqual.alwaysTrue
+                - equal.alwaysFalse
+                - booleanOr.rightAlwaysFalse
+                - isset.offset
+                - missingType.iterableValue
+        -
+            identifiers:
+                - missingType.return
+            paths:
+                - test/*

@@ -32,12 +32,12 @@ class NewLineProcessor implements INodeProcessor
      */
     function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
     {
-        /* @var $node PlainTextNode */
+        if (!($node instanceof PlainTextNode)) throw new \InvalidArgumentException('Node is not a PlainTextNode');
         $text = $node->text;
         $text = preg_replace('/ *<br> */', "\n", $text);
 
         $ret = [];
-        $lines = explode("\n", $text);
+        $lines = explode("\n", $text ?? '');
         for ($i = 0; $i < count($lines); $i++) {
             $line = $lines[$i];
             $ret[] = new PlainTextNode($line);

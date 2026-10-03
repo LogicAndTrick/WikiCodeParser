@@ -10,11 +10,13 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-class ColumnNode implements INode {
+class ColumnNode implements INode
+{
     public int $width;
     public INode $content;
 
-    public function __construct(int $width, INode $content) {
+    public function __construct(int $width, INode $content)
+    {
         $this->width = $width;
         $this->content = $content;
     }
@@ -58,7 +60,7 @@ class MdColumnsElement extends Element
         $current = $lines->Current();
 
         $meta = substr($lines->Value(), 10);
-        $colDefs = array_map(fn(string $x) => intval($x, 10) ?? 0, explode(':', $meta));
+        $colDefs = array_map(fn(string $x) => intval($x, 10), explode(':', $meta));
         $total = 0;
 
         foreach ($colDefs as $d) {

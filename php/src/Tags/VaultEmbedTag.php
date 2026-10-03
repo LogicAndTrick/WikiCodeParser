@@ -24,7 +24,7 @@ class VaultEmbedTag extends Tag
     {
         $peekTag = $state->Peek(7);
         $pt = $state->PeekTo(']');
-        return $context == TagParseContext::Block && $peekTag == '[vault:' && strlen($pt) > 7 && !str_contains($pt, "\n");
+        return $context == TagParseContext::Block && $peekTag == '[vault:' && $pt && strlen($pt) > 7 && !str_contains($pt, "\n");
     }
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
@@ -58,7 +58,7 @@ class VaultEmbedTag extends Tag
             '<div class="embed-container">' .
             '<div class="embed-content">' .
             "<div class=\"uninitialised\" data-embed-type=\"vault\" data-vault-id=\"$id\">" .
-            "Loading embedded content: Vault Item #${id}";
+            "Loading embedded content: Vault Item #{$id}";
         $after = '</div></div></div></div>';
         $ret = new HtmlNode($before, PlainTextNode::Empty(), $after);
         $ret->plainBefore = "[TWHL vault item #$id]";

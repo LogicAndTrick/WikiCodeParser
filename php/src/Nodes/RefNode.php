@@ -15,7 +15,9 @@ class RefNode implements INode
         $this->name = $name;
     }
 
-    private function GetNode() : INode {
+    private function GetNode(): INode
+    {
+        /** @var INode */
         return $this->data->Get("Ref::{$this->name}", fn() => UnprocessablePlainTextNode::Empty());
     }
 
@@ -26,7 +28,7 @@ class RefNode implements INode
 
     function ToPlainText(): string
     {
-        return $this->GetNode()->ToHtml();
+        return $this->GetNode()->ToPlainText();
     }
 
     function GetChildren(): array

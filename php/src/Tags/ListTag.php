@@ -51,5 +51,4 @@ class ListTag extends Tag
         $ret->isBlockNode = true;
         return $ret;
     }
-
 }

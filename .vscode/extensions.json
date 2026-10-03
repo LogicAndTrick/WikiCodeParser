@@ -1,10 +1,12 @@
 {
     "recommendations": [
         "dbaeumer.vscode-eslint",
-        "ms-vscode.test-adapter-converter",
-        "hbenl.vscode-test-explorer",
         "Orta.vscode-jest",
         "esbenp.prettier-vscode",
-        "editorconfig.editorconfig"
+        "editorconfig.editorconfig",
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "sanderronde.phpstan-vscode",
+        "recca0120.vscode-phpunit"
     ]
 }

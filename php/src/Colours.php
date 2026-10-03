@@ -4,6 +4,7 @@ namespace LogicAndTrick\WikiCodeParser;
 
 class Colours
 {
+    // @formatter:off
     private static array $colorNames = [
         'aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black',
         'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse',
@@ -26,6 +27,7 @@ class Colours
         'silver', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue', 'tan',
         'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen'
     ];
+    // @formatter:on
 
     public static function IsValidColor(string $text): bool
     {

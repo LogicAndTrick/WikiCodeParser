@@ -6,7 +6,7 @@ use PHPUnit\Framework\Assert;
 
 class TestCaseUtils
 {
-    public static function AssertSame(string $name, string $expected, string $actual, bool $split) : void
+    public static function AssertSame(string $name, string $expected, string $actual, bool $split): void
     {
         if ($split) {
             $expectedLines = explode("\n", $expected);
@@ -23,7 +23,8 @@ class TestCaseUtils
         }
     }
 
-    private static function Test(ParserConfiguration $config, string $input, string $expectedOutput, ?string $expectedPlain, ?string $expectedMeta, bool $split = false) : void {
+    private static function Test(ParserConfiguration $config, string $input, string $expectedOutput, ?string $expectedPlain, ?string $expectedMeta, bool $split = false): void
+    {
         $parser = new Parser($config);
 
         $result = $parser->ParseResult($input);
@@ -35,19 +36,19 @@ class TestCaseUtils
 
         if ($expectedMeta != null) {
             $resultMetaObjects = $result->GetMetadata();
-            $expectedMetaObjects = array_map(function(string $x) {
+            $expectedMetaObjects = array_map(function (string $x) {
                 $x = trim($x);
                 $spl = explode('=', $x, 2);
-                return [ 'key' => $spl[0], 'value' => json_decode($spl[1]) ];
+                return ['key' => $spl[0], 'value' => json_decode($spl[1])];
             }, explode("\n", $expectedMeta));
             Assert::assertEquals(count($expectedMetaObjects), count($resultMetaObjects));
-            for ($i = 0; $i < count($resultMetaObjects); $i++)
-            {
+            for ($i = 0; $i < count($resultMetaObjects); $i++) {
                 $rmo = $resultMetaObjects[$i];
                 $emo = $expectedMetaObjects[$i];
                 Assert::assertEquals($emo['key'], $rmo['key']);
                 if ($emo['value'] == $rmo['value']) continue;
                 $robj = $rmo['value'];
+                /** @var iterable $eobj */
                 $eobj = $emo['value'];
                 foreach ($eobj as $name => $ev) {
                     $rv = $robj->$name;
@@ -57,11 +58,13 @@ class TestCaseUtils
         }
     }
 
-    private static function GetTestCaseDirectory(string $folder) : string {
-        return __DIR__.'/../../tests/'.$folder;
+    private static function GetTestCaseDirectory(string $folder): string
+    {
+        return __DIR__ . '/../../tests/' . $folder;
     }
 
-    public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false) : void {
+    public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false): void
+    {
         $dir = TestCaseUtils::GetTestCaseDirectory($folder);
         $_in = '';
         $_out = '';
@@ -69,6 +72,7 @@ class TestCaseUtils
         $_meta = null;
         if (file_exists("$dir/$name")) {
             $text = file_get_contents("$dir/$name");
+            if ($text === false) $text = '';
             $spl = array_map(fn($x) => trim($x), explode('###', $text));
             $_in = $spl[0];
             $_out = $spl[1];
@@ -77,11 +81,15 @@ class TestCaseUtils
         } else {
             $_in = file_get_contents("$dir/$name.in");
             $_out = file_get_contents("$dir/$name.out");
+            if ($_in === false) $_in = '';
+            if ($_out === false) $_out = '';
             if (file_exists("$dir/$name.plain")) {
                 $_plain = file_get_contents("$dir/$name.plain");
+                if ($_plain === false) $_plain = '';
             }
             if (file_exists("$dir/$name.meta")) {
                 $_meta = file_get_contents("$dir/$name.meta");
+                if ($_meta === false) $_meta = '';
             }
         }
 

@@ -54,7 +54,8 @@ class WikiCreditTag extends Tag
                     $credit->Description = $val;
                     break;
                 case 'user':
-                    $credit->UserID = intval($val, 10) ?? null;
+                    $num = intval($val, 10);
+                    $credit->UserID = $num >= 1 ? $num : null;
                     break;
                 case 'name':
                     $credit->Name = $val;

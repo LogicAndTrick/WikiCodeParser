@@ -56,10 +56,12 @@ class WikiBookTag extends Tag
                     $book->ChapterName = $val;
                     break;
                 case 'chapternumber':
-                    $book->ChapterNumber = intval($val, 10) ?? null;
+                    $num = intval($val, 10);
+                    $book->ChapterNumber = $num >= 1 ? $num : null;
                     break;
                 case 'pagenumber':
-                    $book->PageNumber = intval($val, 10) ?? null;
+                    $num = intval($val, 10);
+                    $book->PageNumber = $num >= 1 ? $num : null;
                     break;
             }
         }

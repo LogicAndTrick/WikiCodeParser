@@ -28,7 +28,7 @@ class WikiLinkTag extends Tag
     public function Matches(State $state, ?string $token, TagParseContext $context): bool
     {
         $pt = $state->PeekTo(']]');
-        return strlen($pt) > 1 && $pt[1] == '[' && !str_contains($pt, "\n")
+        return $pt && strlen($pt) > 1 && $pt[1] == '[' && !str_contains($pt, "\n")
             && preg_match('/([^\]]*?)(?:\|([^\]]*?))?/i', substr($pt, 2));
     }
 
@@ -66,7 +66,7 @@ class WikiLinkTag extends Tag
 
         $slug = WikiRevision::CreateSlug($page);
         $url = HtmlHelper::AttributeEncode("https://twhl.info/wiki/page/$slug") . $hash;
-        $before = "<a href=\"${url}\">";
+        $before = "<a href=\"{$url}\">";
         $after = '</a>';
 
         $content = new NodeCollection();

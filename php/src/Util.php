@@ -2,15 +2,18 @@
 
 namespace LogicAndTrick\WikiCodeParser;
 
-class Util {
-    public static function Find(array $array, callable $predicate) : mixed {
+class Util
+{
+    public static function Find(array $array, callable $predicate): mixed
+    {
         foreach ($array as $el) {
             if ($predicate($el)) return $el;
         }
         return null;
     }
 
-    public static function OrderBy(array $array, callable $selector) : array {
+    public static function OrderBy(array $array, callable $selector): array
+    {
         usort($array, function ($a, $b) use ($selector) {
             $av = call_user_func($selector, $a);
             $bv = call_user_func($selector, $b);
@@ -21,12 +24,14 @@ class Util {
         return $array;
     }
 
-    public static function OrderByDescending(array $array, callable $selector) : array {
+    public static function OrderByDescending(array $array, callable $selector): array
+    {
         $array = self::OrderBy($array, $selector);
         return array_reverse($array);
     }
 
-    public static function IndexOfAny(string $str, array $searchStrings, int $position = 0) {
+    public static function IndexOfAny(string $str, array $searchStrings, int $position = 0): int
+    {
         $min = -1;
         foreach ($searchStrings as $searchString) {
             $idx = strpos($str, $searchString, $position);
@@ -36,9 +41,11 @@ class Util {
         return $min;
     }
 
-    public static function Template(string $templateString, mixed $obj) {
+    public static function Template(string $templateString, mixed $obj): string
+    {
         return preg_replace_callback('/\{(.*?)\}/i', function (array $matches) use ($obj) {
+            /** @var string */
             return $obj[$matches[1]];
-        }, $templateString);
+        }, $templateString) ?? '';
     }
 }

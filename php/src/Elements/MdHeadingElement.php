@@ -10,40 +10,47 @@ use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-class HeadingNode implements INode {
+class HeadingNode implements INode
+{
     public int $level;
     public string $id;
     public INode $text;
 
-    public function __construct(int $level, string $id, INode $text) {
+    public function __construct(int $level, string $id, INode $text)
+    {
         $this->level = $level;
         $this->id = $id;
         $this->text = $text;
     }
 
-    public function ToHtml() : string {
+    public function ToHtml(): string
+    {
         return "<h{$this->level} id=\"{$this->id}\">{$this->text->ToHtml()}</h{$this->level}>";
     }
 
-    public function ToPlainText(): string {
+    public function ToPlainText(): string
+    {
         $plain = $this->text->ToPlainText();
         $plain = str_replace("\n", ' ', $plain);
         return $plain . "\n" . str_repeat('-', strlen($plain));
     }
 
-    public function GetChildren(): array {
-        return [ $this->text ];
+    public function GetChildren(): array
+    {
+        return [$this->text];
     }
 
     /**
      * @throws Exception
      */
-    public function ReplaceChild(int $i, INode $node): void {
+    public function ReplaceChild(int $i, INode $node): void
+    {
         if ($i != 0) throw new Exception('Argument out of range');
         $this->text = $node;
     }
 
-    public function HasContent(): bool {
+    public function HasContent(): bool
+    {
         return true;
     }
 }
@@ -73,19 +80,20 @@ class MdHeadingElement extends Element
         return new HeadingNode($level, $id, $contents);
     }
 
-    private static function GetUniqueAnchor(ParseData $data, string $text) : string
+    private static function GetUniqueAnchor(ParseData $data, string $text): string
     {
         $key = 'MdHeadingElement.IdList';
+        /** @var string[] $anchors */
         $anchors = &$data->Get($key, fn() => []);
 
-        $id = preg_replace('/[^\\da-z?\\/:@\-._~!$&\'()*+,;=]/i', '_', $text);
+        $id = preg_replace('/[^\\da-z?\\/:@\-._~!$&\'()*+,;=]/i', '_', $text) ?? '';
         $anchor = $id;
         $inc = 1;
         do {
             // Increment if we have a duplicate
             if (!in_array($anchor, $anchors)) break;
             $inc++;
-            $anchor = "${id}_${inc}";
+            $anchor = "{$id}_{$inc}";
         } while (true);
 
         $anchors[] = $anchor;

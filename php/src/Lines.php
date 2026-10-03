@@ -16,19 +16,24 @@ class Lines
         $this->content = explode("\n", $content);
         $this->index = -1;
     }
-    public function Back() {
+    public function Back(): void
+    {
         $this->index--;
     }
-    public function Next() : bool {
+    public function Next(): bool
+    {
         return ++$this->index < count($this->content);
     }
-    public function Value() : string {
+    public function Value(): string
+    {
         return $this->content[$this->index];
     }
-    public function Current() : int {
+    public function Current(): int
+    {
         return $this->index;
     }
-    public function SetCurrent(int $index) {
+    public function SetCurrent(int $index): void
+    {
         $this->index = $index;
     }
 }

@@ -84,7 +84,7 @@ class WikiYoutubeTag extends Tag
             '<div class="caption-panel">' .
             '<div class="video-container caption-body">' .
             '<div class="video-content">' .
-            "<div class=\"uninitialised\" data-youtube-id=\"$id\" style=\"background-image: url('https://i.ytimg.com/vi/${id}/hqdefault.jpg');\"></div>" .
+            "<div class=\"uninitialised\" data-youtube-id=\"$id\" style=\"background-image: url('https://i.ytimg.com/vi/{$id}/hqdefault.jpg');\"></div>" .
             '</div>' .
             '</div>';
         $after = '</div></div>';
@@ -95,7 +95,7 @@ class WikiYoutubeTag extends Tag
 
     private static function ValidateID(string $url): bool
     {
-        return preg_match('/^[a-zA-Z0-9_-]{6,11}$/i', $url);
+        return preg_match('/^[a-zA-Z0-9_-]{6,11}$/i', $url) > 0;
     }
 
     private static array $validClasses = ['large', 'medium', 'small', 'left', 'right', 'center'];

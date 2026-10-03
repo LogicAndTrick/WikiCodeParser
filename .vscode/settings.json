@@ -16,4 +16,13 @@
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "phpunit.phpunit": "${workspaceFolder}/php/vendor/bin/phpunit",
+    "phpunit.args": [
+        "--configuration",
+        "${workspaceFolder}/php/phpunit.xml"
+    ],
+    "editor.showDeprecated": true,
+    "phpstan.rootDir": "${workspaceFolder}/php",
+    "phpstan.configFile": "phpstan.neon",
+    "phpstan.binPath": "${workspaceFolder}/php/vendor/bin/phpstan",
 }

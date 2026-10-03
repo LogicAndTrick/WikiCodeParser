@@ -16,10 +16,11 @@ abstract class Element
 
     public int $priority = 0;
 
-    public function InScope(string $scope) : bool {
+    public function InScope(string $scope): bool
+    {
         return !$scope || trim($scope) == '' || in_array($scope, $this->scopes, true);
     }
 
-    public abstract function Matches(Lines $lines) : bool;
-    public abstract function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope) : ?INode;
+    public abstract function Matches(Lines $lines): bool;
+    public abstract function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode;
 }

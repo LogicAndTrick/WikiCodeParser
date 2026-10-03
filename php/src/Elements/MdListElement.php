@@ -182,7 +182,7 @@ class MdListElement extends Element
         return new NodeCollection(...$item->subtrees);
     }
 
-    private function CreateListItems(?ListItemNode $lastItemNode, string $prefix, Parser $parser, ParseData $data, Lines $lines, string $scope)
+    private function CreateListItems(?ListItemNode $lastItemNode, string $prefix, Parser $parser, ParseData $data, Lines $lines, string $scope): array
     {
         $ret = [];
         do {

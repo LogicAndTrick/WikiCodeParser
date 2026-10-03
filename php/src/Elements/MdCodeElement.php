@@ -75,7 +75,7 @@ class MdCodeElement extends Element
 
         $plain = new UnprocessablePlainTextNode(implode("\n", $arr));
         $cls = !$lang || trim($lang) == '' ? '' : " class=\"lang-$lang\"";
-        $before = "<pre${cls}><code>";
+        $before = "<pre{$cls}><code>";
         $after = '</code></pre>';
         return new HtmlNode($before, $plain, $after);
     }

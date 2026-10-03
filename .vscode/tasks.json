@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "PHPStan analyse",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "./composer.phar",
+                "run",
+                "analyse"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/php"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "PHPUnit test",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "./composer.phar",
+                "run",
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/php"
+            },
+            "problemMatcher": [
+                {
+                    "owner": "phpunit",
+                    "source": "phpunit",
+                    "fileLocation": [
+                        "autoDetect",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^\\d+\\)\\s+(.+):(\\d+)\\s*$",
+                            "file": 1,
+                            "line": 2
+                        },
+                        {
+                            "regexp": "^(\\S.*)$",
+                            "message": 1
+                        }
+                    ],
+                    "severity": "warning"
+                }
+            ]
+        }
+    ]
+}

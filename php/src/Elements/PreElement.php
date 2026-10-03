@@ -16,8 +16,23 @@ class PreElement extends Element
      * @var string[]
      */
     public static array $allowedLanguages = [
-        'php', 'dos', 'bat', 'cmd', 'css', 'cpp', 'c', 'c++', 'cs', 'ini', 'json', 'xml', 'html', 'angelscript',
-        'javascript', 'js', 'plaintext'
+        'php',
+        'dos',
+        'bat',
+        'cmd',
+        'css',
+        'cpp',
+        'c',
+        'c++',
+        'cs',
+        'ini',
+        'json',
+        'xml',
+        'html',
+        'angelscript',
+        'javascript',
+        'js',
+        'plaintext'
     ];
 
     public string $token = 'pre';
@@ -25,10 +40,11 @@ class PreElement extends Element
     public function Matches(Lines $lines): bool
     {
         $value = trim($lines->Value());
-        return strlen($value) > strlen($this->token) + 1 && str_starts_with($value, '['.$this->token) && preg_match($this->getTokenRegex(), $value);
+        return strlen($value) > strlen($this->token) + 1 && str_starts_with($value, '[' . $this->token) && preg_match($this->getTokenRegex(), $value);
     }
 
-    private function getTokenRegex() : string {
+    private function getTokenRegex(): string
+    {
         $escapedToken = preg_quote($this->token);
         return '/\[' . $escapedToken . '(?:=([a-z ]+))?]/i';
     }
@@ -102,7 +118,7 @@ class PreElement extends Element
                             if (Colours::IsValidColor($p)) $color = $p;
                             else if (intval($p, 10)) $numLines = intval($p, 10);
                         }
-                        $highlight[] = [ 'firstLine' => $firstLine, 'numLines' => $numLines, 'color' => $color ];
+                        $highlight[] = ['firstLine' => $firstLine, 'numLines' => $numLines, 'color' => $color];
                         continue;
                     }
                 }
@@ -112,21 +128,21 @@ class PreElement extends Element
             $arr = $newArr;
 
             // Make sure highlights don't overlap each other or go past the end of the block
-            $highlight[] = [ 'firstLine' => count($arr), 'numLines' => 0, 'color' => '' ];
+            $highlight[] = ['firstLine' => count($arr), 'numLines' => 0, 'color' => ''];
             for ($i = 0; $i < count($highlight) - 1; $i++) {
                 $currFirst = $highlight[$i]['firstLine'];
                 $currNum = $highlight[$i]['numLines'];
                 $currCol = $highlight[$i]['color'];
                 $nextFirst = $highlight[$i + 1]['firstLine'];
                 $lastLine = $currFirst + $currNum - 1;
-                if ($lastLine >= $nextFirst) $highlight[$i] = [ 'firstLine' => $currFirst, 'numLines' => $nextFirst - $currFirst, 'color' => $currCol ];
+                if ($lastLine >= $nextFirst) $highlight[$i] = ['firstLine' => $currFirst, 'numLines' => $nextFirst - $currFirst, 'color' => $currCol];
             }
             $highlight = array_filter($highlight, fn($x) => $x['numLines'] > 0);
         }
 
         $arr = PreElement::FixCodeIndentation($arr);
 
-        $highlights = implode('', array_map(fn($h) => "<div class=\"line-highlight\" style=\"top: ${h['firstLine']}em; height: ${h['numLines']}em; background: ${h['color']};\"></div>", $highlight));
+        $highlights = implode('', array_map(fn($h) => "<div class=\"line-highlight\" style=\"top: {$h['firstLine']}em; height: {$h['numLines']}em; background: {$h['color']};\"></div>", $highlight));
         $plain = new UnprocessablePlainTextNode(implode("\n", $arr));
         $cls = !$lang || trim($lang) == '' ? '' : " class=\"lang-$lang\"";
         $before = "<pre$cls><code>$highlights";
@@ -134,7 +150,8 @@ class PreElement extends Element
         return new HtmlNode($before, $plain, $after);
     }
 
-    public static function FixCodeIndentation(array $arr) : array {
+    public static function FixCodeIndentation(array $arr): array
+    {
         // Replace all tabs with 4 spaces
         $arr = array_map(fn(string $x) => str_replace("\t", '    ', $x), $arr);
 

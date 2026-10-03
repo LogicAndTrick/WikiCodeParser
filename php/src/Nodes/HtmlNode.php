@@ -34,7 +34,7 @@ class HtmlNode implements INode
 
     function GetChildren(): array
     {
-        return  [ $this->content ];
+        return  [$this->content];
     }
 
     function ReplaceChild(int $i, INode $node): void

@@ -30,26 +30,30 @@ class MarkdownTextProcessor implements INodeProcessor
         return $node instanceof PlainTextNode && Util::IndexOfAny($node->text, self::$Tokens) >= 0;
     }
 
-    private static function GetTokenIndex(string $c): int {
+    private static function GetTokenIndex(string $c): int
+    {
         $s = array_search($c, self::$Tokens);
         if ($s === false) return -1;
-        return $s;
+        return intval($s);
     }
-    private static function IsStartBreakChar(string $c): bool {
+    private static function IsStartBreakChar(string $c): bool
+    {
         return in_array($c, self::$StartBreakChars);
     }
-    private static function IsEndBreakChar(string $c): bool {
+    private static function IsEndBreakChar(string $c): bool
+    {
         return in_array($c, self::$StartBreakChars) || in_array($c, self::$ExtraEndBreakChars) || in_array($c, self::$Tokens);
     }
 
     /**
-     * @param int $tracker
+     * @param int[] $tracker
      * @param string $text
      * @param int $position
      * @param int $endPosition
      * @return INode|null
      */
-    private static function ParseToken(array &$tracker, string $text, int $position, int &$endPosition): ?INode {
+    private static function ParseToken(array &$tracker, string $text, int $position, int &$endPosition): ?INode
+    {
         $endPosition = -1;
         $token = $text[$position];
         $tokenIndex = self::GetTokenIndex($token);
@@ -64,7 +68,7 @@ class MarkdownTextProcessor implements INodeProcessor
 
         // Make sure we can close this token
         $valid = ($endToken + 1 == strlen($text) || self::IsEndBreakChar($text[$endToken + 1])) // end of string or before an end breaker
-                 && trim($text[$endToken - 1]) != ''; // not whitespace previous
+            && trim($text[$endToken - 1]) != ''; // not whitespace previous
         if (!$valid) return null;
 
         $str = substr($text, $position + 1, $endToken - $position - 1);
@@ -72,7 +76,6 @@ class MarkdownTextProcessor implements INodeProcessor
         $tracker[$tokenIndex] = 1;
 
         // code tokens cannot be nested
-        /** @var ?INode $contents */
         if ($token == '`') {
             $contents = new UnprocessablePlainTextNode($str);
         } else {
@@ -82,7 +85,7 @@ class MarkdownTextProcessor implements INodeProcessor
 
         $tracker[$tokenIndex] = 0;
 
-        $endPosition = $endToken;
+        $endPosition = intval($endToken);
 
         $ret = new HtmlNode(self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
         $ret->plainBefore = $token;
@@ -95,7 +98,8 @@ class MarkdownTextProcessor implements INodeProcessor
      * @param string $text
      * @return INode[]
      */
-    private static function ParseTokens(array &$tracker, string $text): array {
+    private static function ParseTokens(array &$tracker, string $text): array
+    {
         $ret = [];
         $plainStart = 0;
         $index = 0;

@@ -39,7 +39,7 @@ class FontTag extends Tag
 
     public static function IsValidSize(string $text): bool
     {
-        $num = intval($text, 10) || 0;
+        $num = intval($text, 10);
         return $num >= 6 && $num <= 40;
     }
 }

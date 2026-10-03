@@ -1,5 +1,7 @@
-<testsuites>
-    <testsuite name="Tests">
-        <directory suffix="Test.php">test</directory>
-    </testsuite>
-</testsuites>
+<phpunit colors="true" failOnAllIssues="true">
+    <testsuites>
+        <testsuite name="Tests">
+            <directory suffix="Test.php">test</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

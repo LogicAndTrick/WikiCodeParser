@@ -4,10 +4,11 @@ namespace LogicAndTrick\WikiCodeParser;
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__.'/TestCaseUtils.php';
+require_once __DIR__ . '/TestCaseUtils.php';
 
 class IsolatedTest extends TestCase
 {
+    // @formatter:off
     public function testmissingtag() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'missing-tag'); }
     public function testunicodeescape() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'unicode-escape'); }
 

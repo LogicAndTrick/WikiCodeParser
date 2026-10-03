@@ -29,7 +29,7 @@ class AlignTag extends Tag
         if (isset($options['align']) && self::IsValidAlign($options['align'])) {
             $cls .= 'text-' . self::ConvertAlign($options['align']);
         }
-        $before .= ' class="'. trim($cls) . '">';
+        $before .= ' class="' . trim($cls) . '">';
         $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());
         $after = '</' . $this->element . '>';
         $ret = new HtmlNode($before, $content, $after);
@@ -37,11 +37,13 @@ class AlignTag extends Tag
         return $ret;
     }
 
-    private static function IsValidAlign(string $text) : bool {
+    private static function IsValidAlign(string $text): bool
+    {
         return $text == 'left' || $text == 'right' || $text == 'center';
     }
 
-    private static function ConvertAlign(string $text) : string {
+    private static function ConvertAlign(string $text): string
+    {
         if ($text == 'left') return 'start';
         if ($text == 'right') return 'end';
         return 'center';

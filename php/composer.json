@@ -3,10 +3,11 @@
   "description": "TWHL WikiCode parser for PHP",
   "license": "MIT",
   "require": {
-    "php": "^8.1"
+    "php": "^8.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10"
+    "phpstan/phpstan": "^2",
+    "phpunit/phpunit": "^12"
   },
   "autoload": {
     "psr-4": {
@@ -20,8 +21,12 @@
   },
   "config": {
     "platform": {
-      "php": "8.1"
+      "php": "8.4"
     },
     "sort-packages": true
+  },
+  "scripts": {
+    "analyse": "phpstan analyse --configuration=phpstan.neon",
+    "test": "phpunit --configuration phpunit.xml --display-deprecations"
   }
 }

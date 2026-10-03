@@ -44,7 +44,8 @@ use LogicAndTrick\WikiCodeParser\Tags\YoutubeTag;
 
 class ParserConfiguration
 {
-    public static function Twhl() : ParserConfiguration {
+    public static function Twhl(): ParserConfiguration
+    {
         $conf = new ParserConfiguration();
 
         // Standard inline
@@ -112,7 +113,8 @@ class ParserConfiguration
         return $conf;
     }
 
-    public static function Snarkpit(): ParserConfiguration {
+    public static function Snarkpit(): ParserConfiguration
+    {
         $conf = new ParserConfiguration();
 
         // Standard inline
@@ -174,7 +176,8 @@ class ParserConfiguration
     public array $tags;
     public array $processors;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->elements = [];
         $this->tags = [];
         $this->processors = [];

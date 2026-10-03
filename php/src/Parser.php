@@ -16,14 +16,15 @@ class Parser
     public ParserConfiguration $configuration;
 
     /**
-     * @param $configuration
+     * @param ParserConfiguration $configuration
      */
-    public function __construct($configuration)
+    public function __construct(ParserConfiguration $configuration)
     {
         $this->configuration = $configuration;
     }
 
-    public function ParseResult(string $text, string $scope = '') : ParseResult {
+    public function ParseResult(string $text, string $scope = ''): ParseResult
+    {
         $data = new ParseData();
         $text = trim($text);
         $node = $this->ParseElements($data, $text, $scope);
@@ -33,7 +34,8 @@ class Parser
         return $res;
     }
 
-    public function ParseElements(ParseData $data, string $text, string $scope) : INode {
+    public function ParseElements(ParseData $data, string $text, string $scope): INode
+    {
         $root = new NodeCollection();
 
         // Elements are line-based scopes, an element cannot start in the middle of a line.
@@ -73,7 +75,7 @@ class Parser
         if (count($plain) > 0) $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, trim(implode("\n", $plain)), $scope, TagParseContext::Block));
 
         // Trim off any whitespace nodes at the end
-        $shouldTrim = function() use ($root) {
+        $shouldTrim = function () use ($root) {
             if (count($root->nodes) === 0) return false;
             $last = $root->nodes[count($root->nodes) - 1];
             if (!($last instanceof UnprocessablePlainTextNode)) return false;
@@ -86,7 +88,8 @@ class Parser
         return self::TrimWhitespace($root);
     }
 
-    public static function TrimWhitespace(INode $node, bool $start = true, bool $end = true) : INode {
+    public static function TrimWhitespace(INode $node, bool $start = true, bool $end = true): INode
+    {
         $removedNodes = [];
 
         if ($start) {
@@ -114,9 +117,10 @@ class Parser
         return $node;
     }
 
-    public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context) : INode {
+    public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context): INode
+    {
         // trim 3 or more newlines down to 2 newlines
-        $text = preg_replace('/\n{3,}/i', "\n\n", $text);
+        $text = preg_replace('/\n{3,}/i', "\n\n", $text) ?? '';
 
         $state = new State($text);
         $root = new NodeCollection();
@@ -150,15 +154,15 @@ class Parser
         return $root;
     }
 
-    public static function FlattenNestedNodeCollections(INode $node) : void {
+    public static function FlattenNestedNodeCollections(INode $node): void
+    {
         if ($node instanceof NodeCollection) {
             /* @var $coll NodeCollection */
             $coll = $node;
             while (Util::Find($coll->nodes, fn(INode $x) => $x instanceof NodeCollection) != null) {
                 $coll->nodes = array_merge(...array_map(fn(INode $x) => $x instanceof NodeCollection ? $x->nodes : [$x], $coll->nodes));
             }
-        }
-        else {
+        } else {
             $ch = $node->GetChildren();
             for ($i = 0; $i < count($ch); $i++) {
                 while ($ch[$i] instanceof NodeCollection && count($ch[$i]->nodes) == 1) {
@@ -175,16 +179,18 @@ class Parser
         }
     }
 
-    public function RunProcessors(INode $node, ParseData $data, string $scope) : INode {
-        $processors = Util::OrderByDescending($this->configuration->processors, fn (INodeProcessor $x) => $x->Priority());
+    public function RunProcessors(INode $node, ParseData $data, string $scope): INode
+    {
+        $processors = Util::OrderByDescending($this->configuration->processors, fn(INodeProcessor $x) => $x->Priority());
         foreach ($processors as $processor) {
-            $node = self::RunProcessor($node, $processor, $data, $scope);
+            $node = $this->RunProcessor($node, $processor, $data, $scope);
         }
 
         return $node;
     }
 
-    public function RunProcessor(INode $node, INodeProcessor $processor, ParseData $data, string $scope) : INode {
+    public function RunProcessor(INode $node, INodeProcessor $processor, ParseData $data, string $scope): INode
+    {
         // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessor if it's needed.
         if ($processor->ShouldProcess($node, $scope)) {
             $result = $processor->Process($this, $data, $node, $scope);
@@ -195,7 +201,7 @@ class Parser
 
         for ($i = 0; $i < count($children); $i++) {
             $child = $children[$i];
-            $processed = self::RunProcessor($child, $processor, $data, $scope);
+            $processed = $this->RunProcessor($child, $processor, $data, $scope);
             $node->ReplaceChild($i, $processed);
         }
 

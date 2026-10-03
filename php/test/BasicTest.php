@@ -10,7 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 class BasicTest extends TestCase
 {
-    private static function GetLeavesRecursive(array &$list, INode $node): void {
+    private static function GetLeavesRecursive(array &$list, INode $node): void
+    {
         $children = $node->GetChildren();
         if (count($children) == 0) {
             $list[] = $node;
@@ -22,13 +23,15 @@ class BasicTest extends TestCase
     /**
      * @return INode[]
      */
-    private static function GetLeaves(INode $root): array {
+    private static function GetLeaves(INode $root): array
+    {
         $list = [];
         self::GetLeavesRecursive($list, $root);
         return $list;
     }
 
-    public function testHtmlEscapingOutsideTag() {
+    public function testHtmlEscapingOutsideTag()
+    {
         $parser = new Parser(new ParserConfiguration());
         $result = $parser->ParseResult('1 & 2');
         self::assertInstanceOf(NodeCollection::class, $result->content);

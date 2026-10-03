@@ -56,7 +56,7 @@ class QuoteElement extends Element
         return $node;
     }
 
-    public static function BalanceQuotes(Lines $lines, &$name, &$postfix): string|null
+    public static function BalanceQuotes(Lines $lines, string|null &$name, string|null &$postfix): string|null
     {
         $name = null;
         $postfix = null;

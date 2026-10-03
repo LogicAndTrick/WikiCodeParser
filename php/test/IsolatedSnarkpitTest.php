@@ -4,10 +4,11 @@ namespace LogicAndTrick\WikiCodeParser;
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__.'/TestCaseUtils.php';
+require_once __DIR__ . '/TestCaseUtils.php';
 
 class IsolatedSnarkpitTest extends TestCase
 {
+    // @formatter:off
     public function testpresimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'pre-simple'); }
     public function testprelang() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'pre-lang'); }
     public function testprehighlight() { TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(),'isolated-sp', 'pre-highlight'); }

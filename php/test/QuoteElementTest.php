@@ -31,7 +31,7 @@ class QuoteElementTest extends TestCase
     }
 
     #[DataProvider('getBalanceQuotesData')]
-    public function testBalanceQuotes($input, $output)
+    public function testBalanceQuotes(string $input, string|null $output)
     {
         $lines = new Lines($input);
         $lines->next();
@@ -39,7 +39,7 @@ class QuoteElementTest extends TestCase
     }
 
     #[DataProvider('getBalanceQuotesData')]
-    public function testBalanceQuotesUpperCase($input, $output)
+    public function testBalanceQuotesUpperCase(string $input, string|null $output)
     {
         $lines = new Lines(strtoupper($input));
         $lines->next();

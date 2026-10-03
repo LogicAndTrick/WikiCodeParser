@@ -54,7 +54,7 @@ class QuickLinkTag extends Tag
 
         $url = HtmlHelper::StripControlCharacters($match[1]);
         $text = isset($match[2]) && strlen($match[2]) > 0 ? $match[2] : $url;
-        $options = [ 'url' => $url ];
+        $options = ['url' => $url];
         if (!$this->Validate($options, $text)) {
             $state->Seek($index, true);
             return null;

@@ -34,7 +34,7 @@ class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
      */
     function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
     {
-        /* @var $coll NodeCollection */
+        if (!($node instanceof NodeCollection)) throw new \InvalidArgumentException('Node is not a NodeCollection');
         $coll = $node;
 
         $ret = [];

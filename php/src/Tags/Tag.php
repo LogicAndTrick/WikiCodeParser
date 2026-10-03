@@ -50,11 +50,14 @@ class Tag
 
     public function Matches(State $state, ?string $token, TagParseContext $context): bool
     {
-        return strtolower($token) == $this->token && ($context == TagParseContext::Block || !$this->isBlock);
+        return $token !== null && strtolower($token) == $this->token && ($context == TagParseContext::Block || !$this->isBlock);
     }
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        // a null token requires the superclass to override this method
+        if (!$this->token) return null;
+
         $index = $state->index;
         $tokenLength = strlen($this->token);
 
@@ -87,8 +90,8 @@ class Tag
             while (!$state->Done()) {
                 $text .= $state->ScanTo('[');
                 $tok = $state->GetToken();
-                if (strtolower($tok) == strtolower($this->token)) $stack++;
-                if (strtolower($tok) == '/' . strtolower($this->token) && trim($state->Peek($tokenLength + 3)) == '[/' . strtolower($this->token) . ']') $stack--;
+                if ($tok && strtolower($tok) == strtolower($this->token)) $stack++;
+                if ($tok && strtolower($tok) == '/' . strtolower($this->token) && trim($state->Peek($tokenLength + 3)) == '[/' . strtolower($this->token) . ']') $stack--;
                 if ($stack == 0) {
                     $state->Seek(strlen($this->token) + 3, false);
                     if (!$this->Validate($options, $text)) break;

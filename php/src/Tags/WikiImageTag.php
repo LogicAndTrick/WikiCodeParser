@@ -32,7 +32,7 @@ class WikiImageTag extends Tag
         foreach (self::$tags as $tag) {
             $peekTag = $state->Peek(2 + strlen($tag));
             $pt = $state->PeekTo(']');
-            if ($peekTag == "[$tag:" && strlen($pt) > 2 + strlen($tag) && !str_contains($pt, "\n")) return $tag;
+            if ($peekTag == "[$tag:" && $pt && strlen($pt) > 2 + strlen($tag) && !str_contains($pt, "\n")) return $tag;
         }
         return null;
     }
@@ -48,7 +48,7 @@ class WikiImageTag extends Tag
         $index = $state->index;
 
         $tag = self::GetTag($state);
-        if ($state->ScanTo(':') != "[$tag" || $state->Next() != ':') {
+        if (!$tag || $state->ScanTo(':') != "[$tag" || $state->Next() != ':') {
             $state->Seek($index, true);
             return null;
         }
@@ -149,7 +149,7 @@ class WikiImageTag extends Tag
         return $ret;
     }
 
-    private static function GetEmbedObject(?string $tag, string $url, ?string $caption, bool $loop): ?INode
+    private static function GetEmbedObject(string $tag, string $url, ?string $caption, bool $loop): ?INode
     {
         $url = HtmlHelper::AttributeEncode($url);
         switch ($tag) {
@@ -163,7 +163,7 @@ class WikiImageTag extends Tag
             case 'audio':
                 $auto = '';
                 if ($loop) $auto = 'autoplay loop muted';
-                $ret = new HtmlNode("<$tag class=\"caption-body\" src=\"$url\" playsinline controls ${auto}>Your browser doesn't support embedded $tag.</$tag>", PlainTextNode::Empty(), '');
+                $ret = new HtmlNode("<$tag class=\"caption-body\" src=\"$url\" playsinline controls {$auto}>Your browser doesn't support embedded $tag.</$tag>", PlainTextNode::Empty(), '');
                 $ret->plainBefore = strtoupper(substr($tag, 0, 1)) . substr($tag, 1);
                 return $ret;
         }

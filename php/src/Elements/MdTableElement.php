@@ -78,14 +78,15 @@ class MdTableElement extends Element
                 $lines->Back();
                 break;
             }
-            $cells = array_map(fn (string $x) => self::ResolveCell($x, $parser, $data, $scope), self::SplitTable(substr($value, 2)));
+            $cells = array_map(fn(string $x) => self::ResolveCell($x, $parser, $data, $scope), self::SplitTable(substr($value, 2)));
             $arr[] = new TableRow($value[1] == '=' ? 'th' : 'td', $cells);
         } while ($lines->Next());
 
         return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');
     }
 
-    private static function SplitTable(string $text) : array {
+    private static function SplitTable(string $text): array
+    {
         $ret = [];
         $level = 0;
         $last = 0;
@@ -104,7 +105,8 @@ class MdTableElement extends Element
         return $ret;
     }
 
-    private static function ResolveCell(string $text, Parser $parser, ParseData $data, string $scope): INode {
+    private static function ResolveCell(string $text, Parser $parser, ParseData $data, string $scope): INode
+    {
         $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', trim($text), $res);
         if ($success) {
             $name = $res[1];
