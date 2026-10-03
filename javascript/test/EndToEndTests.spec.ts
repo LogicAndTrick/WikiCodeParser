@@ -79,6 +79,7 @@ describe('Isolated tests', () => {
     test('mdcode-lang', () => RunTestCase('mdcode-lang'));
 
     test('heading-simple', () => RunTestCase('heading-simple'));
+    test('heading-duplicates', () => RunTestCase('heading-duplicates'));
 
     test('mdline-simple', () => RunTestCase('mdline-simple'));
 

@@ -1,5 +1,6 @@
 [http://example.com]
 [http://example.com|Test]
+[http://]
 [invalid://example.com]
 [vbscript://msgbox(1)]
 [data://text/html,alert(1)]
@@ -8,6 +9,7 @@
 
 <a href="http://example.com">http://example.com</a><br/>
 <a href="http://example.com">Test</a><br/>
+[http://]<br/>
 [invalid://example.com]<br/>
 [vbscript://msgbox(1)]<br/>
 [data://text/html,alert(1)]
@@ -16,6 +18,7 @@
 
 http://example.com
 Test (http://example.com)
+[http://]
 [invalid://example.com]
 [vbscript://msgbox(1)]
 [data://text/html,alert(1)]

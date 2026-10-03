@@ -7,6 +7,7 @@
 [red]red[/red]
 [purple]purple[/purple]
 [yellow]yellow[/yellow]
+[b]bold, case insensitive[/B]
 
 ###
 
@@ -18,7 +19,8 @@
 <span class="blue">blue</span><br/>
 <span class="red">red</span><br/>
 <span class="purple">purple</span><br/>
-<span class="yellow">yellow</span>
+<span class="yellow">yellow</span><br/>
+<strong>bold, case insensitive</strong>
 
 ###
 
@@ -31,3 +33,4 @@ blue
 red
 purple
 yellow
+bold, case insensitive

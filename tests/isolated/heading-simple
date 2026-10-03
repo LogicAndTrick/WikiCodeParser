@@ -2,6 +2,14 @@
 == H2
 == H2
 === H3<br>H3
+= 1
+= 01
+= 10
+= 1e1
+= http://example.com
+= test@example.com
+= € ∑ →
+= ٣
 
 ###
 
@@ -10,6 +18,14 @@
 <h2 id="H2_2">H2</h2>
 <h3 id="H3_H3">H3<br/>
 H3</h3>
+<h1 id="1">1</h1>
+<h1 id="01">01</h1>
+<h1 id="10">10</h1>
+<h1 id="1e1">1e1</h1>
+<h1 id="http://example.com"><a href="http://example.com">http://example.com</a></h1>
+<h1 id="test@example.com"><a href="mailto:test@example.com">test@example.com</a></h1>
+<h1 id="_____">€ ∑ →</h1>
+<h1 id="_">٣</h1>
 
 ###
 
@@ -21,3 +37,19 @@ H2
 --
 H3 H3
 -----
+1
+-
+01
+--
+10
+--
+1e1
+---
+http://example.com
+------------------
+test@example.com
+----------------
+€ ∑ →
+-----
+٣
+-

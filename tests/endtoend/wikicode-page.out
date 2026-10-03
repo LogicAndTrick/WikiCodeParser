@@ -34,7 +34,7 @@ There are two ways to do basic text formatting - the <em>Markdown</em> way and t
 </table></div>
 
 <h2 id="Smilies/emoticons/emoji">Smilies/emoticons/emoji</h2>
-Before the land of smartphones and dedicated Unicode glyphs, emoji were known as &#39;smilies&#39;, and were not text, but images! Bizarre, I know. TWHL has complete Unicode support, so go nuts with your smartphone keyboards and you won&#39;t have any issues with favourites such as <code>U+1F4A9: PILE OF POO</code>: &#128169;. For us plebs using desktop browsers, though, you can also use the traditional smilies from the good ol&#39; days.<br/>
+Before the land of smartphones and dedicated Unicode glyphs, emoji were known as &#39;smilies&#39;, and were not text, but images! Bizarre, I know. TWHL has complete Unicode support, so go nuts with your smartphone keyboards and you won&#39;t have any issues with favourites such as <code>U+1F4A9: PILE OF POO</code>: 💩. For us plebs using desktop browsers, though, you can also use the traditional smilies from the good ol&#39; days.<br/>
 <br/>
 Here is TWHL&#39;s library of smilies and their corresponding text representations. Simply type the text and it will be replaced with a smiley image in the post.<br/>
 <br/>

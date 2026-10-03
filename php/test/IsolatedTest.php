@@ -22,6 +22,7 @@ class IsolatedTest extends TestCase
     public function testmdcodelang() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'mdcode-lang'); }
 
     public function testheadingsimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-simple'); }
+    public function testheadingduplicates() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-duplicates'); }
 
     public function testmdlinesimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'mdline-simple'); }
 

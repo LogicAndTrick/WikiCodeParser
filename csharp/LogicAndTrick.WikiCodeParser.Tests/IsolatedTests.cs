@@ -13,6 +13,7 @@ public class IsolatedTests
     [DataRow("mdcode-simple")]
     [DataRow("mdcode-lang")]
     [DataRow("heading-simple")]
+    [DataRow("heading-duplicates")]
     [DataRow("mdline-simple")]
     [DataRow("columns-simple")]
     [DataRow("columns-invalid")]
