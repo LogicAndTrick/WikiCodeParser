@@ -31,7 +31,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             const string key = nameof(MdHeadingElement) + ".IdList";
             var anchors = data.Get(key, () => new HashSet<string>());
 
-            var id = Regex.Replace(text, @"[^\da-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase);
+            var id = Regex.Replace(text, @"[^0-9a-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
             var anchor = id;
             var inc = 1;
             do {

@@ -12,7 +12,8 @@ namespace LogicAndTrick.WikiCodeParser
 
         public static string Encode(string text)
         {
-            return HttpUtility.HtmlEncode(text);
+            text = text.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&#39;");
+            return text;
         }
 
         public static string UrlEncode(string urlPart)
@@ -22,9 +23,7 @@ namespace LogicAndTrick.WikiCodeParser
 
         public static string AttributeEncode(string attributeText)
         {
-            return HttpUtility.HtmlAttributeEncode(attributeText)
-                .Replace(">", "&gt;")
-                .Replace("'", "&#39;");
+            return Encode(attributeText);
         }
 
         public static string StripControlCharacters(string text)

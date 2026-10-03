@@ -30,6 +30,7 @@ export class LinkTag extends Tag {
     }
 
     public Validate(options: Record<string, string>, text: string): boolean {
+        if (options['url'] !== undefined && (options['url'] ?? '').trim().length == 0) return false;
         const url = this.BuildUrl(options, text);
         return HtmlHelper.ValidateUrl(url) && url.match(/^[^\]"\n ]+$/i) != null;
     }

@@ -16,9 +16,9 @@ three</li>
 <li>five
 <ul>
 <li>six</li>
-<li>seven</li>
 </ul>
 </li>
+<li>seven^</li>
 </ul>
 
 
@@ -30,4 +30,5 @@ three
 - four^
 - five
 - six
-- seven
+
+- seven^

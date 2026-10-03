@@ -90,7 +90,14 @@ export class Tag {
             return null;
         } else {
             const text = state.ScanTo('[/' + this.Token + ']', true);
-            if (state.Peek(tokenLength + 3).trim() == '[/' + this.Token.toLowerCase() + ']' && this.Validate(options, text)) {
+            if (
+                state
+                    .Peek(tokenLength + 3)
+                    .trim()
+                    .toLowerCase() ==
+                    '[/' + this.Token.toLowerCase() + ']' &&
+                this.Validate(options, text)
+            ) {
                 state.Seek(this.Token.length + 3, false);
                 return this.FormatResult(parser, data, state, scope, options, text);
             } else {

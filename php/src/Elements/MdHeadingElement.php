@@ -32,7 +32,7 @@ class HeadingNode implements INode
     {
         $plain = $this->text->ToPlainText();
         $plain = str_replace("\n", ' ', $plain);
-        return $plain . "\n" . str_repeat('-', strlen($plain));
+        return $plain . "\n" . str_repeat('-', mb_strlen($plain));
     }
 
     public function GetChildren(): array
@@ -86,12 +86,12 @@ class MdHeadingElement extends Element
         /** @var string[] $anchors */
         $anchors = &$data->Get($key, fn() => []);
 
-        $id = preg_replace('/[^\\da-z?\\/:@\-._~!$&\'()*+,;=]/i', '_', $text) ?? '';
+        $id = preg_replace('/[^\\da-z?\\/:@\-._~!$&\'()*+,;=]/iu', '_', $text) ?? '';
         $anchor = $id;
         $inc = 1;
         do {
             // Increment if we have a duplicate
-            if (!in_array($anchor, $anchors)) break;
+            if (!in_array($anchor, $anchors, true)) break;
             $inc++;
             $anchor = "{$id}_{$inc}";
         } while (true);

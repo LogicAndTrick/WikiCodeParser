@@ -41,6 +41,7 @@ class LinkTag extends Tag
 
     public function Validate(array $options, string $text): bool
     {
+        if (isset($options['url']) && trim($options['url']) === '') return false;
         $url = $this->BuildUrl($options, $text);
         return HtmlHelper::ValidateUrl($url) && preg_match('/^[^\]"\n ]+$/i', $url);
     }

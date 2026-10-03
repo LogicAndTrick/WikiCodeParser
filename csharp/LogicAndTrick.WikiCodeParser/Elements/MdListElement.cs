@@ -80,7 +80,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             {
                 var value = lines.Value().TrimEnd();
 
-                if (!value.StartsWith(prefix))
+                if (!value.StartsWith(prefix, StringComparison.Ordinal))
                 {
                     // No longer valid for this list
                     lines.Back();
@@ -101,9 +101,9 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                     value = value.TrimStart();
 
                     // Support for continuations
-                    while (value.EndsWith("^"))
+                    while (value.EndsWith("^", StringComparison.Ordinal))
                     {
-                        if (value.EndsWith("\\^")) // super basic way to escape continuations
+                        if (value.EndsWith("\\^", StringComparison.Ordinal)) // super basic way to escape continuations
                         {
                             value = value.Substring(0, value.Length - 2) + "^";
                             break;

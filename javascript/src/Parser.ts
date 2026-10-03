@@ -33,7 +33,7 @@ export class Parser {
         const root = new NodeCollection();
 
         // Elements are line-based scopes, an element cannot start in the middle of a line.
-        text = text.replace('\r', '');
+        text = text.replace(/\r/g, '');
 
         const lines = new Lines(text);
         const inscope = OrderByDescending(
