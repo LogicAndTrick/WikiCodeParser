@@ -3,6 +3,7 @@ import { Lines } from '../Lines';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { TagParseContext } from '../TagParseContext';
+import { Trim } from '../Util';
 import { Element } from './Element';
 
 class HeadingNode implements INode {
@@ -45,10 +46,10 @@ export class MdHeadingElement extends Element {
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
-        const value = lines.Value().trim();
+        const value = Trim(lines.Value());
         const res = /^(=+)(.*?)=*$/i.exec(value)!;
         const level = Math.min(6, res[1].length);
-        const text = res[2].trim();
+        const text = Trim(res[2]);
 
         let contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
         contents = parser.RunProcessors(contents, data, scope);

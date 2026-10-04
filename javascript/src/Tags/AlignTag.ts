@@ -3,6 +3,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class AlignTag extends Tag {
@@ -22,7 +23,7 @@ export class AlignTag extends Tag {
         if (options['align'] && AlignTag.IsValidAlign(options['align'])) {
             cls += 'text-' + AlignTag.ConvertAlign(options['align']);
         }
-        before += ' class="' + cls.trim() + '">';
+        before += ' class="' + Trim(cls) + '">';
         const content = parser.ParseTags(data, text, scope, this.TagContext());
         const after = '</' + this.Element + '>';
         const ret = new HtmlNode(before, content, after);

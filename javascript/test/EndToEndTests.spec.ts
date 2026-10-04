@@ -80,6 +80,9 @@ describe('Isolated tests', () => {
 
     test('heading-simple', () => RunTestCase('heading-simple'));
     test('heading-duplicates', () => RunTestCase('heading-duplicates'));
+    test('heading-numeric', () => RunTestCase('heading-numeric'));
+    test('heading-processing', () => RunTestCase('heading-processing'));
+    test('heading-unicode', () => RunTestCase('heading-unicode'));
 
     test('mdline-simple', () => RunTestCase('mdline-simple'));
 

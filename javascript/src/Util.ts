@@ -28,3 +28,20 @@ export function Template(template_string: string, obj: any) {
         return obj[name] || '';
     });
 }
+
+/* eslint-disable no-control-regex */
+const TrimStartRegex = /^[ \t\r\n\0\x0B]+/g;
+const TrimEndRegex = /[ \t\r\n\0\x0B]+$/g;
+/* eslint-enable no-control-regex */
+
+export function TrimStart(str: string) {
+    return str.replace(TrimStartRegex, '');
+}
+
+export function TrimEnd(str: string) {
+    return str.replace(TrimEndRegex, '');
+}
+
+export function Trim(str: string) {
+    return str.replace(TrimStartRegex, '').replace(TrimEndRegex, '');
+}

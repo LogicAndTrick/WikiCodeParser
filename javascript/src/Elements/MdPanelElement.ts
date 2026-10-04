@@ -4,6 +4,7 @@ import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
+import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
 
 export class MdPanelElement extends Element {
@@ -14,19 +15,19 @@ export class MdPanelElement extends Element {
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
 
-        const meta = lines.Value().substring(3).trim();
+        const meta = Trim(lines.Value().substring(3));
         let title = '';
 
         let found = false;
         const arr: string[] = [];
         while (lines.Next()) {
-            const value = lines.Value().trimEnd();
+            const value = TrimEnd(lines.Value());
             if (value == '~~~') {
                 found = true;
                 break;
             }
 
-            if (value.length > 1 && value[0] == ':') title = value.substring(1).trim();
+            if (value.length > 1 && value[0] == ':') title = Trim(value.substring(1));
             else arr.push(value);
         }
 

@@ -5,6 +5,7 @@ import { NodeCollection } from '../Nodes/NodeCollection';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
+import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 
 class ListNode implements INode {
@@ -118,7 +119,7 @@ export class MdListElement extends Element {
     }
 
     public Matches(lines: Lines): boolean {
-        const value = lines.Value().trim();
+        const value = Trim(lines.Value());
         return MdListElement.IsValidListItem(value, 0) > 0;
     }
 
@@ -142,7 +143,7 @@ export class MdListElement extends Element {
     private CreateListItems(lastItemNode: ListItemNode, prefix: string, parser: Parser, data: ParseData, lines: Lines, scope: string): ListItemNode[] {
         const ret: ListItemNode[] = [];
         do {
-            let value = lines.Value().trimEnd();
+            let value = TrimEnd(lines.Value());
 
             if (!value.startsWith(prefix)) {
                 // No longer valid for this list
@@ -161,7 +162,7 @@ export class MdListElement extends Element {
             if (value.length > 1 && value[0] == ' ' && prefix.length > 0) {
                 // don't allow this if we're parsing at level 0
                 // List item
-                value = value.trimStart();
+                value = TrimStart(value);
 
                 // Support for continuations
                 while (value.endsWith('^')) {
@@ -170,13 +171,13 @@ export class MdListElement extends Element {
                         value = value.substring(0, value.length - 2) + '^';
                         break;
                     } else if (lines.Next()) {
-                        value = value.substring(0, value.length - 1).trim() + '\n' + lines.Value().trimStart();
+                        value = Trim(value.substring(0, value.length - 1)) + '\n' + TrimStart(lines.Value());
                     } else {
                         break;
                     }
                 }
 
-                value = value.trim();
+                value = Trim(value);
 
                 let pt: INode;
 

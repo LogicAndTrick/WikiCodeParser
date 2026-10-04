@@ -5,6 +5,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class LinkTag extends Tag {
@@ -30,7 +31,7 @@ export class LinkTag extends Tag {
     }
 
     public Validate(options: Record<string, string>, text: string): boolean {
-        if (options['url'] !== undefined && (options['url'] ?? '').trim().length == 0) return false;
+        if (options['url'] !== undefined && Trim(options['url'] ?? '').length == 0) return false;
         const url = this.BuildUrl(options, text);
         return HtmlHelper.ValidateUrl(url) && url.match(/^[^\]"\n ]+$/i) != null;
     }

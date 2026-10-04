@@ -6,6 +6,7 @@ import { NodeCollection } from '../Nodes/NodeCollection';
 import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
 import { TagParseContext } from '../TagParseContext';
+import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
 
 class TableRow implements INode {
@@ -53,13 +54,13 @@ class TableRow implements INode {
 
 export class MdTableElement extends Element {
     public Matches(lines: Lines): boolean {
-        const value = lines.Value().trimEnd();
+        const value = TrimEnd(lines.Value());
         return value.length >= 2 && value[0] == '|' && (value[1] == '=' || value[1] == '-');
     }
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const arr: TableRow[] = [];
         do {
-            const value = lines.Value().trimEnd();
+            const value = TrimEnd(lines.Value());
             if (value.length < 2 || value[0] != '|' || (value[1] != '=' && value[1] != '-')) {
                 lines.Back();
                 break;
@@ -75,7 +76,7 @@ export class MdTableElement extends Element {
         const ret = [];
         let level = 0;
         let last = 0;
-        text = text.trim();
+        text = Trim(text);
         const len = text.length;
         let i: number;
         for (i = 0; i < len; i++) {
@@ -83,16 +84,16 @@ export class MdTableElement extends Element {
             if (c == '[') level++;
             else if (c == ']') level--;
             else if ((c == '|' && level == 0) || i == len - 1) {
-                ret.push(text.substring(last, i + (i == len - 1 ? 1 : 0)).trim());
+                ret.push(Trim(text.substring(last, i + (i == len - 1 ? 1 : 0))));
                 last = i + 1;
             }
         }
-        if (last < len) ret.push(text.substring(last, i + (i == len - 1 ? 1 : 0)).trim());
+        if (last < len) ret.push(Trim(text.substring(last, i + (i == len - 1 ? 1 : 0))));
         return ret;
     }
 
     private static ResolveCell(text: string, parser: Parser, data: ParseData, scope: string): INode {
-        const res = /^:ref=([a-z0-9 ]+)$/i.exec(text.trim());
+        const res = /^:ref=([a-z0-9 ]+)$/i.exec(Trim(text));
         if (res) {
             const name = res[1];
             return new RefNode(data, name);

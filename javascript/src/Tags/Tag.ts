@@ -4,6 +4,7 @@ import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
+import { Trim } from '../Util';
 
 export class Tag {
     public Token: string | null;
@@ -46,7 +47,7 @@ export class Tag {
         const tokenLength = this.Token.length;
 
         state.Seek(tokenLength + 1, false);
-        let optionsString = state.ScanTo(']').trim();
+        let optionsString = Trim(state.ScanTo(']'));
         if (state.Next() != ']') {
             state.Seek(index, true);
             return null;
@@ -61,8 +62,8 @@ export class Tag {
                 const myregexp = /(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/gim;
                 let m = myregexp.exec(optionsString);
                 while (m != null) {
-                    const name = m[1].trim();
-                    const value = m[2].trim();
+                    const name = Trim(m[1]);
+                    const value = Trim(m[2]);
                     options[name] = value;
                     m = myregexp.exec(optionsString);
                 }
@@ -90,14 +91,7 @@ export class Tag {
             return null;
         } else {
             const text = state.ScanTo('[/' + this.Token + ']', true);
-            if (
-                state
-                    .Peek(tokenLength + 3)
-                    .trim()
-                    .toLowerCase() ==
-                    '[/' + this.Token.toLowerCase() + ']' &&
-                this.Validate(options, text)
-            ) {
+            if (state.Peek(tokenLength + 3).toLowerCase() == '[/' + this.Token.toLowerCase() + ']' && this.Validate(options, text)) {
                 state.Seek(this.Token.length + 3, false);
                 return this.FormatResult(parser, data, state, scope, options, text);
             } else {

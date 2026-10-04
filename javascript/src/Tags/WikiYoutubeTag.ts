@@ -5,6 +5,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class WikiYoutubeTag extends Tag {
@@ -42,7 +43,7 @@ export class WikiYoutubeTag extends Tag {
         }
 
         const id = regs[1];
-        const params = regs[2]?.trim().split('|') ?? [];
+        const params = Trim(regs[2] ?? '').split('|') ?? [];
 
         if (!WikiYoutubeTag.ValidateID(id)) {
             state.Seek(index, true);
@@ -57,7 +58,7 @@ export class WikiYoutubeTag extends Tag {
         for (const p of params) {
             const l = p.toLowerCase();
             if (WikiYoutubeTag.IsClass(l)) classes.push(l);
-            else caption = p.trim();
+            else caption = Trim(p);
         }
 
         if (!caption || caption.trim() == '') caption = null;

@@ -5,6 +5,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class PreTag extends Tag {
@@ -25,7 +26,7 @@ export class PreTag extends Tag {
 
         // Trim blank lines from the start and end of the array
         for (let i = 0; i < 2; i++) {
-            while (arr.length > 0 && arr[0].trim() == '') arr.splice(0, 1);
+            while (arr.length > 0 && Trim(arr[0]) == '') arr.splice(0, 1);
             arr.reverse();
         }
 

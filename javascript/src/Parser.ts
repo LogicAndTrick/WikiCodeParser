@@ -10,7 +10,7 @@ import { ParseResult } from './ParseResult';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { State } from './State';
 import { TagParseContext } from './TagParseContext';
-import { OrderByDescending } from './Util';
+import { OrderByDescending, Trim } from './Util';
 
 export class Parser {
     public Configuration: ParserConfiguration;
@@ -21,7 +21,7 @@ export class Parser {
 
     public ParseResult(text: string, scope = ''): ParseResult {
         const data = new ParseData();
-        text = text.trim();
+        text = Trim(text);
         let node = this.ParseElements(data, text, scope);
         node = this.RunProcessors(node, data, scope);
         const res = new ParseResult();
@@ -53,7 +53,7 @@ export class Parser {
 
                 // if we have any plain text, create a node for it
                 if (plain.length > 0) {
-                    root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, plain.join('\n').trim(), scope, TagParseContext.Block)));
+                    root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, Trim(plain.join('\n')), scope, TagParseContext.Block)));
                     root.Nodes.push(UnprocessablePlainTextNode.NewLine()); // Newline before next element
                 }
                 plain.splice(0, plain.length);
@@ -68,7 +68,7 @@ export class Parser {
         }
 
         // parse any plain text that might be left
-        if (plain.length > 0) root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, plain.join('\n').trim(), scope, TagParseContext.Block)));
+        if (plain.length > 0) root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, Trim(plain.join('\n')), scope, TagParseContext.Block)));
 
         // Trim off any whitespace nodes at the end
         const shouldTrim = () => {
