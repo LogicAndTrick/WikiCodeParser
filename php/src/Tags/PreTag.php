@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class PreTag extends Tag
 {
@@ -31,7 +32,7 @@ class PreTag extends Tag
 
         // Trim blank lines from the start and end of the array
         for ($i = 0; $i < 2; $i++) {
-            while (count($arr) > 0 && trim($arr[0]) == '') array_splice($arr, 0, 1);
+            while (count($arr) > 0 && Util::Trim($arr[0]) == '') array_splice($arr, 0, 1);
             $arr = array_reverse($arr);
         }
 

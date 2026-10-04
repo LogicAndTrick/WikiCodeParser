@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class WikiYoutubeTag extends Tag
 {
@@ -51,7 +52,7 @@ class WikiYoutubeTag extends Tag
         }
 
         $id = $regs[1];
-        $params = isset($regs[2]) && strlen($regs[2]) > 0 ? explode('|', trim($regs[2])) : [];
+        $params = isset($regs[2]) && strlen($regs[2]) > 0 ? explode('|', Util::Trim($regs[2])) : [];
 
         if (!self::ValidateID($id)) {
             $state->Seek($index, true);
@@ -66,7 +67,7 @@ class WikiYoutubeTag extends Tag
         foreach ($params as $p) {
             $l = strtolower($p);
             if (self::IsClass($l)) $classes[] = $l;
-            else $caption = trim($p);
+            else $caption = Util::Trim($p);
         }
 
         if (!$caption || trim($caption) == '') $caption = null;

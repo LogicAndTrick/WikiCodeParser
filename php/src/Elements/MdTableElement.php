@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class TableRow implements INode
 {
@@ -65,7 +66,7 @@ class MdTableElement extends Element
 {
     public function Matches(Lines $lines): bool
     {
-        $value = rtrim($lines->Value());
+        $value = Util::TrimEnd($lines->Value());
         return strlen($value) >= 2 && $value[0] == '|' && ($value[1] == '=' || $value[1] == '-');
     }
 
@@ -73,7 +74,7 @@ class MdTableElement extends Element
     {
         $arr = [];
         do {
-            $value = rtrim($lines->Value());
+            $value = Util::TrimEnd($lines->Value());
             if (strlen($value) < 2 || $value[0] != '|' || ($value[1] != '=' && $value[1] != '-')) {
                 $lines->Back();
                 break;
@@ -90,24 +91,24 @@ class MdTableElement extends Element
         $ret = [];
         $level = 0;
         $last = 0;
-        $text = trim($text);
+        $text = Util::Trim($text);
         $len =  strlen($text);
         for ($i = 0; $i < $len; $i++) {
             $c = $text[$i];
             if ($c == '[') $level++;
             else if ($c == ']') $level--;
             else if (($c == '|' && $level == 0) || $i == $len - 1) {
-                $ret[] = trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
+                $ret[] = Util::Trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
                 $last = $i + 1;
             }
         }
-        if ($last < $len) $ret[] = trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
+        if ($last < $len) $ret[] = Util::Trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
         return $ret;
     }
 
     private static function ResolveCell(string $text, Parser $parser, ParseData $data, string $scope): INode
     {
-        $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', trim($text), $res);
+        $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', Util::Trim($text), $res);
         if ($success) {
             $name = $res[1];
             return new RefNode($data, $name);

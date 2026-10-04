@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class MdCodeElement extends Element
 {
@@ -26,7 +27,7 @@ class MdCodeElement extends Element
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
         $current = $lines->Current();
-        $firstLine = rtrim(substr($lines->Value(), 3));
+        $firstLine = Util::TrimEnd(substr($lines->Value(), 3));
 
         $lang = null;
         if (in_array(strtolower($firstLine), PreElement::$allowedLanguages)) {
@@ -38,7 +39,7 @@ class MdCodeElement extends Element
 
         $found = false;
         while ($lines->Next()) {
-            $value = rtrim($lines->Value());
+            $value = Util::TrimEnd($lines->Value());
             if (str_ends_with($value, '```')) {
                 $lastLine = substr($value, 0, strlen($value) - 3);
                 $arr[] = $lastLine;
@@ -56,7 +57,7 @@ class MdCodeElement extends Element
 
         // Trim blank lines from the start and end of the array
         for ($i = 0; $i < 2; $i++) {
-            while (count($arr) > 0 && trim($arr[0]) == '') array_splice($arr, 0, 1);
+            while (count($arr) > 0 && Util::Trim($arr[0]) == '') array_splice($arr, 0, 1);
             $arr = array_reverse($arr);
         }
 
@@ -65,8 +66,8 @@ class MdCodeElement extends Element
 
         // Find the longest common whitespace amongst all lines (ignore blank lines)
         $longestWhitespace = array_reduce($arr, function (int $c, string $i) {
-            if (strlen(trim($i)) == 0) return $c;
-            $wht = strlen($i) - strlen(ltrim($i));
+            if (strlen(Util::Trim($i)) == 0) return $c;
+            $wht = strlen($i) - strlen(Util::TrimStart($i));
             return min($wht, $c);
         }, 9999);
 

@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class Tag
 {
@@ -62,7 +63,7 @@ class Tag
         $tokenLength = strlen($this->token);
 
         $state->Seek($tokenLength + 1, false);
-        $optionsString = trim($state->ScanTo(']'));
+        $optionsString = Util::Trim($state->ScanTo(']'));
         if ($state->Next() != ']') {
             $state->Seek($index, true);
             return null;
@@ -77,8 +78,8 @@ class Tag
                 preg_match_all('/(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/im', $optionsString, $matches, PREG_SET_ORDER);
                 for ($i = 0; $i < count($matches); $i++) {
                     $match = $matches[$i];
-                    $name = trim($match[1]);
-                    $value = trim($match[2]);
+                    $name = Util::Trim($match[1]);
+                    $value = Util::Trim($match[2]);
                     $options[$name] = $value;
                 }
             }

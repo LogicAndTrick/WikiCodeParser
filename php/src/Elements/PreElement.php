@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class PreElement extends Element
 {
@@ -39,7 +40,7 @@ class PreElement extends Element
 
     public function Matches(Lines $lines): bool
     {
-        $value = trim($lines->Value());
+        $value = Util::Trim($lines->Value());
         return strlen($value) > strlen($this->token) + 1 && str_starts_with($value, '[' . $this->token) && preg_match($this->getTokenRegex(), $value);
     }
 
@@ -54,7 +55,7 @@ class PreElement extends Element
         $current = $lines->Current();
         $arr = [];
 
-        $line = trim($lines->Value());
+        $line = Util::Trim($lines->Value());
         $success = preg_match($this->getTokenRegex(), $line, $res);
         if (!$success) {
             $lines->SetCurrent($current);
@@ -78,7 +79,7 @@ class PreElement extends Element
             if (strlen($line) > 0) $arr[] = $line;
             $found = false;
             while ($lines->Next()) {
-                $value = rtrim($lines->Value());
+                $value = Util::TrimEnd($lines->Value());
                 if (str_ends_with($value, '[/' . $this->token . ']')) {
                     $lastLine = substr($value, 0, strlen($value) - (strlen($this->token) + 3));
                     $arr[] = $lastLine;
@@ -97,7 +98,7 @@ class PreElement extends Element
 
         // Trim blank lines from the start and end of the array
         for ($i = 0; $i < 2; $i++) {
-            while (count($arr) > 0 && trim($arr[0]) == '') array_splice($arr, 0, 1);
+            while (count($arr) > 0 && Util::Trim($arr[0]) == '') array_splice($arr, 0, 1);
             $arr = array_reverse($arr);
         }
 
@@ -157,8 +158,8 @@ class PreElement extends Element
 
         // Find the longest common whitespace amongst all lines (ignore blank lines)
         $longestWhitespace = array_reduce($arr, function (int $c, string $i) {
-            if (strlen(trim($i)) == 0) return $c;
-            $wht = strlen($i) - strlen(ltrim($i));
+            if (strlen(Util::Trim($i)) == 0) return $c;
+            $wht = strlen($i) - strlen(Util::TrimStart($i));
             return min($wht, $c);
         }, 9999);
 

@@ -23,6 +23,9 @@ class IsolatedTest extends TestCase
 
     public function testheadingsimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-simple'); }
     public function testheadingduplicates() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-duplicates'); }
+    public function testheadingnumeric() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-numeric'); }
+    public function testheadingprocessing() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-processing'); }
+    public function testheadingunicode() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'heading-unicode'); }
 
     public function testmdlinesimple() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', 'mdline-simple'); }
 

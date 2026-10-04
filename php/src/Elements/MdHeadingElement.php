@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class HeadingNode implements INode
@@ -65,14 +66,14 @@ class MdHeadingElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
-        $value = trim($lines->Value());
+        $value = Util::Trim($lines->Value());
         $success = preg_match('/^(=+)(.*?)=*$/i', $value, $res);
         if (!$success) {
             return null;
         }
 
         $level = min(6, strlen($res[1]));
-        $text = trim($res[2]);
+        $text = Util::Trim($res[2]);
 
         $contents = $parser->ParseTags($data, $text, $scope, TagParseContext::Inline);
         $contents = $parser->RunProcessors($contents, $data, $scope);

@@ -48,4 +48,21 @@ class Util
             return $obj[$matches[1]];
         }, $templateString) ?? '';
     }
+
+    const TRIM_CHARS = " \t\n\r\0\x0B";
+
+    public static function TrimStart(string $str): string
+    {
+        return ltrim($str, self::TRIM_CHARS);
+    }
+
+    public static function TrimEnd(string $str): string
+    {
+        return rtrim($str, self::TRIM_CHARS);
+    }
+
+    public static function Trim(string $str): string
+    {
+        return trim($str, self::TRIM_CHARS);
+    }
 }

@@ -7,12 +7,13 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class RefElement extends Element
 {
     public function Matches(Lines $lines): bool
     {
-        $value = trim($lines->Value());
+        $value = Util::Trim($lines->Value());
         return strlen($value) > 4 && str_starts_with($value, '[ref=') && preg_match('/\[ref=[a-z0-9 ]+\]/i', $value);
     }
 
@@ -21,7 +22,7 @@ class RefElement extends Element
         $current = $lines->Current();
         $arr = [];
 
-        $line = trim($lines->Value());
+        $line = Util::Trim($lines->Value());
         $success = preg_match('/\[ref=([a-z0-9 ]+)\]/i', $line, $res);
         if (!$success) {
             $lines->SetCurrent($current);
@@ -38,7 +39,7 @@ class RefElement extends Element
             if (strlen($line) > 0) $arr[] = $line;
             $found = false;
             while ($lines->Next()) {
-                $value = rtrim($lines->Value());
+                $value = Util::TrimEnd($lines->Value());
                 if (str_ends_with($value, '[/ref]')) {
                     $lastLine = substr($value, 0, strlen($value) - 6);
                     $arr[] = $lastLine;
@@ -56,7 +57,7 @@ class RefElement extends Element
         }
 
         // Store the ref node
-        $node = $parser->ParseElements($data, trim(implode("\n", $arr)), $scope);
+        $node = $parser->ParseElements($data, Util::Trim(implode("\n", $arr)), $scope);
         $data->Set("Ref::$name", $node);
 
         // Return nothing

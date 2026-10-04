@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class QuoteElement extends Element
 {
@@ -17,7 +18,7 @@ class QuoteElement extends Element
 
     public function Matches(Lines $lines): bool
     {
-        $value = trim($lines->value());
+        $value = Util::Trim($lines->value());
         return strlen($value) > 6 && stripos($value, "[quote") === 0 && preg_match(self::OPEN_QUOTE_REGEX, $value);
     }
 
@@ -26,7 +27,7 @@ class QuoteElement extends Element
         $current = $lines->current();
         $arr = [];
 
-        $line = trim($lines->value());
+        $line = Util::Trim($lines->value());
         if (!preg_match(self::OPEN_QUOTE_REGEX, $line, $res)) {
             $lines->setCurrent($current);
             return null;
@@ -61,7 +62,7 @@ class QuoteElement extends Element
         $name = null;
         $postfix = null;
 
-        $line = ltrim($lines->value());
+        $line = Util::TrimStart($lines->value());
         if (!preg_match(self::OPEN_QUOTE_REGEX, $line, $openMat)) return null;
         if (isset($openMat[1])) $name = $openMat[1];
 

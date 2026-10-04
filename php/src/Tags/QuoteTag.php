@@ -7,6 +7,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class QuoteTag extends Tag
 {
@@ -31,7 +32,7 @@ class QuoteTag extends Tag
             $before .= '<strong class="quote-name">' . $options['name'] . ' said:</strong><br/>';
         }
         $after = '</' . $this->element . '>';
-        $content = $parser->ParseTags($data, trim($text), $scope, $this->TagContext());
+        $content = $parser->ParseTags($data, Util::Trim($text), $scope, $this->TagContext());
         $ret = new HtmlNode($before, $content, $after);
         $ret->plainBefore = (isset($options['name']) ? $options['name'] . ' said: ' : '') . "[quote]\n";
         $ret->plainAfter = "\n[/quote]";

@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class AlignTag extends Tag
 {
@@ -29,7 +30,7 @@ class AlignTag extends Tag
         if (isset($options['align']) && self::IsValidAlign($options['align'])) {
             $cls .= 'text-' . self::ConvertAlign($options['align']);
         }
-        $before .= ' class="' . trim($cls) . '">';
+        $before .= ' class="' . Util::Trim($cls) . '">';
         $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());
         $after = '</' . $this->element . '>';
         $ret = new HtmlNode($before, $content, $after);

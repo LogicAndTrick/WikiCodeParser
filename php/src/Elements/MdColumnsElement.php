@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class ColumnNode implements INode
@@ -82,7 +83,7 @@ class MdColumnsElement extends Element
         $arr = [];
         $cols = [];
         while ($lines->Next() && $i < count($colDefs)) {
-            $value = rtrim($lines->Value());
+            $value = Util::TrimEnd($lines->Value());
             if ($value == '%%') {
                 $cols[] = new ColumnNode($colDefs[$i], $parser->ParseElements($data, implode("\n", $arr), $scope));
                 $arr = [];
