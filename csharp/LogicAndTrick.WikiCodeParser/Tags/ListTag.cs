@@ -17,7 +17,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         public override bool Validate(Dictionary<string, string> options, string text)
         {
             var items = text.Split(new[] { "[*]" }, StringSplitOptions.None)
-                .Select(x => x.Trim())
+                .Select(x => Util.Trim(x))
                 .Where(x => x.Length > 0);
             return base.Validate(options, text) && items.Any();
         }
@@ -30,7 +30,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var content = new NodeCollection();
             var items = text.Split(new[] { "[*]" }, StringSplitOptions.None)
-                .Select(x => x.Trim())
+                .Select(x => Util.Trim(x))
                 .Where(x => x.Length > 0);
             foreach (var item in items)
             {

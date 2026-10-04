@@ -46,7 +46,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             var id = regs.Groups[1].Value;
-            var @params = regs.Groups[2].Value.Trim().Split('|');
+            var @params = Util.Trim(regs.Groups[2].Value).Split('|');
 
             if (!ValidateID(id))
             {
@@ -63,7 +63,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             {
                 var l = p.ToLower();
                 if (IsClass(l)) classes.Add(l);
-                else caption = p.Trim();
+                else caption = Util.Trim(p);
             }
 
             if (string.IsNullOrWhiteSpace(caption)) caption = null;

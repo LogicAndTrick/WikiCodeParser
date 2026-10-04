@@ -10,7 +10,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
     {
         public override bool Matches(Lines lines)
         {
-            var value = lines.Value().TrimEnd();
+            var value = Util.TrimEnd(lines.Value());
             return value.Length >= 2 && value[0] == '|' && (value[1] == '=' || value[1] == '-');
         }
 
@@ -19,7 +19,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var arr = new List<TableRow>();
             do
             {
-                var value = lines.Value().TrimEnd();
+                var value = Util.TrimEnd(lines.Value());
                 if (value.Length < 2 || value[0] != '|' || (value[1] != '=' && value[1] != '-')) {
                     lines.Back();
                     break;
@@ -35,7 +35,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         {
             var level = 0;
             var last = 0;
-            text = text.Trim();
+            text = Util.Trim(text);
             var len = text.Length;
             int i;
             for (i = 0; i < len; i++)
@@ -45,16 +45,16 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 else if (c == ']') level--;
                 else if ((c == '|' && level == 0) || i == len - 1)
                 {
-                    yield return text.Substring(last, (i - last) + (i == len - 1 ? 1 : 0)).Trim();
+                    yield return Util.Trim(text.Substring(last, (i - last) + (i == len - 1 ? 1 : 0)));
                     last = i + 1;
                 }
             }
-            if (last < len) yield return text.Substring(last, (i-last) + (i == len - 1 ? 1 : 0)).Trim();
+            if (last < len) yield return Util.Trim(text.Substring(last, (i-last) + (i == len - 1 ? 1 : 0)));
         }
 
         private static INode ResolveCell(string text, Parser parser, ParseData data, string scope)
         {
-            var res = Regex.Match(text.Trim(), "^:ref=([a-z0-9 ]+)$", RegexOptions.IgnoreCase);
+            var res = Regex.Match(Util.Trim(text), "^:ref=([a-z0-9 ]+)$", RegexOptions.IgnoreCase);
             if (res.Success)
             {
                 var name = res.Groups[1].Value;

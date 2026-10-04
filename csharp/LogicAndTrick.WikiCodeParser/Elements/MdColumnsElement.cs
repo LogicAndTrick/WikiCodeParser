@@ -46,7 +46,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var cols = new List<ColumnNode>();
             while (lines.Next() && i < colDefs.Count)
             {
-                var value = lines.Value().TrimEnd();
+                var value = Util.TrimEnd(lines.Value());
                 if (value == "%%")
                 {
                     cols.Add(new ColumnNode(colDefs[i], parser.ParseElements(data, String.Join("\n", arr), scope)));

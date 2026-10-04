@@ -18,7 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override bool Matches(Lines lines)
         {
-            var value = lines.Value().Trim();
+            var value = Util.Trim(lines.Value());
             return value.Length > Token.Length + 1 && value.Substring(0, Token.Length + 1) == "[" + Token && Regex.IsMatch(value, @"\[" + Regex.Escape(Token) + @"(=[a-z ]+)?\]", RegexOptions.IgnoreCase);
         }
 
@@ -27,7 +27,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var current = lines.Current();
             var arr = new List<string>();
 
-            var line = lines.Value().Trim();
+            var line = Util.Trim(lines.Value());
             var res = Regex.Match(line, @"\[" + Regex.Escape(Token) + @"(?:=([a-z ]+))?\]", RegexOptions.IgnoreCase);
             if (!res.Success)
             {
@@ -56,7 +56,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var found = false;
                 while (lines.Next())
                 {
-                    var value = lines.Value().TrimEnd();
+                    var value = Util.TrimEnd(lines.Value());
                     if (value.EndsWith("[/" + Token + "]"))
                     {
                         var lastLine = value.Substring(0, value.Length - (Token.Length + 3));
@@ -80,7 +80,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             // Trim blank lines from the start and end of the array
             for (var i = 0; i < 2; i++)
             {
-                while (arr.Count > 0 && arr[0].Trim() == "") arr.RemoveAt(0);
+                while (arr.Count > 0 && Util.Trim(arr[0]) == "") arr.RemoveAt(0);
                 arr.Reverse();
             }
 
@@ -147,8 +147,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             // Find the longest common whitespace amongst all lines (ignore blank lines)
             var longestWhitespace = arr.Aggregate(9999, (c, i) =>
             {
-                if (i.Trim().Length == 0) return c;
-                var wht = i.Length - i.TrimStart().Length;
+                if (Util.Trim(i).Length == 0) return c;
+                var wht = i.Length - Util.TrimStart(i).Length;
                 return Math.Min(wht, c);
             });
 

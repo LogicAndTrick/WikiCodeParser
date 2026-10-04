@@ -45,7 +45,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var tokenLength = Token.Length;
 
             state.Seek(tokenLength + 1, false);
-            var optionsString = state.ScanTo("]").Trim();
+            var optionsString = Util.Trim(state.ScanTo("]"));
             if (state.Next() != ']')
             {
                 state.Seek(index, true);
@@ -66,8 +66,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
                     foreach (Match m in matches)
                     {
-                        var name = m.Groups[1].Value.Trim();
-                        var value = m.Groups[2].Value.Trim();
+                        var name = Util.Trim(m.Groups[1].Value);
+                        var value = Util.Trim(m.Groups[2].Value);
                         options[name] = value;
                     }
                 }

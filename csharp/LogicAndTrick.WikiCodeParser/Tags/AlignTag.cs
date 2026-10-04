@@ -25,7 +25,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             {
                 cls += "text-" + ConvertAlign(options["align"]);
             }
-            before += " class=\"" + cls.Trim() + "\">";
+            before += " class=\"" + Util.Trim(cls) + "\">";
             var content = parser.ParseTags(data, text, scope, TagContext);
             var after = "</" + Element + ">";
             return new HtmlNode(before, content, after) { IsBlockNode = true };

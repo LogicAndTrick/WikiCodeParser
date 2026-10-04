@@ -8,7 +8,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
     {
         public override bool Matches(Lines lines)
         {
-            var value = lines.Value().Trim();
+            var value = Util.Trim(lines.Value());
             return value.Length > 4 && value.StartsWith("[ref=") && Regex.IsMatch(value, @"\[ref=[a-z0-9 ]+\]", RegexOptions.IgnoreCase);
         }
 
@@ -17,7 +17,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var current = lines.Current();
             var arr = new List<string>();
 
-            var line = lines.Value().Trim();
+            var line = Util.Trim(lines.Value());
             var res = Regex.Match(line, @"\[ref=([a-z0-9 ]+)\]", RegexOptions.IgnoreCase);
             if (!res.Success)
             {
@@ -39,7 +39,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var found = false;
                 while (lines.Next())
                 {
-                    var value = lines.Value().TrimEnd();
+                    var value = Util.TrimEnd(lines.Value());
                     if (value.EndsWith("[/ref]"))
                     {
                         var lastLine = value.Substring(0, value.Length - 6);
@@ -61,7 +61,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
 
             // Store the ref node
-            var node = parser.ParseElements(data, string.Join("\n", arr).Trim(), scope);
+            var node = parser.ParseElements(data, Util.Trim(string.Join("\n", arr)), scope);
             data.Set($"Ref::{name}", node);
 
             // Return nothing

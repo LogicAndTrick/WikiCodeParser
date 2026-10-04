@@ -1,0 +1,18 @@
+= http://example.com
+= test@example.com
+= [i]Something[/i]
+
+###
+
+<h1 id="http://example.com"><a href="http://example.com">http://example.com</a></h1>
+<h1 id="test@example.com"><a href="mailto:test@example.com">test@example.com</a></h1>
+<h1 id="Something">Something</h1>
+
+###
+
+http://example.com
+------------------
+test@example.com
+----------------
+Something
+---------

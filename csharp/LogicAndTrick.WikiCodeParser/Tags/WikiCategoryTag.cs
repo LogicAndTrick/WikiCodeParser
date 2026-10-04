@@ -34,7 +34,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             state.SkipWhitespace();
-            return new MetadataNode("WikiCategory", str.Trim());
+            return new MetadataNode("WikiCategory", Util.Trim(str));
         }
     }
 }

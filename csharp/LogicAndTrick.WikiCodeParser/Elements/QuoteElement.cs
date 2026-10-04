@@ -12,7 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override bool Matches(Lines lines)
         {
-            var value = lines.Value().Trim();
+            var value = Util.Trim(lines.Value());
             return value.Length > 6 && value.StartsWith("[quote", StringComparison.InvariantCultureIgnoreCase) && OpenQuote.IsMatch(value);
         }
 
@@ -21,7 +21,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var current = lines.Current();
             var arr = new List<string>();
 
-            var line = lines.Value().Trim();
+            var line = Util.Trim(lines.Value());
             var res = OpenQuote.Match(line);
             if (!res.Success)
             {
@@ -62,7 +62,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             name = null;
             postfix = null;
 
-            var line = lines.Value().TrimStart();
+            var line = Util.TrimStart(lines.Value());
             var openMat = OpenQuote.Match(line);
             if (!openMat.Success) return null;
             if (openMat.Groups[1].Success) name = openMat.Groups[1].Value;

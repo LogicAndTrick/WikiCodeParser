@@ -24,8 +24,8 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (child is PlainTextNode ptn)
                 {
                     var text = ptn.Text;
-                    if (trimStart) text = text.TrimStart();
-                    if (next is HtmlNode nht && nht.IsBlockNode) text = text.TrimEnd();
+                    if (trimStart) text = Util.TrimStart(text);
+                    if (next is HtmlNode nht && nht.IsBlockNode) text = Util.TrimEnd(text);
                     ptn.Text = text;
                 }
 

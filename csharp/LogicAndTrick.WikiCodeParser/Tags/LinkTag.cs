@@ -35,7 +35,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override bool Validate(Dictionary<string, string> options, string text)
         {
-            if (options.ContainsKey("url") && (options["url"] ?? "").Trim().Length == 0) return false;
+            if (options.ContainsKey("url") && Util.Trim(options["url"] ?? "").Length == 0) return false;
             var url = BuildUrl(options, text);
             return HtmlHelper.ValidateUrl(url) && Regex.IsMatch(url, @"^[^\]""\n ]+$", RegexOptions.IgnoreCase);
         }

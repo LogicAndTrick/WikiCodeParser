@@ -15,10 +15,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
-            var value = lines.Value().Trim();
+            var value = Util.Trim(lines.Value());
             var res = Regex.Match(value, @"^(=+)(.*?)=*$", RegexOptions.IgnoreCase);
             var level = Math.Min(6, res.Groups[1].Value.Length);
-            var text = res.Groups[2].Value.Trim();
+            var text = Util.Trim(res.Groups[2].Value);
 
             var contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
             contents = parser.RunProcessors(contents, data, scope);
