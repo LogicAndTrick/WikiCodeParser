@@ -19,3 +19,4 @@ README.md
 .jest.config.js
 rollup.config.mjs
 tsconfig.json
+tsconfig.types.json

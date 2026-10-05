@@ -1,10 +1,11 @@
-import { Parser, Util } from '..';
 import { WikiRevisionBook } from '../Models/WikiRevisionBook';
 import { INode } from '../Nodes/INode';
 import { MetadataNode } from '../Nodes/MetadataNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
+import { ParseIntStrict } from '../Util';
 import { Tag } from './Tag';
 
 export class WikiBookTag extends Tag {
@@ -49,7 +50,7 @@ export class WikiBookTag extends Tag {
                     book.ChapterName = val;
                     break;
                 case 'chapternumber':
-                    const cn = Util.ParseIntStrict(val);
+                    const cn = ParseIntStrict(val);
                     if (cn !== null && cn > 0) {
                         book.ChapterNumber = cn;
                     } else {
@@ -58,7 +59,7 @@ export class WikiBookTag extends Tag {
                     }
                     break;
                 case 'pagenumber':
-                    const pn = Util.ParseIntStrict(val);
+                    const pn = ParseIntStrict(val);
                     if (pn !== null && pn > 0) {
                         book.PageNumber = pn;
                     } else {

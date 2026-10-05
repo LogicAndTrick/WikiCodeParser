@@ -1,11 +1,11 @@
-import { Parser, Util } from '..';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
-import { IndexOfAny } from '../Util';
+import { Parser } from '../Parser';
+import { IndexOfAny, Trim } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
 type endPositionOutobject = { endPosition: number };
@@ -48,7 +48,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
         // Make sure we can close this token
         const valid =
             (endToken + 1 == text.length || MarkdownTextProcessor.IsEndBreakChar(text[endToken + 1])) && // end of string or before an end breaker
-            Util.Trim(text[endToken - 1]) != ''; // not whitespace previous
+            Trim(text[endToken - 1]) != ''; // not whitespace previous
         if (!valid) return null;
 
         const str = text.substring(position + 1, endToken);
@@ -87,7 +87,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
             const valid =
                 (nextIndex == 0 || MarkdownTextProcessor.IsStartBreakChar(text[nextIndex - 1])) && // start of string or after a start breaker
                 nextIndex + 1 < text.length && // not end of string
-                Util.Trim(text[nextIndex + 1]) != ''; // not whitespace next
+                Trim(text[nextIndex + 1]) != ''; // not whitespace next
             if (!valid) {
                 index = nextIndex + 1;
                 continue;

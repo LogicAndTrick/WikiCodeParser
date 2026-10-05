@@ -1,8 +1,8 @@
-import { Parser } from '..';
 import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { Trim } from '../Util';
 import { Element } from './Element';
 

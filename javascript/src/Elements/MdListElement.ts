@@ -1,10 +1,10 @@
-import { Parser } from '..';
 import { Lines } from '../Lines';
 import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 

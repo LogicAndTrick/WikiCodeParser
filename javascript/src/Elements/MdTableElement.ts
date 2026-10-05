@@ -1,10 +1,10 @@
-import { Parser } from '..';
 import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { TagParseContext } from '../TagParseContext';
 import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';

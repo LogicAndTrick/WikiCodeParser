@@ -1,8 +1,8 @@
-import { Parser } from '..';
 import { WikiRevisionCredit } from '../Models/WikiRevisionCredit';
 import { INode } from '../Nodes/INode';
 import { MetadataNode } from '../Nodes/MetadataNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
 import { Tag } from './Tag';

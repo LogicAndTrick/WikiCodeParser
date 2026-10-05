@@ -8,7 +8,6 @@
         "moduleResolution": "bundler",
         "esModuleInterop": true,
         "allowJs": true,
-        "sourceMap": true,
         "declaration": true,
         "lib": ["ES2019", "DOM"],
         "types": ["node"]

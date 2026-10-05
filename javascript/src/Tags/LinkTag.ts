@@ -1,9 +1,9 @@
-import { Parser } from '..';
 import { HtmlHelper } from '../HtmlHelper';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { State } from '../State';
 import { Trim } from '../Util';
 import { Tag } from './Tag';

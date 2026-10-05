@@ -1,9 +1,10 @@
-import { Parser, Util } from '..';
 import { Colours } from '../Colours';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { State } from '../State';
+import { ParseIntStrict } from '../Util';
 import { Tag } from './Tag';
 
 export class FontTag extends Tag {
@@ -32,7 +33,7 @@ export class FontTag extends Tag {
     }
 
     static IsValidSize(text: string): boolean {
-        const num = Util.ParseIntStrict(text);
+        const num = ParseIntStrict(text);
         return num !== null && num >= 6 && num <= 40;
     }
 }

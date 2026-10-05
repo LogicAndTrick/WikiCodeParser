@@ -1,10 +1,11 @@
-import { Parser, Util } from '..';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
+import { ParseIntStrict } from '../Util';
 import { Tag } from './Tag';
 
 export class VaultEmbedTag extends Tag {
@@ -35,7 +36,7 @@ export class VaultEmbedTag extends Tag {
             return null;
         }
 
-        const id = Util.ParseIntStrict(str);
+        const id = ParseIntStrict(str);
         if (id === null || id <= 0) {
             state.Seek(index, true);
             return null;

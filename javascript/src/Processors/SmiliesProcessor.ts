@@ -1,10 +1,10 @@
-import { Parser } from '..';
 import { HtmlHelper } from '../HtmlHelper';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { IndexOfAny, Template } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 

@@ -15,7 +15,7 @@
     "type": "module",
     "scripts": {
         "build": "rollup -c",
-        "types": "tsc --emitDeclarationOnly",
+        "types": "tsc -p tsconfig.types.json",
         "test": "jest",
         "lint": "eslint ."
     },

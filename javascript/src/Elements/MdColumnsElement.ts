@@ -1,10 +1,10 @@
-import { Parser, Util } from '..';
 import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { ParseData } from '../ParseData';
-import { TrimEnd } from '../Util';
+import { Parser } from '../Parser';
+import { ParseIntStrict, TrimEnd } from '../Util';
 import { Element } from './Element';
 
 class ColumnNode implements INode {
@@ -41,7 +41,7 @@ export class MdColumnsElement extends Element {
         const current = lines.Current();
 
         const meta = lines.Value().substring(10);
-        const colDefs = meta.split(':').map(x => Util.ParseIntStrict(x) ?? 0);
+        const colDefs = meta.split(':').map(x => ParseIntStrict(x) ?? 0);
         let total = 0;
 
         for (const d of colDefs) {

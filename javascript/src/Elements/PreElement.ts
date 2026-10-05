@@ -1,10 +1,10 @@
-import { Parser } from '..';
 import { Colours } from '../Colours';
 import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
+import { Parser } from '../Parser';
 import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 
