@@ -2,15 +2,18 @@
 [spoiler=One]Two
 three
 four[/spoiler]
+[spoiler=<strong>test</strong>]five[/spoiler]
 
 ###
 
 <span class="spoiler" title="Spoiler">Test</span><br/>
 <span class="spoiler" title="One">Two<br/>
 three<br/>
-four</span>
+four</span><br/>
+<span class="spoiler" title="&lt;strong&gt;test&lt;/strong&gt;">five</span>
 
 ###
 
 [Spoiler](spoiler text)
 [One](spoiler text)
+[<strong>test</strong>](spoiler text)
