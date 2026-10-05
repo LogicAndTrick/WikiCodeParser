@@ -42,7 +42,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             var numSmilies = 0;
             while (index + 1 < text.Length && (index = text.IndexOfAny(_tokenStarts, index + 1)) >= 0)
             {
-                if (numSmilies > MaxSmilies)
+                if (numSmilies >= MaxSmilies)
                 {
                     yield return new HtmlNode("<em class=\"text-danger\">", new UnprocessablePlainTextNode(" [warning: too many smilies in post] "), "</em>");
                     break;
@@ -65,7 +65,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (definition == null) continue;
 
                 // Must end with whitespace
-                if (index + token.Length < text.Length - 1 && !Char.IsWhiteSpace(text[index + token.Length])) continue;
+                if (index + token.Length < text.Length && !Char.IsWhiteSpace(text[index + token.Length])) continue;
 
                 // We have a smiley
                 if (start < index) yield return new PlainTextNode(text.Substring(start, index - start));
@@ -259,7 +259,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 {
                     if (text.IndexOf(token, startIndex, StringComparison.Ordinal) == startIndex) {
                     // Must end with whitespace
-                    if (startIndex + token.Length < text.Length - 1 && !Char.IsWhiteSpace(text[startIndex + token.Length])) continue;
+                    if (startIndex + token.Length < text.Length && !Char.IsWhiteSpace(text[startIndex + token.Length])) continue;
                         return token;
                     }
                 }

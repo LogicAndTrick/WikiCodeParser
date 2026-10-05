@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class FontTag extends Tag
 {
@@ -39,7 +40,7 @@ class FontTag extends Tag
 
     public static function IsValidSize(string $text): bool
     {
-        $num = intval($text, 10);
-        return $num >= 6 && $num <= 40;
+        $num = Util::ParseIntStrict($text);
+        return $num !== null && $num >= 6 && $num <= 40;
     }
 }

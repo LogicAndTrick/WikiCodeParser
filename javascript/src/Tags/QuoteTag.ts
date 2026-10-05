@@ -1,4 +1,4 @@
-import { Parser } from '..';
+import { HtmlHelper, Parser } from '..';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
@@ -23,7 +23,7 @@ export class QuoteTag extends Tag {
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += '>';
         if (options['name']) {
-            before += '<strong class="quote-name">' + options['name'] + ' said:</strong><br/>';
+            before += '<strong class="quote-name">' + HtmlHelper.Encode(options['name']) + ' said:</strong><br/>';
         }
         const after = '</' + this.Element + '>';
         const content = parser.ParseTags(data, Trim(text), scope, this.TagContext());

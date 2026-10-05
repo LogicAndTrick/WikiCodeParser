@@ -23,7 +23,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             before += '>';
             if (options.ContainsKey("name"))
             {
-                before += "<strong class=\"quote-name\">" + options["name"] + " said:</strong><br/>";
+                before += "<strong class=\"quote-name\">" + HtmlHelper.Encode(options["name"]) + " said:</strong><br/>";
             }
             var after = "</" + Element + '>';
             var content = parser.ParseTags(data, text == null ? null : Util.Trim(text), scope, TagContext);

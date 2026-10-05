@@ -33,7 +33,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         
         internal static bool IsValidSize(string text)
         {
-            return int.TryParse(text, out var num) && num >= 6 && num <= 40;
+            return Util.TryParseIntStrict(text, out var num) && num >= 6 && num <= 40;
         }
     }
 }

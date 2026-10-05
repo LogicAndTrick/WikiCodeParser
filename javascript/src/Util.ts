@@ -45,3 +45,10 @@ export function TrimEnd(str: string) {
 export function Trim(str: string) {
     return str.replace(TrimStartRegex, '').replace(TrimEndRegex, '');
 }
+
+export function ParseIntStrict(str: string): number | null {
+    const match = /^-?[0-9]+$/.exec(str);
+    if (!match) return null;
+    const num = parseInt(str, 10);
+    return isNaN(num) ? null : num;
+}

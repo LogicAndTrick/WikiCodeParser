@@ -35,7 +35,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             ElementClass = elementClass;
         }
 
-        public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) || Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
+        public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) || Scopes.Contains(scope);
 
         public virtual bool Matches(State state, string token, TagParseContext context) => token?.ToLower() == Token && (context == TagParseContext.Block || !IsBlock);
 

@@ -1,4 +1,4 @@
-import { Parser } from '..';
+import { HtmlHelper, Parser } from '..';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
@@ -53,7 +53,7 @@ export class SpoilerTag extends Tag {
 
         let before = `<${this.Element}`;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
-        before += ` title="${visibleText}">`;
+        before += ` title="${HtmlHelper.Encode(visibleText)}">`;
         const after = `</${this.Element}>`;
         return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, this.TagContext())), after);
     }

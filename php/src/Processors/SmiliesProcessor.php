@@ -30,7 +30,7 @@ class SmileyDefinition
         foreach ($this->tokens as $token) {
             if (strpos($text, $token, $startIndex) === $startIndex) {
                 // Must end with whitespace
-                if ($startIndex + strlen($token) < strlen($text) - 1 && trim($text[$startIndex + strlen($token)]) != '') continue;
+                if ($startIndex + strlen($token) < strlen($text) && trim($text[$startIndex + strlen($token)]) != '') continue;
                 return $token;
             }
         }
@@ -86,7 +86,7 @@ class SmiliesProcessor implements INodeProcessor
         $index = -1;
         $numSmilies = 0;
         while ($index + 1 < strlen($text) && ($index = Util::IndexOfAny($text, $this->tokenStarts, $index + 1)) >= 0) {
-            if ($numSmilies > self::$MaxSmilies) {
+            if ($numSmilies >= self::$MaxSmilies) {
                 $ret[] = new HtmlNode('<em class="text-danger">', new UnprocessablePlainTextNode(' [warning: too many smilies in post] '), '</em>');
                 break;
             }
@@ -110,7 +110,7 @@ class SmiliesProcessor implements INodeProcessor
             /** @var string $token */
 
             // Must end with whitespace
-            if ($index + strlen($token) < strlen($text) - 1 && trim($text[$index + strlen($token)]) != '') continue;
+            if ($index + strlen($token) < strlen($text) && trim($text[$index + strlen($token)]) != '') continue;
 
             // We have a smiley
             if ($start < $index) $ret[] = new PlainTextNode(substr($text, $start, $index - $start));

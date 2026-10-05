@@ -30,7 +30,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
 
             var text = BalanceQuotes(lines, out var author, out var postfix);
-            if (text == null)
+            if (String.IsNullOrWhiteSpace(text))
             {
                 lines.SetCurrent(current);
                 return null;
@@ -40,7 +40,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var plainBefore = "[quote]\n";
             if (!string.IsNullOrWhiteSpace(author))
             {
-                before += "<strong class=\"quote-name\">" + author + " said:</strong><br/>";
+                before += "<strong class=\"quote-name\">" + HtmlHelper.Encode(author) + " said:</strong><br/>";
                 plainBefore = author + " said: " + plainBefore;
             }
 

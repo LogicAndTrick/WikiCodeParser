@@ -65,4 +65,11 @@ class Util
     {
         return trim($str, self::TRIM_CHARS);
     }
+
+    public static function ParseIntStrict(string $str): ?int
+    {
+        if (!preg_match('/^-?[0-9]+$/D', $str)) return null;
+        $num = intval($str, 10);
+        return $num;
+    }
 }

@@ -1,3 +1,6 @@
+using System.Globalization;
+using System.Text.RegularExpressions;
+
 namespace LogicAndTrick.WikiCodeParser
 {
     public static class Util
@@ -17,6 +20,13 @@ namespace LogicAndTrick.WikiCodeParser
         public static string Trim(string str)
         {
             return str.Trim(TrimChars);
+        }
+
+        public static bool TryParseIntStrict(string str, out int result)
+        {
+            result = 0;
+            if (!Regex.IsMatch(str, @"^-?[0-9]+$")) return false;
+            return int.TryParse(str, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace LogicAndTrick\WikiCodeParser\Elements;
 
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
@@ -34,7 +35,7 @@ class QuoteElement extends Element
         }
 
         $text = self::BalanceQuotes($lines, $author, $postfix);
-        if ($text === null) {
+        if ($text === null || trim($text) === '') {
             $lines->setCurrent($current);
             return null;
         }
@@ -42,7 +43,7 @@ class QuoteElement extends Element
         $before = "<blockquote>";
         $plainBefore = "[quote]\n";
         if ($author !== null && trim($author) !== '') {
-            $before .= "<strong class=\"quote-name\">" . $author . " said:</strong><br/>";
+            $before .= "<strong class=\"quote-name\">" . HtmlHelper::Encode($author) . " said:</strong><br/>";
             $plainBefore = $author . " said: " . $plainBefore;
         }
 

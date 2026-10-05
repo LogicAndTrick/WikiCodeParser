@@ -1,4 +1,4 @@
-import { Parser } from '..';
+import { HtmlHelper, Parser } from '..';
 import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
@@ -28,7 +28,7 @@ export class QuoteElement extends Element {
         }
 
         const { text, author, postfix } = QuoteElement.BalanceQuotes(lines);
-        if (!text) {
+        if (!text || text.trim().length == 0) {
             lines.SetCurrent(current);
             return null;
         }
@@ -36,7 +36,7 @@ export class QuoteElement extends Element {
         let before = '<blockquote>';
         let plainBefore = '[quote]\n';
         if (author) {
-            before += `<strong class="quote-name">${author} said:</strong><br/>`;
+            before += `<strong class="quote-name">${HtmlHelper.Encode(author)} said:</strong><br/>`;
             plainBefore = `${author} said: ${plainBefore}`;
         }
 

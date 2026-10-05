@@ -1,4 +1,4 @@
-import { Parser } from '..';
+import { Parser, Util } from '..';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
@@ -35,8 +35,8 @@ export class VaultEmbedTag extends Tag {
             return null;
         }
 
-        const id = parseInt(str, 10);
-        if (!id) {
+        const id = Util.ParseIntStrict(str);
+        if (id === null || id <= 0) {
             state.Seek(index, true);
             return null;
         }

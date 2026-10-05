@@ -36,7 +36,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 return null;
             }
 
-            if (!int.TryParse(str, out var id))
+            if (!Util.TryParseIntStrict(str, out var id) || id <= 0)
             {
                 state.Seek(index, true);
                 return null;

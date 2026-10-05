@@ -51,10 +51,26 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         book.ChapterName = val;
                         break;
                     case "chapternumber":
-                        if (int.TryParse(val, out var cn)) book.ChapterNumber = cn;
+                        if (Util.TryParseIntStrict(val, out var cn) && cn > 0)
+                        {
+                            book.ChapterNumber = cn;
+                        }
+                        else
+                        {
+                            state.Seek(index, true);
+                            return null;
+                        }
                         break;
                     case "pagenumber":
-                        if (int.TryParse(val, out var pn)) book.PageNumber = pn;
+                        if (Util.TryParseIntStrict(val, out var pn) && pn > 0)
+                        {
+                            book.PageNumber = pn;
+                        }
+                        else
+                        {
+                            state.Seek(index, true);
+                            return null;
+                        }
                         break;
                 }
             }
