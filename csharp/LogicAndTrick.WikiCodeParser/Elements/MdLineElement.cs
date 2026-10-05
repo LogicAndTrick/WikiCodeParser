@@ -6,7 +6,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
     {
         public override bool Matches(Lines lines)
         {
-            var value = lines.Value().TrimEnd();
+            var value = Util.TrimEnd(lines.Value());
             return value.Length >= 3 && value == new string('-', value.Length);
         }
 

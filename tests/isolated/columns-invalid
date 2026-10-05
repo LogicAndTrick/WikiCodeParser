@@ -4,9 +4,21 @@ one
 two
 %%
 
+%%columns=6a:6b
+one
+%%
+two
+%%
+
 ###
 
 %%columns=3:3<br/>
+one<br/>
+%%<br/>
+two<br/>
+%%<br/>
+<br/>
+%%columns=6a:6b<br/>
 one<br/>
 %%<br/>
 two<br/>
@@ -15,6 +27,12 @@ two<br/>
 ###
 
 %%columns=3:3
+one
+%%
+two
+%%
+
+%%columns=6a:6b
 one
 %%
 two

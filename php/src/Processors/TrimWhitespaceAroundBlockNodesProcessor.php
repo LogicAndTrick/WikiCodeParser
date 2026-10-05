@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
 {
@@ -45,8 +46,8 @@ class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
             $next = $i < count($coll->nodes) - 1 ? $coll->nodes[$i + 1] : null;
             if ($child instanceof PlainTextNode) {
                 $text = $child->text;
-                if ($trimStart) $text = ltrim($text);
-                if ($next instanceof HtmlNode && $next->isBlockNode) $text = rtrim($text);
+                if ($trimStart) $text = Util::TrimStart($text);
+                if ($next instanceof HtmlNode && $next->isBlockNode) $text = Util::TrimEnd($text);
                 $child->text = $text;
             }
 

@@ -18,7 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + "\"";
-            if (options.ContainsKey("color") || options.ContainsKey("colour") || options.ContainsKey("size"))
+            if (options.ContainsKey("color") || options.ContainsKey("colour"))
             {
                 before += " style=\"";
                 if (options.ContainsKey("color") && Colours.IsValidColor(options["color"])) before += "color: " + options["color"] + "; ";

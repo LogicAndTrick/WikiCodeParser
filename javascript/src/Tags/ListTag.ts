@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class ListTag extends Tag {
@@ -17,7 +18,7 @@ export class ListTag extends Tag {
     public override Validate(options: Record<string, string>, text: string): boolean {
         const items = text
             .split('[*]')
-            .map(x => x.trim())
+            .map(x => Trim(x))
             .filter(x => x?.length > 0);
         return super.Validate(options, text) && items.length > 0;
     }
@@ -30,7 +31,7 @@ export class ListTag extends Tag {
         const content = new NodeCollection();
         const items = text
             .split('[*]')
-            .map(x => x.trim())
+            .map(x => Trim(x))
             .filter(x => x?.length > 0);
         for (const item of items) {
             const node = new HtmlNode('<li>', parser.ParseTags(data, item, scope, this.TagContext()), '</li>\n');

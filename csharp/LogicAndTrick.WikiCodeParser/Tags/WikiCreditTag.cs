@@ -51,7 +51,15 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         credit.Description = val;
                         break;
                     case "user":
-                        if (int.TryParse(val, out var uid)) credit.UserID = uid;
+                        if (Util.TryParseIntStrict(val, out var uid) && uid > 0)
+                        {
+                            credit.UserID = uid;
+                        }
+                        else
+                        {
+                            state.Seek(index, true);
+                            return null;
+                        }
                         break;
                     case "name":
                         credit.Name = val;

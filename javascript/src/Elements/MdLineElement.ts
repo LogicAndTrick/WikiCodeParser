@@ -4,11 +4,12 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
+import { TrimEnd } from '../Util';
 import { Element } from './Element';
 
 export class MdLineElement extends Element {
     public Matches(lines: Lines): boolean {
-        const value = lines.Value().trimEnd();
+        const value = TrimEnd(lines.Value());
         return value.length >= 3 && value == '-'.repeat(value.length);
     }
 

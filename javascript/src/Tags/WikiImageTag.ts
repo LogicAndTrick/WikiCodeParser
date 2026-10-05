@@ -9,8 +9,8 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
-
 export class WikiImageTag extends Tag {
     public TwhlBehaviour = false;
 
@@ -63,7 +63,7 @@ export class WikiImageTag extends Tag {
         const content = new NodeCollection();
 
         const image = match[1];
-        const params = match[2] ? match[2].trim().split('|') : [];
+        const params = match[2] ? Trim(match[2]).split('|') : [];
         let src = image;
         if (!image.includes('/')) {
             if (this.TwhlBehaviour) {
@@ -92,8 +92,8 @@ export class WikiImageTag extends Tag {
             const l = p.toLowerCase();
             if (WikiImageTag.IsClass(l)) classes.push(l);
             else if (l == 'loop') loop = true;
-            else if (l.length > 4 && l.substring(0, 4) == 'url:') url = p.substring(4).trim();
-            else caption = p.trim();
+            else if (l.length > 4 && l.substring(0, 4) == 'url:') url = Trim(p.substring(4));
+            else caption = Trim(p);
         }
 
         if (!caption || caption.trim() == '') caption = null;

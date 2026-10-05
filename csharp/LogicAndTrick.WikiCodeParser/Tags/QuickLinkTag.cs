@@ -20,7 +20,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (string.IsNullOrEmpty(pt)) return false;
 
             pt = pt.Substring(1);
-            return pt.Length > 0 && !pt.Contains("\n") && Regex.IsMatch(pt, @"^([a-z]{2,10}://[^\]]*?)(?:\|([^\]]*?))?", RegexOptions.IgnoreCase);
+            return pt.Length > 0 && !pt.Contains("\n") && Regex.IsMatch(pt, @"^([a-z]{2,10}://[^\]]+?)(?:\|([^\]]+?))?", RegexOptions.IgnoreCase);
         }
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)

@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class VaultEmbedTag extends Tag
 {
@@ -42,8 +43,8 @@ class VaultEmbedTag extends Tag
             return null;
         }
 
-        $id = intval($str, 10);
-        if (!$id) {
+        $id = Util::ParseIntStrict($str);
+        if ($id === null || $id <= 0) {
             $state->Seek($index, true);
             return null;
         }

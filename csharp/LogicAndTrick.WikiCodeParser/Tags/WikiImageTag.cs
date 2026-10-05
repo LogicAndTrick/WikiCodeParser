@@ -67,7 +67,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var content = new NodeCollection();
 
             var image = match.Groups[1].Value;
-            var @params = match.Groups[2].Success ? match.Groups[2].Value.Trim().Split('|') : Array.Empty<string>();
+            var @params = match.Groups[2].Success ? Util.Trim(match.Groups[2].Value).Split('|') : Array.Empty<string>();
             var src = image;
             if (!image.Contains("/"))
             {
@@ -104,8 +104,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 var l = p.ToLower();
                 if (IsClass(l)) classes.Add(l);
                 else if (l == "loop") loop = true;
-                else if (l.Length > 4 && l.Substring(0, 4) == "url:") url = p.Substring(4).Trim();
-                else caption = p.Trim();
+                else if (l.Length > 4 && l.Substring(0, 4) == "url:") url = Util.Trim(p.Substring(4));
+                else caption = Util.Trim(p);
             }
 
             if (String.IsNullOrWhiteSpace(caption)) caption = null;

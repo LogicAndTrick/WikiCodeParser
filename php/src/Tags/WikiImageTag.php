@@ -13,6 +13,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class WikiImageTag extends Tag
 {
@@ -69,7 +70,7 @@ class WikiImageTag extends Tag
         $content = new NodeCollection();
 
         $image = $match[1];
-        $params = isset($match[2]) && strlen($match[2]) > 0 ? explode('|', trim($match[2])) : [];
+        $params = isset($match[2]) && strlen($match[2]) > 0 ? explode('|', Util::Trim($match[2])) : [];
         $src = $image;
         if (!str_contains($image, '/')) {
             if ($this->twhlBehaviour) {
@@ -99,8 +100,8 @@ class WikiImageTag extends Tag
             $l = strtolower($p);
             if (self::IsClass($l)) $classes[] = $l;
             else if ($l == 'loop') $loop = true;
-            else if (strlen($l) > 4 && str_starts_with($l, 'url:')) $url = trim(substr($p, 4));
-            else $caption = trim($p);
+            else if (strlen($l) > 4 && str_starts_with($l, 'url:')) $url = Util::Trim(substr($p, 4));
+            else $caption = Util::Trim($p);
         }
 
         if (!$caption || trim($caption) == '') $caption = null;

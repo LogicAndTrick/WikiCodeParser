@@ -4,6 +4,7 @@ import { MetadataNode } from '../Nodes/MetadataNode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class WikiCategoryTag extends Tag {
@@ -33,6 +34,6 @@ export class WikiCategoryTag extends Tag {
         }
 
         state.SkipWhitespace();
-        return new MetadataNode('WikiCategory', str.trim());
+        return new MetadataNode('WikiCategory', Trim(str));
     }
 }

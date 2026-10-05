@@ -2,6 +2,8 @@
 == H2
 == H2
 === H3<br>H3
+= A & B
+= Disallowed##[[]]characters     heading
 
 ###
 
@@ -10,6 +12,8 @@
 <h2 id="H2_2">H2</h2>
 <h3 id="H3_H3">H3<br/>
 H3</h3>
+<h1 id="A_&amp;_B">A &amp; B</h1>
+<h1 id="Disallowed_characters_heading">Disallowed##[[]]characters     heading</h1>
 
 ###
 
@@ -21,3 +25,7 @@ H2
 --
 H3 H3
 -----
+A & B
+-----
+Disallowed##[[]]characters     heading
+--------------------------------------

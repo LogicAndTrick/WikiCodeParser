@@ -5,6 +5,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
+import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 
 export class PreElement extends Element {
@@ -31,7 +32,7 @@ export class PreElement extends Element {
     public Token = 'pre';
 
     public Matches(lines: Lines): boolean {
-        const value = lines.Value().trim();
+        const value = Trim(lines.Value());
         return value.length > this.Token.length + 1 && value.startsWith('[' + this.Token) && value.match(this.getTokenRegex()) != null;
     }
 
@@ -44,7 +45,7 @@ export class PreElement extends Element {
         const current = lines.Current();
         let arr: string[] = [];
 
-        let line = lines.Value().trim();
+        let line = Trim(lines.Value());
         const res = line.match(this.getTokenRegex());
         if (!res) {
             lines.SetCurrent(current);
@@ -68,7 +69,7 @@ export class PreElement extends Element {
             if (line.length > 0) arr.push(line);
             let found = false;
             while (lines.Next()) {
-                const value = lines.Value().trimEnd();
+                const value = TrimEnd(lines.Value());
                 if (value.endsWith('[/' + this.Token + ']')) {
                     const lastLine = value.substring(0, value.length - (this.Token.length + 3));
                     arr.push(lastLine);
@@ -87,7 +88,7 @@ export class PreElement extends Element {
 
         // Trim blank lines from the start and end of the array
         for (let i = 0; i < 2; i++) {
-            while (arr.length > 0 && arr[0].trim() == '') arr.splice(0, 1);
+            while (arr.length > 0 && Trim(arr[0]) == '') arr.splice(0, 1);
             arr.reverse();
         }
 
@@ -145,8 +146,8 @@ export class PreElement extends Element {
 
         // Find the longest common whitespace amongst all lines (ignore blank lines)
         const longestWhitespace = arr.reduce((c, i) => {
-            if (i.trim().length == 0) return c;
-            const wht = i.length - i.trimStart().length;
+            if (Trim(i).length == 0) return c;
+            const wht = i.length - TrimStart(i).length;
             return Math.min(wht, c);
         }, 9999);
 

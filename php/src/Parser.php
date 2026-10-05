@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\Processors\INodeProcessor;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class Parser
 {
@@ -26,7 +27,7 @@ class Parser
     public function ParseResult(string $text, string $scope = ''): ParseResult
     {
         $data = new ParseData();
-        $text = trim($text);
+        $text = Util::Trim($text);
         $node = $this->ParseElements($data, $text, $scope);
         $node = $this->RunProcessors($node, $data, $scope);
         $res = new ParseResult();
@@ -57,7 +58,7 @@ class Parser
 
                 // if we have any plain text, create a node for it
                 if (count($plain) > 0) {
-                    $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, trim(implode("\n", $plain)), $scope, TagParseContext::Block));
+                    $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, Util::Trim(implode("\n", $plain)), $scope, TagParseContext::Block));
                     $root->nodes[] = UnprocessablePlainTextNode::NewLine(); // Newline before next element
                 }
                 $plain = [];
@@ -72,7 +73,7 @@ class Parser
         }
 
         // parse any plain text that might be left
-        if (count($plain) > 0) $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, trim(implode("\n", $plain)), $scope, TagParseContext::Block));
+        if (count($plain) > 0) $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, Util::Trim(implode("\n", $plain)), $scope, TagParseContext::Block));
 
         // Trim off any whitespace nodes at the end
         $shouldTrim = function () use ($root) {

@@ -2,6 +2,7 @@
 
 namespace LogicAndTrick\WikiCodeParser\Elements;
 
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
@@ -9,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class QuoteElement extends Element
 {
@@ -17,7 +19,7 @@ class QuoteElement extends Element
 
     public function Matches(Lines $lines): bool
     {
-        $value = trim($lines->value());
+        $value = Util::Trim($lines->value());
         return strlen($value) > 6 && stripos($value, "[quote") === 0 && preg_match(self::OPEN_QUOTE_REGEX, $value);
     }
 
@@ -26,14 +28,14 @@ class QuoteElement extends Element
         $current = $lines->current();
         $arr = [];
 
-        $line = trim($lines->value());
+        $line = Util::Trim($lines->value());
         if (!preg_match(self::OPEN_QUOTE_REGEX, $line, $res)) {
             $lines->setCurrent($current);
             return null;
         }
 
         $text = self::BalanceQuotes($lines, $author, $postfix);
-        if ($text === null) {
+        if ($text === null || trim($text) === '') {
             $lines->setCurrent($current);
             return null;
         }
@@ -41,7 +43,7 @@ class QuoteElement extends Element
         $before = "<blockquote>";
         $plainBefore = "[quote]\n";
         if ($author !== null && trim($author) !== '') {
-            $before .= "<strong class=\"quote-name\">" . $author . " said:</strong><br/>";
+            $before .= "<strong class=\"quote-name\">" . HtmlHelper::Encode($author) . " said:</strong><br/>";
             $plainBefore = $author . " said: " . $plainBefore;
         }
 
@@ -61,7 +63,7 @@ class QuoteElement extends Element
         $name = null;
         $postfix = null;
 
-        $line = ltrim($lines->value());
+        $line = Util::TrimStart($lines->value());
         if (!preg_match(self::OPEN_QUOTE_REGEX, $line, $openMat)) return null;
         if (isset($openMat[1])) $name = $openMat[1];
 

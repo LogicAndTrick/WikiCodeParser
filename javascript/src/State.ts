@@ -14,7 +14,18 @@ export class State {
     }
 
     public ScanTo(find: string, ignoreCase = false): string {
-        let pos = ignoreCase ? this.Text.toLowerCase().indexOf(find.toLowerCase(), this.Index) : this.Text.indexOf(find, this.Index);
+        let pos: number;
+
+        if (ignoreCase) {
+            const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(escaped, 'gi');
+            regex.lastIndex = this.Index;
+            const match = regex.exec(this.Text);
+            pos = match ? match.index : this.Length;
+        } else {
+            pos = this.Text.indexOf(find, this.Index);
+            if (pos < 0) pos = this.Length;
+        }
         if (pos < 0) pos = this.Length;
         const ret = this.Text.substring(this.Index, pos);
         this.Index = pos;

@@ -80,8 +80,8 @@ class StateTest extends TestCase
         self::assertEquals('B', $st->Next());
         self::assertEquals(' ', $st->Next());
         self::assertEquals('C', $st->Next());
-        self::assertEquals('\0', $st->Next());
-        self::assertEquals('\0', $st->Next());
+        self::assertEquals("\0", $st->Next());
+        self::assertEquals("\0", $st->Next());
     }
 
     public function testGetToken()

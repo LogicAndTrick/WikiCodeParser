@@ -19,10 +19,8 @@ export class SizeTag extends Tag {
     public override FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
-        if (options['size']) {
-            before += ' style="';
-            if (options['size'] && FontTag.IsValidSize(options['size'])) before += 'font-size: ' + options['size'] + 'px; ';
-            before = before.trimEnd() + '"';
+        if (options['size'] && FontTag.IsValidSize(options['size'])) {
+            before += ' style="font-size: ' + options['size'] + 'px;"';
         }
         before += '>';
         const content = parser.ParseTags(data, text, scope, this.TagContext());

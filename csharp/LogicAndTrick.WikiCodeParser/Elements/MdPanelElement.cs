@@ -14,21 +14,21 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         {
             var current = lines.Current();
 
-            var meta = lines.Value().Substring(3).Trim();
+            var meta = Util.Trim(lines.Value().Substring(3));
             var title = "";
 
             var found = false;
             var arr = new List<string>();
             while (lines.Next())
             {
-                var value = lines.Value().TrimEnd();
+                var value = Util.TrimEnd(lines.Value());
                 if (value == "~~~")
                 {
                     found = true;
                     break;
                 }
 
-                if (value.Length > 1 && value[0] == ':') title = value.Substring(1).Trim();
+                if (value.Length > 1 && value[0] == ':') title = Util.Trim(value.Substring(1));
                 else arr.Add(value);
             }
 

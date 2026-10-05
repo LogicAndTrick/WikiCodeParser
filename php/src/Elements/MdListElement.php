@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 
@@ -160,7 +161,7 @@ class MdListElement extends Element
 
     public function Matches(Lines $lines): bool
     {
-        $value = trim($lines->Value());
+        $value = Util::Trim($lines->Value());
         return self::IsValidListItem($value, 0) > 0;
     }
 
@@ -186,7 +187,7 @@ class MdListElement extends Element
     {
         $ret = [];
         do {
-            $value = rtrim($lines->Value());
+            $value = Util::TrimEnd($lines->Value());
 
             if (!str_starts_with($value, $prefix)) {
                 // No longer valid for this list
@@ -204,7 +205,7 @@ class MdListElement extends Element
 
             if (strlen($value) > 1 && $value[0] == ' ' && strlen($prefix) > 0) { // don't allow this if we're parsing at level 0
                 // List item
-                $value = ltrim($value);
+                $value = Util::TrimStart($value);
 
                 // Support for continuations
                 while (str_ends_with($value, '^')) {
@@ -212,13 +213,13 @@ class MdListElement extends Element
                         $value = substr($value, 0, strlen($value) - 2) . '^';
                         break;
                     } else if ($lines->Next()) {
-                        $value = trim(substr($value, 0, strlen($value) - 1)) . "\n" . ltrim($lines->Value());
+                        $value = Util::Trim(substr($value, 0, strlen($value) - 1)) . "\n" . Util::TrimStart($lines->Value());
                     } else {
                         break;
                     }
                 }
 
-                $value = trim($value);
+                $value = Util::Trim($value);
 
                 $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', $value, $res);
                 if ($success) {

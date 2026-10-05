@@ -1,4 +1,4 @@
-import { Parser } from '..';
+import { Parser, Util } from '..';
 import { WikiRevisionCredit } from '../Models/WikiRevisionCredit';
 import { INode } from '../Nodes/INode';
 import { MetadataNode } from '../Nodes/MetadataNode';
@@ -47,7 +47,13 @@ export class WikiCreditTag extends Tag {
                     credit.Description = val;
                     break;
                 case 'user':
-                    credit.UserID = parseInt(val, 10) || undefined;
+                    const userId = Util.ParseIntStrict(val);
+                    if (userId !== null && userId > 0) {
+                        credit.UserID = userId;
+                    } else {
+                        state.Seek(index, true);
+                        return null;
+                    }
                     break;
                 case 'name':
                     credit.Name = val;

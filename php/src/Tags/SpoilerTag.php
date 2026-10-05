@@ -2,6 +2,7 @@
 
 namespace LogicAndTrick\WikiCodeParser\Tags;
 
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
@@ -67,7 +68,7 @@ class SpoilerTag extends Tag
 
         $before = "<{$this->element}";
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';
-        $before .= " title=\"{$visibleText}\">";
+        $before .= " title=\"" . HtmlHelper::Encode($visibleText) . "\">";
         $after = "</{$this->element}>";
         return new HtmlNode($before, new SpoilerNode($visibleText, $parser->ParseTags($data, $text, $scope, $this->TagContext())), $after);
     }

@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class ListTag extends Tag
 {
@@ -22,7 +23,7 @@ class ListTag extends Tag
     public function Validate(array $options, string $text): bool
     {
         $items = array_filter(
-            array_map(fn(string $x) => trim($x), explode('[*]', $text)),
+            array_map(fn(string $x) => Util::Trim($x), explode('[*]', $text)),
             fn(string $x) => $x && strlen($x) > 0
         );
         return parent::Validate($options, $text) && count($items) > 0;
@@ -36,7 +37,7 @@ class ListTag extends Tag
 
         $content = new NodeCollection();
         $items = array_filter(
-            array_map(fn(string $x) => trim($x), explode('[*]', $text)),
+            array_map(fn(string $x) => Util::Trim($x), explode('[*]', $text)),
             fn(string $x) => $x && strlen($x) > 0
         );
         foreach ($items as $item) {

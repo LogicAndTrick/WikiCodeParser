@@ -1,10 +1,11 @@
-import { Parser } from '..';
+import { HtmlHelper, Parser } from '..';
 import { Lines } from '../Lines';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { ParseData } from '../ParseData';
 import { TagParseContext } from '../TagParseContext';
+import { Trim, TrimStart } from '../Util';
 import { Element } from './Element';
 
 export class QuoteElement extends Element {
@@ -12,14 +13,14 @@ export class QuoteElement extends Element {
     private static CloseQuoteLength = 8;
 
     Matches(lines: Lines): boolean {
-        const value = lines.Value().trim();
+        const value = Trim(lines.Value());
         return value.length > 6 && value.toLowerCase().startsWith('[quote') && QuoteElement.OpenQuote.test(value);
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const current = lines.Current();
 
-        const line = lines.Value().trim();
+        const line = Trim(lines.Value());
         const res = QuoteElement.OpenQuote.exec(line);
         if (!res) {
             lines.SetCurrent(current);
@@ -27,7 +28,7 @@ export class QuoteElement extends Element {
         }
 
         const { text, author, postfix } = QuoteElement.BalanceQuotes(lines);
-        if (!text) {
+        if (!text || text.trim().length == 0) {
             lines.SetCurrent(current);
             return null;
         }
@@ -35,7 +36,7 @@ export class QuoteElement extends Element {
         let before = '<blockquote>';
         let plainBefore = '[quote]\n';
         if (author) {
-            before += `<strong class="quote-name">${author} said:</strong><br/>`;
+            before += `<strong class="quote-name">${HtmlHelper.Encode(author)} said:</strong><br/>`;
             plainBefore = `${author} said: ${plainBefore}`;
         }
 
@@ -56,7 +57,7 @@ export class QuoteElement extends Element {
 
         const openQuote = new RegExp(QuoteElement.OpenQuote, 'iy');
 
-        let line = lines.Value().trimStart();
+        let line = TrimStart(lines.Value());
         let openMat = openQuote.exec(line);
         if (!openMat) return { text: null, author: name, postfix };
 

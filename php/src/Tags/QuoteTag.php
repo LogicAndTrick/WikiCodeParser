@@ -2,11 +2,13 @@
 
 namespace LogicAndTrick\WikiCodeParser\Tags;
 
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class QuoteTag extends Tag
 {
@@ -28,10 +30,10 @@ class QuoteTag extends Tag
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';
         $before .= '>';
         if (isset($options['name'])) {
-            $before .= '<strong class="quote-name">' . $options['name'] . ' said:</strong><br/>';
+            $before .= '<strong class="quote-name">' . HtmlHelper::Encode($options['name']) . ' said:</strong><br/>';
         }
         $after = '</' . $this->element . '>';
-        $content = $parser->ParseTags($data, trim($text), $scope, $this->TagContext());
+        $content = $parser->ParseTags($data, Util::Trim($text), $scope, $this->TagContext());
         $ret = new HtmlNode($before, $content, $after);
         $ret->plainBefore = (isset($options['name']) ? $options['name'] . ' said: ' : '') . "[quote]\n";
         $ret->plainAfter = "\n[/quote]";

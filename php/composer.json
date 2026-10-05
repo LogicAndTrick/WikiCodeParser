@@ -3,7 +3,8 @@
   "description": "TWHL WikiCode parser for PHP",
   "license": "MIT",
   "require": {
-    "php": "^8.4"
+    "php": "^8.4",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "phpstan/phpstan": "^2",

@@ -5,6 +5,7 @@ import { NodeCollection } from '../Nodes/NodeCollection';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
+import { TrimEnd, TrimStart } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
 export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
@@ -25,8 +26,8 @@ export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
             const next = i < coll.Nodes.length - 1 ? coll.Nodes[i + 1] : null;
             if (child instanceof PlainTextNode) {
                 let text = child.Text;
-                if (trimStart) text = text.trimStart();
-                if (next instanceof HtmlNode && next.IsBlockNode) text = text.trimEnd();
+                if (trimStart) text = TrimStart(text);
+                if (next instanceof HtmlNode && next.IsBlockNode) text = TrimEnd(text);
                 child.Text = text;
             }
 

@@ -1,5 +1,6 @@
 |= One | Two
 |- Three | Four
+|- Five] | [Six
 
 ###
 
@@ -11,9 +12,14 @@
 <td>Three</td>
 <td>Four</td>
 </tr>
+<tr>
+<td>Five]</td>
+<td>[Six</td>
+</tr>
 </table></div>
 
 ###
 
 One | Two
 Three | Four
+Five] | [Six

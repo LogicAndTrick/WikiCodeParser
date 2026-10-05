@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class MdPanelElement extends Element
 {
@@ -20,19 +21,19 @@ class MdPanelElement extends Element
     {
         $current = $lines->Current();
 
-        $meta = trim(substr($lines->Value(), 3));
+        $meta = Util::Trim(substr($lines->Value(), 3));
         $title = '';
 
         $found = false;
         $arr = [];
         while ($lines->Next()) {
-            $value = rtrim($lines->Value());
+            $value = Util::TrimEnd($lines->Value());
             if ($value == '~~~') {
                 $found = true;
                 break;
             }
 
-            if (strlen($value) > 1 && $value[0] == ':') $title = trim(substr($value, 1));
+            if (strlen($value) > 1 && $value[0] == ':') $title = Util::Trim(substr($value, 1));
             else $arr[] = $value;
         }
 

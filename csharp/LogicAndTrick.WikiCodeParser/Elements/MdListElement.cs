@@ -48,7 +48,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override bool Matches(Lines lines)
         {
-            var value = lines.Value().Trim();
+            var value = Util.Trim(lines.Value());
             return IsValidListItem(value, 0) > 0;
         }
 
@@ -78,9 +78,9 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         {
             do
             {
-                var value = lines.Value().TrimEnd();
+                var value = Util.TrimEnd(lines.Value());
 
-                if (!value.StartsWith(prefix))
+                if (!value.StartsWith(prefix, StringComparison.Ordinal))
                 {
                     // No longer valid for this list
                     lines.Back();
@@ -98,19 +98,19 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 if (value.Length > 1 && value[0] == ' ' && prefix.Length > 0) // don't allow this if we're parsing at level 0
                 {
                     // List item
-                    value = value.TrimStart();
+                    value = Util.TrimStart(value);
 
                     // Support for continuations
-                    while (value.EndsWith("^"))
+                    while (value.EndsWith("^", StringComparison.Ordinal))
                     {
-                        if (value.EndsWith("\\^")) // super basic way to escape continuations
+                        if (value.EndsWith("\\^", StringComparison.Ordinal)) // super basic way to escape continuations
                         {
                             value = value.Substring(0, value.Length - 2) + "^";
                             break;
                         }
                         else if (lines.Next())
                         {
-                            value = value.Substring(0, value.Length - 1).Trim() + "\n" + lines.Value().TrimStart();
+                            value = Util.Trim(value.Substring(0, value.Length - 1)) + "\n" + Util.TrimStart(lines.Value());
                         }
                         else
                         {
@@ -118,7 +118,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                         }
                     }
 
-                    value = value.Trim();
+                    value = Util.Trim(value);
 
                     INode pt;
 

@@ -1,8 +1,9 @@
-import { Parser } from '..';
+import { HtmlHelper, Parser } from '..';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { State } from '../State';
+import { Trim } from '../Util';
 import { Tag } from './Tag';
 
 export class QuoteTag extends Tag {
@@ -22,10 +23,10 @@ export class QuoteTag extends Tag {
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += '>';
         if (options['name']) {
-            before += '<strong class="quote-name">' + options['name'] + ' said:</strong><br/>';
+            before += '<strong class="quote-name">' + HtmlHelper.Encode(options['name']) + ' said:</strong><br/>';
         }
         const after = '</' + this.Element + '>';
-        const content = parser.ParseTags(data, text?.trim(), scope, this.TagContext());
+        const content = parser.ParseTags(data, Trim(text), scope, this.TagContext());
         const ret = new HtmlNode(before, content, after);
         ret.PlainBefore = (options['name'] ? options['name'] + ' said: ' : '') + '[quote]\n';
         ret.PlainAfter = '\n[/quote]';

@@ -18,11 +18,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + "\"";
-            if (options.ContainsKey("size"))
+            if (options.ContainsKey("size") && FontTag.IsValidSize(options["size"]))
             {
-                before += " style=\"";
-                if (options.ContainsKey("size") && FontTag.IsValidSize(options["size"])) before += "font-size: " + options["size"] + "px; ";
-                before = before.TrimEnd(' ') + "\"";
+                before += " style=\"font-size: " + options["size"] + "px;\"";
             }
             before += ">";
             var content = parser.ParseTags(data, text, scope, TagContext);

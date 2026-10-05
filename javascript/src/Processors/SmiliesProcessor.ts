@@ -21,7 +21,7 @@ class SmileyDefinition {
         for (const token of this.Tokens) {
             if (text.indexOf(token, startIndex) == startIndex) {
                 // Must end with whitespace
-                if (startIndex + token.length < text.length - 1 && text[startIndex + token.length].trim() != '') continue;
+                if (startIndex + token.length < text.length && text[startIndex + token.length].trim() != '') continue;
                 return token;
             }
         }
@@ -62,7 +62,7 @@ export class SmiliesProcessor implements INodeProcessor {
         let index = -1;
         let numSmilies = 0;
         while (index + 1 < text.length && (index = IndexOfAny(text, this._tokenStarts, index + 1)) >= 0) {
-            if (numSmilies > SmiliesProcessor.MaxSmilies) {
+            if (numSmilies >= SmiliesProcessor.MaxSmilies) {
                 ret.push(new HtmlNode('<em class="text-danger">', new UnprocessablePlainTextNode(' [warning: too many smilies in post] '), '</em>'));
                 break;
             }
@@ -83,7 +83,7 @@ export class SmiliesProcessor implements INodeProcessor {
             if (definition == null || token == null) continue;
 
             // Must end with whitespace
-            if (index + token.length < text.length - 1 && text[index + token.length].trim() != '') continue;
+            if (index + token.length < text.length && text[index + token.length].trim() != '') continue;
 
             // We have a smiley
             if (start < index) ret.push(new PlainTextNode(text.substring(start, index)));

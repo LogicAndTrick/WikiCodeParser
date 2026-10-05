@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class WikiBookTag extends Tag
 {
@@ -56,12 +57,22 @@ class WikiBookTag extends Tag
                     $book->ChapterName = $val;
                     break;
                 case 'chapternumber':
-                    $num = intval($val, 10);
-                    $book->ChapterNumber = $num >= 1 ? $num : null;
+                    $cn = Util::ParseIntStrict($val);
+                    if ($cn !== null && $cn > 0) {
+                        $book->ChapterNumber = $cn;
+                    } else {
+                        $state->Seek($index, true);
+                        return null;
+                    }
                     break;
                 case 'pagenumber':
-                    $num = intval($val, 10);
-                    $book->PageNumber = $num >= 1 ? $num : null;
+                    $pn = Util::ParseIntStrict($val);
+                    if ($pn !== null && $pn > 0) {
+                        $book->PageNumber = $pn;
+                    } else {
+                        $state->Seek($index, true);
+                        return null;
+                    }
                     break;
             }
         }

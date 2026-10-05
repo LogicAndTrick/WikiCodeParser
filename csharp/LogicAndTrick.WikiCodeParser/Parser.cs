@@ -28,7 +28,7 @@ namespace LogicAndTrick.WikiCodeParser
         public ParseResult ParseResult(string text, string scope = "")
         {
             var data = new ParseData();
-            text = text.Trim();
+            text = Util.Trim(text);
             var node = ParseElements(data, text, scope);
             node = RunProcessors(node, data, scope);
             return new ParseResult
@@ -69,7 +69,7 @@ namespace LogicAndTrick.WikiCodeParser
                     // if we have any plain text, create a node for it
                     if (plain.Count > 0)
                     {
-                        root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, TagParseContext.Block)));
+                        root.Nodes.Add(TrimWhitespace(ParseTags(data, Util.Trim(String.Join("\n", plain)), scope, TagParseContext.Block)));
                         root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Newline before next element
                     }
                     plain.Clear();
@@ -84,7 +84,7 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             // parse any plain text that might be left
-            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain).Trim(), scope, TagParseContext.Block)));
+            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, Util.Trim(String.Join("\n", plain)), scope, TagParseContext.Block)));
             
             // Trim off any whitespace nodes at the end
             while (root.Nodes.Count > 0 && root.Nodes[root.Nodes.Count - 1] is UnprocessablePlainTextNode ptn && string.IsNullOrWhiteSpace(ptn.Text))

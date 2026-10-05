@@ -4,6 +4,7 @@ three
 - four\^
 - five^
 - six
+- seven^
 
 ###
 
@@ -17,6 +18,7 @@ three</li>
 <li>six</li>
 </ul>
 </li>
+<li>seven^</li>
 </ul>
 
 
@@ -28,3 +30,5 @@ three
 - four^
 - five
 - six
+
+- seven^

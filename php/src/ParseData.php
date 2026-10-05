@@ -13,10 +13,10 @@ class ParseData
 
     public function &Get(string $key, callable $defaultValue): mixed
     {
-        if (array_key_exists($key, $this->values)) return $this->values[$key];
-        $v = $defaultValue();
-        $this->values[$key] = $v;
-        return $v;
+        if (!array_key_exists($key, $this->values)) {
+            $this->values[$key] = $defaultValue();
+        }
+        return $this->values[$key];
     }
 
     public function Set(string $key, mixed &$value): void

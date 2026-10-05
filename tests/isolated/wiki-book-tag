@@ -1,9 +1,35 @@
 [book:test1|chapter:aaa|chapternumber:2|pagenumber:3]
 [book:test2|chapter:bbb|chapternumber:7|pagenumber:99]
+[book:test3|chapter:ccc|chapternumber:0|pagenumber:1]
+[book:test4|chapter:ccc|chapternumber:-1|pagenumber:1]
+[book:test5|chapter:ccc|chapternumber:1a|pagenumber:1]
+[book:test6|chapter:ccc|chapternumber:1e1|pagenumber:1]
+[book:test7|chapter:ccc|chapternumber:1|pagenumber:0]
+[book:test8|chapter:ccc|chapternumber:1|pagenumber:-1]
+[book:test9|chapter:ccc|chapternumber:1|pagenumber:1a]
+[book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]
 
 ###
 
+[book:test3|chapter:ccc|chapternumber:0|pagenumber:1]<br/>
+[book:test4|chapter:ccc|chapternumber:-1|pagenumber:1]<br/>
+[book:test5|chapter:ccc|chapternumber:1a|pagenumber:1]<br/>
+[book:test6|chapter:ccc|chapternumber:1e1|pagenumber:1]<br/>
+[book:test7|chapter:ccc|chapternumber:1|pagenumber:0]<br/>
+[book:test8|chapter:ccc|chapternumber:1|pagenumber:-1]<br/>
+[book:test9|chapter:ccc|chapternumber:1|pagenumber:1a]<br/>
+[book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]
+
 ###
+
+[book:test3|chapter:ccc|chapternumber:0|pagenumber:1]
+[book:test4|chapter:ccc|chapternumber:-1|pagenumber:1]
+[book:test5|chapter:ccc|chapternumber:1a|pagenumber:1]
+[book:test6|chapter:ccc|chapternumber:1e1|pagenumber:1]
+[book:test7|chapter:ccc|chapternumber:1|pagenumber:0]
+[book:test8|chapter:ccc|chapternumber:1|pagenumber:-1]
+[book:test9|chapter:ccc|chapternumber:1|pagenumber:1a]
+[book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]
 
 ###
 

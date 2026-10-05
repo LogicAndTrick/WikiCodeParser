@@ -62,6 +62,20 @@ public class BasicTests
     }
 
     [TestMethod]
+    public void TestCarriageReturns()
+    {
+        var input = "Line 1\r\nLine 2\r\nLine 3\nLine 4";
+        var output = "Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4";
+
+        var config = new ParserConfiguration();
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml());
+    }
+
+    [TestMethod]
     public void TestNewLineAfterTag()
     {
         var input = "A [code]B[/code]\n\nC";

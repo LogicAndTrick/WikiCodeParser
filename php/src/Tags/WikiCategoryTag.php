@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class WikiCategoryTag extends Tag
 {
@@ -40,6 +41,6 @@ class WikiCategoryTag extends Tag
         }
 
         $state->SkipWhitespace();
-        return new MetadataNode('WikiCategory', trim($str));
+        return new MetadataNode('WikiCategory', Util::Trim($str));
     }
 }

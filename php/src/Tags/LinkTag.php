@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class LinkTag extends Tag
 {
@@ -41,6 +42,7 @@ class LinkTag extends Tag
 
     public function Validate(array $options, string $text): bool
     {
+        if (isset($options['url']) && Util::Trim($options['url']) === '') return false;
         $url = $this->BuildUrl($options, $text);
         return HtmlHelper::ValidateUrl($url) && preg_match('/^[^\]"\n ]+$/i', $url);
     }

@@ -11,7 +11,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
         public int Priority { get; set; } = 0;
 
         public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) ||
-                                                     Scopes.Contains(scope, StringComparer.InvariantCultureIgnoreCase);
+                                                     Scopes.Contains(scope);
 
         public abstract bool Matches(Lines lines);
         public abstract INode Consume(Parser parser, ParseData data, Lines lines, string scope);

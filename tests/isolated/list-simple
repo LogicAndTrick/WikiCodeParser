@@ -3,7 +3,9 @@
 - three
 # four
 # five
-# six
+# trailing nbsp: six 
+* seven
+​* leading zero-width: eight
 
 ###
 
@@ -15,8 +17,13 @@
 <ol>
 <li>four</li>
 <li>five</li>
-<li>six</li>
+<li>trailing nbsp: six </li>
 </ol>
+<ul>
+<li>seven</li>
+</ul>
+
+​* leading zero-width: eight
 
 ###
 
@@ -25,4 +32,7 @@
 - three
 # four
 # five
-# six
+# trailing nbsp: six 
+- seven
+
+​* leading zero-width: eight

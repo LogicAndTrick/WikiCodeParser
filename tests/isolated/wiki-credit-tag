@@ -3,10 +3,24 @@
 [credit:test3|name:hi]
 [credit:test4|url:http://example.com]
 [credit:test5|user:456|name:zzz|url:http://example.com]
+[credit:test2|user:0]
+[credit:test2|user:-1]
+[credit:test2|user:1a]
+[credit:test2|user:1e1]
 
 ###
 
+[credit:test2|user:0]<br/>
+[credit:test2|user:-1]<br/>
+[credit:test2|user:1a]<br/>
+[credit:test2|user:1e1]
+
 ###
+
+[credit:test2|user:0]
+[credit:test2|user:-1]
+[credit:test2|user:1a]
+[credit:test2|user:1e1]
 
 ###
 

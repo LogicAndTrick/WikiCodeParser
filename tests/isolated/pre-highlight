@@ -8,12 +8,20 @@ test2
 
 B
 
+[pre=highlight]
+@@red:2
+test1
+test2
+[/pre]
+
 ###
 
 A
 <pre class="lang-cpp"><code><div class="line-highlight" style="top: 0em; height: 2em; background: red;"></div>test1
 test2</code></pre>
 B
+<pre><code><div class="line-highlight" style="top: 0em; height: 2em; background: red;"></div>test1
+test2</code></pre>
 
 ###
 
@@ -21,3 +29,5 @@ A
 test1
 test2
 B
+test1
+test2

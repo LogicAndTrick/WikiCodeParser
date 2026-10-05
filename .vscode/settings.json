@@ -8,13 +8,16 @@
         "source.fixAll": "explicit",
         "source.organizeImports": "explicit"
     },
-    "testExplorer.useNativeTesting": true,
-    "editor.formatOnSave": true,
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
     },
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[php]": {
+        "editor.formatOnSave": true,
     },
     "phpunit.phpunit": "${workspaceFolder}/php/vendor/bin/phpunit",
     "phpunit.args": [
@@ -25,4 +28,12 @@
     "phpstan.rootDir": "${workspaceFolder}/php",
     "phpstan.configFile": "phpstan.neon",
     "phpstan.binPath": "${workspaceFolder}/php/vendor/bin/phpstan",
+    "[markdown]": {
+        "editor.defaultFormatter": "vscode.markdown-language-features",
+        "editor.formatOnSave": false
+    },
+    "[html]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "vscode.html-language-features"
+    }
 }

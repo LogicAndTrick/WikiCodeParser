@@ -1,4 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
+import { HtmlNode, MdHeadingElement, NewLineProcessor, QuickLinkTag, UnprocessablePlainTextNode } from '../src';
 import { QuoteElement } from '../src/Elements/QuoteElement';
 import { Lines } from '../src/Lines';
 import { INode } from '../src/Nodes/INode';
@@ -20,6 +21,17 @@ function GetLeavesRecursive(list: INode[], node: INode): void {
 function GetLeaves(root: INode): INode[] {
     const list: INode[] = [];
     GetLeavesRecursive(list, root);
+    return list;
+}
+
+function CollapseCollectionsRecursive(list: INode[], node: INode): void {
+    if (node instanceof NodeCollection) node.Nodes.forEach(x => CollapseCollectionsRecursive(list, x));
+    else list.push(node);
+}
+
+function CollapseCollections(root: INode): INode[] {
+    const list: INode[] = [];
+    CollapseCollectionsRecursive(list, root);
     return list;
 }
 
@@ -115,6 +127,39 @@ describe('Basic tests', () => {
         expect(node.Text).toBe('1 & 2');
         expect(node.ToHtml()).toBe('1 &amp; 2');
         expect(node.ToPlainText()).toBe('1 & 2');
+    });
+    test('html escaping inside tag', () => {
+        const config = new ParserConfiguration();
+        config.Tags.push(new QuickLinkTag());
+        const parser = new Parser(config);
+        const result = parser.ParseResult('[https://example.com|ex&ple]');
+        expect(result.Content).toBeInstanceOf(NodeCollection);
+        const leaves = CollapseCollections(result.Content);
+        expect(leaves.length).toBe(1);
+        const node = leaves[0] as HtmlNode;
+        expect(node).toBeInstanceOf(HtmlNode);
+        expect(node.HtmlBefore).toBe('<a href="https://example.com">');
+        expect(node.HtmlAfter).toBe('</a>');
+        const content = CollapseCollections(node.Content);
+        expect(content.length).toBe(1);
+        const ptnode = content[0] as UnprocessablePlainTextNode;
+        expect(ptnode).toBeInstanceOf(UnprocessablePlainTextNode);
+        expect(ptnode.Text).toBe('ex&ple');
+    });
+    test('Block new lines', () => {
+        const config = new ParserConfiguration();
+        config.Elements.push(new MdHeadingElement());
+        config.Processors.push(new NewLineProcessor());
+        const parser = new Parser(config);
+        const result = parser.ParseResult('a\n\n\n\n= b\n\n\n\nc\nd\n\ne');
+        expect(result.ToHtml()).toBe('a\n<h1 id="b">b</h1>\nc<br/>\nd<br/>\n<br/>\ne');
+    });
+    test('Carriage returns', () => {
+        const config = new ParserConfiguration();
+        config.Processors.push(new NewLineProcessor());
+        const parser = new Parser(config);
+        const result = parser.ParseResult('Line 1\r\nLine 2\r\nLine 3\nLine 4');
+        expect(result.ToHtml()).toBe('Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4');
     });
 });
 

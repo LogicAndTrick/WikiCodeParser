@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class WikiCreditTag extends Tag
 {
@@ -54,8 +55,13 @@ class WikiCreditTag extends Tag
                     $credit->Description = $val;
                     break;
                 case 'user':
-                    $num = intval($val, 10);
-                    $credit->UserID = $num >= 1 ? $num : null;
+                    $userId = Util::ParseIntStrict($val);
+                    if ($userId !== null && $userId > 0) {
+                        $credit->UserID = $userId;
+                    } else {
+                        $state->Seek($index, true);
+                        return null;
+                    }
                     break;
                 case 'name':
                     $credit->Name = $val;

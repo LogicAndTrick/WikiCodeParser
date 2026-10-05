@@ -28,7 +28,7 @@ class QuickLinkTag extends Tag
         if (!$pt || $pt == '') return false;
 
         $pt = substr($pt, 1);
-        return strlen($pt) > 0 && !str_contains($pt, "\n") && preg_match('/^([a-z]{2,10}:\/\/[^\]]*?)(?:\|([^\]]*?))?/i', $pt);
+        return strlen($pt) > 0 && !str_contains($pt, "\n") && preg_match('/^([a-z]{2,10}:\/\/[^\]]+?)(?:\|([^\]]+?))?/i', $pt);
     }
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null

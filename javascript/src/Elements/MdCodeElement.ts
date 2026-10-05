@@ -4,6 +4,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
+import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 import { PreElement } from './PreElement';
 
@@ -20,7 +21,7 @@ export class MdCodeElement extends Element {
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode | null {
         const current = lines.Current();
-        let firstLine = lines.Value().substring(3).trimEnd();
+        let firstLine = TrimEnd(lines.Value().substring(3));
 
         let lang: string | null = null;
         if (PreElement.AllowedLanguages.includes(firstLine.toLowerCase())) {
@@ -32,7 +33,7 @@ export class MdCodeElement extends Element {
 
         let found = false;
         while (lines.Next()) {
-            const value = lines.Value().trimEnd();
+            const value = TrimEnd(lines.Value());
             if (value.endsWith('```')) {
                 const lastLine = value.substring(0, value.length - 3);
                 arr.push(lastLine);
@@ -50,7 +51,7 @@ export class MdCodeElement extends Element {
 
         // Trim blank lines from the start and end of the array
         for (let i = 0; i < 2; i++) {
-            while (arr.length > 0 && arr[0].trim() == '') arr.splice(0, 1);
+            while (arr.length > 0 && Trim(arr[0]) == '') arr.splice(0, 1);
             arr.reverse();
         }
 
@@ -59,8 +60,8 @@ export class MdCodeElement extends Element {
 
         // Find the longest common whitespace amongst all lines (ignore blank lines)
         const longestWhitespace = arr.reduce((c, i) => {
-            if (i.trim().length == 0) return c;
-            const wht = i.length - i.trimStart().length;
+            if (Trim(i).length == 0) return c;
+            const wht = i.length - TrimStart(i).length;
             return Math.min(wht, c);
         }, 9999);
 

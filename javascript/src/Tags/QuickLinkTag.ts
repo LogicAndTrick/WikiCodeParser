@@ -22,7 +22,7 @@ export class QuickLinkTag extends Tag {
         if (!pt || pt == '') return false;
 
         pt = pt.substring(1);
-        return pt.length > 0 && !pt.includes('\n') && pt.match(/^([a-z]{2,10}:\/\/[^\]]*?)(?:\|([^\]]*?))?/i) != null;
+        return pt.length > 0 && !pt.includes('\n') && pt.match(/^([a-z]{2,10}:\/\/[^\]]+?)(?:\|([^\]]+?))?/i) != null;
     }
 
     public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {

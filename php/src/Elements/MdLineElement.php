@@ -8,12 +8,13 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class MdLineElement extends Element
 {
     public function Matches(Lines $lines): bool
     {
-        $value = rtrim($lines->Value());
+        $value = Util::TrimEnd($lines->Value());
         return strlen($value) >= 3 && $value == str_repeat('-', strlen($value));
     }
 

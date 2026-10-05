@@ -24,10 +24,8 @@ class SizeTag extends Tag
     {
         $before = '<' . $this->element;
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';
-        if (isset($options['size'])) {
-            $before .= ' style="';
-            if (isset($options['size']) && FontTag::IsValidSize($options['size'])) $before .= 'font-size: ' . $options['size'] . 'px; ';
-            $before = rtrim($before) . '"';
+        if (isset($options['size']) && FontTag::IsValidSize($options['size'])) {
+            $before .= ' style="font-size: ' . $options['size'] . 'px;"';
         }
         $before .= '>';
         $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());

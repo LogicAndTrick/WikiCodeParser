@@ -1,8 +1,10 @@
 import { Parser } from '..';
+import { HtmlHelper } from '../HtmlHelper';
 import { Lines } from '../Lines';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { TagParseContext } from '../TagParseContext';
+import { Trim } from '../Util';
 import { Element } from './Element';
 
 class HeadingNode implements INode {
@@ -16,7 +18,8 @@ class HeadingNode implements INode {
     }
 
     ToHtml(): string {
-        return `<h${this.Level} id="${this.ID}">${this.Text.ToHtml()}</h${this.Level}>`;
+        const escaped = HtmlHelper.AttributeEncode(this.ID);
+        return `<h${this.Level} id="${escaped}">${this.Text.ToHtml()}</h${this.Level}>`;
     }
 
     ToPlainText(): string {
@@ -45,14 +48,14 @@ export class MdHeadingElement extends Element {
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
-        const value = lines.Value().trim();
+        const value = Trim(lines.Value());
         const res = /^(=+)(.*?)=*$/i.exec(value)!;
         const level = Math.min(6, res[1].length);
-        const text = res[2].trim();
+        const text = Trim(res[2]);
 
-        let contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
-        contents = parser.RunProcessors(contents, data, scope);
-        const id = MdHeadingElement.GetUniqueAnchor(data, contents.ToPlainText());
+        const contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
+        const contentsPlainText = parser.RunProcessors(contents, data, scope).ToPlainText();
+        const id = MdHeadingElement.GetUniqueAnchor(data, contentsPlainText);
         return new HeadingNode(level, id, contents);
     }
 
@@ -60,7 +63,7 @@ export class MdHeadingElement extends Element {
         const key = MdHeadingElement.name + '.IdList';
         const anchors = data.Get(key, () => new Set<string>());
 
-        const id = text.replace(/[^\da-z?/:@\-._~!$&'()*+,;=]/gi, '_');
+        const id = text.replace(/[^0-9A-Za-z?/:@\-._~!$&'()*+,;=]+/gu, '_');
         let anchor = id;
         let inc = 1;
         do {

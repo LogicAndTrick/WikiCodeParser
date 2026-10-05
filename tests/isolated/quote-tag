@@ -5,6 +5,12 @@ hello
 [/quote]
 [/quote]
 
+[quote=<strong>test</strong>]
+test
+[/quote]
+
+[quote][/quote]
+
 ###
 
 <blockquote><strong class="quote-name">test said:</strong><br/>hi
@@ -12,6 +18,11 @@ hello
 <blockquote>hello</blockquote>
 </blockquote>
 
+
+
+<blockquote><strong class="quote-name">&lt;strong&gt;test&lt;/strong&gt; said:</strong><br/>test</blockquote>
+
+[quote][/quote]
 
 ###
 
@@ -23,3 +34,11 @@ hello
 [/quote]
 
 [/quote]
+
+
+
+<strong>test</strong> said: [quote]
+test
+[/quote]
+
+[quote][/quote]

@@ -23,7 +23,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
-            before += $" title=\"{visibleText}\">";
+            before += $" title=\"{HtmlHelper.Encode(visibleText)}\">";
             var after = "</" + Element + '>';
             return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, TagContext)), after);
         }

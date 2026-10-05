@@ -17,20 +17,20 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var value = lines.Value();
             var arr = new List<string>
             {
-                value.Substring(1).Trim()
+                Util.Trim(value.Substring(1))
             };
             while (lines.Next())
             {
-                value = lines.Value().Trim();
+                value = Util.Trim(lines.Value());
                 if (value.Length == 0 || value[0] != '>')
                 {
                     lines.Back();
                     break;
                 }
-                arr.Add(value.Substring(1).Trim());
+                arr.Add(Util.Trim(value.Substring(1)));
             }
 
-            var text = String.Join("\n", arr).Trim();
+            var text = Util.Trim(String.Join("\n", arr));
             return new HtmlNode("<blockquote>", parser.ParseElements(data, text, scope), "</blockquote>")
             {
                 PlainBefore = "[quote]\n",
