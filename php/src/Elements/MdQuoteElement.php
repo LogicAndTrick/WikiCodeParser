@@ -13,7 +13,7 @@ class MdQuoteElement extends Element
 {
     public function Matches(Lines $lines): bool
     {
-        $value = Util::Trim($lines->Value());
+        $value = $lines->Value();
         return strlen($value) > 0 && str_starts_with($value, '>');
     }
 

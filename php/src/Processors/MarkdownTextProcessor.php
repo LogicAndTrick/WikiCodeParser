@@ -68,7 +68,7 @@ class MarkdownTextProcessor implements INodeProcessor
 
         // Make sure we can close this token
         $valid = ($endToken + 1 == strlen($text) || self::IsEndBreakChar($text[$endToken + 1])) // end of string or before an end breaker
-            && trim($text[$endToken - 1]) != ''; // not whitespace previous
+            && Util::Trim($text[$endToken - 1]) != ''; // not whitespace previous
         if (!$valid) return null;
 
         $str = substr($text, $position + 1, $endToken - $position - 1);
@@ -111,7 +111,7 @@ class MarkdownTextProcessor implements INodeProcessor
             // Make sure we can start a new token
             $valid = ($nextIndex == 0 || self::IsStartBreakChar($text[$nextIndex - 1])) // start of string or after a start breaker
                 && $nextIndex + 1 < strlen($text) // not end of string
-                && trim($text[$nextIndex + 1]) != ''; // not whitespace next
+                && Util::Trim($text[$nextIndex + 1]) != ''; // not whitespace next
             if (!$valid) {
                 $index = $nextIndex + 1;
                 continue;

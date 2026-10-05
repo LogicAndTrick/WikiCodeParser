@@ -39,7 +39,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             
             // Make sure we can close this token
             var valid = (endToken + 1 == text.Length || IsEndBreakChar(text[endToken + 1])) // end of string or before an end breaker
-                        && !Char.IsWhiteSpace(text, endToken - 1); // not whitespace previous
+                        && Util.Trim(text[endToken - 1].ToString()) != ""; // not whitespace previous
             if (!valid) return null;
 
             var str = text.Substring(position + 1, endToken - position - 1);
@@ -81,7 +81,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 // Make sure we can start a new token
                 var valid = (nextIndex == 0 || IsStartBreakChar(text[nextIndex - 1])) // start of string or after a start breaker
                             && nextIndex + 1 < text.Length // not end of string
-                            && !Char.IsWhiteSpace(text, nextIndex + 1); // not whitespace next
+                            && Util.Trim(text[nextIndex + 1].ToString()) != ""; // not whitespace next
                 if (!valid)
                 {
                     index = nextIndex + 1;

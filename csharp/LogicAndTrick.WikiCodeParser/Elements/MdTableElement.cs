@@ -42,7 +42,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             {
                 var c = text[i];
                 if (c == '[') level++;
-                else if (c == ']') level--;
+                else if (c == ']')
+                {
+                    if (level > 0) level--;
+                }
                 else if ((c == '|' && level == 0) || i == len - 1)
                 {
                     yield return Util.Trim(text.Substring(last, (i - last) + (i == len - 1 ? 1 : 0)));

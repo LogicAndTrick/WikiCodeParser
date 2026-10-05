@@ -70,7 +70,7 @@ class State
      */
     public function  Next(): string
     {
-        if ($this->index >= $this->length) return '\0';
+        if ($this->index >= $this->length) return "\0";
         return $this->text[$this->index++];
     }
 

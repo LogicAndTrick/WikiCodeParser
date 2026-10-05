@@ -96,8 +96,9 @@ class MdTableElement extends Element
         for ($i = 0; $i < $len; $i++) {
             $c = $text[$i];
             if ($c == '[') $level++;
-            else if ($c == ']') $level--;
-            else if (($c == '|' && $level == 0) || $i == $len - 1) {
+            else if ($c == ']') {
+                if ($level > 0) $level--;
+            } else if (($c == '|' && $level == 0) || $i == $len - 1) {
                 $ret[] = Util::Trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
                 $last = $i + 1;
             }

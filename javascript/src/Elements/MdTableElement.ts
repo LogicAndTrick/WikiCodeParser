@@ -82,8 +82,9 @@ export class MdTableElement extends Element {
         for (i = 0; i < len; i++) {
             const c = text[i];
             if (c == '[') level++;
-            else if (c == ']') level--;
-            else if ((c == '|' && level == 0) || i == len - 1) {
+            else if (c == ']') {
+                if (level > 0) level--;
+            } else if ((c == '|' && level == 0) || i == len - 1) {
                 ret.push(Trim(text.substring(last, i + (i == len - 1 ? 1 : 0))));
                 last = i + 1;
             }

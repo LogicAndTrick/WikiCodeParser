@@ -18,7 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var current = lines.Current();
 
             var meta = lines.Value().Substring(10);
-            var colDefs = meta.Split(':').Select(x => int.TryParse(x, out var v) ? v : 0).ToList();
+            var colDefs = meta.Split(':').Select(x => Util.TryParseIntStrict(x, out var v) ? v : 0).ToList();
             var total = 0;
 
             foreach (var d in colDefs)
