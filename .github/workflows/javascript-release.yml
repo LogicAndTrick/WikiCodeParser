@@ -17,6 +17,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: "@logicandtrick"
+
       - name: Build
         run: |
           cd javascript
@@ -26,6 +29,6 @@ jobs:
       - name: Publish
         run: |
           cd javascript
-          npm publish --non-interactive --access public
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
