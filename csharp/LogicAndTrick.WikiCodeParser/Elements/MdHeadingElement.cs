@@ -21,8 +21,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var text = Util.Trim(res.Groups[2].Value);
 
             var contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
-            contents = parser.RunProcessors(contents, data, scope);
-            var id = GetUniqueAnchor(data, contents.ToPlainText());
+            var contentsPlainText = parser.RunProcessors(contents, data, scope).ToPlainText();
+            var id = GetUniqueAnchor(data, contentsPlainText);
             return new HeadingNode(level, id, contents);
         }
 
@@ -31,7 +31,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             const string key = nameof(MdHeadingElement) + ".IdList";
             var anchors = data.Get(key, () => new HashSet<string>());
 
-            var id = Regex.Replace(text, @"[^0-9a-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            var id = Regex.Replace(text, @"[^0-9A-Za-z?/:@\-._~!$&'()*+,;=]+", "_");
             var anchor = id;
             var inc = 1;
             do {
@@ -60,7 +60,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
             public string ToHtml()
             {
-                return $"<h{Level} id=\"{ID}\">"
+                var escaped = HtmlHelper.AttributeEncode(ID);
+                return $"<h{Level} id=\"{escaped}\">"
                        + Text.ToHtml()
                        + $"</h{Level}>";
             }

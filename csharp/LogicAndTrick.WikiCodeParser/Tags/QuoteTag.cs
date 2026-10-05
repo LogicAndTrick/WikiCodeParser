@@ -26,7 +26,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 before += "<strong class=\"quote-name\">" + options["name"] + " said:</strong><br/>";
             }
             var after = "</" + Element + '>';
-            var content = parser.ParseTags(data, text == null ? Util.Trim(text) : null, scope, TagContext);
+            var content = parser.ParseTags(data, text == null ? null : Util.Trim(text), scope, TagContext);
             return new HtmlNode(before, content, after)
             {
                 PlainBefore = (options.ContainsKey("name") ? options["name"] + " said: " : "") + "[quote]\n",

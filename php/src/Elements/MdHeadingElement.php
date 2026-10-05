@@ -3,6 +3,7 @@
 namespace LogicAndTrick\WikiCodeParser\Elements;
 
 use Exception;
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
@@ -26,14 +27,20 @@ class HeadingNode implements INode
 
     public function ToHtml(): string
     {
-        return "<h{$this->level} id=\"{$this->id}\">{$this->text->ToHtml()}</h{$this->level}>";
+        $escaped = HtmlHelper::AttributeEncode($this->id);
+        return "<h{$this->level} id=\"{$escaped}\">{$this->text->ToHtml()}</h{$this->level}>";
     }
 
     public function ToPlainText(): string
     {
         $plain = $this->text->ToPlainText();
         $plain = str_replace("\n", ' ', $plain);
-        return $plain . "\n" . str_repeat('-', mb_strlen($plain));
+        // convert to utf-16 so we get consistent character counts between the 3 implementation languages
+        // if we wanted to get a true character count, we could use grapheme_strlen() from the intl extension
+        // however that is less commonly installed, so we do this instead.
+        // divide by 2 since strlen counts bytes and UTF-16LE uses 2 bytes per character
+        $length = intval(strlen(mb_convert_encoding($plain, 'UTF-16LE', 'UTF-8')) / 2);
+        return $plain . "\n" . str_repeat('-', $length);
     }
 
     public function GetChildren(): array
@@ -76,8 +83,8 @@ class MdHeadingElement extends Element
         $text = Util::Trim($res[2]);
 
         $contents = $parser->ParseTags($data, $text, $scope, TagParseContext::Inline);
-        $contents = $parser->RunProcessors($contents, $data, $scope);
-        $id = MdHeadingElement::GetUniqueAnchor($data, $contents->ToPlainText());
+        $contentsPlainText = $parser->RunProcessors($contents, $data, $scope)->ToPlainText();
+        $id = MdHeadingElement::GetUniqueAnchor($data, $contentsPlainText);
         return new HeadingNode($level, $id, $contents);
     }
 
@@ -87,7 +94,7 @@ class MdHeadingElement extends Element
         /** @var string[] $anchors */
         $anchors = &$data->Get($key, fn() => []);
 
-        $id = preg_replace('/[^\\da-z?\\/:@\-._~!$&\'()*+,;=]/iu', '_', $text) ?? '';
+        $id = preg_replace('/[^0-9A-Za-z?\\/:@\-._~!$&\'()*+,;=]+/u', '_', $text) ?? '';
         $anchor = $id;
         $inc = 1;
         do {
