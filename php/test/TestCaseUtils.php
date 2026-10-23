@@ -63,6 +63,13 @@ class TestCaseUtils
         return __DIR__ . '/../../tests/' . $folder;
     }
 
+    public static function GetTestCaseNames(string $folder): array
+    {
+        $dir = TestCaseUtils::GetTestCaseDirectory($folder);
+        $files = scandir($dir);
+        return array_filter($files, fn(string $s) => $s != '..' && $s != '.');
+    }
+
     public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false): void
     {
         $dir = TestCaseUtils::GetTestCaseDirectory($folder);

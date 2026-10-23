@@ -88,6 +88,15 @@ public static class TestCaseUtils
         return Path.Combine(dir, "tests", folder);
     }
 
+    public static IEnumerable<string> GetTestCaseNames(string folder)
+    {
+        var dir = GetTestCaseDirectory(folder);
+        foreach (var file in Directory.GetFiles(dir))
+        {
+            yield return Path.GetFileName(file);
+        }
+    }
+
     // ReSharper disable InconsistentNaming
     public static void RunTestCase(ParserConfiguration config, string folder, string name, bool split = false)
     {

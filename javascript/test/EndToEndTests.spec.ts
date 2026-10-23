@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
 
@@ -37,8 +37,17 @@ function Test(config: ParserConfiguration, input: string, expectedOutput: string
     }
 }
 
-function RunTestCaseInFolder(config: ParserConfiguration, folder: string, name: string, split = false) {
-    const dir = `${__dirname}/../../tests/${folder}`;
+function GetTestCaseDirectory(folder: string): string {
+    return `${__dirname}/../../tests/${folder}`;
+}
+
+function GetTestCaseNames(folder: string): string[] {
+    const dir = GetTestCaseDirectory(folder);
+    return readdirSync(dir);
+}
+
+function RunTestCase(config: ParserConfiguration, folder: string, name: string, split = false) {
+    const dir = GetTestCaseDirectory(folder);
     let _in: string;
     let _out: string;
     let _plain: string | undefined = undefined;
@@ -64,92 +73,13 @@ function RunTestCaseInFolder(config: ParserConfiguration, folder: string, name: 
 }
 
 describe('Isolated tests', () => {
-    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Twhl(), 'isolated', name, split);
-
-    test('missing-tag', () => RunTestCase('missing-tag'));
-    test('unicode-escape', () => RunTestCase('unicode-escape'));
-
-    test('ref-simple', () => RunTestCase('ref-simple'));
-
-    test('pre-simple', () => RunTestCase('pre-simple'));
-    test('pre-lang', () => RunTestCase('pre-lang'));
-    test('pre-highlight', () => RunTestCase('pre-highlight'));
-
-    test('mdcode-simple', () => RunTestCase('mdcode-simple'));
-    test('mdcode-lang', () => RunTestCase('mdcode-lang'));
-
-    test('heading-simple', () => RunTestCase('heading-simple'));
-    test('heading-duplicates', () => RunTestCase('heading-duplicates'));
-    test('heading-numeric', () => RunTestCase('heading-numeric'));
-    test('heading-processing', () => RunTestCase('heading-processing'));
-    test('heading-unicode', () => RunTestCase('heading-unicode'));
-
-    test('mdline-simple', () => RunTestCase('mdline-simple'));
-
-    test('columns-simple', () => RunTestCase('columns-simple'));
-    test('columns-invalid', () => RunTestCase('columns-invalid'));
-
-    test('panel-simple', () => RunTestCase('panel-simple'));
-
-    test('mdquote-simple', () => RunTestCase('mdquote-simple'));
-    test('mdquote-nested', () => RunTestCase('mdquote-nested'));
-
-    test('list-simple', () => RunTestCase('list-simple'));
-    test('list-nested', () => RunTestCase('list-nested'));
-    test('list-continuation', () => RunTestCase('list-continuation'));
-    test('list-block', () => RunTestCase('list-block'));
-    test('list-ref', () => RunTestCase('list-ref'));
-
-    test('table-simple', () => RunTestCase('table-simple'));
-    test('table-ref', () => RunTestCase('table-ref'));
-
-    test('tags-plain', () => RunTestCase('tags-plain'));
-    test('code-tag', () => RunTestCase('code-tag'));
-    test('font-tag', () => RunTestCase('font-tag'));
-    test('h-tag', () => RunTestCase('h-tag'));
-    test('pre-tag', () => RunTestCase('pre-tag'));
-    test('quote-tag', () => RunTestCase('quote-tag'));
-    test('quote-with-headings', () => RunTestCase('quote-with-headings'));
-    test('image-tag', () => RunTestCase('image-tag'));
-    test('link-tag', () => RunTestCase('link-tag'));
-    test('vault-tag', () => RunTestCase('vault-tag'));
-    test('quick-link-tag', () => RunTestCase('quick-link-tag'));
-    test('spoiler-tag', () => RunTestCase('spoiler-tag'));
-    test('youtube-tag', () => RunTestCase('youtube-tag'));
-
-    test('wiki-category-tag', () => RunTestCase('wiki-category-tag'));
-    test('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
-    test('wiki-file-tag', () => RunTestCase('wiki-file-tag'));
-    test('wiki-credit-tag', () => RunTestCase('wiki-credit-tag'));
-    test('wiki-book-tag', () => RunTestCase('wiki-book-tag'));
-    test('wiki-archive-tag', () => RunTestCase('wiki-archive-tag'));
-    test('wiki-youtube-tag', () => RunTestCase('wiki-youtube-tag'));
-    test('wiki-link-tag', () => RunTestCase('wiki-link-tag'));
-
-    test('processor-newlines', () => RunTestCase('processor-newlines'));
-    test('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
-    test('processor-smilies-toomany', () => RunTestCase('processor-smilies-toomany'));
-    test('processor-markdowntext', () => RunTestCase('processor-markdowntext'));
-    test('processor-autolinking', () => RunTestCase('processor-autolinking'));
+    test.each(GetTestCaseNames('isolated'))('Isolated: %p', name => RunTestCase(ParserConfiguration.Twhl(), 'isolated', name));
 });
 
 describe('Isolated tests: snarkpit', () => {
-    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Snarkpit(), 'isolated-sp', name, split);
-
-    test('pre-simple', () => RunTestCase('pre-simple'));
-    test('pre-lang', () => RunTestCase('pre-lang'));
-    test('pre-highlight', () => RunTestCase('pre-highlight'));
-    test('code-tag', () => RunTestCase('code-tag'));
-    test('pre-tag', () => RunTestCase('pre-tag'));
-    test('align-tag', () => RunTestCase('align-tag'));
-    test('size-tag', () => RunTestCase('size-tag'));
-    test('color-tag', () => RunTestCase('color-tag'));
-    test('list-tag', () => RunTestCase('list-tag'));
-    test('wiki-image-tag', () => RunTestCase('wiki-image-tag'));
-    test('processor-smilies-basic', () => RunTestCase('processor-smilies-basic'));
+    test.each(GetTestCaseNames('isolated-sp'))('Isolated-SP: %p', name => RunTestCase(ParserConfiguration.Snarkpit(), 'isolated-sp', name));
 });
 
 describe('End to end tests', () => {
-    const RunTestCase = (name: string, split = false) => RunTestCaseInFolder(ParserConfiguration.Twhl(), 'endtoend', name, split);
-    test('wikicode-page', () => RunTestCase('wikicode-page'));
+    test('wikicode-page', () => RunTestCase(ParserConfiguration.Twhl(), 'endtoend', 'wikicode-page'));
 });
