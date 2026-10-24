@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
@@ -62,10 +63,31 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
             // Store the ref node
             var node = parser.ParseElements(data, Util.Trim(string.Join("\n", arr)), scope);
+            RemoveRefNodes(node);
             data.Set($"Ref::{name}", node);
 
             // Return nothing
             return PlainTextNode.Empty;
+        }
+
+        /// <summary>
+        /// Removes all other ref nodes from this node (block ref recursion)
+        /// </summary>
+        private static void RemoveRefNodes(INode node)
+        {
+            var children = node.GetChildren();
+            for (var i = 0; i < children.Count; i++)
+            {
+                var ch = children[i];
+                if (ch is RefNode rn)
+                {
+                    node.ReplaceChild(i, new UnprocessablePlainTextNode($":ref={rn.Name}"));
+                }
+                else
+                {
+                    RemoveRefNodes(ch);
+                }
+            }
         }
     }
 }
