@@ -4,6 +4,8 @@
 [img:https://example.com/test4.png|right]
 [img:https://example.com/test5.png|&]
 [img:test]
+[img:invalid://test.png]
+[img:https://example.com/example.png|url: javascript:alert(1)]
 
 ###
 
@@ -16,7 +18,8 @@
 <div class="embedded image right"><span class="caption-panel"><img class="caption-body" src="https://example.com/test4.png" alt="User posted image" /></span></div>
 
 <div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" src="https://example.com/test5.png" alt="&amp;" /><span class="caption">&amp;</span></span></div>
-[img:test]
+[img:test]<br/>
+[img:invalid://test.png]
 
 ###
 
@@ -30,3 +33,4 @@
 
 [Image] &
 [img:test]
+[img:invalid://test.png]

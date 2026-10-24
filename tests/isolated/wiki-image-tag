@@ -5,6 +5,8 @@
 [img:test5|&]
 [img:https://example.com/example.png]
 [img:invalid://test.png]
+[img:https://example.com/example.png|url:http://example.com]
+[img:https://example.com/example.png|url: javascript:alert(1)]
 
 ###
 
@@ -20,6 +22,8 @@
 
 <div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
 [img:invalid://test.png]
+<div class="embedded image"><a href="http://example.com"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></a></div>
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
 
 ###
 
@@ -35,6 +39,9 @@
 
 [Image]
 [img:invalid://test.png]
+[Image]
+
+[Image]
 
 ###
 
