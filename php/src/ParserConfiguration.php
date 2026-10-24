@@ -175,11 +175,15 @@ class ParserConfiguration
     public array $elements;
     public array $tags;
     public array $processors;
+    public int $max_element_depth;
+    public int $max_tag_depth;
 
     public function __construct()
     {
         $this->elements = [];
         $this->tags = [];
         $this->processors = [];
+        $this->max_element_depth = 5;
+        $this->max_tag_depth = 10;
     }
 }

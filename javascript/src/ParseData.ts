@@ -1,8 +1,12 @@
 export class ParseData {
     private _values: Record<string, any>;
+    public CurrentElementDepth: number;
+    public CurrentTagDepth: number;
 
     constructor() {
         this._values = {};
+        this.CurrentElementDepth = 0;
+        this.CurrentTagDepth = 0;
     }
 
     public Get<T>(key: string, defaultValue: () => T): T {

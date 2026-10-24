@@ -6,10 +6,14 @@ namespace LogicAndTrick.WikiCodeParser
     public class ParseData
     {
         private readonly Dictionary<string, object> _values;
+        public int CurrentElementDepth { get; set; }
+        public int CurrentTagDepth { get; set; }
 
         public ParseData()
         {
             _values = new Dictionary<string, object>();
+            CurrentElementDepth = 0;
+            CurrentTagDepth = 0;
         }
 
         public T Get<T>(string key, Func<T> defaultValue)

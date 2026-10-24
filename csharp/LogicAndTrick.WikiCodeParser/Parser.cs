@@ -46,6 +46,7 @@ namespace LogicAndTrick.WikiCodeParser
         /// <returns>The nodes of the parsed text</returns>
         public INode ParseElements(ParseData data, string text, string scope)
         {
+            data.CurrentElementDepth++;
             var root = new NodeCollection();
 
             // Elements are line-based scopes, an element cannot start in the middle of a line.
@@ -53,6 +54,7 @@ namespace LogicAndTrick.WikiCodeParser
 
             var lines = new Lines(text);
             var inscope = Configuration.Elements.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
+            if (data.CurrentElementDepth > Configuration.MaxElementDepth) inscope.Clear();
             var plain = new List<string>();
 
             while (lines.Next())
@@ -93,7 +95,10 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             FlattenNestedNodeCollections(root);
-            return TrimWhitespace(root);
+            var ret = TrimWhitespace(root);
+
+            data.CurrentElementDepth--;
+            return ret;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -141,12 +146,15 @@ namespace LogicAndTrick.WikiCodeParser
         /// <returns>The node of the parsed text</returns>
         public INode ParseTags(ParseData data, string text, string scope, TagParseContext context)
         {
+            data.CurrentTagDepth++;
+
             // trim 3 or more newlines down to 2 newlines
             text = Regex.Replace(text, "\n{3,}", "\n\n");
 
             var state = new State(text);
             var root = new NodeCollection();
             var inscope = Configuration.Tags.Where(x => x.InScope(scope)).OrderByDescending(x => x.Priority).ToList();
+            if (data.CurrentTagDepth > Configuration.MaxTagDepth) inscope.Clear();
 
             while (!state.Done)
             {
@@ -177,6 +185,7 @@ namespace LogicAndTrick.WikiCodeParser
                 }
             }
 
+            data.CurrentTagDepth--;
             return root;
         }
 

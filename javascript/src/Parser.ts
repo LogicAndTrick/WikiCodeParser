@@ -30,6 +30,7 @@ export class Parser {
     }
 
     public ParseElements(data: ParseData, text: string, scope: string): INode {
+        data.CurrentElementDepth++;
         const root = new NodeCollection();
 
         // Elements are line-based scopes, an element cannot start in the middle of a line.
@@ -40,6 +41,7 @@ export class Parser {
             this.Configuration.Elements.filter(x => x.InScope(scope)),
             x => x.Priority
         );
+        if (data.CurrentElementDepth > this.Configuration.MaxElementDepth) inscope.splice(0, inscope.length);
         const plain: string[] = [];
 
         while (lines.Next()) {
@@ -82,7 +84,10 @@ export class Parser {
         }
 
         Parser.FlattenNestedNodeCollections(root);
-        return Parser.TrimWhitespace(root);
+        const ret = Parser.TrimWhitespace(root);
+
+        data.CurrentElementDepth--;
+        return ret;
     }
 
     public static TrimWhitespace(node: INode, start = true, end = true): INode {
@@ -114,6 +119,8 @@ export class Parser {
     }
 
     public ParseTags(data: ParseData, text: string, scope: string, context: TagParseContext): INode {
+        data.CurrentTagDepth++;
+
         // trim 3 or more newlines down to 2 newlines
         text = text.replace(/\n{3,}/g, '\n\n');
 
@@ -123,6 +130,7 @@ export class Parser {
             this.Configuration.Tags.filter(x => x.InScope(scope)),
             x => x.Priority
         );
+        if (data.CurrentTagDepth > this.Configuration.MaxTagDepth) inscope.splice(0, inscope.length);
 
         while (!state.Done) {
             let plain = state.ScanTo('[');
@@ -149,6 +157,7 @@ export class Parser {
             }
         }
 
+        data.CurrentTagDepth--;
         return root;
     }
 

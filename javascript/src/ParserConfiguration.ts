@@ -168,10 +168,14 @@ export class ParserConfiguration {
     public Elements: Element[];
     public Tags: Tag[];
     public Processors: INodeProcessor[];
+    public MaxElementDepth: number;
+    public MaxTagDepth: number;
 
     public constructor() {
         this.Elements = [];
         this.Tags = [];
         this.Processors = [];
+        this.MaxElementDepth = 5;
+        this.MaxTagDepth = 10;
     }
 }

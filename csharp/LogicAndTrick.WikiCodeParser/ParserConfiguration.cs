@@ -141,12 +141,16 @@ namespace LogicAndTrick.WikiCodeParser
         public List<Element> Elements { get; }
         public List<Tag> Tags { get; }
         public List<INodeProcessor> Processors { get; }
+        public int MaxTagDepth { get; set; }
+        public int MaxElementDepth { get; set; }
 
         public ParserConfiguration()
         {
             Elements = new List<Element>();
             Tags = new List<Tag>();
             Processors = new List<INodeProcessor>();
+            MaxElementDepth = 5;
+            MaxTagDepth = 10;
         }
     }
 }
