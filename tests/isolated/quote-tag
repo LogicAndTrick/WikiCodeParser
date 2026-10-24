@@ -11,6 +11,26 @@ test
 
 [quote][/quote]
 
+[quote]
+[quote]
+[quote]
+[quote]
+[quote]
+[quote]
+[quote]
+[quote]
+[quote]
+Test
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+
 ###
 
 <blockquote><strong class="quote-name">test said:</strong><br/>hi
@@ -23,6 +43,24 @@ test
 <blockquote><strong class="quote-name">&lt;strong&gt;test&lt;/strong&gt; said:</strong><br/>test</blockquote>
 
 [quote][/quote]
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>[quote]<br/>
+[quote]<br/>
+[quote]<br/>
+[quote]<br/>
+Test<br/>
+[/quote]<br/>
+[/quote]<br/>
+[/quote]<br/>
+[/quote]</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 
 ###
 
@@ -42,3 +80,31 @@ test
 [/quote]
 
 [quote][/quote]
+
+[quote]
+
+[quote]
+
+[quote]
+
+[quote]
+
+[quote]
+[quote]
+[quote]
+[quote]
+[quote]
+Test
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+[/quote]
+
+[/quote]
+
+[/quote]
+
+[/quote]
+
+[/quote]
