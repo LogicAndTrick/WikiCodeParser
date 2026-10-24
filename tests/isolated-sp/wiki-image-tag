@@ -20,6 +20,7 @@
 <div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" src="https://example.com/test5.png" alt="&amp;" /><span class="caption">&amp;</span></span></div>
 [img:test]<br/>
 [img:invalid://test.png]
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
 
 ###
 
@@ -34,3 +35,4 @@
 [Image] &
 [img:test]
 [img:invalid://test.png]
+[Image]

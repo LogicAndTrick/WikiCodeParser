@@ -140,17 +140,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (embed != null) content.Nodes.Add(embed);
             if (caption != null) content.Nodes.Add(new HtmlNode("<span class=\"caption\">", new PlainTextNode(caption), "</span>") { PlainBefore = " " });
 
-            var before = $"<{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{HtmlHelper.AttributeEncode(caption)}\"" : "") + ">"
-                         + (url.Length > 0 ? "<a href=\"" + HtmlHelper.AttributeEncode(url) + "\">" : "")
-                         + "<span class=\"caption-panel\">";
-            var after = "</span>"
-                        + (url.Length > 0 ? "</a>" : "")
-                        + $"</{el}>";
+            var panel = HtmlNodeBuilder.Make("span").AddClass("caption-panel").Add(content).ToNode();
+            var wrapper = url.Length == 0 ? panel : HtmlNodeBuilder.Make("a").Attr("href", url).Add(panel).ToNode();
 
-            return new HtmlNode(before, content, after)
-            {
-                IsBlockNode = el == "div"
-            };
+            return HtmlNodeBuilder.Make(el)
+                .AddClasses(classes)
+                .If(caption?.Length > 0, x => x.Attr("title", caption))
+                .Add(wrapper)
+                .ToNode(isBlockNode: el == "div");
         }
 
         private static INode GetEmbedObject(string tag, string url, string caption, bool loop)

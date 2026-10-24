@@ -23,6 +23,7 @@
 <div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
 [img:invalid://test.png]
 <div class="embedded image"><a href="http://example.com"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></a></div>
+
 <div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
 
 ###
