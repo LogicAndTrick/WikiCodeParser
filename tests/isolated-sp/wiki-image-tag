@@ -9,18 +9,18 @@
 
 ###
 
-<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/test1.png" alt="User posted image" /></span></div>
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/test1.png" /></span></div>
 
-<div class="embedded image" title="caption"><span class="caption-panel"><img class="caption-body" src="https://example.com/test2.png" alt="caption" /><span class="caption">caption</span></span></div>
+<div class="embedded image" title="caption"><span class="caption-panel"><img class="caption-body" alt="caption" src="https://example.com/test2.png" /><span class="caption">caption</span></span></div>
 
-<div class="embedded image small"><span class="caption-panel"><img class="caption-body" src="https://example.com/test3.png" alt="User posted image" /></span></div>
+<div class="embedded image small"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/test3.png" /></span></div>
 
-<div class="embedded image right"><span class="caption-panel"><img class="caption-body" src="https://example.com/test4.png" alt="User posted image" /></span></div>
+<div class="embedded image right"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/test4.png" /></span></div>
 
-<div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" src="https://example.com/test5.png" alt="&amp;" /><span class="caption">&amp;</span></span></div>
+<div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" alt="&amp;" src="https://example.com/test5.png" /><span class="caption">&amp;</span></span></div>
 [img:test]<br/>
 [img:invalid://test.png]
-<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></div>
 
 ###
 

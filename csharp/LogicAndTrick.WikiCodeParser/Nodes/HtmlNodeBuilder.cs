@@ -74,7 +74,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
             return this;
         }
 
-        public HtmlNodeBuilder Prop(string prop, bool on)
+        public HtmlNodeBuilder Prop(string prop, bool on = true)
         {
             if (!HtmlHelper.ValidateAttributeName(prop)) throw new ArgumentException("Invalid prop name.");
             if (prop == "class") throw new ArgumentException("Use AddClass instead.");
