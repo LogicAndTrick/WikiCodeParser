@@ -73,9 +73,9 @@ class QuoteElementTest extends TestCase
     public function testQuoteSimple()
     {
         $input = "[quote]Test[/quote]";
-        $output = "\n<blockquote>Test</blockquote>\n";
+        $output = FakeSanitiser::Sanitise("\n<blockquote>Test</blockquote>\n");
         $parser = self::createParser();
         $result = $parser->parseResult($input);
-        $this->assertEquals($output, $result->toHtml());
+        $this->assertEquals($output, $result->toHtml(TestCaseUtils::Sanitise(...)));
     }
 }

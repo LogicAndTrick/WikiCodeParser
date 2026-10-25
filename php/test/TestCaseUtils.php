@@ -3,9 +3,33 @@
 namespace LogicAndTrick\WikiCodeParser;
 
 use PHPUnit\Framework\Assert;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class TestCaseUtils
 {
+    private static HtmlSanitizer|null $htmlSanitizer = null;
+
+    public static function Sanitise(string $html): string
+    {
+        if (self::$htmlSanitizer == null) {
+            self::$htmlSanitizer = new HtmlSanitizer(
+                new HtmlSanitizerConfig()
+                    ->allowSafeElements()
+                    ->allowLinkSchemes(['http', 'https', 'ftp', 'mailto'])
+                    ->allowAttribute('class', '*')
+                    ->allowAttribute('id', '*')
+                    ->allowAttribute('style', '*')
+                    ->allowAttribute('data-embed-type', ['div'])
+                    ->allowAttribute('data-vault-id', ['div'])
+                    ->allowAttribute('data-info', ['span'])
+                    ->allowAttribute('data-youtube-id', ['div'])
+                    ->withMaxInputLength(pow(2, 32))
+            );
+        }
+        return self::$htmlSanitizer->sanitize($html);
+    }
+
     public static function AssertSame(string $name, string $expected, string $actual, bool $split): void
     {
         if ($split) {
@@ -28,8 +52,9 @@ class TestCaseUtils
         $parser = new Parser($config);
 
         $result = $parser->ParseResult($input);
-        $resultHtml = trim($result->ToHtml());
+        $resultHtml = trim($result->ToHtml(TestCaseUtils::Sanitise(...)));
         $resultPlain = trim($result->ToPlainText());
+        $expectedOutput = trim(FakeSanitiser::Sanitise($expectedOutput));
 
         self::AssertSame('html', $expectedOutput, $resultHtml, $split);
         if ($expectedPlain !== null) self::AssertSame('plain', $expectedPlain, $resultPlain, $split);

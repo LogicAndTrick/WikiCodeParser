@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
 namespace LogicAndTrick.WikiCodeParser
@@ -22,7 +23,21 @@ namespace LogicAndTrick.WikiCodeParser
             return list;
         }
 
-        public string ToHtml() => Content.ToHtml();
+        /// <summary>
+        /// Convert the result to HTML and sanitise it with a given callback.
+        /// Supplying a valid sanitiser is the responsibility of the caller.
+        /// </summary>
+        public string ToHtml(Func<string, string> sanitiser) => sanitiser(ToHtmlUnsanitised());
+
+        /// <summary>
+        /// Convert the result to HTML without a sanitiser callback.
+        /// Its possible malicious input could include injection attacks. Use at your own risk.
+        /// </summary>
+        public string ToHtmlUnsanitised() => Content.ToHtml();
+
+        /// <summary>
+        /// Convert the result to plain text.
+        /// </summary>
         public string ToPlainText() => Content.ToPlainText();
     }
 }

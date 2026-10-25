@@ -2,6 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
+import { sanitise } from './Util';
 
 function AssertSame(name: string, expected: string, actual: string, split: boolean): void {
     if (split) {
@@ -22,12 +23,13 @@ function Test(config: ParserConfiguration, input: string, expectedOutput: string
     const parser = new Parser(config);
 
     const result = parser.ParseResult(input);
-    const resultHtml = result.ToHtml().trim();
+    const resultHtml = result.ToHtml(sanitise).trim();
     const resultPlain = result.ToPlainText().trim();
     const resultMeta = result
         .GetMetadata()
         .map(x => `${x.Key}=${JSON.stringify(x.Value)}`)
         .join('\n');
+    expectedOutput = sanitise(expectedOutput).trim();
 
     AssertSame('html', expectedOutput, resultHtml, split);
     if (expectedPlain !== undefined) AssertSame('plain', expectedPlain, resultPlain, split);

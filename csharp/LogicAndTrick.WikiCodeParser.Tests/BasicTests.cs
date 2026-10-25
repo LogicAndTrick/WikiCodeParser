@@ -50,7 +50,7 @@ public class BasicTests
     public void TestBlockNewLines()
     {
         var input = "a\n\n\n\n= b\n\n\n\nc\nd\n\ne";
-        var output = "a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne";
+        var output = TestCaseUtils.Sanitise("a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne");
 
         var config = new ParserConfiguration();
         config.Elements.Add(new MdHeadingElement());
@@ -58,28 +58,28 @@ public class BasicTests
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestCarriageReturns()
     {
         var input = "Line 1\r\nLine 2\r\nLine 3\nLine 4";
-        var output = "Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4";
+        var output = TestCaseUtils.Sanitise("Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4");
 
         var config = new ParserConfiguration();
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestNewLineAfterTag()
     {
         var input = "A [code]B[/code]\n\nC";
-        var output = "A <code>B</code><br/>\n<br/>\nC";
+        var output = TestCaseUtils.Sanitise("A <code>B</code><br/>\n<br/>\nC");
 
         var config = new ParserConfiguration();
         config.Tags.Add(new CodeTag());
@@ -87,14 +87,14 @@ public class BasicTests
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestSmiliesList()
     {
         var input = ":aggrieved:\n:glad:\n";
-        var output = "<img class=\"smiley\" src=\"https://twhl.info/images/smilies/aggrieved.png\" alt=\":aggrieved:\" /><br/>\n<img class=\"smiley\" src=\"https://twhl.info/images/smilies/glad.png\" alt=\":glad:\" />";
+        var output = TestCaseUtils.Sanitise("<img class=\"smiley\" src=\"https://twhl.info/images/smilies/aggrieved.png\" alt=\":aggrieved:\" /><br/>\n<img class=\"smiley\" src=\"https://twhl.info/images/smilies/glad.png\" alt=\":glad:\" />");
 
         var config = new ParserConfiguration();
         config.Processors.Add(new SmiliesProcessor("https://twhl.info/images/smilies/{0}.png").AddTwhl());
@@ -102,28 +102,28 @@ public class BasicTests
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestMultipleNewLines()
     {
         var input = "a\n\n\nb\n\nc\nd\n\n";
-        var output = "a<br/>\n<br/>\nb<br/>\n<br/>\nc<br/>\nd";
+        var output = TestCaseUtils.Sanitise("a<br/>\n<br/>\nb<br/>\n<br/>\nc<br/>\nd");
 
         var config = new ParserConfiguration();
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestMultipleHeadings()
     {
         var input = "= One\n==Two";
-        var output = "<h1 id=\"One\">One</h1>\n<h2 id=\"Two\">Two</h2>";
+        var output = TestCaseUtils.Sanitise("<h1 id=\"One\">One</h1>\n<h2 id=\"Two\">Two</h2>");
 
         var config = new ParserConfiguration();
         config.Elements.Add(new MdHeadingElement());
@@ -131,14 +131,14 @@ public class BasicTests
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestQuoteNewLines()
     {
         var input = "before\n\n[quote]quote[/quote]\n\nafter";
-        var output = "before\n<blockquote>quote</blockquote>\nafter";
+        var output = TestCaseUtils.Sanitise("before\n<blockquote>quote</blockquote>\nafter");
 
         var config = new ParserConfiguration();
         config.Tags.Add(new QuoteTag());
@@ -147,7 +147,7 @@ public class BasicTests
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
@@ -155,7 +155,7 @@ public class BasicTests
     {
         var input = "- one ^\n" +
                     "  two";
-        var output = "<ul>\n<li>one<br/>\ntwo</li>\n</ul>\n";
+        var output = TestCaseUtils.Sanitise("<ul>\n<li>one<br/>\ntwo</li>\n</ul>\n");
 
         var config = new ParserConfiguration();
         config.Elements.Add(new MdTableElement());
@@ -165,7 +165,7 @@ public class BasicTests
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
@@ -188,39 +188,39 @@ public class BasicTests
     public void TestNewLinesBeforeImage()
     {
         var input = "Before\n\n[img]https://example.com/example.png[/img]\n\nAfter";
-        var output = "Before\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter";
+        var output = TestCaseUtils.Sanitise("Before\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter");
 
         var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestBoldAndNewLinesBeforeImage()
     {
         var input = "*Bold*\n\n[img]https://example.com/example.png[/img]\n\nAfter";
-        var output = "<strong>Bold</strong>\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter";
+        var output = TestCaseUtils.Sanitise("<strong>Bold</strong>\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter");
 
         var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void TestCategoriesAndWhitespace()
     {
         var input = "[cat:A]\n[cat:B]\n\n= Heading";
-        var output = "<h1 id=\"Heading\">Heading</h1>";
+        var output = TestCaseUtils.Sanitise("<h1 id=\"Heading\">Heading</h1>");
 
         var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
@@ -252,14 +252,14 @@ public class BasicTests
     public void TestAllowNestedFontTags()
     {
         var input = "A[font=red]B[font=blue]C[/font]D[/font]E";
-        var expected = "A<span style=\"color: red;\">B<span style=\"color: blue;\">C</span>D</span>E";
+        var expected = TestCaseUtils.Sanitise("A<span style=\"color: red;\">B<span style=\"color: blue;\">C</span>D</span>E");
 
         var config = ParserConfiguration.Twhl();
         config.Tags.Find(x => x is FontTag)!.IsNested = true;
 
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
-        Assert.AreEqual(expected, result.ToHtml());
+        Assert.AreEqual(expected, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
@@ -310,18 +310,18 @@ public class BasicTests
         var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
-        Assert.AreNotEqual(input, result.ToHtml());
+        Assert.AreNotEqual(TestCaseUtils.Sanitise(input), result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     private static void DefaultConfigurationTest(string input, string expected)
     {
         input = input.Replace("\r", "");
-        expected = expected.Replace("\r", "");
+        expected = TestCaseUtils.Sanitise(expected.Replace("\r", ""));
 
         var config = ParserConfiguration.Twhl();
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
-        Assert.AreEqual(expected, result.ToHtml());
+        Assert.AreEqual(expected, result.ToHtml(TestCaseUtils.Sanitise));
     }
     
     private static IList<INode> GetLeaves(INode root)

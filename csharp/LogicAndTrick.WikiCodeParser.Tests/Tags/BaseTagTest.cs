@@ -28,10 +28,10 @@ public abstract class BaseTagTest<T> where T : Tag
     {
         var parser = GetParser();
         var input = transform(data, data.Input);
-        var html = transform(data, data.ExpectedHtml);
+        var html = TestCaseUtils.Sanitise(transform(data, data.ExpectedHtml));
         var plain = transform(data, data.ExpectedPlaintext);
         var result = parser.ParseResult(input);
-        Assert.AreEqual(html, result.ToHtml());
+        Assert.AreEqual(html, result.ToHtml(TestCaseUtils.Sanitise));
         Assert.AreEqual(plain, result.ToPlainText());
         var expectedMeta = data.ExpectedMetaData;
         var meta = result.GetMetadata();
