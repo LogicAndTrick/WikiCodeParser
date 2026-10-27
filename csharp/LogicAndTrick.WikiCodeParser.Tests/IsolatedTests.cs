@@ -9,6 +9,7 @@ public class IsolatedTests
     }
 
     [TestMethod]
+    [Timeout(1000)]
     [DynamicData(nameof(GetTestCases))]
     public void IsolatedTest(string name)
     {
@@ -20,8 +21,8 @@ public class IsolatedTests
         return TestCaseUtils.GetTestCaseNames("isolated-sp");
     }
     
-    [DataTestMethod]
     [TestMethod]
+    [Timeout(1000)]
     [DynamicData(nameof(GetSnarkpitTestCases))]
     public void IsolatedTestSnarkpit(string name)
     {
