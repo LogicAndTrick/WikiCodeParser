@@ -3,6 +3,9 @@ https://example.com
 ftp://example.com
 test@example.com
 test@test@example.com
+email: test@example.com.
+test@example...com
+test test@example.com.au test
 
 ###
 
@@ -10,7 +13,10 @@ test@test@example.com
 <a href="https://example.com">https://example.com</a><br/>
 ftp://example.com<br/>
 <a href="mailto:test@example.com">test@example.com</a><br/>
-test@test@example.com
+test@test@example.com<br/>
+email: <a href="mailto:test@example.com">test@example.com</a>.<br/>
+test@example...com<br/>
+test <a href="mailto:test@example.com.au">test@example.com.au</a> test
 
 ###
 
@@ -19,3 +25,6 @@ https://example.com
 ftp://example.com
 test@example.com
 test@test@example.com
+email: test@example.com.
+test@example...com
+test test@example.com.au test

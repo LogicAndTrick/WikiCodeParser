@@ -4,6 +4,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { TrimEnd, TrimStart } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
 export class NewLineProcessor implements INodeProcessor {
@@ -13,12 +14,21 @@ export class NewLineProcessor implements INodeProcessor {
         return node instanceof PlainTextNode && (node.Text.includes('\n') || node.Text.includes('<br>'));
     }
 
-    Process(parser: Parser, data: ParseData, node: INode, _scope: string): INode[] {
-        let text = (node as PlainTextNode).Text;
-        text = text.replace(/ *<br> */g, '\n');
+    Process(_parser: Parser, _data: ParseData, node: INode, _scope: string): INode[] {
+        const text = (node as PlainTextNode).Text;
+
+        const lines: string[] = [];
+        for (const line of text.split('\n')) {
+            const breaks = line.split('<br>');
+            for (let i = 0; i < breaks.length; i++) {
+                let s = breaks[i];
+                if (i > 0) s = TrimStart(s);
+                if (i < breaks.length - 1) s = TrimEnd(s);
+                lines.push(s);
+            }
+        }
 
         const ret: INode[] = [];
-        const lines = text.split('\n');
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             ret.push(new PlainTextNode(line));

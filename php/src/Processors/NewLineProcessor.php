@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Util;
 
 class NewLineProcessor implements INodeProcessor
 {
@@ -33,11 +34,20 @@ class NewLineProcessor implements INodeProcessor
     function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
     {
         if (!($node instanceof PlainTextNode)) throw new \InvalidArgumentException('Node is not a PlainTextNode');
-        $text = $node->text;
-        $text = preg_replace('/ *<br> */', "\n", $text);
+        $text = $node->text ?? '';
+
+        $lines = [];
+        foreach (explode("\n", $text) as $line) {
+            $breaks = explode('<br>', $line);
+            for ($i = 0; $i < count($breaks); $i++) {
+                $s = $breaks[$i];
+                if ($i > 0) $s = Util::TrimStart($s);
+                if ($i < count($breaks) - 1) $s = Util::TrimEnd($s);
+                $lines[] = $s;
+            }
+        }
 
         $ret = [];
-        $lines = explode("\n", $text ?? '');
         for ($i = 0; $i < count($lines); $i++) {
             $line = $lines[$i];
             $ret[] = new PlainTextNode($line);

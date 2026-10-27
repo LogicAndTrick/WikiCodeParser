@@ -29,21 +29,26 @@ export function Template(template_string: string, obj: any) {
     });
 }
 
-/* eslint-disable no-control-regex */
-const TrimStartRegex = /^[ \t\r\n\0\x0B]+/g;
-const TrimEndRegex = /[ \t\r\n\0\x0B]+$/g;
-/* eslint-enable no-control-regex */
+// this was a regex before, but performance was terrible.
+const TrimChars = new Set<string>([' ', '\t', '\n', '\r', '\0', '\x0B']);
 
 export function TrimStart(str: string) {
-    return str.replace(TrimStartRegex, '');
+    // find the index of the first char that isn't trimmable
+    let i = 0;
+    while (i < str.length && TrimChars.has(str[i])) i++;
+    // slice off everything before that
+    return str.slice(i);
 }
 
 export function TrimEnd(str: string) {
-    return str.replace(TrimEndRegex, '');
+    // as above, backwards
+    let i = str.length;
+    while (i > 0 && TrimChars.has(str[i - 1])) i--;
+    return str.slice(0, i);
 }
 
 export function Trim(str: string) {
-    return str.replace(TrimStartRegex, '').replace(TrimEndRegex, '');
+    return TrimEnd(TrimStart(str));
 }
 
 export function ParseIntStrict(str: string): number | null {

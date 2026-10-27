@@ -19,7 +19,7 @@ class AutoLinkingProcessor implements INodeProcessor
     function ShouldProcess(INode $node, string $scope): bool
     {
         return $node instanceof PlainTextNode
-            && (str_contains($node->text, 'http') || str_contains($node->text, '@'));
+            && (str_contains(strtolower($node->text), 'http') || str_contains($node->text, '@'));
     }
 
     function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
@@ -36,10 +36,10 @@ class AutoLinkingProcessor implements INodeProcessor
         // 0 => ['url', 0], url => ['url', 0], 1 => ['url', 0]
         // 0 => ['url', 0], email => ['url', 0], 1 => ['url', 0]
 
-        preg_match_all('/(?<=^|\s)(?<url>https?:\/\/[^\][""\s]+)(?=\s|$)/i', $text, $urlResult, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+        preg_match_all('/(?<!\S)(?<url>https?:\/\/[^\][""\s]+)(?!\S)/i', $text, $urlResult, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
         array_push($allMatches, ...$urlResult);
 
-        preg_match_all('/(?<=^|\s)(?<email>[^\][""\s@]+@[^\][""\s@]+\.[^\][""\s@]+)(?=\s|$)/i', $text, $emailResult, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+        preg_match_all('/(?<!\S)(?<email>[^\][""\s@]+@[^\][""\s@.]+(?:\.[^\][""\s@.]+)+)(?=\.?(?!\S))/i', $text, $emailResult, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
         array_push($allMatches, ...$emailResult);
 
         usort($allMatches, fn($a, $b) => $a[0][1] - $b[0][1]);
