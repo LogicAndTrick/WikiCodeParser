@@ -77,6 +77,11 @@ class WikiBookTag extends Tag
             }
         }
 
+        if (!isset($book->BookName) || !isset($book->ChapterName) || !isset($book->ChapterNumber) || !isset($book->PageNumber) || $book->ChapterNumber <= 0 || $book->PageNumber <= 0) {
+            $state->Seek($index, true);
+            return null;
+        }
+
         $state->SkipWhitespace();
         return new MetadataNode('WikiBook', $book);
     }
