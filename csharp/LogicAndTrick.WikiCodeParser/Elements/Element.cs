@@ -7,7 +7,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 {
     public abstract class Element
     {
-        public List<string> Scopes { get; set; }
+        public List<string> Scopes { get; set; } = new List<string>();
         public int Priority { get; set; } = 0;
 
         public virtual bool InScope(string scope) => string.IsNullOrWhiteSpace(scope) ||

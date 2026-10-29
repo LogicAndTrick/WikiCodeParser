@@ -92,7 +92,7 @@ class TestCaseUtils
     {
         $dir = TestCaseUtils::GetTestCaseDirectory($folder);
         $files = scandir($dir);
-        return array_filter($files, fn(string $s) => $s != '..' && $s != '.');
+        return array_filter($files, fn(string $s) => $s != '..' && $s != '.' && !str_starts_with($s, 'ignored'));
     }
 
     public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false): void

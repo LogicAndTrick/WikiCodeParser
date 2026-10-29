@@ -116,7 +116,7 @@ public static class TestCaseUtils
     public static IEnumerable<string> GetTestCaseNames(string folder)
     {
         var dir = GetTestCaseDirectory(folder);
-        foreach (var file in Directory.GetFiles(dir))
+        foreach (var file in Directory.GetFiles(dir).Where(x => !Path.GetFileName(x).StartsWith("ignored")))
         {
             yield return Path.GetFileName(file);
         }

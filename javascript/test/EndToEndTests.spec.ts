@@ -45,7 +45,7 @@ function GetTestCaseDirectory(folder: string): string {
 
 function GetTestCaseNames(folder: string): string[] {
     const dir = GetTestCaseDirectory(folder);
-    return readdirSync(dir);
+    return readdirSync(dir).filter(x => !x.startsWith('ignored'));
 }
 
 function RunTestCase(config: ParserConfiguration, folder: string, name: string, split = false) {
