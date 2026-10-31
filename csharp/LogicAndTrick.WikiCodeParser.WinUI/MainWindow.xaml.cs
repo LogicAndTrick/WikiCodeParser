@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
+using Ganss.Xss;
 
 namespace LogicAndTrick.WikiCodeParser.WinUI
 {
@@ -15,6 +16,19 @@ namespace LogicAndTrick.WikiCodeParser.WinUI
     {
         private readonly Parser _parser;
         private bool _webViewInitialised;
+        
+        static HtmlSanitizer sanitiser = new HtmlSanitizer
+        {
+            AllowDataAttributes = true,
+            AllowedTags = { "video", "audio" },
+            AllowedAttributes = { "id", "class", "playsinline", "controls", "autoplay", "loop", "muted" },
+            AllowedSchemes = { "ftp", "mailto" }
+        };
+
+        public static string Sanitise(string html)
+        {
+            return sanitiser.Sanitize(html, "");
+        }
 
         public MainWindow()
         {
@@ -52,7 +66,7 @@ information
             try
             {
                 var parsed = _parser.ParseResult(text);
-                var html = parsed.ToHtml();
+                var html = parsed.ToHtml(Sanitise);
                 var content = "<div class=\"bbcode\">" + html + "</div>" + HtmlMetadata(parsed.GetMetadata());
                 HtmlTextBox.Text = html;
                 if (!_webViewInitialised) return;

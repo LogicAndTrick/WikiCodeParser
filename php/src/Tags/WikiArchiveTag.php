@@ -2,6 +2,7 @@
 
 namespace LogicAndTrick\WikiCodeParser\Tags;
 
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Models\WikiRevisionCredit;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\MetadataNode;
@@ -57,10 +58,14 @@ class WikiArchiveTag extends Tag
                     $credit->Description = $val;
                     break;
                 case 'url':
-                    $credit->Url = $val;
+                    if (HtmlHelper::GetUrlScheme($val) && HtmlHelper::ValidateUrl($val)) {
+                        $credit->Url = $val;
+                    }
                     break;
                 case 'wayback':
-                    $credit->WaybackUrl = $val;
+                    if (intval($val, 10) || (HtmlHelper::GetUrlScheme($val) && HtmlHelper::ValidateUrl($val))) {
+                        $credit->WaybackUrl = $val;
+                    }
                     break;
                 case 'full':
                     $credit->Type = WikiRevisionCredit::TypeFull;

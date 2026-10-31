@@ -1,10 +1,11 @@
 import { HtmlHelper } from '../HtmlHelper';
 import { WikiRevision } from '../Models/WikiRevision';
-import { HtmlNode } from '../Nodes/HtmlNode';
+import { HtmlNodeBuilder } from '../Nodes/HtmlNodeBuilder';
 import { INode } from '../Nodes/INode';
 import { MetadataNode } from '../Nodes/MetadataNode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
+import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
 import { State } from '../State';
@@ -121,51 +122,39 @@ export class WikiImageTag extends Tag {
 
         const embed = WikiImageTag.GetEmbedObject(tag, src, caption, loop);
         if (embed != null) content.Nodes.push(embed);
+        if (caption != null) content.Nodes.push(HtmlNodeBuilder.make('span').addClass('caption').add(new PlainTextNode(caption)).toNode({ plainBefore: ' ' }));
 
-        if (caption != null) {
-            const cn = new HtmlNode('<span class="caption">', new PlainTextNode(caption), '</span>');
-            cn.PlainBefore = ' ';
-            content.Nodes.push(cn);
-        }
+        const panel = HtmlNodeBuilder.make('span').addClass('caption-panel').add(content).toNode();
+        const wrapper = !url || url.length == 0 ? panel : HtmlNodeBuilder.make('a').attr('href', url).add(panel).toNode();
 
-        const before =
-            `<${el} class="${classes.join(' ')}"` +
-            (caption && caption.length > 0 ? ` title="${HtmlHelper.AttributeEncode(caption)}"` : '') +
-            '>' +
-            (url.length > 0 ? '<a href="' + HtmlHelper.AttributeEncode(url) + '">' : '') +
-            '<span class="caption-panel">';
-        const after = '</span>' + (url.length > 0 ? '</a>' : '') + `</${el}>`;
-
-        const ret = new HtmlNode(before, content, after);
-        ret.IsBlockNode = el == 'div';
-        return ret;
+        return HtmlNodeBuilder.make(el)
+            .addClasses(classes)
+            .if(!!caption && caption.length > 0, x => x.attr('title', caption))
+            .add(wrapper)
+            .toNode({ isBlockNode: el == 'div' });
     }
 
     private static GetEmbedObject(tag: string, url: string, caption: string | null, loop: boolean): INode | null {
-        url = HtmlHelper.AttributeEncode(url);
         switch (tag) {
-            case 'img': {
-                caption = caption ?? 'User posted image';
-                const cap = HtmlHelper.AttributeEncode(caption);
-                const ret = new HtmlNode(`<img class="caption-body" src="${url}" alt="${cap}" />`, PlainTextNode.Empty(), '');
-                ret.PlainBefore = '[Image]';
-                return ret;
-            }
+            case 'img':
+                return HtmlNodeBuilder.make('img')
+                    .addClass('caption-body')
+                    .attr('src', url)
+                    .attr('alt', caption ?? 'User posted image')
+                    .toNode({ plainBefore: '[Image]', selfClosing: true });
             case 'video':
-            case 'audio': {
-                let auto = '';
-                if (loop) auto = 'autoplay loop muted';
-                const ret = new HtmlNode(
-                    `<${tag} class="caption-body" src="${url}" playsinline controls ${auto}>Your browser doesn't support embedded ${tag}.</${tag}>`,
-                    PlainTextNode.Empty(),
-                    ''
-                );
-                ret.PlainBefore = tag.substring(0, 1).toUpperCase() + tag.substring(1);
-                return ret;
-            }
+            case 'audio':
+                return HtmlNodeBuilder.make(tag)
+                    .addClass('caption-body')
+                    .attr('src', url)
+                    .prop('playsinline')
+                    .prop('controls')
+                    .if(loop, x => x.prop('autoplay').prop('loop').prop('muted'))
+                    .add(new UnprocessablePlainTextNode(`Your browser doesn't support embedded ${tag}.`))
+                    .toNode({ plainBefore: tag.substring(0, 1).toUpperCase() + tag.substring(1), selfClosing: true });
+            default:
+                return null;
         }
-
-        return null;
     }
 
     private static ValidClasses: string[] = ['large', 'medium', 'small', 'thumb', 'left', 'right', 'center', 'inline'];

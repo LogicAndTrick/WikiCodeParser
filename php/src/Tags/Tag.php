@@ -54,6 +54,26 @@ class Tag
         return $token !== null && strtolower($token) == $this->token && ($context == TagParseContext::Block || !$this->isBlock);
     }
 
+    public function ParseOptionsString(string $optionsString): array
+    {
+        $result = [];
+        $optionsString = str_replace(["\t", "\r", "\n"], ' ', $optionsString);
+        $list = explode(' ', $optionsString);
+        foreach ($list as $kv) {
+            if (!strlen($kv) || !str_contains($kv, '=')) continue;
+
+            $spl = explode('=', $kv);
+            if (count($spl) != 2) continue;
+
+            $key = Util::Trim($spl[0]);
+            $value = Util::Trim($spl[1]);
+            if (!strlen($key)) continue;
+
+            $result[] = ['key' => $key, 'value' => $value];
+        }
+        return $result;
+    }
+
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
         // a null token requires the superclass to override this method
@@ -75,12 +95,8 @@ class Tag
                 $options[$this->mainOption] = substr($optionsString, 1);
             } else {
                 if ($optionsString[0] == '=') $optionsString = $this->mainOption . $optionsString;
-                preg_match_all('/(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/im', $optionsString, $matches, PREG_SET_ORDER);
-                for ($i = 0; $i < count($matches); $i++) {
-                    $match = $matches[$i];
-                    $name = Util::Trim($match[1]);
-                    $value = Util::Trim($match[2]);
-                    $options[$name] = $value;
+                foreach ($this->ParseOptionsString($optionsString) as $kv) {
+                    $options[$kv['key']] = $kv['value'];
                 }
             }
         }

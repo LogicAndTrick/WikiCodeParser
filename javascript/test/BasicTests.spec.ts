@@ -8,6 +8,7 @@ import { PlainTextNode } from '../src/Nodes/PlainTextNode';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
 import { State } from '../src/State';
+import { sanitise } from './Util';
 
 function GetLeavesRecursive(list: INode[], node: INode): void {
     const children = node.GetChildren();
@@ -152,14 +153,14 @@ describe('Basic tests', () => {
         config.Processors.push(new NewLineProcessor());
         const parser = new Parser(config);
         const result = parser.ParseResult('a\n\n\n\n= b\n\n\n\nc\nd\n\ne');
-        expect(result.ToHtml()).toBe('a\n<h1 id="b">b</h1>\nc<br/>\nd<br/>\n<br/>\ne');
+        expect(result.ToHtml(sanitise)).toBe(sanitise('a\n<h1 id="b">b</h1>\nc<br/>\nd<br/>\n<br/>\ne'));
     });
     test('Carriage returns', () => {
         const config = new ParserConfiguration();
         config.Processors.push(new NewLineProcessor());
         const parser = new Parser(config);
         const result = parser.ParseResult('Line 1\r\nLine 2\r\nLine 3\nLine 4');
-        expect(result.ToHtml()).toBe('Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4');
+        expect(result.ToHtml(sanitise)).toBe(sanitise('Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4'));
     });
 });
 
@@ -219,9 +220,9 @@ describe('QuoteElementTest', () => {
 
     test('QuoteSimple', () => {
         const input = '[quote]Test[/quote]';
-        const output = '\n<blockquote>Test</blockquote>\n';
+        const output = sanitise('\n<blockquote>Test</blockquote>\n');
         const parser = createParser();
         const result = parser.ParseResult(input);
-        expect(result.ToHtml()).toBe(output);
+        expect(result.ToHtml(sanitise)).toBe(output);
     });
 });

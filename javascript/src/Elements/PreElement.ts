@@ -106,7 +106,8 @@ export class PreElement extends Element {
                         let numLines = 1;
                         let color = '#FF8000';
                         for (let i = 1; i < match.length; i++) {
-                            const p = match[i];
+                            const p = match[i] as string | undefined;
+                            if (!p) continue;
                             if (Colours.IsValidColor(p)) color = p;
                             else if (parseInt(p, 10)) numLines = parseInt(p, 10);
                         }

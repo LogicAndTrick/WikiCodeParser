@@ -12,15 +12,18 @@ namespace LogicAndTrick.WikiCodeParser.Processors
         public bool ShouldProcess(INode node, string scope)
         {
             return node is PlainTextNode ptn
-                   && (ptn.Text.Contains("http") || ptn.Text.Contains("@"));
+                   && (ptn.Text.ToLower().Contains("http") || ptn.Text.Contains("@"));
         }
+
+        private readonly static Regex UrlMatch = new Regex(@"(?<!\S)(?<url>https?://[^\][""\s]+)(?!\S)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly static Regex EmailMatch = new Regex(@"(?<!\S)(?<email>[^\][""\s@]+@[^\][""\s@.]+(?:\.[^\][""\s@.]+)+)(?=\.?(?!\S))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope)
         {
             var text = ((PlainTextNode) node).Text;
 
-            var urlMatches = Regex.Matches(text, @"(?<=^|\s)(?<url>https?://[^\][""\s]+)(?=\s|$)", RegexOptions.IgnoreCase);
-            var emailMatches = Regex.Matches(text, @"(?<=^|\s)(?<email>[^\][""\s@]+@[^\][""\s@]+\.[^\][""\s@]+)(?=\s|$)", RegexOptions.IgnoreCase);
+            var urlMatches = UrlMatch.Matches(text);
+            var emailMatches = EmailMatch.Matches(text);
             var start = 0;
             foreach (var match in urlMatches.OfType<Match>().Union(emailMatches.OfType<Match>()).OrderBy(x => x.Index))
             {

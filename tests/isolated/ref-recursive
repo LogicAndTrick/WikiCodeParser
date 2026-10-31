@@ -1,0 +1,17 @@
+[ref=A]
+- :ref=A
+[/ref]
+- :ref=A
+
+###
+
+<ul>
+<li><ul>
+<li>:ref=A</li>
+</ul>
+</li>
+</ul>
+
+###
+
+- - :ref=A

@@ -9,4 +9,8 @@
     <ProjectReference Include="..\LogicAndTrick.WikiCodeParser\LogicAndTrick.WikiCodeParser.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HtmlSanitizer" Version="9.2.1039" />
+  </ItemGroup>
+
 </Project>

@@ -3,9 +3,33 @@
 namespace LogicAndTrick\WikiCodeParser;
 
 use PHPUnit\Framework\Assert;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class TestCaseUtils
 {
+    private static HtmlSanitizer|null $htmlSanitizer = null;
+
+    public static function Sanitise(string $html): string
+    {
+        if (self::$htmlSanitizer == null) {
+            self::$htmlSanitizer = new HtmlSanitizer(
+                new HtmlSanitizerConfig()
+                    ->allowSafeElements()
+                    ->allowLinkSchemes(['http', 'https', 'ftp', 'mailto'])
+                    ->allowAttribute('class', '*')
+                    ->allowAttribute('id', '*')
+                    ->allowAttribute('style', '*')
+                    ->allowAttribute('data-embed-type', ['div'])
+                    ->allowAttribute('data-vault-id', ['div'])
+                    ->allowAttribute('data-info', ['span'])
+                    ->allowAttribute('data-youtube-id', ['div'])
+                    ->withMaxInputLength(pow(2, 32))
+            );
+        }
+        return self::$htmlSanitizer->sanitize($html);
+    }
+
     public static function AssertSame(string $name, string $expected, string $actual, bool $split): void
     {
         if ($split) {
@@ -28,14 +52,21 @@ class TestCaseUtils
         $parser = new Parser($config);
 
         $result = $parser->ParseResult($input);
-        $resultHtml = trim($result->ToHtml());
+        $resultHtml = trim($result->ToHtml(TestCaseUtils::Sanitise(...)));
         $resultPlain = trim($result->ToPlainText());
+        $expectedOutput = trim(FakeSanitiser::Sanitise($expectedOutput));
 
         self::AssertSame('html', $expectedOutput, $resultHtml, $split);
         if ($expectedPlain !== null) self::AssertSame('plain', $expectedPlain, $resultPlain, $split);
 
         if ($expectedMeta != null) {
+            // var resultMetaObjects = result.GetMetadata().Select(x => new { x.Key, Value = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(x.Value)) }).ToList();
             $resultMetaObjects = $result->GetMetadata();
+            foreach ($resultMetaObjects as &$m) {
+                $json = json_encode($m['value']);
+                $parsed = $json ? json_decode($json) : [];
+                $m['value'] = $parsed;
+            }
             $expectedMetaObjects = array_map(function (string $x) {
                 $x = trim($x);
                 $spl = explode('=', $x, 2);
@@ -48,8 +79,17 @@ class TestCaseUtils
                 Assert::assertEquals($emo['key'], $rmo['key']);
                 if ($emo['value'] == $rmo['value']) continue;
                 $robj = $rmo['value'];
-                /** @var iterable $eobj */
+                /** @var array $eobj */
                 $eobj = $emo['value'];
+
+                $rkeys = [];
+                $ekeys = [];
+                foreach ($robj as $k => $v) {
+                    if ($v !== null && $v !== '' && $v !== 0) $rkeys[$k] = true;
+                }
+                foreach ($eobj as $k => $v) $ekeys[$k] = true;
+                Assert::assertArraysAreEqualIgnoringOrder($rkeys, $ekeys);
+
                 foreach ($eobj as $name => $ev) {
                     $rv = $robj->$name;
                     Assert::assertEquals($ev, $rv);
@@ -61,6 +101,13 @@ class TestCaseUtils
     private static function GetTestCaseDirectory(string $folder): string
     {
         return __DIR__ . '/../../tests/' . $folder;
+    }
+
+    public static function GetTestCaseNames(string $folder): array
+    {
+        $dir = TestCaseUtils::GetTestCaseDirectory($folder);
+        $files = scandir($dir);
+        return array_filter($files, fn(string $s) => $s != '..' && $s != '.' && !str_starts_with($s, 'ignored'));
     }
 
     public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false): void

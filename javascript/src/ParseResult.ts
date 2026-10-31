@@ -19,10 +19,25 @@ export class ParseResult {
         return list;
     }
 
-    public ToHtml(): string {
+    /**
+     * Convert the result to HTML and sanitise it with a given callback.
+     * Supplying a valid sanitiser is the responsibility of the caller.
+     */
+    public ToHtml(sanitiser: (x: string) => string): string {
+        return sanitiser(this.Content.ToHtml());
+    }
+
+    /**
+     * Convert the result to HTML without a sanitiser callback.
+     * Its possible malicious input could include injection attacks. Use at your own risk.
+     */
+    public ToHtmlUnsanitised(): string {
         return this.Content.ToHtml();
     }
 
+    /**
+     * Convert the result to plain text.
+     */
     public ToPlainText(): string {
         return this.Content.ToPlainText();
     }

@@ -8,6 +8,10 @@
 [book:test8|chapter:ccc|chapternumber:1|pagenumber:-1]
 [book:test9|chapter:ccc|chapternumber:1|pagenumber:1a]
 [book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]
+[book:test11]
+[book:test12|chapter:ddd]
+[book:test13|chapter:ddd|chapternumber:1]
+[book:test14|chapter:ddd|pagenumber:1]
 
 ###
 
@@ -18,7 +22,11 @@
 [book:test7|chapter:ccc|chapternumber:1|pagenumber:0]<br/>
 [book:test8|chapter:ccc|chapternumber:1|pagenumber:-1]<br/>
 [book:test9|chapter:ccc|chapternumber:1|pagenumber:1a]<br/>
-[book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]
+[book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]<br/>
+[book:test11]<br/>
+[book:test12|chapter:ddd]<br/>
+[book:test13|chapter:ddd|chapternumber:1]<br/>
+[book:test14|chapter:ddd|pagenumber:1]
 
 ###
 
@@ -30,6 +38,10 @@
 [book:test8|chapter:ccc|chapternumber:1|pagenumber:-1]
 [book:test9|chapter:ccc|chapternumber:1|pagenumber:1a]
 [book:test0|chapter:ccc|chapternumber:1|pagenumber:1e1]
+[book:test11]
+[book:test12|chapter:ddd]
+[book:test13|chapter:ddd|chapternumber:1]
+[book:test14|chapter:ddd|pagenumber:1]
 
 ###
 

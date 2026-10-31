@@ -14,6 +14,19 @@ test1
 test2
 [/pre]
 
+[pre=cpp highlight]
+@@red
+test
+[/pre]
+[pre=highlight cpp]
+@@1
+test
+[/pre]
+[pre=highlight]
+@@
+test
+[/pre]
+
 ###
 
 A
@@ -23,6 +36,10 @@ B
 <pre><code><div class="line-highlight" style="top: 0em; height: 2em; background: red;"></div>test1
 test2</code></pre>
 
+<pre class="lang-cpp"><code><div class="line-highlight" style="top: 0em; height: 1em; background: red;"></div>test</code></pre>
+<pre class="lang-cpp"><code><div class="line-highlight" style="top: 0em; height: 1em; background: #FF8000;"></div>test</code></pre>
+<pre><code><div class="line-highlight" style="top: 0em; height: 1em; background: #FF8000;"></div>test</code></pre>
+
 ###
 
 A
@@ -31,3 +48,7 @@ test2
 B
 test1
 test2
+
+test
+test
+test

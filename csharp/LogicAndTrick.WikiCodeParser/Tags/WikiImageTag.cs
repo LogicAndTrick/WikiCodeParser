@@ -138,44 +138,40 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var embed = GetEmbedObject(tag, src, caption, loop);
             if (embed != null) content.Nodes.Add(embed);
-            if (caption != null) content.Nodes.Add(new HtmlNode("<span class=\"caption\">", new PlainTextNode(caption), "</span>") { PlainBefore = " " });
+            if (caption != null) content.Nodes.Add(HtmlNodeBuilder.Make("span").AddClass("caption").Add(new PlainTextNode(caption)).ToNode(plainBefore: " "));
 
-            var before = $"<{el} class=\"{string.Join(" ", classes)}\"" + (caption?.Length > 0 ? $" title=\"{HtmlHelper.AttributeEncode(caption)}\"" : "") + ">"
-                         + (url.Length > 0 ? "<a href=\"" + HtmlHelper.AttributeEncode(url) + "\">" : "")
-                         + "<span class=\"caption-panel\">";
-            var after = "</span>"
-                        + (url.Length > 0 ? "</a>" : "")
-                        + $"</{el}>";
+            var panel = HtmlNodeBuilder.Make("span").AddClass("caption-panel").Add(content).ToNode();
+            var wrapper = url.Length == 0 ? panel : HtmlNodeBuilder.Make("a").Attr("href", url).Add(panel).ToNode();
 
-            return new HtmlNode(before, content, after)
-            {
-                IsBlockNode = el == "div"
-            };
+            return HtmlNodeBuilder.Make(el)
+                .AddClasses(classes)
+                .If(caption?.Length > 0, x => x.Attr("title", caption))
+                .Add(wrapper)
+                .ToNode(isBlockNode: el == "div");
         }
 
         private static INode GetEmbedObject(string tag, string url, string caption, bool loop)
         {
-            url = HtmlHelper.AttributeEncode(url);
-            switch (tag)
-            {
+            switch (tag) {
                 case "img":
-                    caption = caption ?? "User posted image";
-                    var cap = HtmlHelper.AttributeEncode(caption);
-                    return new HtmlNode($"<img class=\"caption-body\" src=\"{url}\" alt=\"{cap}\" />", PlainTextNode.Empty, "")
-                    {
-                        PlainBefore = "[Image]"
-                    };
+                    return HtmlNodeBuilder.Make("img")
+                        .AddClass("caption-body")
+                        .Attr("src", url)
+                        .Attr("alt", caption ?? "User posted image")
+                        .ToNode(plainBefore: "[Image]", selfClosing: true);
                 case "video":
                 case "audio":
-                    var auto = "";
-                    if (loop) auto = "autoplay loop muted";
-                    return new HtmlNode($"<{tag} class=\"caption-body\" src=\"{url}\" playsinline controls {auto}>Your browser doesn't support embedded {tag}.</{tag}>", PlainTextNode.Empty, "")
-                    {
-                        PlainBefore = tag.Substring(0, 1).ToUpper() + tag.Substring(1)
-                    };
+                    return HtmlNodeBuilder.Make(tag)
+                        .AddClass("caption-body")
+                        .Attr("src", url)
+                        .Prop("playsinline")
+                        .Prop("controls")
+                        .If(loop, x => x.Prop("autoplay").Prop("loop").Prop("muted"))
+                        .Add(new UnprocessablePlainTextNode($"Your browser doesn't support embedded ${tag}."))
+                        .ToNode(plainBefore: tag.Substring(0, 1).ToUpper() + tag.Substring(1), selfClosing: true);
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         private static readonly string[] ValidClasses = {"large", "medium", "small", "thumb", "left", "right", "center", "inline"};

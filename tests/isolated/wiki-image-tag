@@ -5,21 +5,26 @@
 [img:test5|&]
 [img:https://example.com/example.png]
 [img:invalid://test.png]
+[img:https://example.com/example.png|url:http://example.com]
+[img:https://example.com/example.png|url: javascript:alert(1)]
 
 ###
 
-<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test1" alt="User posted image" /></span></div>
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://twhl.info/wiki/embed/test1" /></span></div>
 
-<div class="embedded image" title="caption"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test2" alt="caption" /><span class="caption">caption</span></span></div>
+<div class="embedded image" title="caption"><span class="caption-panel"><img class="caption-body" alt="caption" src="https://twhl.info/wiki/embed/test2" /><span class="caption">caption</span></span></div>
 
-<div class="embedded image small"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test3" alt="User posted image" /></span></div>
+<div class="embedded image small"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://twhl.info/wiki/embed/test3" /></span></div>
 
-<div class="embedded image right"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test4" alt="User posted image" /></span></div>
+<div class="embedded image right"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://twhl.info/wiki/embed/test4" /></span></div>
 
-<div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" src="https://twhl.info/wiki/embed/test5" alt="&amp;" /><span class="caption">&amp;</span></span></div>
+<div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" alt="&amp;" src="https://twhl.info/wiki/embed/test5" /><span class="caption">&amp;</span></span></div>
 
-<div class="embedded image"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></div>
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></div>
 [img:invalid://test.png]
+<div class="embedded image"><a href="http://example.com"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></a></div>
+
+<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></div>
 
 ###
 
@@ -35,6 +40,9 @@
 
 [Image]
 [img:invalid://test.png]
+[Image]
+
+[Image]
 
 ###
 

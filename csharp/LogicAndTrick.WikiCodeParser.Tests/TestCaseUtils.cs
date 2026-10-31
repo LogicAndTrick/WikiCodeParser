@@ -1,10 +1,34 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Ganss.Xss;
 
 namespace LogicAndTrick.WikiCodeParser.Tests;
 
 public static class TestCaseUtils
 {
+    static HtmlSanitizer sanitiser;
+    static TestCaseUtils()
+    {
+        sanitiser = new HtmlSanitizer
+        {
+            AllowDataAttributes = true,
+            AllowedTags = { "video", "audio" },
+            AllowedAttributes = { "id", "class", "playsinline", "controls", "autoplay", "loop", "muted" },
+            AllowedSchemes = { "ftp", "mailto" }
+        };
+        sanitiser.RemovingAtRule += (_, e) => Assert.Fail($"Sanitiser: Removed at-rule {e.Rule.Type} on tag {e.Tag.TagName}");
+        sanitiser.RemovingAttribute += (_, e) => Assert.Fail($"Sanitiser: Removed attribute {e.Attribute.Name}=\"{e.Attribute.Value}\" on tag {e.Tag.TagName} - {e.Reason}");
+        sanitiser.RemovingComment += (_, e) => Assert.Fail($"Sanitiser: Removed comment \"{e.Comment.TextContent}\"");
+        sanitiser.RemovingCssClass += (_, e) => Assert.Fail($"Sanitiser: Removed css class {e.CssClass} on tag {e.Tag.TagName} - {e.Reason}");
+        sanitiser.RemovingStyle += (_, e) => Assert.Fail($"Sanitiser: Removed style {e.Style.Name}:{e.Style.Value} on tag {e.Tag.TagName} - {e.Reason}");
+        sanitiser.RemovingTag += (_, e) => Assert.Fail($"Sanitiser: Removed tag {e.Tag.TagName} - {e.Reason}");
+    }
+
+    public static string Sanitise(string html)
+    {
+        return sanitiser.Sanitize(html, "");
+    }
+
     private static void AssertSame(string name, string expected, string actual, bool split)
     {
         if (split)
@@ -30,8 +54,9 @@ public static class TestCaseUtils
         var parser = new Parser(config);
 
         var result = parser.ParseResult(input);
-        var resultHtml = result.ToHtml().Trim();
+        var resultHtml = result.ToHtml(TestCaseUtils.Sanitise).Trim();
         var resultPlain = result.ToPlainText().Trim();
+        expectedOutput = TestCaseUtils.Sanitise(expectedOutput).Trim();
 
         AssertSame("html", expectedOutput, resultHtml, split);
         if (expectedPlain != null) AssertSame("plain", expectedPlain, resultPlain, split);
@@ -54,6 +79,10 @@ public static class TestCaseUtils
 
                 Assert.IsNotNull(robj);
                 Assert.IsNotNull(eobj);
+
+                var rkeys = robj.Properties().Where(x => x.Value != null && x.Value.ToString() is not "0" and not "").Select(x => x.Name).Order().ToList();
+                var ekeys = eobj.Properties().Select(x => x.Name).Order().ToList();
+                CollectionAssert.AreEqual(rkeys, ekeys);
 
                 if (emo.Value?.ToString() == rmo.Value?.ToString()) continue;
                 foreach (var ep in eobj.Properties())
@@ -86,6 +115,15 @@ public static class TestCaseUtils
         if (dir == null) throw new FileNotFoundException("Cannot find test case folder", folder);
 
         return Path.Combine(dir, "tests", folder);
+    }
+
+    public static IEnumerable<string> GetTestCaseNames(string folder)
+    {
+        var dir = GetTestCaseDirectory(folder);
+        foreach (var file in Directory.GetFiles(dir).Where(x => !Path.GetFileName(x).StartsWith("ignored")))
+        {
+            yield return Path.GetFileName(file);
+        }
     }
 
     // ReSharper disable InconsistentNaming

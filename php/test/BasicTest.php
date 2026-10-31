@@ -91,7 +91,7 @@ class BasicTest extends TestCase
     public function testBlockNewLines()
     {
         $input = "a\n\n\n\n= b\n\n\n\nc\nd\n\ne";
-        $output = "a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne";
+        $output = FakeSanitiser::Sanitise("a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne");
 
         $config = new ParserConfiguration();
         $config->elements[] = new MdHeadingElement();
@@ -99,19 +99,19 @@ class BasicTest extends TestCase
         $parser = new Parser($config);
         $result = $parser->ParseResult($input);
 
-        self::assertEquals($output, $result->ToHtml());
+        self::assertEquals($output, $result->ToHtml(TestCaseUtils::Sanitise(...)));
     }
 
     public function testCarriageReturns()
     {
         $input = "Line 1\r\nLine 2\r\nLine 3\nLine 4";
-        $output = "Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4";
+        $output = FakeSanitiser::Sanitise("Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4");
 
         $config = new ParserConfiguration();
         $config->processors[] = new NewLineProcessor();
         $parser = new Parser($config);
         $result = $parser->ParseResult($input);
 
-        self::assertEquals($output, $result->ToHtml());
+        self::assertEquals($output, $result->ToHtml(TestCaseUtils::Sanitise(...)));
     }
 }

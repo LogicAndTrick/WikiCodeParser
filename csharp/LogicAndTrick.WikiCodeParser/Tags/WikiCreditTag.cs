@@ -65,7 +65,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         credit.Name = val;
                         break;
                     case "url":
-                        credit.Url = val;
+                        if (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val)) {
+                            credit.Url = val;
+                        }
                         break;
                 }
             }

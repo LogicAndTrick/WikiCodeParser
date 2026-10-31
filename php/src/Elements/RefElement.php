@@ -5,6 +5,8 @@ namespace LogicAndTrick\WikiCodeParser\Elements;
 use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
+use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
+use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\Util;
@@ -58,9 +60,23 @@ class RefElement extends Element
 
         // Store the ref node
         $node = $parser->ParseElements($data, Util::Trim(implode("\n", $arr)), $scope);
+        RefElement::RemoveRefNodes($node);
         $data->Set("Ref::$name", $node);
 
         // Return nothing
         return PlainTextNode::Empty();
+    }
+
+    private static function RemoveRefNodes(INode $node): void
+    {
+        $children = $node->GetChildren();
+        for ($i = 0; $i < count($children); $i++) {
+            $ch = $children[$i];
+            if ($ch instanceof RefNode) {
+                $node->ReplaceChild($i, new UnprocessablePlainTextNode(":ref={$ch->name}"));
+            } else {
+                RefElement::RemoveRefNodes($ch);
+            }
+        }
     }
 }

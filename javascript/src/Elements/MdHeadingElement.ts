@@ -49,7 +49,7 @@ export class MdHeadingElement extends Element {
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
         const value = Trim(lines.Value());
-        const res = /^(=+)(.*?)=*$/i.exec(value)!;
+        const res = /^(=+)(.*?)=*$/is.exec(value)!;
         const level = Math.min(6, res[1].length);
         const text = Trim(res[2]);
 

@@ -39,6 +39,25 @@ export class Tag {
         return token?.toLowerCase() == this.Token && (context == TagParseContext.Block || !this.IsBlock);
     }
 
+    public ParseOptionsString(optionsString: string): { key: string; value: string }[] {
+        const result: { key: string; value: string }[] = [];
+        optionsString = optionsString.replaceAll('\t', ' ').replaceAll('\r', ' ').replaceAll('\n', ' ');
+        const list = optionsString.split(' ');
+        for (const kv of list) {
+            if (!kv.length || !kv.includes('=')) continue;
+
+            const spl = kv.split('=');
+            if (spl.length != 2) continue;
+
+            const key = Trim(spl[0]);
+            const value = Trim(spl[1]);
+            if (key.length == 0) continue;
+
+            result.push({ key, value });
+        }
+        return result;
+    }
+
     public Parse(parser: Parser, data: ParseData, state: State, scope: string, _context: TagParseContext): INode | null {
         // a null token requires the superclass to override this method
         if (!this.Token) return null;
@@ -59,13 +78,8 @@ export class Tag {
                 options[this.MainOption] = optionsString.substring(1);
             } else {
                 if (optionsString[0] == '=') optionsString = this.MainOption + optionsString;
-                const myregexp = /(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)/gim;
-                let m = myregexp.exec(optionsString);
-                while (m != null) {
-                    const name = Trim(m[1]);
-                    const value = Trim(m[2]);
-                    options[name] = value;
-                    m = myregexp.exec(optionsString);
+                for (const { key, value } of this.ParseOptionsString(optionsString)) {
+                    options[key] = value;
                 }
             }
         }

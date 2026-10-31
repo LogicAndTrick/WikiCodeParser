@@ -5,10 +5,12 @@ namespace LogicAndTrick\WikiCodeParser\Tags;
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Models\WikiRevision;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
+use LogicAndTrick\WikiCodeParser\Nodes\HtmlNodeBuilder;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\MetadataNode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
+use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\State;
@@ -130,46 +132,39 @@ class WikiImageTag extends Tag
 
         $embed = self::GetEmbedObject($tag, $src, $caption, $loop);
         if ($embed != null) $content->nodes[] = $embed;
+        if ($caption != null) $content->nodes[] = HtmlNodeBuilder::Make('span')->AddClass('caption')->Add(new PlainTextNode($caption))->ToNode(plainBefore: ' ');
 
-        if ($caption != null) {
-            $cn = new HtmlNode('<span class="caption">', new PlainTextNode($caption), '</span>');
-            $cn->plainBefore = ' ';
-            $content->nodes[] = $cn;
-        }
+        $panel = HtmlNodeBuilder::Make('span')->AddClass('caption-panel')->Add($content)->ToNode();
+        $wrapper = !$url || strlen($url) == 0 ? $panel : HtmlNodeBuilder::Make('a')->Attr('href', $url)->Add($panel)->ToNode();
 
-        $clsJoin = implode(' ', $classes);
-        $before = "<$el class=\"$clsJoin\"" . ($caption && strlen($caption) > 0 ? ' title="' . HtmlHelper::AttributeEncode($caption) . '"' : '') . '>'
-            . ($url && strlen($url) > 0 ? '<a href="' . HtmlHelper::AttributeEncode($url) . '">' : '')
-            . '<span class="caption-panel">';
-        $after = '</span>'
-            . ($url && strlen($url) > 0 ? '</a>' : '')
-            . "</$el>";
-
-        $ret = new HtmlNode($before, $content, $after);
-        $ret->isBlockNode = $el == 'div';
-        return $ret;
+        return HtmlNodeBuilder::Make($el)
+            ->AddClasses($classes)
+            ->If($caption && strlen($caption) > 0, fn(HtmlNodeBuilder $x) => $x->Attr('title', $caption))
+            ->Add($wrapper)
+            ->ToNode(isBlockNode: $el == 'div');
     }
 
     private static function GetEmbedObject(string $tag, string $url, ?string $caption, bool $loop): ?INode
     {
-        $url = HtmlHelper::AttributeEncode($url);
         switch ($tag) {
             case 'img':
-                $caption = $caption ?? 'User posted image';
-                $cap = HtmlHelper::AttributeEncode($caption);
-                $ret = new HtmlNode("<img class=\"caption-body\" src=\"$url\" alt=\"$cap\" />", PlainTextNode::Empty(), '');
-                $ret->plainBefore = '[Image]';
-                return $ret;
+                return HtmlNodeBuilder::Make('img')
+                    ->AddClass('caption-body')
+                    ->Attr('src', $url)
+                    ->Attr('alt', $caption ?? 'User posted image')
+                    ->ToNode(plainBefore: '[Image]', selfClosing: true);
             case 'video':
             case 'audio':
-                $auto = '';
-                if ($loop) $auto = 'autoplay loop muted';
-                $ret = new HtmlNode("<$tag class=\"caption-body\" src=\"$url\" playsinline controls {$auto}>Your browser doesn't support embedded $tag.</$tag>", PlainTextNode::Empty(), '');
-                $ret->plainBefore = strtoupper(substr($tag, 0, 1)) . substr($tag, 1);
-                return $ret;
+                return HtmlNodeBuilder::Make($tag)
+                    ->AddClass('caption-body')
+                    ->Attr('src', $url)
+                    ->Prop('playsinline')->Prop('controls')
+                    ->If($loop, fn(HtmlNodeBuilder $x) => $x->Prop('autoplay')->Prop('loop')->Prop('muted'))
+                    ->Add(new UnprocessablePlainTextNode("Your browser doesn't support embedded {$tag}."))
+                    ->ToNode(plainBefore: strtoupper(substr($tag, 0, 1)) . substr($tag, 1), selfClosing: true);
+            default:
+                return null;
         }
-
-        return null;
     }
 
     private static array $validClasses = ['large', 'medium', 'small', 'thumb', 'left', 'right', 'center', 'inline'];

@@ -19,48 +19,49 @@ public class RefElementTest
     public void UnusedRefTest()
     {
         var input = "[ref=test]aaaa[/ref]";
-        var output = "";
+        var output = TestCaseUtils.Sanitise("");
         var parser = CreateParser();
         var result = parser.ParseResult(input);
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void UsedRefTest1()
     {
         var input = "\n|-:ref=test\n[ref=test]aaaa[/ref]";
-        var output = "<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>";
+        var output = TestCaseUtils.Sanitise("<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>");
         var parser = CreateParser();
         var result = parser.ParseResult(input);
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void UsedRefTest2()
     {
         var input = "\n|-:ref=test\n[ref=test]\naaaa[/ref]";
-        var output = "<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>";
+        var output = TestCaseUtils.Sanitise("<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>");
         var parser = CreateParser();
         var result = parser.ParseResult(input);
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void UsedRefTest3()
     {
         var input = "\n|-:ref=test\n[ref=test]aaaa\n[/ref]";
-        var output = "<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>";
+        var output = TestCaseUtils.Sanitise("<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>");
         var parser = CreateParser();
         var result = parser.ParseResult(input);
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 
     [TestMethod]
     public void UsedRefTest4()
     {
         var input = "\n|-:ref=test\n[ref=test]\naaaa\n[/ref]";
-        var output = "<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>"; var parser = CreateParser();
+        var output = TestCaseUtils.Sanitise("<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<td>aaaa</td>\n</tr>\n</table></div>");
+        var parser = CreateParser();
         var result = parser.ParseResult(input);
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 }

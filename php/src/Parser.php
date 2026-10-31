@@ -37,6 +37,7 @@ class Parser
 
     public function ParseElements(ParseData $data, string $text, string $scope): INode
     {
+        $data->current_element_depth++;
         $root = new NodeCollection();
 
         // Elements are line-based scopes, an element cannot start in the middle of a line.
@@ -44,6 +45,7 @@ class Parser
 
         $lines = new Lines($text);
         $inscope = Util::OrderByDescending(array_filter($this->configuration->elements, fn(Element $x) => $x->InScope($scope)), fn(Element $x) => $x->priority);
+        if ($data->current_element_depth > $this->configuration->max_element_depth) $inscope = [];
         $plain = [];
 
         while ($lines->Next()) {
@@ -86,7 +88,10 @@ class Parser
             array_splice($root->nodes, count($root->nodes) - 1, 1);
         }
         self::FlattenNestedNodeCollections($root);
-        return self::TrimWhitespace($root);
+        $ret = self::TrimWhitespace($root);
+
+        $data->current_element_depth--;
+        return $ret;
     }
 
     public static function TrimWhitespace(INode $node, bool $start = true, bool $end = true): INode
@@ -120,12 +125,15 @@ class Parser
 
     public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context): INode
     {
+        $data->current_tag_depth++;
+
         // trim 3 or more newlines down to 2 newlines
         $text = preg_replace('/\n{3,}/i', "\n\n", $text) ?? '';
 
         $state = new State($text);
         $root = new NodeCollection();
         $inscope = Util::OrderByDescending(array_filter($this->configuration->tags, fn(Tag $x) => $x->InScope($scope)), fn(Tag $x) => $x->priority);
+        if ($data->current_tag_depth > $this->configuration->max_tag_depth) $inscope = [];
 
         while (!$state->Done()) {
             $plain = $state->ScanTo('[');
@@ -152,6 +160,7 @@ class Parser
             }
         }
 
+        $data->current_tag_depth--;
         return $root;
     }
 

@@ -10,7 +10,7 @@ export class AutoLinkingProcessor implements INodeProcessor {
     public Priority = 9;
 
     ShouldProcess(node: INode, _scope: string): boolean {
-        return node instanceof PlainTextNode && (node.Text.includes('http') || node.Text.includes('@'));
+        return node instanceof PlainTextNode && (node.Text.toLowerCase().includes('http') || node.Text.includes('@'));
     }
 
     Process(parser: Parser, data: ParseData, node: INode, _scope: string): INode[] {
@@ -20,14 +20,14 @@ export class AutoLinkingProcessor implements INodeProcessor {
 
         const allMatches: RegExpExecArray[] = [];
 
-        const urlMatcher = /(?<=^|\s)(?<url>https?:\/\/[^\][""\s]+)(?=\s|$)/gi;
+        const urlMatcher = /(?<!\S)(?<url>https?:\/\/[^\][""\s]+)(?!\S)/gi;
         let urlMatch = urlMatcher.exec(text);
         while (urlMatch != null) {
             allMatches.push(urlMatch);
             urlMatch = urlMatcher.exec(text);
         }
 
-        const emailMatcher = /(?<=^|\s)(?<email>[^\][""\s@]+@[^\][""\s@]+\.[^\][""\s@]+)(?=\s|$)/gi;
+        const emailMatcher = /(?<!\S)(?<email>[^\][""\s@]+@[^\][""\s@.]+(?:\.[^\][""\s@.]+)+)(?=\.?(?!\S))/gi;
         let emailMatch = emailMatcher.exec(text);
         while (emailMatch != null) {
             allMatches.push(emailMatch);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
 
 namespace LogicAndTrick.WikiCodeParser.Tags
@@ -39,6 +38,26 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public virtual bool Matches(State state, string token, TagParseContext context) => token?.ToLower() == Token && (context == TagParseContext.Block || !IsBlock);
 
+        public virtual List<(string key, string value)> ParseOptionsString(string optionsString)
+        {
+            var result = new List<(string key, string value)>();
+            var list = optionsString.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var kv in list)
+            {
+                if (!kv.Contains('=')) continue;
+
+                var spl = kv.Split('=');
+                if (spl.Length != 2) continue;
+
+                var key = Util.Trim(spl[0]);
+                var value = Util.Trim(spl[1]);
+                if (key.Length == 0) continue;
+
+                result.Add((key, value));
+            }
+            return result;
+        }
+
         public virtual INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
             var index = state.Index;
@@ -62,13 +81,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 else
                 {
                     if (optionsString[0] == '=') optionsString = MainOption + optionsString;
-                    var matches = Regex.Matches(optionsString, @"(?=\s|^)\s*([^ ]+?)=([^\s]*)(?=\s|$)(?!=)",
-                        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
-                    foreach (Match m in matches)
+                    foreach (var (key, value) in ParseOptionsString(optionsString))
                     {
-                        var name = Util.Trim(m.Groups[1].Value);
-                        var value = Util.Trim(m.Groups[2].Value);
-                        options[name] = value;
+                        options[key] = value;
                     }
                 }
             }

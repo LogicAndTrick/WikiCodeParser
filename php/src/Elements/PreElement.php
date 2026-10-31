@@ -69,7 +69,7 @@ class PreElement extends Element
         if (isset($res[1])) {
             $spl = explode(' ', $res[1]);
             $hl = in_array('highlight', $spl);
-            $lang = strtolower(array_filter($spl, fn(string $x) => $x != 'highlight')[0]);
+            $lang = strtolower(array_values(array_filter($spl, fn(string $x) => $x != 'highlight'))[0] ?? '');
             if (!in_array($lang, PreElement::$allowedLanguages)) $lang = null;
         }
 

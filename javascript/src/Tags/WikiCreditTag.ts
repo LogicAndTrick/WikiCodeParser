@@ -1,3 +1,4 @@
+import { HtmlHelper } from '../HtmlHelper';
 import { WikiRevisionCredit } from '../Models/WikiRevisionCredit';
 import { INode } from '../Nodes/INode';
 import { MetadataNode } from '../Nodes/MetadataNode';
@@ -60,7 +61,9 @@ export class WikiCreditTag extends Tag {
                     credit.Name = val;
                     break;
                 case 'url':
-                    credit.Url = val;
+                    if (HtmlHelper.GetUrlScheme(val) && HtmlHelper.ValidateUrl(val)) {
+                        credit.Url = val;
+                    }
                     break;
             }
         }

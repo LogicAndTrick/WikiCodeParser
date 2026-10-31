@@ -70,6 +70,11 @@ export class WikiBookTag extends Tag {
             }
         }
 
+        if (book.BookName == null || book.ChapterName == null || book.ChapterNumber == null || book.PageNumber == null || book.ChapterNumber <= 0 || book.PageNumber <= 0) {
+            state.Seek(index, true);
+            return null;
+        }
+
         state.SkipWhitespace();
         return new MetadataNode('WikiBook', book);
     }

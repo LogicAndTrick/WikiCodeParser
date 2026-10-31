@@ -79,6 +79,6 @@ public class QuoteElementTest
         var output = "\n<blockquote>Test</blockquote>\n";
         var parser = CreateParser();
         var result = parser.ParseResult(input);
-        Assert.AreEqual(output, result.ToHtml());
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
     }
 }

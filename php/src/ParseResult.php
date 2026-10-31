@@ -26,11 +26,28 @@ class ParseResult
         return $list;
     }
 
-    public function ToHtml(): string
+    /**
+     * Convert the result to HTML and sanitise it with a given callback.
+     * Supplying a valid sanitiser is the responsibility of the caller.
+     * @param callable(string): string $sanitiser
+     */
+    public function ToHtml(callable $sanitiser): string
+    {
+        return $sanitiser($this->content->ToHtml());
+    }
+
+    /**
+     * Convert the result to HTML without a sanitiser callback.
+     * Its possible malicious input could include injection attacks. Use at your own risk.
+     */
+    public function ToHtmlUnsanitised(): string
     {
         return $this->content->ToHtml();
     }
 
+    /**
+     * Convert the result to plain text.
+     */
     public function ToPlainText(): string
     {
         return $this->content->ToPlainText();
