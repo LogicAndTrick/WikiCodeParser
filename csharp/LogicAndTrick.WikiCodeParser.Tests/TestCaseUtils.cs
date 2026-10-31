@@ -80,6 +80,10 @@ public static class TestCaseUtils
                 Assert.IsNotNull(robj);
                 Assert.IsNotNull(eobj);
 
+                var rkeys = robj.Properties().Where(x => x.Value != null && x.Value.ToString() is not "0" and not "").Select(x => x.Name).Order().ToList();
+                var ekeys = eobj.Properties().Select(x => x.Name).Order().ToList();
+                CollectionAssert.AreEqual(rkeys, ekeys);
+
                 if (emo.Value?.ToString() == rmo.Value?.ToString()) continue;
                 foreach (var ep in eobj.Properties())
                 {

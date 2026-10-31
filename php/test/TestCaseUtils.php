@@ -60,7 +60,13 @@ class TestCaseUtils
         if ($expectedPlain !== null) self::AssertSame('plain', $expectedPlain, $resultPlain, $split);
 
         if ($expectedMeta != null) {
+            // var resultMetaObjects = result.GetMetadata().Select(x => new { x.Key, Value = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(x.Value)) }).ToList();
             $resultMetaObjects = $result->GetMetadata();
+            foreach ($resultMetaObjects as &$m) {
+                $json = json_encode($m['value']);
+                $parsed = $json ? json_decode($json) : [];
+                $m['value'] = $parsed;
+            }
             $expectedMetaObjects = array_map(function (string $x) {
                 $x = trim($x);
                 $spl = explode('=', $x, 2);
@@ -73,8 +79,17 @@ class TestCaseUtils
                 Assert::assertEquals($emo['key'], $rmo['key']);
                 if ($emo['value'] == $rmo['value']) continue;
                 $robj = $rmo['value'];
-                /** @var iterable $eobj */
+                /** @var array $eobj */
                 $eobj = $emo['value'];
+
+                $rkeys = [];
+                $ekeys = [];
+                foreach ($robj as $k => $v) {
+                    if ($v !== null && $v !== '' && $v !== 0) $rkeys[$k] = true;
+                }
+                foreach ($eobj as $k => $v) $ekeys[$k] = true;
+                Assert::assertArraysAreEqualIgnoringOrder($rkeys, $ekeys);
+
                 foreach ($eobj as $name => $ev) {
                     $rv = $robj->$name;
                     Assert::assertEquals($ev, $rv);

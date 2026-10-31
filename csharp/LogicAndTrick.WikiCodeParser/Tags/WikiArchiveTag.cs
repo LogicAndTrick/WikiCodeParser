@@ -54,10 +54,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         credit.Description = val;
                         break;
                     case "url":
-                        credit.Url = val;
+                        if (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val)) {
+                            credit.Url = val;
+                        }
                         break;
                     case "wayback":
-                        credit.WaybackUrl = val;
+                        if (long.TryParse(val, out _) || (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val))) {
+                            credit.WaybackUrl = val;
+                        }
                         break;
                     case "full":
                         credit.Type = WikiRevisionCredit.TypeFull;
