@@ -14,7 +14,7 @@ export class NewLineProcessor implements INodeProcessor {
         return node instanceof PlainTextNode && (node.Text.includes('\n') || node.Text.includes('<br>'));
     }
 
-    Process(_parser: Parser, _data: ParseData, node: INode, _scope: string): INode[] {
+    Process(_parser: Parser, _data: ParseData, parentNode: INode | null, node: INode, _scope: string): INode[] {
         const text = (node as PlainTextNode).Text;
 
         const lines: string[] = [];

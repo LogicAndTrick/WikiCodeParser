@@ -108,7 +108,7 @@ class Tag
                 $text .= $state->ScanTo('[');
                 $tok = $state->GetToken();
                 if ($tok && strtolower($tok) == strtolower($this->token)) $stack++;
-                if ($tok && strtolower($tok) == '/' . strtolower($this->token) && trim($state->Peek($tokenLength + 3)) == '[/' . strtolower($this->token) . ']') $stack--;
+                if ($tok && strtolower($tok) == '/' . strtolower($this->token) && strtolower(trim($state->Peek($tokenLength + 3))) == '[/' . strtolower($this->token) . ']') $stack--;
                 if ($stack == 0) {
                     $state->Seek(strlen($this->token) + 3, false);
                     if (!$this->Validate($options, $text)) break;

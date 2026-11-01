@@ -13,7 +13,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             return node is PlainTextNode ptn && (ptn.Text.Contains("\n") || ptn.Text.Contains("<br>"));
         }
 
-        public IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope)
+        public IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope)
         {
             var text = ((PlainTextNode)node).Text;
 

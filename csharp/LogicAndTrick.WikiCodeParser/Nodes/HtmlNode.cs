@@ -49,5 +49,10 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         {
             return true;
         }
+
+        public override string ToString()
+        {
+            return "html{" + HtmlBefore + "}";
+        }
     }
 }

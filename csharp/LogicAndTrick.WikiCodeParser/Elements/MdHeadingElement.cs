@@ -21,7 +21,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var text = Util.Trim(res.Groups[2].Value);
 
             var contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
-            var contentsPlainText = parser.RunProcessors(contents, data, scope).ToPlainText();
+            var contentsPlainText = parser.RunProcessors(null, contents, data, scope).ToPlainText();
             var id = GetUniqueAnchor(data, contentsPlainText);
             return new HeadingNode(level, id, contents);
         }

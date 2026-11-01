@@ -104,7 +104,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             if (plainStart < text.Length) yield return new PlainTextNode(text.Substring(plainStart));
         }
 
-        public IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope)
+        public IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope)
         {
             var text = ((PlainTextNode) node).Text;
 

@@ -2,6 +2,7 @@
 
 namespace LogicAndTrick\WikiCodeParser\Elements;
 
+use Exception;
 use LogicAndTrick\WikiCodeParser\Lines;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
@@ -12,14 +13,50 @@ use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
 
-class TableRow implements INode
+class TableCell implements INode
 {
     public string $type;
-    public array $cells;
+    public INode $contents;
 
-    public function __construct(string $type, array $cells)
+    public function __construct(string $type, INode $contents)
     {
         $this->type = $type;
+        $this->contents = $contents;
+    }
+
+    function ToHtml(): string
+    {
+        return "<{$this->type}>{$this->contents->ToHtml()}</{$this->type}>";
+    }
+
+    function ToPlainText(): string
+    {
+        return $this->contents->ToPlainText();
+    }
+
+    function GetChildren(): array
+    {
+        return [$this->contents];
+    }
+
+    function ReplaceChild(int $i, INode $node): void
+    {
+        if ($i != 0) throw new Exception('Argument out of range');
+        $this->contents = $node;
+    }
+
+    function HasContent(): bool
+    {
+        return $this->contents->HasContent();
+    }
+}
+
+class TableRow implements INode
+{
+    public array $cells;
+
+    public function __construct(array $cells)
+    {
         $this->cells = $cells;
     }
 
@@ -27,7 +64,7 @@ class TableRow implements INode
     {
         $sb = "<tr>\n";
         foreach ($this->cells as $cell) {
-            $sb .= "<{$this->type}>{$cell->ToHtml()}</{$this->type}>\n";
+            $sb .= $cell->ToHtml() . "\n";
         }
         $sb .= "</tr>\n";
         return $sb;
@@ -79,8 +116,9 @@ class MdTableElement extends Element
                 $lines->Back();
                 break;
             }
-            $cells = array_map(fn(string $x) => self::ResolveCell($x, $parser, $data, $scope), self::SplitTable(substr($value, 2)));
-            $arr[] = new TableRow($value[1] == '=' ? 'th' : 'td', $cells);
+            $type = $value[1] == '=' ? 'th' : 'td';
+            $cells = array_map(fn(string $x) => new TableCell($type, self::ResolveCell($x, $parser, $data, $scope)), self::SplitTable(substr($value, 2)));
+            $arr[] = new TableRow($cells);
         } while ($lines->Next());
 
         return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');

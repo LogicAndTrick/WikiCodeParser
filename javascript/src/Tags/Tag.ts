@@ -91,7 +91,16 @@ export class Tag {
                 text += state.ScanTo('[');
                 const tok = state.GetToken();
                 if (tok && tok.toLowerCase() == this.Token.toLowerCase()) stack++;
-                if (tok && tok.toLowerCase() == '/' + this.Token.toLowerCase() && state.Peek(tokenLength + 3).trim() == '[/' + this.Token.toLowerCase() + ']') stack--;
+                if (
+                    tok &&
+                    tok.toLowerCase() == '/' + this.Token.toLowerCase() &&
+                    state
+                        .Peek(tokenLength + 3)
+                        .trim()
+                        .toLowerCase() ==
+                        '[/' + this.Token.toLowerCase() + ']'
+                )
+                    stack--;
                 if (stack == 0) {
                     state.Seek(this.Token.length + 3, false);
                     if (!this.Validate(options, text)) break;

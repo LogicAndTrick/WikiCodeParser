@@ -17,5 +17,5 @@ export interface INodeProcessor {
      * Process a node and return the nodes that will replace it.
      * @returns The nodes to replace the given node with
      */
-    Process(parser: Parser, data: ParseData, node: INode, scope: string): INode[];
+    Process(parser: Parser, data: ParseData, parentNode: INode | null, node: INode, scope: string): INode[];
 }

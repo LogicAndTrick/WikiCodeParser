@@ -133,7 +133,7 @@ class MarkdownTextProcessor implements INodeProcessor
         return $ret;
     }
 
-    function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
+    function Process(Parser $parser, ParseData $data, INode|null $parentNode, INode $node, string $scope): array
     {
         /** @var PlainTextNode $node */
         $text = $node->text;

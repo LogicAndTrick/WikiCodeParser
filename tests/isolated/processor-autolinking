@@ -7,6 +7,23 @@ email: test@example.com.
 test@example...com
 test test@example.com.au test
 
+1 https://twhl.info/?a=_b_ 2
+visit https://twhl.info, and then visit https://twhl.info!!!
+(no really, visit https://twhl.info)
+wikipedia: https://en.wikipedia.org/wiki/Half-life_(disambiguation)
+wikipedia2(https://en.wikipedia.org/wiki/Half-life)
+"https://twhl.info/"
+don't send emails to fake@domainname.example.com.
+[b]visit[/b] https://twhl.info!
+[b]x[/b]http://example.com
+http://example.com[b]x[/b]
+[url=http://example.com?1]http://example.com?2[/url]
+[[Test|http://example.com]]
+[url=http://example.com]fake@domainname.example.com[/url]
+`https://example.com/`
+[code]https://example.com/[/code]
+https://example.com/
+
 ###
 
 <a href="http://example.com">http://example.com</a><br/>
@@ -16,7 +33,24 @@ ftp://example.com<br/>
 test@test@example.com<br/>
 email: <a href="mailto:test@example.com">test@example.com</a>.<br/>
 test@example...com<br/>
-test <a href="mailto:test@example.com.au">test@example.com.au</a> test
+test <a href="mailto:test@example.com.au">test@example.com.au</a> test<br/>
+<br/>
+1 <a href="https://twhl.info/?a=_b_">https://twhl.info/?a=_b_</a> 2<br/>
+visit <a href="https://twhl.info">https://twhl.info</a>, and then visit <a href="https://twhl.info">https://twhl.info</a>!!!<br/>
+(no really, visit <a href="https://twhl.info">https://twhl.info</a>)<br/>
+wikipedia: <a href="https://en.wikipedia.org/wiki/Half-life_(disambiguation)">https://en.wikipedia.org/wiki/Half-life_(disambiguation)</a><br/>
+wikipedia2(<a href="https://en.wikipedia.org/wiki/Half-life">https://en.wikipedia.org/wiki/Half-life</a>)<br/>
+&quot;<a href="https://twhl.info/">https://twhl.info/</a>&quot;<br/>
+don&#39;t send emails to <a href="mailto:fake@domainname.example.com">fake@domainname.example.com</a>.<br/>
+<strong>visit</strong> <a href="https://twhl.info">https://twhl.info</a>!<br/>
+<strong>x</strong>http://example.com<br/>
+http://example.com<strong>x</strong><br/>
+<a href="http://example.com?1">http://example.com?2</a><br/>
+<a href="https://twhl.info/wiki/page/Test">http://example.com</a><br/>
+<a href="http://example.com">fake@domainname.example.com</a><br/>
+<code>https://example.com/</code><br/>
+<code>https://example.com/</code><br/>
+<a href="https://example.com/">https://example.com/</a>
 
 ###
 
@@ -28,3 +62,20 @@ test@test@example.com
 email: test@example.com.
 test@example...com
 test test@example.com.au test
+
+1 https://twhl.info/?a=_b_ 2
+visit https://twhl.info, and then visit https://twhl.info!!!
+(no really, visit https://twhl.info)
+wikipedia: https://en.wikipedia.org/wiki/Half-life_(disambiguation)
+wikipedia2(https://en.wikipedia.org/wiki/Half-life)
+"https://twhl.info/"
+don't send emails to fake@domainname.example.com.
+visit https://twhl.info!
+xhttp://example.com
+http://example.comx
+http://example.com?2
+http://example.com
+fake@domainname.example.com
+`https://example.com/`
+https://example.com/
+https://example.com/

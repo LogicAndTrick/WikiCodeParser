@@ -1,6 +1,7 @@
 import { HtmlHelper } from '../HtmlHelper';
 import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
+import { NodeExtensions } from '../Nodes/NodeExtensions';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
@@ -21,7 +22,12 @@ class SmileyDefinition {
         for (const token of this.Tokens) {
             if (text.indexOf(token, startIndex) == startIndex) {
                 // Must end with whitespace
-                if (startIndex + token.length < text.length && text[startIndex + token.length].trim() != '') continue;
+                if (
+                    startIndex + token.length < text.length &&
+                    text[startIndex + token.length].trim() != '' &&
+                    !SmiliesProcessor.AllowedEndChars.has(text[startIndex + token.length])
+                )
+                    continue;
                 return token;
             }
         }
@@ -49,7 +55,10 @@ export class SmiliesProcessor implements INodeProcessor {
         return node instanceof PlainTextNode && this._definitions.length > 0;
     }
 
-    Process(_parser: Parser, _data: ParseData, node: INode, _scope: string): INode[] {
+    public static AllowedStartChars: Set<string> = new Set<string>([' ', '\n', '\r', '\t', '(', '"']);
+    public static AllowedEndChars: Set<string> = new Set<string>([' ', '\n', '\r', '\t', ')', '"', '.', ',', '!', '?']);
+
+    Process(_parser: Parser, _data: ParseData, parentNode: INode | null, node: INode, _scope: string): INode[] {
         if (!this._initialised) {
             this._tokenStarts = new Set<string>(this._definitions.flatMap(x => x.Tokens).map(x => x[0]));
             this._initialised = true;
@@ -68,7 +77,7 @@ export class SmiliesProcessor implements INodeProcessor {
             }
 
             // Must start with whitespace
-            if (index != 0 && text[index - 1].trim() != '') continue;
+            if (index != 0 && text[index - 1].trim() != '' && !SmiliesProcessor.AllowedStartChars.has(text[index - 1])) continue;
 
             // Find an appropriate definition
             let definition: SmileyDefinition | null = null;
@@ -83,15 +92,20 @@ export class SmiliesProcessor implements INodeProcessor {
             if (definition == null || token == null) continue;
 
             // Must end with whitespace
-            if (index + token.length < text.length && text[index + token.length].trim() != '') continue;
+            if (index + token.length < text.length && text[index + token.length].trim() != '' && !SmiliesProcessor.AllowedEndChars.has(text[index + token.length])) continue;
+
+            // skip smileys starting on the first letter if the previous sibling doesn't end in whitespace or one of the allowed punctuation chars
+            if (index == 0 && !NodeExtensions.PreviousNodeEndsWith(node, parentNode, SmiliesProcessor.AllowedStartChars)) continue;
+            // same if the smiley ends on the last letter and the next sibling doesn't start with an allowed char
+            if (index + token.length == text.length && !NodeExtensions.NextNodeStartsWith(node, parentNode, SmiliesProcessor.AllowedEndChars)) continue;
 
             // We have a smiley
             if (start < index) ret.push(new PlainTextNode(text.substring(start, index)));
             const src = HtmlHelper.AttributeEncode(Template(this.UrlFormatString, { 0: definition.Name }));
             const alt = HtmlHelper.AttributeEncode(token);
-            const node = new HtmlNode(`<img class="smiley" src="${src}" alt="${alt}" />`, PlainTextNode.Empty(), '');
-            node.PlainBefore = token;
-            ret.push(node);
+            const smileyNode = new HtmlNode(`<img class="smiley" src="${src}" alt="${alt}" />`, PlainTextNode.Empty(), '');
+            smileyNode.PlainBefore = token;
+            ret.push(smileyNode);
             start = index + token.length;
             index += token.length;
 

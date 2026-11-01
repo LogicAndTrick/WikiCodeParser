@@ -15,7 +15,7 @@ export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
         return node instanceof NodeCollection;
     }
 
-    Process(parser: Parser, data: ParseData, node: INode, scope: string): INode[] {
+    Process(parser: Parser, data: ParseData, parentNode: INode | null, node: INode, scope: string): INode[] {
         const coll = node as NodeCollection;
 
         const ret = [];
@@ -31,7 +31,7 @@ export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
                 child.Text = text;
             }
 
-            child = parser.RunProcessor(child, this, data, scope);
+            child = parser.RunProcessor(coll, child, this, data, scope);
 
             if (child instanceof HtmlNode && child.IsBlockNode) {
                 trimStart = true;

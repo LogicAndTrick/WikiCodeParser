@@ -5,6 +5,7 @@ namespace LogicAndTrick\WikiCodeParser\Processors;
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
+use LogicAndTrick\WikiCodeParser\Nodes\NodeExtensions;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
@@ -30,7 +31,7 @@ class SmileyDefinition
         foreach ($this->tokens as $token) {
             if (strpos($text, $token, $startIndex) === $startIndex) {
                 // Must end with whitespace
-                if ($startIndex + strlen($token) < strlen($text) && trim($text[$startIndex + strlen($token)]) != '') continue;
+                if ($startIndex + strlen($token) < strlen($text) && trim($text[$startIndex + strlen($token)]) != '' && !in_array($text[$startIndex + strlen($token)], SmiliesProcessor::AllowedEndChars, true)) continue;
                 return $token;
             }
         }
@@ -71,7 +72,10 @@ class SmiliesProcessor implements INodeProcessor
         return $node instanceof PlainTextNode && count($this->definitions) > 0;
     }
 
-    function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
+    public const AllowedStartChars = [' ', '\n', '\r', '\t', '(', '"'];
+    public const AllowedEndChars = [' ', '\n', '\r', '\t', ')', '"', '.', ',', '!', '?'];
+
+    function Process(Parser $parser, ParseData $data, INode|null $parentNode, INode $node, string $scope): array
     {
         if (!$this->initialised) {
             $this->tokenStarts = array_unique(array_map(fn(string $x) => $x[0], array_merge(...array_map(fn(SmileyDefinition $def) => $def->tokens, $this->definitions))));
@@ -92,7 +96,7 @@ class SmiliesProcessor implements INodeProcessor
             }
 
             // Must start with whitespace
-            if ($index != 0 && trim($text[$index - 1]) != '') continue;
+            if ($index != 0 && trim($text[$index - 1]) != '' && !in_array($text[$index - 1], self::AllowedStartChars, true)) continue;
 
             // Find an appropriate definition
             /** @var ?SmileyDefinition $definition */
@@ -110,15 +114,20 @@ class SmiliesProcessor implements INodeProcessor
             /** @var string $token */
 
             // Must end with whitespace
-            if ($index + strlen($token) < strlen($text) && trim($text[$index + strlen($token)]) != '') continue;
+            if ($index + strlen($token) < strlen($text) && trim($text[$index + strlen($token)]) != '' && !in_array($text[$index + strlen($token)], self::AllowedEndChars, true)) continue;
+
+            // skip smileys starting on the first letter if the previous sibling doesn't end in whitespace or one of the allowed punctuation chars
+            if ($index == 0 && !NodeExtensions::PreviousNodeEndsWith($node, $parentNode, self::AllowedStartChars)) continue;
+            // same if the smiley ends on the last letter and the next sibling doesn't start with an allowed char
+            if ($index + strlen($token) == strlen($text) && !NodeExtensions::NextNodeStartsWith($node, $parentNode, self::AllowedEndChars)) continue;
 
             // We have a smiley
             if ($start < $index) $ret[] = new PlainTextNode(substr($text, $start, $index - $start));
             $src = HtmlHelper::AttributeEncode(Util::Template($this->urlFormatString, ['0' => $definition->name]));
             $alt = HtmlHelper::AttributeEncode($token);
-            $node = new HtmlNode("<img class=\"smiley\" src=\"{$src}\" alt=\"{$alt}\" />", PlainTextNode::Empty(), '');
-            $node->plainBefore = $token;
-            $ret[] = $node;
+            $smiley_node = new HtmlNode("<img class=\"smiley\" src=\"{$src}\" alt=\"{$alt}\" />", PlainTextNode::Empty(), '');
+            $smiley_node->plainBefore = $token;
+            $ret[] = $smiley_node;
             $start = $index + strlen($token);
             $index += strlen($token);
 

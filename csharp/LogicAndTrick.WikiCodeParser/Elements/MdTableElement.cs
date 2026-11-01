@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,8 +25,9 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                     lines.Back();
                     break;
                 }
-                var cells = SplitTable(value.Substring(2)).Select(x => ResolveCell(x, parser, data, scope));
-                arr.Add(new TableRow(value[1] == '=' ? "th" : "td", cells));
+                var type = value[1] == '=' ? "th" : "td";
+                var cells = SplitTable(value.Substring(2)).Select(x => new TableCell(type, ResolveCell(x, parser, data, scope)));
+                arr.Add(new TableRow(cells));
             } while (lines.Next());
 
             return new HtmlNode("<div class=\"table-responsive\"><table class=\"table table-bordered\">", new NodeCollection(arr), "</table></div>");
@@ -68,12 +70,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         private class TableRow : INode
         {
-            public string Type { get; }
-            public List<INode> Cells { get; }
+            public List<TableCell> Cells { get; }
 
-            public TableRow(string type, IEnumerable<INode> cells)
+            public TableRow(IEnumerable<TableCell> cells)
             {
-                Type = type;
                 Cells = cells.ToList();
             }
 
@@ -82,9 +82,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var sb = new StringBuilder("<tr>\n");
                 foreach (var cell in Cells)
                 {
-                    sb.Append("<").Append(Type).Append(">");
-                    sb.Append(cell.ToHtml());
-                    sb.Append("</").Append(Type).Append(">\n");
+                    sb.Append(cell.ToHtml()).Append("\n");
                 }
                 sb.Append("</tr>\n");
                 return sb.ToString();
@@ -106,17 +104,61 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
             public IList<INode> GetChildren()
             {
-                return Cells;
+                var list = new List<INode>();
+                list.AddRange(Cells);
+                return list;
             }
 
             public void ReplaceChild(int i, INode node)
             {
-                Cells[i] = node;
+                Cells[i] = (TableCell) node;
             }
 
             public bool HasContent()
             {
                 return true;
+            }
+        }
+
+        private class TableCell : INode
+        {
+            public string Type { get; }
+            public INode Contents { get; set; }
+
+            public TableCell(string type, INode contents)
+            {
+                Type = type;
+                Contents = contents;
+            }
+
+            public string ToHtml()
+            {
+                var sb = new StringBuilder();
+                sb.Append("<").Append(Type).Append(">");
+                sb.Append(Contents.ToHtml());
+                sb.Append("</").Append(Type).Append(">");
+                return sb.ToString();
+            }
+
+            public string ToPlainText()
+            {
+                return Contents.ToPlainText();
+            }
+
+            public IList<INode> GetChildren()
+            {
+                return new List<INode> { Contents };
+            }
+
+            public void ReplaceChild(int i, INode node)
+            {
+                if (i != 0) throw new ArgumentOutOfRangeException();
+                Contents = node;
+            }
+
+            public bool HasContent()
+            {
+                return Contents.HasContent();
             }
         }
     }

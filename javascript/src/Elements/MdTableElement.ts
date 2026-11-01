@@ -9,19 +9,48 @@ import { TagParseContext } from '../TagParseContext';
 import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
 
-class TableRow implements INode {
+class TableCell implements INode {
     public Type: string;
-    public Cells: INode[];
+    public Contents: INode;
 
-    constructor(type: string, ...cells: INode[]) {
+    constructor(type: string, contents: INode) {
         this.Type = type;
+        this.Contents = contents;
+    }
+
+    ToHtml() {
+        return `<${this.Type}>${this.Contents.ToHtml()}</${this.Type}>`;
+    }
+
+    ToPlainText() {
+        return this.Contents.ToPlainText();
+    }
+
+    GetChildren(): INode[] {
+        return [this.Contents];
+    }
+
+    ReplaceChild(i: number, node: INode) {
+        if (i != 0) throw new Error('Argument out of range');
+        this.Contents = node;
+    }
+
+    HasContent(): boolean {
+        return this.Contents.HasContent();
+    }
+}
+
+class TableRow implements INode {
+    public Cells: TableCell[];
+
+    constructor(...cells: TableCell[]) {
         this.Cells = cells;
     }
 
     ToHtml(): string {
         let sb = '<tr>\n';
         for (const cell of this.Cells) {
-            sb += `<${this.Type}>${cell.ToHtml()}</${this.Type}>\n`;
+            sb += cell.ToHtml() + '\n';
         }
         sb += '</tr>\n';
         return sb;
@@ -44,7 +73,7 @@ class TableRow implements INode {
     }
 
     ReplaceChild(i: number, node: INode): void {
-        this.Cells[i] = node;
+        this.Cells[i] = node as TableCell;
     }
 
     HasContent(): boolean {
@@ -65,8 +94,9 @@ export class MdTableElement extends Element {
                 lines.Back();
                 break;
             }
-            const cells = MdTableElement.SplitTable(value.substring(2)).map(x => MdTableElement.ResolveCell(x, parser, data, scope));
-            arr.push(new TableRow(value[1] == '=' ? 'th' : 'td', ...cells));
+            const type = value[1] == '=' ? 'th' : 'td';
+            const cells = MdTableElement.SplitTable(value.substring(2)).map(x => new TableCell(type, MdTableElement.ResolveCell(x, parser, data, scope)));
+            arr.push(new TableRow(...cells));
         } while (lines.Next());
 
         return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...arr), '</table></div>');

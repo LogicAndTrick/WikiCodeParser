@@ -1,5 +1,7 @@
 import { INode } from './INode';
+import { PlainTextNode } from './PlainTextNode';
 import { RemovedNode } from './RemovedNode';
+import { UnprocessablePlainTextNode } from './UnprocessablePlainTextNode';
 
 export class NodeExtensions {
     public static Remove(root: INode, remove: INode): boolean {
@@ -28,6 +30,42 @@ export class NodeExtensions {
             if (NodeExtensions.WalkBack(child, visitor) === false) return false;
         }
         if (visitor(node) === false) return false;
+        return true;
+    }
+
+    public static PreviousSibling(node: INode, parentNode: INode | null): INode | null {
+        if (parentNode == null) return null;
+        const children = parentNode.GetChildren();
+        const idx = children.indexOf(node);
+        if (idx <= 0) return null;
+        return children[idx - 1];
+    }
+
+    public static NextSibling(node: INode, parentNode: INode | null): INode | null {
+        if (parentNode == null) return null;
+        const children = parentNode.GetChildren();
+        const idx = children.indexOf(node);
+        if (idx < 0 || idx >= children.length - 1) return null;
+        return children[idx + 1];
+    }
+
+    public static PreviousNodeEndsWith(node: INode, parentNode: INode | null, chars: Set<string>): boolean {
+        let prev: INode | null = node;
+        while ((prev = NodeExtensions.PreviousSibling(prev, parentNode)) != null) {
+            if (prev instanceof PlainTextNode && prev.Text.length > 0) return chars.has(prev.Text[prev.Text.length - 1]);
+            if (prev instanceof UnprocessablePlainTextNode && prev.Text.length > 0) return chars.has(prev.Text[prev.Text.length - 1]);
+            if (prev.HasContent()) return false;
+        }
+        return true;
+    }
+
+    public static NextNodeStartsWith(node: INode, parentNode: INode | null, chars: Set<string>): boolean {
+        let next: INode | null = node;
+        while ((next = NodeExtensions.NextSibling(next, parentNode)) != null) {
+            if (next instanceof PlainTextNode && next.Text.length > 0) return chars.has(next.Text[0]);
+            if (next instanceof UnprocessablePlainTextNode && next.Text.length > 0) return chars.has(next.Text[0]);
+            if (next.HasContent()) return false;
+        }
         return true;
     }
 }

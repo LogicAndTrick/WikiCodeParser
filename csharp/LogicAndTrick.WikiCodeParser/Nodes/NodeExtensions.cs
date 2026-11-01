@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LogicAndTrick.WikiCodeParser.Nodes
@@ -72,6 +73,48 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
             if (!visitor.Invoke(node)) return false;
 
+            return true;
+        }
+
+        public static INode PreviousSibling(this INode node, INode parentNode)
+        {
+            if (parentNode == null) return null;
+            var children = parentNode.GetChildren();
+            var idx = children.IndexOf(node);
+            if (idx <= 0) return null;
+            return children[idx - 1];
+        }
+
+        public static INode NextSibling(this INode node, INode parentNode)
+        {
+            if (parentNode == null) return null;
+            var children = parentNode.GetChildren();
+            var idx = children.IndexOf(node);
+            if (idx < 0 || idx >= children.Count - 1) return null;
+            return children[idx + 1];
+        }
+
+        public static bool PreviousNodeEndsWith(this INode node, INode parentNode, HashSet<char> chars)
+        {
+            var prev = node;
+            while ((prev = prev.PreviousSibling(parentNode)) != null)
+            {
+                if (prev is PlainTextNode ptn && ptn.Text.Length > 0) return chars.Contains(ptn.Text[ptn.Text.Length - 1]);
+                else if (prev is UnprocessablePlainTextNode uptn && uptn.Text.Length > 0) return chars.Contains(uptn.Text[uptn.Text.Length - 1]);
+                else if (prev.HasContent()) return false;
+            }
+            return true;
+        }
+
+        public static bool NextNodeStartsWith(this INode node, INode parentNode, HashSet<char> chars)
+        {
+            var next = node;
+            while ((next = next.NextSibling(parentNode)) != null)
+            {
+                if (next is PlainTextNode ptn && ptn.Text.Length > 0) return chars.Contains(ptn.Text[0]);
+                else if (next is UnprocessablePlainTextNode uptn && uptn.Text.Length > 0) return chars.Contains(uptn.Text[0]);
+                else if (next.HasContent()) return false;
+            }
             return true;
         }
     }

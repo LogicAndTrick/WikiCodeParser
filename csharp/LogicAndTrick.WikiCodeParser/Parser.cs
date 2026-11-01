@@ -30,7 +30,7 @@ namespace LogicAndTrick.WikiCodeParser
             var data = new ParseData();
             text = Util.Trim(text);
             var node = ParseElements(data, text, scope);
-            node = RunProcessors(node, data, scope);
+            node = RunProcessors(null, node, data, scope);
             return new ParseResult
             {
                 Content = node
@@ -218,22 +218,22 @@ namespace LogicAndTrick.WikiCodeParser
             }
         }
 
-        public INode RunProcessors(INode node, ParseData data, string scope)
+        public INode RunProcessors(INode parentNode, INode node, ParseData data, string scope)
         {
             foreach (var processor in Configuration.Processors.OrderByDescending(x => x.Priority))
             {
-                node = RunProcessor(node, processor, data, scope);
+                node = RunProcessor(parentNode, node, processor, data, scope);
             }
 
             return node;
         }
 
-        public INode RunProcessor(INode node, INodeProcessor processor, ParseData data, string scope)
+        public INode RunProcessor(INode parentNode, INode node, INodeProcessor processor, ParseData data, string scope)
         {
             // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessor if it's needed.
             if (processor.ShouldProcess(node, scope))
             {
-                var result = processor.Process(this, data, node, scope).ToList();
+                var result = processor.Process(this, data, parentNode, node, scope).ToList();
                 return result.Count == 1 ? result[0] : new NodeCollection(result);
             }
 
@@ -242,7 +242,7 @@ namespace LogicAndTrick.WikiCodeParser
             for (var i = 0; i < children.Count; i++)
             {
                 var child = children[i];
-                var processed = RunProcessor(child, processor, data, scope);
+                var processed = RunProcessor(node, child, processor, data, scope);
                 node.ReplaceChild(i, processed);
             }
 

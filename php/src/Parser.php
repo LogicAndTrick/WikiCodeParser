@@ -29,7 +29,7 @@ class Parser
         $data = new ParseData();
         $text = Util::Trim($text);
         $node = $this->ParseElements($data, $text, $scope);
-        $node = $this->RunProcessors($node, $data, $scope);
+        $node = $this->RunProcessors(null, $node, $data, $scope);
         $res = new ParseResult();
         $res->content = $node;
         return $res;
@@ -189,21 +189,21 @@ class Parser
         }
     }
 
-    public function RunProcessors(INode $node, ParseData $data, string $scope): INode
+    public function RunProcessors(INode|null $parentNode, INode $node, ParseData $data, string $scope): INode
     {
         $processors = Util::OrderByDescending($this->configuration->processors, fn(INodeProcessor $x) => $x->Priority());
         foreach ($processors as $processor) {
-            $node = $this->RunProcessor($node, $processor, $data, $scope);
+            $node = $this->RunProcessor($parentNode, $node, $processor, $data, $scope);
         }
 
         return $node;
     }
 
-    public function RunProcessor(INode $node, INodeProcessor $processor, ParseData $data, string $scope): INode
+    public function RunProcessor(INode|null $parentNode, INode $node, INodeProcessor $processor, ParseData $data, string $scope): INode
     {
         // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessor if it's needed.
         if ($processor->ShouldProcess($node, $scope)) {
-            $result = $processor->Process($this, $data, $node, $scope);
+            $result = $processor->Process($this, $data, $parentNode, $node, $scope);
             return count($result) == 1 ? $result[0] : new NodeCollection(...$result);
         }
 
@@ -211,7 +211,7 @@ class Parser
 
         for ($i = 0; $i < count($children); $i++) {
             $child = $children[$i];
-            $processed = $this->RunProcessor($child, $processor, $data, $scope);
+            $processed = $this->RunProcessor($node, $child, $processor, $data, $scope);
             $node->ReplaceChild($i, $processed);
         }
 

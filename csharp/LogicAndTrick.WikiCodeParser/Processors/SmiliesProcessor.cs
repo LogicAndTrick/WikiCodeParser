@@ -28,7 +28,10 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             return node is PlainTextNode && _definitions.Count > 0;
         }
 
-        public IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope)
+        private static readonly HashSet<char> AllowedStartChars = new HashSet<char> { ' ', '\n', '\r', '\t', '(', '"' };
+        private static readonly HashSet<char> AllowedEndChars = new HashSet<char> { ' ', '\n', '\r', '\t', ')', '"', '.', ',', '!', '?' };
+
+        public IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope)
         {
             if (!_initialised)
             {
@@ -49,7 +52,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 }
 
                 // Must start with whitespace
-                if (index != 0 && !Char.IsWhiteSpace(text[index - 1])) continue;
+                if (index != 0 && !Char.IsWhiteSpace(text[index - 1]) && !AllowedStartChars.Contains(text[index - 1])) continue;
 
                 // Find an appropriate definition
                 SmileyDefinition definition = null;
@@ -65,7 +68,12 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (definition == null) continue;
 
                 // Must end with whitespace
-                if (index + token.Length < text.Length && !Char.IsWhiteSpace(text[index + token.Length])) continue;
+                if (index + token.Length < text.Length && !Char.IsWhiteSpace(text[index + token.Length]) && !AllowedEndChars.Contains(text[index + token.Length])) continue;
+
+                // skip smileys starting on the first letter if the previous sibling doesn't end in whitespace or one of the allowed punctuation chars
+                if (index == 0 && !node.PreviousNodeEndsWith(parentNode, AllowedStartChars)) continue;
+                // same if the smiley ends on the last letter and the next sibling doesn't start with an allowed char
+                if (index + token.Length == text.Length && !node.NextNodeStartsWith(parentNode, AllowedEndChars)) continue;
 
                 // We have a smiley
                 if (start < index) yield return new PlainTextNode(text.Substring(start, index - start));
@@ -258,8 +266,8 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 foreach (var token in Tokens)
                 {
                     if (text.IndexOf(token, startIndex, StringComparison.Ordinal) == startIndex) {
-                    // Must end with whitespace
-                    if (startIndex + token.Length < text.Length && !Char.IsWhiteSpace(text[startIndex + token.Length])) continue;
+                        // Must end with whitespace
+                        if (startIndex + token.Length < text.Length && !Char.IsWhiteSpace(text[startIndex + token.Length]) && !AllowedEndChars.Contains(text[startIndex + token.Length])) continue;
                         return token;
                     }
                 }

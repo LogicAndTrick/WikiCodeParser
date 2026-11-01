@@ -12,7 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             return node is NodeCollection;
         }
 
-        public IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope)
+        public IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope)
         {
             var coll = (NodeCollection) node;
 
@@ -29,7 +29,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                     ptn.Text = text;
                 }
 
-                child = parser.RunProcessor(child, this, data, scope);
+                child = parser.RunProcessor(coll, child, this, data, scope);
 
                 if (child is HtmlNode html && html.IsBlockNode)
                 {

@@ -33,7 +33,7 @@ class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
     /**
      * @inheritDoc
      */
-    function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
+    function Process(Parser $parser, ParseData $data, INode|null $parentNode, INode $node, string $scope): array
     {
         if (!($node instanceof NodeCollection)) throw new \InvalidArgumentException('Node is not a NodeCollection');
         $coll = $node;
@@ -51,7 +51,7 @@ class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
                 $child->text = $text;
             }
 
-            $child = $parser->RunProcessor($child, $this, $data, $scope);
+            $child = $parser->RunProcessor($coll, $child, $this, $data, $scope);
 
             if ($child instanceof HtmlNode && $child->isBlockNode) {
                 $trimStart = true;

@@ -54,7 +54,7 @@ export class MdHeadingElement extends Element {
         const text = Trim(res[2]);
 
         const contents = parser.ParseTags(data, text, scope, TagParseContext.Inline);
-        const contentsPlainText = parser.RunProcessors(contents, data, scope).ToPlainText();
+        const contentsPlainText = parser.RunProcessors(null, contents, data, scope).ToPlainText();
         const id = MdHeadingElement.GetUniqueAnchor(data, contentsPlainText);
         return new HeadingNode(level, id, contents);
     }

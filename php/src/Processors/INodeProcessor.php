@@ -22,5 +22,5 @@ interface INodeProcessor
      * Process a node and return the nodes that will replace it.
      * @return INode[]
      */
-    function Process(Parser $parser, ParseData $data, INode $node, string $scope): array;
+    function Process(Parser $parser, ParseData $data, INode|null $parentNode, INode $node, string $scope): array;
 }

@@ -97,7 +97,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                     text += state.ScanTo("[");
                     var tok = state.GetToken();
                     if (string.Equals(tok, Token, StringComparison.InvariantCultureIgnoreCase)) stack++;
-                    if (string.Equals(tok, "/" + Token, StringComparison.InvariantCultureIgnoreCase) && string.Equals(state.Peek(tokenLength + 3), "[/" + Token + "]", StringComparison.InvariantCultureIgnoreCase)) stack--;
+                    if (string.Equals(tok, "/" + Token, StringComparison.InvariantCultureIgnoreCase) && string.Equals(state.Peek(tokenLength + 3).Trim(), "[/" + Token + "]", StringComparison.InvariantCultureIgnoreCase)) stack--;
                     if (stack == 0)
                     {
                         state.Seek(Token.Length + 3, false);

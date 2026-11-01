@@ -19,6 +19,6 @@ namespace LogicAndTrick.WikiCodeParser.Processors
         /// Process a node and return the nodes that will replace it.
         /// </summary>
         /// <returns>The nodes to replace the given node with</returns>
-        IEnumerable<INode> Process(Parser parser, ParseData data, INode node, string scope);
+        IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope);
     }
 }

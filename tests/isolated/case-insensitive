@@ -1,0 +1,40 @@
+[quote]hi[/QUOTE]
+
+[quote=test1]
+[QUOTE=test2]test3[/quote]
+[/QUOTE]
+
+[b]test4[/B]
+[CAT:test5]
+
+###
+
+<blockquote>hi</blockquote>
+
+
+
+<blockquote><strong class="quote-name">test1 said:</strong><br/>
+<blockquote><strong class="quote-name">test2 said:</strong><br/>test3</blockquote>
+</blockquote>
+
+<strong>test4</strong><br/>
+[CAT:test5]
+
+###
+
+[quote]
+hi
+[/quote]
+
+
+
+test1 said: [quote]
+
+test2 said: [quote]
+test3
+[/quote]
+
+[/quote]
+
+test4
+[CAT:test5]

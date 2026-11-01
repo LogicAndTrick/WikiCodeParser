@@ -83,7 +83,7 @@ class MdHeadingElement extends Element
         $text = Util::Trim($res[2]);
 
         $contents = $parser->ParseTags($data, $text, $scope, TagParseContext::Inline);
-        $contentsPlainText = $parser->RunProcessors($contents, $data, $scope)->ToPlainText();
+        $contentsPlainText = $parser->RunProcessors(null, $contents, $data, $scope)->ToPlainText();
         $id = MdHeadingElement::GetUniqueAnchor($data, $contentsPlainText);
         return new HeadingNode($level, $id, $contents);
     }

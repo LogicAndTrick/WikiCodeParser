@@ -31,7 +31,7 @@ class NewLineProcessor implements INodeProcessor
     /**
      * @inheritDoc
      */
-    function Process(Parser $parser, ParseData $data, INode $node, string $scope): array
+    function Process(Parser $parser, ParseData $data, INode|null $parentNode, INode $node, string $scope): array
     {
         if (!($node instanceof PlainTextNode)) throw new \InvalidArgumentException('Node is not a PlainTextNode');
         $text = $node->text ?? '';

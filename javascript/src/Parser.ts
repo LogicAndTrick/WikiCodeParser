@@ -23,7 +23,7 @@ export class Parser {
         const data = new ParseData();
         text = Trim(text);
         let node = this.ParseElements(data, text, scope);
-        node = this.RunProcessors(node, data, scope);
+        node = this.RunProcessors(null, node, data, scope);
         const res = new ParseResult();
         res.Content = node;
         return res;
@@ -183,18 +183,18 @@ export class Parser {
         }
     }
 
-    public RunProcessors(node: INode, data: ParseData, scope: string): INode {
+    public RunProcessors(parentNode: INode | null, node: INode, data: ParseData, scope: string): INode {
         for (const processor of OrderByDescending(this.Configuration.Processors, x => x.Priority)) {
-            node = this.RunProcessor(node, processor, data, scope);
+            node = this.RunProcessor(parentNode, node, processor, data, scope);
         }
 
         return node;
     }
 
-    public RunProcessor(node: INode, processor: INodeProcessor, data: ParseData, scope: string): INode {
+    public RunProcessor(parentNode: INode | null, node: INode, processor: INodeProcessor, data: ParseData, scope: string): INode {
         // If the node can be processed, don't touch subnodes - the processor can invoke RunProcessor if it's needed.
         if (processor.ShouldProcess(node, scope)) {
-            const result = processor.Process(this, data, node, scope);
+            const result = processor.Process(this, data, parentNode, node, scope);
             return result.length == 1 ? result[0] : new NodeCollection(...result);
         }
 
@@ -202,7 +202,7 @@ export class Parser {
 
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
-            const processed = this.RunProcessor(child, processor, data, scope);
+            const processed = this.RunProcessor(node, child, processor, data, scope);
             node.ReplaceChild(i, processed);
         }
 
