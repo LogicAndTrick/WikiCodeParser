@@ -20,7 +20,7 @@ export default {
         {
             file: 'build/index.js',
             sourcemap: false,
-            format: 'cjs',
+            format: 'es',
         },
     ],
     plugins: [
