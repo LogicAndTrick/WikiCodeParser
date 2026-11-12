@@ -32,7 +32,7 @@ namespace LogicAndTrick.WikiCodeParser.WinUI
 
         public MainWindow()
         {
-            _parser = new Parser(ParserConfiguration.Twhl());
+            _parser = new Parser(ParserConfiguration.Twhl("https://twhl.info"));
 
             InitializeComponent();
             WebView.CoreWebView2InitializationCompleted += (_, _) =>

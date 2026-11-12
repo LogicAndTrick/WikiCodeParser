@@ -9,5 +9,5 @@ require_once __DIR__ . '/TestCaseUtils.php';
 class EndToEndTest extends TestCase
 {
     // @formatter:off
-    public function testwikicodepage() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'endtoend', 'wikicode-page'); }
+    public function testwikicodepage() { TestCaseUtils::RunTestCase(ParserConfiguration::Twhl('https://twhl.info'), 'endtoend', 'wikicode-page'); }
 }

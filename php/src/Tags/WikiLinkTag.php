@@ -65,7 +65,7 @@ class WikiLinkTag extends Tag
         }
 
         $slug = WikiRevision::CreateSlug($page);
-        $url = HtmlHelper::AttributeEncode("https://twhl.info/wiki/page/$slug") . $hash;
+        $url = HtmlHelper::AttributeEncode($parser->configuration->BuildUrl("/wiki/page/$slug")) . $hash;
         $before = "<a href=\"{$url}\">";
         $after = '</a>';
 

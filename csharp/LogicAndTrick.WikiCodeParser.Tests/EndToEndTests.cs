@@ -7,6 +7,6 @@ public class EndToEndTests
     [DataRow("wikicode-page")]
     public void EndToEndTest(string name)
     {
-        TestCaseUtils.RunTestCase(ParserConfiguration.Twhl(), "endtoend", name);
+        TestCaseUtils.RunTestCase(ParserConfiguration.Twhl("https://twhl.info"), "endtoend", name);
     }
 }

@@ -25,7 +25,7 @@ namespace LogicAndTrick.WikiCodeParser.Sandbox
 
         static void Main(string[] args)
         {
-            var parser = new Parser(ParserConfiguration.Twhl());
+            var parser = new Parser(ParserConfiguration.Twhl("https://twhl.info"));
             var str = ":)";
             var result = parser.ParseResult(str);
             var meta = result.GetMetadata();

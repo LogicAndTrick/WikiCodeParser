@@ -13,7 +13,7 @@ public class QuoteElementTest
 {
     private static Parser CreateParser()
     {
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         return new Parser(config);
     }
 

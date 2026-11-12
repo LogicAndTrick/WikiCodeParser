@@ -38,7 +38,7 @@ export class WikiImageTag extends Tag {
         return tag != null;
     }
 
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, context: TagParseContext): INode | null {
+    public override Parse(parser: Parser, _data: ParseData, state: State, _scope: string, context: TagParseContext): INode | null {
         const index = state.Index;
 
         const tag = WikiImageTag.GetTag(state);
@@ -69,7 +69,7 @@ export class WikiImageTag extends Tag {
         if (!image.includes('/')) {
             if (this.TwhlBehaviour) {
                 content.Nodes.push(new MetadataNode('WikiUpload', image));
-                src = `https://twhl.info/wiki/embed/${WikiRevision.CreateSlug(image)}`;
+                src = parser.Configuration.BuildUrl(`/wiki/embed/${WikiRevision.CreateSlug(image)}`);
             } else {
                 state.Seek(index, true);
                 return null;
@@ -103,7 +103,7 @@ export class WikiImageTag extends Tag {
         if (tag == 'img' && url != null && HtmlHelper.ValidateUrl(url)) {
             if (this.TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null) {
                 content.Nodes.push(new MetadataNode('WikiLink', url));
-                url = `https://twhl.info/wiki/page/${WikiRevision.CreateSlug(url)}`;
+                url = parser.Configuration.BuildUrl(`/wiki/page/${WikiRevision.CreateSlug(url)}`);
             }
         } else {
             url = '';

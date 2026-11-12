@@ -55,7 +55,7 @@ class BasicTest extends TestCase
 
     public function testHtmlEscapingOutsideTag()
     {
-        $parser = new Parser(new ParserConfiguration());
+        $parser = new Parser(new ParserConfiguration('http://example.com'));
         $result = $parser->ParseResult('1 & 2');
         self::assertInstanceOf(NodeCollection::class, $result->content);
         $leaves = self::GetLeaves($result->content);
@@ -69,7 +69,7 @@ class BasicTest extends TestCase
 
     public function testHtmlEscapingInsideTag()
     {
-        $config = new ParserConfiguration();
+        $config = new ParserConfiguration('http://example.com');
         $config->tags[] = new QuickLinkTag();
         $parser = new Parser($config);
         $result = $parser->ParseResult("[https://example.com|ex&ple]");
@@ -93,7 +93,7 @@ class BasicTest extends TestCase
         $input = "a\n\n\n\n= b\n\n\n\nc\nd\n\ne";
         $output = FakeSanitiser::Sanitise("a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne");
 
-        $config = new ParserConfiguration();
+        $config = new ParserConfiguration('http://example.com');
         $config->elements[] = new MdHeadingElement();
         $config->processors[] = new NewLineProcessor();
         $parser = new Parser($config);
@@ -107,7 +107,7 @@ class BasicTest extends TestCase
         $input = "Line 1\r\nLine 2\r\nLine 3\nLine 4";
         $output = FakeSanitiser::Sanitise("Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4");
 
-        $config = new ParserConfiguration();
+        $config = new ParserConfiguration('http://example.com');
         $config->processors[] = new NewLineProcessor();
         $parser = new Parser($config);
         $result = $parser->ParseResult($input);

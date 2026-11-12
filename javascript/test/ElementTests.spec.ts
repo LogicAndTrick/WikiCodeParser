@@ -7,7 +7,7 @@ import { sanitise } from './Util';
 
 describe('QuoteElementTest', () => {
     function createParser(): Parser {
-        const config = ParserConfiguration.Twhl();
+        const config = ParserConfiguration.Twhl('https://twhl.info');
         return new Parser(config);
     }
 

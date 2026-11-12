@@ -13,7 +13,7 @@ public class IsolatedTests
     [DynamicData(nameof(GetTestCases))]
     public void IsolatedTest(string name)
     {
-        TestCaseUtils.RunTestCase(ParserConfiguration.Twhl(), "isolated", name);
+        TestCaseUtils.RunTestCase(ParserConfiguration.Twhl("https://twhl.info"), "isolated", name);
     }
 
     public static IEnumerable<string> GetSnarkpitTestCases()
@@ -26,6 +26,6 @@ public class IsolatedTests
     [DynamicData(nameof(GetSnarkpitTestCases))]
     public void IsolatedTestSnarkpit(string name)
     {
-        TestCaseUtils.RunTestCase(ParserConfiguration.Snarkpit(), "isolated-sp", name);
+        TestCaseUtils.RunTestCase(ParserConfiguration.Snarkpit("https://snarkpit.net"), "isolated-sp", name);
     }
 }

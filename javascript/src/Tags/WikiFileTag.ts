@@ -28,7 +28,7 @@ export class WikiFileTag extends Tag {
         return tag != null;
     }
 
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+    public override Parse(parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
 
         const tag = WikiFileTag.GetTag(state);
@@ -54,8 +54,8 @@ export class WikiFileTag extends Tag {
         const page = match[1];
         const text = match[2]?.length > 0 ? match[2] : page;
         const slug = WikiRevision.CreateSlug(page);
-        const url = HtmlHelper.AttributeEncode(`https://twhl.info/wiki/embed/${slug}`);
-        const infoUrl = HtmlHelper.AttributeEncode(`https://twhl.info/wiki/embed-info/${slug}`);
+        const url = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(`/wiki/embed/${slug}`));
+        const infoUrl = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(`/wiki/embed-info/${slug}`));
 
         const before = `<span class="embedded-inline download" data-info="${infoUrl}"><a href="${url}"><span class="fa fa-download"></span> `;
         const after = '</a></span>';

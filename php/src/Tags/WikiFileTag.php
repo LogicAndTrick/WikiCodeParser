@@ -56,8 +56,8 @@ class WikiFileTag extends Tag
         $page = $match[1];
         $text = isset($match[2]) && strlen($match[2]) > 0 ? $match[2] : $page;
         $slug = WikiRevision::CreateSlug($page);
-        $url = HtmlHelper::AttributeEncode("https://twhl.info/wiki/embed/{$slug}");
-        $infoUrl = HtmlHelper::AttributeEncode("https://twhl.info/wiki/embed-info/{$slug}");
+        $url = HtmlHelper::AttributeEncode($parser->configuration->BuildUrl("/wiki/embed/{$slug}"));
+        $infoUrl = HtmlHelper::AttributeEncode($parser->configuration->BuildUrl("/wiki/embed-info/{$slug}"));
 
         $before = "<span class=\"embedded-inline download\" data-info=\"{$infoUrl}\"><a href=\"{$url}\"><span class=\"fa fa-download\"></span> ";
         $after = '</a></span>';

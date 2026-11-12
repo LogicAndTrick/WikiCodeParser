@@ -22,7 +22,7 @@ class IsolatedTest extends TestCase
     #[DataProvider('getTestCases')]
     public function testIsolated(string $name)
     {
-        TestCaseUtils::RunTestCase(ParserConfiguration::Twhl(), 'isolated', $name);
+        TestCaseUtils::RunTestCase(ParserConfiguration::Twhl('https://twhl.info'), 'isolated', $name);
     }
 
     public static function getSnarkpitTestCases(): array
@@ -38,6 +38,6 @@ class IsolatedTest extends TestCase
     #[DataProvider('getSnarkpitTestCases')]
     public function testIsolatedSnarkpit(string $name)
     {
-        TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit(), 'isolated-sp', $name);
+        TestCaseUtils::RunTestCase(ParserConfiguration::Snarkpit('https://snarkpit.net'), 'isolated-sp', $name);
     }
 }

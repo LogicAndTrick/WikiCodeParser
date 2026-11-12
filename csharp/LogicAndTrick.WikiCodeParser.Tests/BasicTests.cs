@@ -11,7 +11,7 @@ public class BasicTests
     [TestMethod]
     public void TestHtmlEscapingOutsideTag()
     {
-        var parser = new Parser(new ParserConfiguration());
+        var parser = new Parser(new ParserConfiguration("http://example.com"));
         var result = parser.ParseResult("1 & 2");
         Assert.IsInstanceOfType(result.Content, typeof(NodeCollection));
         var leaves = GetLeaves(result.Content);
@@ -27,7 +27,7 @@ public class BasicTests
     [TestMethod]
     public void TestHtmlEscapingInsideTag()
     {
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Tags.Add(new QuickLinkTag());
         var parser = new Parser(config);
         var result = parser.ParseResult("[https://example.com|ex&ple]");
@@ -52,7 +52,7 @@ public class BasicTests
         var input = "a\n\n\n\n= b\n\n\n\nc\nd\n\ne";
         var output = TestCaseUtils.Sanitise("a\n<h1 id=\"b\">b</h1>\nc<br/>\nd<br/>\n<br/>\ne");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Elements.Add(new MdHeadingElement());
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
@@ -67,7 +67,7 @@ public class BasicTests
         var input = "Line 1\r\nLine 2\r\nLine 3\nLine 4";
         var output = TestCaseUtils.Sanitise("Line 1<br/>\nLine 2<br/>\nLine 3<br/>\nLine 4");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
@@ -81,7 +81,7 @@ public class BasicTests
         var input = "A [code]B[/code]\n\nC";
         var output = TestCaseUtils.Sanitise("A <code>B</code><br/>\n<br/>\nC");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Tags.Add(new CodeTag());
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
@@ -96,8 +96,8 @@ public class BasicTests
         var input = ":aggrieved:\n:glad:\n";
         var output = TestCaseUtils.Sanitise("<img class=\"smiley\" src=\"https://twhl.info/images/smilies/aggrieved.png\" alt=\":aggrieved:\" /><br/>\n<img class=\"smiley\" src=\"https://twhl.info/images/smilies/glad.png\" alt=\":glad:\" />");
 
-        var config = new ParserConfiguration();
-        config.Processors.Add(new SmiliesProcessor("https://twhl.info/images/smilies/{0}.png").AddTwhl());
+        var config = new ParserConfiguration("https://twhl.info");
+        config.Processors.Add(new SmiliesProcessor("/images/smilies/{0}.png").AddTwhl());
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
@@ -111,7 +111,7 @@ public class BasicTests
         var input = "a\n\n\nb\n\nc\nd\n\n";
         var output = TestCaseUtils.Sanitise("a<br/>\n<br/>\nb<br/>\n<br/>\nc<br/>\nd");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
@@ -125,7 +125,7 @@ public class BasicTests
         var input = "= One\n==Two";
         var output = TestCaseUtils.Sanitise("<h1 id=\"One\">One</h1>\n<h2 id=\"Two\">Two</h2>");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Elements.Add(new MdHeadingElement());
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
@@ -140,7 +140,7 @@ public class BasicTests
         var input = "before\n\n[quote]quote[/quote]\n\nafter";
         var output = TestCaseUtils.Sanitise("before\n<blockquote>quote</blockquote>\nafter");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Tags.Add(new QuoteTag());
         config.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
         config.Processors.Add(new NewLineProcessor());
@@ -157,7 +157,7 @@ public class BasicTests
                     "  two";
         var output = TestCaseUtils.Sanitise("<ul>\n<li>one<br/>\ntwo</li>\n</ul>\n");
 
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Elements.Add(new MdTableElement());
         config.Elements.Add(new MdListElement());
         config.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
@@ -190,7 +190,7 @@ public class BasicTests
         var input = "Before\n\n[img]https://example.com/example.png[/img]\n\nAfter";
         var output = TestCaseUtils.Sanitise("Before\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter");
 
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
@@ -203,7 +203,7 @@ public class BasicTests
         var input = "*Bold*\n\n[img]https://example.com/example.png[/img]\n\nAfter";
         var output = TestCaseUtils.Sanitise("<strong>Bold</strong>\n<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/example.png\" alt=\"User posted image\" /></span></div>\nAfter");
 
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
@@ -216,7 +216,7 @@ public class BasicTests
         var input = "[cat:A]\n[cat:B]\n\n= Heading";
         var output = TestCaseUtils.Sanitise("<h1 id=\"Heading\">Heading</h1>");
 
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
 
@@ -254,7 +254,7 @@ public class BasicTests
         var input = "A[font=red]B[font=blue]C[/font]D[/font]E";
         var expected = TestCaseUtils.Sanitise("A<span style=\"color: red;\">B<span style=\"color: blue;\">C</span>D</span>E");
 
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         config.Tags.Find(x => x is FontTag)!.IsNested = true;
 
         var parser = new Parser(config);
@@ -307,7 +307,7 @@ public class BasicTests
     {
         input = input.Replace("\r", "");
 
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
         Assert.AreNotEqual(TestCaseUtils.Sanitise(input), result.ToHtml(TestCaseUtils.Sanitise));
@@ -318,7 +318,7 @@ public class BasicTests
         input = input.Replace("\r", "");
         expected = TestCaseUtils.Sanitise(expected.Replace("\r", ""));
 
-        var config = ParserConfiguration.Twhl();
+        var config = ParserConfiguration.Twhl("https://twhl.info");
         var parser = new Parser(config);
         var result = parser.ParseResult(input);
         Assert.AreEqual(expected, result.ToHtml(TestCaseUtils.Sanitise));

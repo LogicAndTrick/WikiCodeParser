@@ -13,7 +13,7 @@ class QuoteElementTest extends TestCase
 {
     private static function createParser()
     {
-        $config = ParserConfiguration::twhl();
+        $config = ParserConfiguration::Twhl('https://twhl.info');
         return new Parser($config);
     }
 

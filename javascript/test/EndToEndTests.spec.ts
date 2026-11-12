@@ -75,13 +75,13 @@ function RunTestCase(config: ParserConfiguration, folder: string, name: string, 
 }
 
 describe('Isolated tests', () => {
-    test.each(GetTestCaseNames('isolated'))('Isolated: %p', name => RunTestCase(ParserConfiguration.Twhl(), 'isolated', name));
+    test.each(GetTestCaseNames('isolated'))('Isolated: %p', name => RunTestCase(ParserConfiguration.Twhl('https://twhl.info'), 'isolated', name));
 });
 
 describe('Isolated tests: snarkpit', () => {
-    test.each(GetTestCaseNames('isolated-sp'))('Isolated-SP: %p', name => RunTestCase(ParserConfiguration.Snarkpit(), 'isolated-sp', name));
+    test.each(GetTestCaseNames('isolated-sp'))('Isolated-SP: %p', name => RunTestCase(ParserConfiguration.Snarkpit('https://snarkpit.net'), 'isolated-sp', name));
 });
 
 describe('End to end tests', () => {
-    test('wikicode-page', () => RunTestCase(ParserConfiguration.Twhl(), 'endtoend', 'wikicode-page'));
+    test('wikicode-page', () => RunTestCase(ParserConfiguration.Twhl('https://twhl.info'), 'endtoend', 'wikicode-page'));
 });

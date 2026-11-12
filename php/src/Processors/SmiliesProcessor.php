@@ -123,7 +123,7 @@ class SmiliesProcessor implements INodeProcessor
 
             // We have a smiley
             if ($start < $index) $ret[] = new PlainTextNode(substr($text, $start, $index - $start));
-            $src = HtmlHelper::AttributeEncode(Util::Template($this->urlFormatString, ['0' => $definition->name]));
+            $src = HtmlHelper::AttributeEncode($parser->configuration->BuildUrl(Util::Template($this->urlFormatString, ['0' => $definition->name])));
             $alt = HtmlHelper::AttributeEncode($token);
             $smiley_node = new HtmlNode("<img class=\"smiley\" src=\"{$src}\" alt=\"{$alt}\" />", PlainTextNode::Empty(), '');
             $smiley_node->plainBefore = $token;

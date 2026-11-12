@@ -15,7 +15,7 @@ public abstract class BaseTagTest<T> where T : Tag
     // ReSharper disable once MemberCanBePrivate.Global
     protected Parser GetParser()
     {
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Tags.Add(CreateTag());
         return new Parser(config);
     }

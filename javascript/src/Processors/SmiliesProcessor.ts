@@ -58,7 +58,7 @@ export class SmiliesProcessor implements INodeProcessor {
     public static AllowedStartChars: Set<string> = new Set<string>([' ', '\n', '\r', '\t', '(', '"']);
     public static AllowedEndChars: Set<string> = new Set<string>([' ', '\n', '\r', '\t', ')', '"', '.', ',', '!', '?']);
 
-    Process(_parser: Parser, _data: ParseData, parentNode: INode | null, node: INode, _scope: string): INode[] {
+    Process(parser: Parser, _data: ParseData, parentNode: INode | null, node: INode, _scope: string): INode[] {
         if (!this._initialised) {
             this._tokenStarts = new Set<string>(this._definitions.flatMap(x => x.Tokens).map(x => x[0]));
             this._initialised = true;
@@ -101,7 +101,7 @@ export class SmiliesProcessor implements INodeProcessor {
 
             // We have a smiley
             if (start < index) ret.push(new PlainTextNode(text.substring(start, index)));
-            const src = HtmlHelper.AttributeEncode(Template(this.UrlFormatString, { 0: definition.Name }));
+            const src = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(Template(this.UrlFormatString, { 0: definition.Name })));
             const alt = HtmlHelper.AttributeEncode(token);
             const smileyNode = new HtmlNode(`<img class="smiley" src="${src}" alt="${alt}" />`, PlainTextNode.Empty(), '');
             smileyNode.PlainBefore = token;

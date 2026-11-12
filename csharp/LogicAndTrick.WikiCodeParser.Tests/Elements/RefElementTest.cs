@@ -8,7 +8,7 @@ public class RefElementTest
 {
     private static Parser CreateParser()
     {
-        var config = new ParserConfiguration();
+        var config = new ParserConfiguration("http://example.com");
         config.Elements.Add(new MdTableElement());
         config.Elements.Add(new RefElement());
         config.Processors.Add(new NewLineProcessor());

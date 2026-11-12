@@ -15,7 +15,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests
         [TestMethod]
         public void TestParseResultEmpty()
         {
-            var parser = new Parser(new ParserConfiguration());
+            var parser = new Parser(new ParserConfiguration("http://example.com"));
             var result = parser.ParseResult("");
             var coll = (NodeCollection)result.Content;
             Assert.AreEqual(0, coll.Nodes.Count);
@@ -24,7 +24,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests
         [TestMethod]
         public void TestParseResultText()
         {
-            var parser = new Parser(new ParserConfiguration());
+            var parser = new Parser(new ParserConfiguration("http://example.com"));
             var result = parser.ParseResult("A");
             var coll = (NodeCollection)result.Content;
             Assert.AreEqual(1, coll.Nodes.Count);
@@ -35,7 +35,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests
         [TestMethod]
         public void TestParseElementsEmpty()
         {
-            var parser = new Parser(new ParserConfiguration());
+            var parser = new Parser(new ParserConfiguration("http://example.com"));
             var data = new ParseData();
             var coll = (NodeCollection) parser.ParseElements(data, "A", "");
             Assert.AreEqual(1, coll.Nodes.Count);
@@ -46,7 +46,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests
         [TestMethod]
         public void TestParseElementsOne()
         {
-            var config = new ParserConfiguration();
+            var config = new ParserConfiguration("http://example.com");
             config.Elements.Add(new PreElement());
             var parser = new Parser(config);
             var data = new ParseData();
@@ -66,7 +66,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests
         [TestMethod]
         public void TestParseTagsEmpty()
         {
-            var parser = new Parser(new ParserConfiguration());
+            var parser = new Parser(new ParserConfiguration("http://example.com"));
             var data = new ParseData();
             var coll = (NodeCollection) parser.ParseTags(data, "A", "", TagParseContext.Block);
             Assert.AreEqual(1, coll.Nodes.Count);
@@ -77,7 +77,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests
         [TestMethod]
         public void TestParseTagsOne()
         {
-            var config = new ParserConfiguration();
+            var config = new ParserConfiguration("http://example.com");
             config.Tags.Add(new Tag("test", "span", "test"));
             var parser = new Parser(config);
             var data = new ParseData();

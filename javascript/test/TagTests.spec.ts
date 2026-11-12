@@ -46,7 +46,7 @@ function testSimpleTransform(parser: Parser, data: TagTestData, transform: (x: T
 }
 
 function baseTest(tag: Tag, data: TagTestData[]) {
-    const config = new ParserConfiguration();
+    const config = new ParserConfiguration('http://example.com');
     config.Tags.push(tag);
     const parser = new Parser(config);
 

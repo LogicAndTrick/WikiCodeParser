@@ -118,7 +118,7 @@ describe('State tests', () => {
 
 describe('Basic tests', () => {
     test('test html escaping outside tag', () => {
-        const parser = new Parser(new ParserConfiguration());
+        const parser = new Parser(new ParserConfiguration('http://example.com'));
         const result = parser.ParseResult('1 & 2');
         expect(result.Content).toBeInstanceOf(NodeCollection);
         const leaves = GetLeaves(result.Content);
@@ -130,7 +130,7 @@ describe('Basic tests', () => {
         expect(node.ToPlainText()).toBe('1 & 2');
     });
     test('html escaping inside tag', () => {
-        const config = new ParserConfiguration();
+        const config = new ParserConfiguration('http://example.com');
         config.Tags.push(new QuickLinkTag());
         const parser = new Parser(config);
         const result = parser.ParseResult('[https://example.com|ex&ple]');
@@ -148,7 +148,7 @@ describe('Basic tests', () => {
         expect(ptnode.Text).toBe('ex&ple');
     });
     test('Block new lines', () => {
-        const config = new ParserConfiguration();
+        const config = new ParserConfiguration('http://example.com');
         config.Elements.push(new MdHeadingElement());
         config.Processors.push(new NewLineProcessor());
         const parser = new Parser(config);
@@ -156,7 +156,7 @@ describe('Basic tests', () => {
         expect(result.ToHtml(sanitise)).toBe(sanitise('a\n<h1 id="b">b</h1>\nc<br/>\nd<br/>\n<br/>\ne'));
     });
     test('Carriage returns', () => {
-        const config = new ParserConfiguration();
+        const config = new ParserConfiguration('http://example.com');
         config.Processors.push(new NewLineProcessor());
         const parser = new Parser(config);
         const result = parser.ParseResult('Line 1\r\nLine 2\r\nLine 3\nLine 4');
@@ -166,7 +166,7 @@ describe('Basic tests', () => {
 
 describe('QuoteElementTest', () => {
     function createParser(): Parser {
-        const config = ParserConfiguration.Twhl();
+        const config = ParserConfiguration.Twhl('https://twhl.info');
         return new Parser(config);
     }
 

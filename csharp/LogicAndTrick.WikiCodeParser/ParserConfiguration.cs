@@ -11,9 +11,9 @@ namespace LogicAndTrick.WikiCodeParser
         /// Create an instance of configuration that matches the configuration of the TWHL website.
         /// </summary>
         /// <returns>Default configuration</returns>
-        public static ParserConfiguration Twhl()
+        public static ParserConfiguration Twhl(string baseUrl)
         {
-            var conf = new ParserConfiguration();
+            var conf = new ParserConfiguration(baseUrl);
 
             // Standard inline
             conf.Tags.Add(new Tag("b", "strong").WithScopes("inline", "excerpt"));
@@ -66,11 +66,11 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Elements.Add(new MdColumnsElement());
             conf.Elements.Add(new RefElement());
             conf.Elements.Add(new QuoteElement());
-            
+
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());
             conf.Processors.Add(new AutoLinkingProcessor());
-            conf.Processors.Add(new SmiliesProcessor("https://twhl.info/images/smilies/{0}.png").AddTwhl());
+            conf.Processors.Add(new SmiliesProcessor("/images/smilies/{0}.png").AddTwhl());
             conf.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
             conf.Processors.Add(new NewLineProcessor());
 
@@ -81,9 +81,9 @@ namespace LogicAndTrick.WikiCodeParser
         /// Create an instance of configuration that matches the configuration of the Snarkpit website.
         /// </summary>
         /// <returns>Default configuration</returns>
-        public static ParserConfiguration Snarkpit()
+        public static ParserConfiguration Snarkpit(string baseUrl)
         {
-            var conf = new ParserConfiguration();
+            var conf = new ParserConfiguration(baseUrl);
 
             // Standard inline
             conf.Tags.Add(new Tag("b", "strong").WithScopes("inline", "excerpt"));
@@ -96,7 +96,7 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Tags.Add(new Tag("center", "div", "text-center").WithBlock(true));
             conf.Tags.Add(new AlignTag());
             conf.Tags.Add(new ListTag());
-            
+
             // Links
             conf.Tags.Add(new LinkTag().WithScopes("excerpt"));
             conf.Tags.Add(new LinkTag().WithScopes("excerpt").WithToken("email"));
@@ -131,7 +131,7 @@ namespace LogicAndTrick.WikiCodeParser
             // Processors
             conf.Processors.Add(new MarkdownTextProcessor());
             conf.Processors.Add(new AutoLinkingProcessor());
-            conf.Processors.Add(new SmiliesProcessor("https://snarkpit.net/images/smilies/{0}.gif").AddSnarkpit());
+            conf.Processors.Add(new SmiliesProcessor("/images/smilies/{0}.gif").AddSnarkpit());
             conf.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
             conf.Processors.Add(new NewLineProcessor());
 
@@ -143,14 +143,21 @@ namespace LogicAndTrick.WikiCodeParser
         public List<INodeProcessor> Processors { get; }
         public int MaxTagDepth { get; set; }
         public int MaxElementDepth { get; set; }
+        public string BaseUrl { get; set; }
 
-        public ParserConfiguration()
+        public ParserConfiguration(string baseUrl)
         {
             Elements = new List<Element>();
             Tags = new List<Tag>();
             Processors = new List<INodeProcessor>();
             MaxElementDepth = 5;
             MaxTagDepth = 10;
+            BaseUrl = baseUrl.TrimEnd('/');
+        }
+
+        public string BuildUrl(string path)
+        {
+            return HtmlHelper.SanitiseUrl($"{BaseUrl}/{path.TrimStart('/')}");
         }
     }
 }

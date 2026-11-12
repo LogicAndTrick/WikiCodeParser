@@ -22,7 +22,7 @@ export class WikiLinkTag extends Tag {
         return pt != null && pt.length > 1 && pt[1] == '[' && !pt.includes('\n') && pt.substring(2).match(/([^\]]*?)(?:\|([^\]]*?))?/i) != null;
     }
 
-    public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+    public override Parse(parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
         const index = state.Index;
 
         if (state.Next() != '[' || state.Next() != '[') {
@@ -53,7 +53,7 @@ export class WikiLinkTag extends Tag {
             hash = '#' + anchor.replace(/[^\da-z?/:@\-._~!$&'()*+,;=]/gi, '_');
         }
 
-        const url = HtmlHelper.AttributeEncode(`https://twhl.info/wiki/page/${WikiRevision.CreateSlug(page)}`) + hash;
+        const url = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(`/wiki/page/${WikiRevision.CreateSlug(page)}`)) + hash;
         const before = `<a href="${url}">`;
         const after = '</a>';
 

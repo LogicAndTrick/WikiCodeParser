@@ -74,7 +74,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 if (TwhlBehaviour)
                 {
                     content.Nodes.Add(new MetadataNode("WikiUpload", image));
-                    src = $"https://twhl.info/wiki/embed/{WikiRevision.CreateSlug(image)}";
+                    src =  parser.Configuration.BuildUrl($"/wiki/embed/{WikiRevision.CreateSlug(image)}");
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 if (TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null)
                 {
                     content.Nodes.Add(new MetadataNode("WikiLink", url));
-                    url = $"https://twhl.info/wiki/page/{WikiRevision.CreateSlug(url)}";
+                    url = parser.Configuration.BuildUrl($"/wiki/page/{WikiRevision.CreateSlug(url)}");
                 }
             }
             else

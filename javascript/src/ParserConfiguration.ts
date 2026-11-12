@@ -10,6 +10,7 @@ import { MdTableElement } from './Elements/MdTableElement';
 import { PreElement } from './Elements/PreElement';
 import { QuoteElement } from './Elements/QuoteElement';
 import { RefElement } from './Elements/RefElement';
+import { HtmlHelper } from './HtmlHelper';
 import { AutoLinkingProcessor } from './Processors/AutoLinkingProcessor';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { MarkdownTextProcessor } from './Processors/MarkdownTextProcessor';
@@ -40,8 +41,8 @@ import { WikiYoutubeTag } from './Tags/WikiYoutubeTag';
 import { YoutubeTag } from './Tags/YoutubeTag';
 
 export class ParserConfiguration {
-    public static Twhl(): ParserConfiguration {
-        const conf = new ParserConfiguration();
+    public static Twhl(baseUrl: string): ParserConfiguration {
+        const conf = new ParserConfiguration(baseUrl);
 
         // // Standard inline
         conf.Tags.push(new Tag('b', 'strong').WithScopes('inline', 'excerpt'));
@@ -100,15 +101,15 @@ export class ParserConfiguration {
         // Processors
         conf.Processors.push(new MarkdownTextProcessor());
         conf.Processors.push(new AutoLinkingProcessor());
-        conf.Processors.push(new SmiliesProcessor('https://twhl.info/images/smilies/{0}.png').AddTwhl());
+        conf.Processors.push(new SmiliesProcessor('/images/smilies/{0}.png').AddTwhl());
         conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
         conf.Processors.push(new NewLineProcessor());
 
         return conf;
     }
 
-    public static Snarkpit(): ParserConfiguration {
-        const conf = new ParserConfiguration();
+    public static Snarkpit(baseUrl: string): ParserConfiguration {
+        const conf = new ParserConfiguration(baseUrl);
 
         // Standard inline
         conf.Tags.push(new Tag('b', 'strong').WithScopes('inline', 'excerpt'));
@@ -158,7 +159,7 @@ export class ParserConfiguration {
         // Processors
         conf.Processors.push(new MarkdownTextProcessor());
         conf.Processors.push(new AutoLinkingProcessor());
-        conf.Processors.push(new SmiliesProcessor('https://snarkpit.net/images/smilies/{0}.gif').AddSnarkpit());
+        conf.Processors.push(new SmiliesProcessor('/images/smilies/{0}.gif').AddSnarkpit());
         conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
         conf.Processors.push(new NewLineProcessor());
 
@@ -170,12 +171,18 @@ export class ParserConfiguration {
     public Processors: INodeProcessor[];
     public MaxElementDepth: number;
     public MaxTagDepth: number;
+    public BaseUrl: string;
 
-    public constructor() {
+    public constructor(baseUrl: string) {
         this.Elements = [];
         this.Tags = [];
         this.Processors = [];
         this.MaxElementDepth = 5;
         this.MaxTagDepth = 10;
+        this.BaseUrl = baseUrl.replace(/\/+$/, '');
+    }
+
+    public BuildUrl(path: string): string {
+        return HtmlHelper.SanitiseUrl(`${this.BaseUrl}/${path.replace(/^\/+/, '')}`);
     }
 }

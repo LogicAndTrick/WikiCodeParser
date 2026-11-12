@@ -8,7 +8,7 @@ Usage in each one is the same, here's an example in each:
 // C#
 var wikiCode = "[b]Hello, world![/b]";
 
-var config = new ParserConfiguration();
+var config = new ParserConfiguration("http://example.com");
 config.Tags.Add(new Tag("b", "strong").WithScopes("inline", "excerpt"));
 
 var parser = new Parser(config);
@@ -20,7 +20,7 @@ var html = result.ToHtml(SanitiseHtml); // more about this below
 // JavaScript / TypeScript
 const wikiCode = '[b]Hello, world![/b]';
 
-const config = new ParserConfiguration();
+const config = new ParserConfiguration('http://example.com');
 config.Tags.push(new Tag('b', 'strong').WithScopes('inline', 'excerpt'));
 
 const parser = new Parser(config);
@@ -32,7 +32,7 @@ const html = result.ToHtml(SanitiseHtml);
 // PHP
 $wikiCode = '[b]Hello, world![/b]';
 
-$config = new ParserConfiguration();
+$config = new ParserConfiguration('http://example.com');
 $config->tags[] = (new Tag('b', 'strong'))->WithScopes('inline', 'excerpt');
 
 $parser = new Parser($config);
@@ -43,8 +43,8 @@ $html = $result->ToHtml(TestCaseUtils::Sanitise(...));
 ## Configuration
 
 To configure, create an instance of `ParserConfiguration` and add elements, tags, and processors to it.
-You can use the TWHL settings by using `ParserConfiguration.Twhl()` which will return a pre-configured
-instance of the configuration. Take a look at its implementation for more details.
+You can use the TWHL settings by using `ParserConfiguration.Twhl(string baseUrl)` which will return a
+pre-configured instance of the configuration. Take a look at its implementation for more details.
 
 You can implement custom elements (block-level elements), tags (inline-level elements),
 and processors (post processors that run on the parsed node tree). See the source code in your preferred

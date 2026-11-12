@@ -2,6 +2,7 @@
 
 namespace LogicAndTrick\WikiCodeParser;
 
+use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Elements\MdCodeElement;
 use LogicAndTrick\WikiCodeParser\Elements\MdColumnsElement;
 use LogicAndTrick\WikiCodeParser\Elements\MdHeadingElement;
@@ -27,7 +28,6 @@ use LogicAndTrick\WikiCodeParser\Tags\LinkTag;
 use LogicAndTrick\WikiCodeParser\Tags\ListTag;
 use LogicAndTrick\WikiCodeParser\Tags\PreTag;
 use LogicAndTrick\WikiCodeParser\Tags\QuickLinkTag;
-use LogicAndTrick\WikiCodeParser\Tags\QuoteTag;
 use LogicAndTrick\WikiCodeParser\Tags\SizeTag;
 use LogicAndTrick\WikiCodeParser\Tags\SpoilerTag;
 use LogicAndTrick\WikiCodeParser\Tags\Tag;
@@ -44,9 +44,9 @@ use LogicAndTrick\WikiCodeParser\Tags\YoutubeTag;
 
 class ParserConfiguration
 {
-    public static function Twhl(): ParserConfiguration
+    public static function Twhl(string $baseUrl): ParserConfiguration
     {
-        $conf = new ParserConfiguration();
+        $conf = new ParserConfiguration($baseUrl);
 
         // Standard inline
         $conf->tags[] = (new Tag('b', 'strong'))->WithScopes('inline', 'excerpt');
@@ -106,16 +106,16 @@ class ParserConfiguration
         // Processors
         $conf->processors[] = new MarkdownTextProcessor();
         $conf->processors[] = new AutoLinkingProcessor();
-        $conf->processors[] = (new SmiliesProcessor('https://twhl.info/images/smilies/{0}.png'))->AddTwhl();
+        $conf->processors[] = (new SmiliesProcessor('/images/smilies/{0}.png'))->AddTwhl();
         $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
         $conf->processors[] = new NewLineProcessor();
 
         return $conf;
     }
 
-    public static function Snarkpit(): ParserConfiguration
+    public static function Snarkpit(string $baseUrl): ParserConfiguration
     {
-        $conf = new ParserConfiguration();
+        $conf = new ParserConfiguration($baseUrl);
 
         // Standard inline
         $conf->tags[] = (new Tag('b', 'strong'))->WithScopes('inline', 'excerpt');
@@ -165,7 +165,7 @@ class ParserConfiguration
         // Processors
         $conf->processors[] = new MarkdownTextProcessor();
         $conf->processors[] = new AutoLinkingProcessor();
-        $conf->processors[] = (new SmiliesProcessor('https://snarkpit.net/images/smilies/{0}.gif'))->AddSnarkpit();
+        $conf->processors[] = (new SmiliesProcessor('/images/smilies/{0}.gif'))->AddSnarkpit();
         $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
         $conf->processors[] = new NewLineProcessor();
 
@@ -177,13 +177,20 @@ class ParserConfiguration
     public array $processors;
     public int $max_element_depth;
     public int $max_tag_depth;
+    public string $base_url;
 
-    public function __construct()
+    public function __construct(string $baseUrl)
     {
         $this->elements = [];
         $this->tags = [];
         $this->processors = [];
         $this->max_element_depth = 5;
         $this->max_tag_depth = 10;
+        $this->base_url = rtrim($baseUrl, '/');
+    }
+
+    public function BuildUrl(string $path): string
+    {
+        return HtmlHelper::SanitiseUrl($this->base_url . '/' . ltrim($path, '/'));
     }
 }

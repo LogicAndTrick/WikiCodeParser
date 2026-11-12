@@ -78,7 +78,7 @@ class WikiImageTag extends Tag
             if ($this->twhlBehaviour) {
                 $content->nodes[] = new MetadataNode('WikiUpload', $image);
                 $slug = WikiRevision::CreateSlug($image);
-                $src = "https://twhl.info/wiki/embed/$slug";
+                $src = $parser->configuration->BuildUrl("/wiki/embed/$slug");
             } else {
                 $state->Seek($index, true);
                 return null;
@@ -113,7 +113,7 @@ class WikiImageTag extends Tag
             if ($this->twhlBehaviour && HtmlHelper::GetUrlScheme($url) == null) {
                 $content->nodes[] = new MetadataNode('WikiLink', $url);
                 $slug = WikiRevision::CreateSlug($url);
-                $url = "https://twhl.info/wiki/page/$slug";
+                $url = $parser->configuration->BuildUrl("/wiki/page/$slug");
             }
         } else {
             $url = '';
