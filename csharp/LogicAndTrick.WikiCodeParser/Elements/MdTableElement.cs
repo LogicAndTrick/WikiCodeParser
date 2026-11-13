@@ -70,6 +70,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         private class TableRow : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             public List<TableCell> Cells { get; }
 
             public TableRow(IEnumerable<TableCell> cells)
@@ -122,6 +124,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         private class TableCell : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             public string Type { get; }
             public INode Contents { get; set; }
 

@@ -8,6 +8,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
     /// </summary>
     public class HtmlNode : INode
     {
+        public int Line { get; set; }
+        public int Column { get; set; }
         public string HtmlBefore { get; }
         public INode Content { get; set; }
         public string HtmlAfter { get; }

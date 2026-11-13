@@ -14,7 +14,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Options = new[] {"id"};
         }
 
-        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
         {
             var id = text;
             if (options.ContainsKey("id")) id = options["id"];

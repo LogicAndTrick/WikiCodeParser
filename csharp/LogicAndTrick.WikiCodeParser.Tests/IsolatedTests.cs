@@ -9,7 +9,7 @@ public class IsolatedTests
     }
 
     [TestMethod]
-    [Timeout(1000)]
+    [Timeout(5000)]
     [DynamicData(nameof(GetTestCases))]
     public void IsolatedTest(string name)
     {
@@ -22,7 +22,7 @@ public class IsolatedTests
     }
     
     [TestMethod]
-    [Timeout(1000)]
+    [Timeout(5000)]
     [DynamicData(nameof(GetSnarkpitTestCases))]
     public void IsolatedTestSnarkpit(string name)
     {

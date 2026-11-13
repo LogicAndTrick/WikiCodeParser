@@ -22,7 +22,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             return base.Validate(options, text) && items.Any();
         }
 
-        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + "\"";

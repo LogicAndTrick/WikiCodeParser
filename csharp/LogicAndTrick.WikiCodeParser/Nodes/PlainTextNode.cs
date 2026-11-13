@@ -10,6 +10,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
     {
         public static INode Empty => new PlainTextNode(string.Empty);
 
+        public int Line { get; set; }
+        public int Column { get; set; }
         public string Text { get; set; }
 
         public PlainTextNode(string text)

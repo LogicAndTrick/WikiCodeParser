@@ -5,6 +5,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 {
     public class RefNode : INode
     {
+        public int Line { get; set; }
+        public int Column { get; set; }
         public ParseData Data { get; set; }
         public string Name { get; set; }
 

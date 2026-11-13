@@ -16,7 +16,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             AllOptionsInMain = true;
         }
 
-        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
         {
             var visibleText = "Spoiler";
             if (options.ContainsKey("text") && options["text"].Length > 0) visibleText = options["text"];
@@ -30,6 +30,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         private class SpoilerNode : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             private string VisibleText { get; }
             private INode SpoilerContent { get; set; }
 

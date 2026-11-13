@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LogicAndTrick.WikiCodeParser
 {
@@ -12,11 +14,38 @@ namespace LogicAndTrick.WikiCodeParser
         public int Index { get; private set; }
         public bool Done => Index >= Length;
 
-        public State(string text)
+        private readonly IReadOnlyList<int> _newlinePositions;
+        private readonly int _startSourceLine;
+        private readonly int _startSourceColumn;
+
+        public State(int startSourceLine, int startSourceColumn, string text)
         {
             Text = text;
             Index = 0;
+
+            _startSourceLine = startSourceLine;
+            _startSourceColumn = startSourceColumn;
+            // get the positions of every newline character, so we can count them
+            var nlpos = new List<int> { -1 }; // lines are 1-indexed, we always start with a newline
+            var idx = text.IndexOf('\n');
+            while (idx >= 0)
+            {
+                nlpos.Add(idx);
+                idx = text.IndexOf('\n', idx + 1);
+            }
+            _newlinePositions = nlpos;
         }
+
+        public int SourceLine => _startSourceLine + _newlinePositions.Count(x => x < Index) - 1; // the input line is 1-indexed too, so subtract 1 here.
+        public int SourceColumn
+        {
+            get
+            {
+                var last = _newlinePositions.LastOrDefault(x => x < Index) + 1;
+                return Index - last + (last == 0 ? _startSourceColumn : 0);
+            }
+        }
+        public Position SourcePosition => new Position(SourceLine, SourceColumn);
 
         public string ScanTo(string find, StringComparison comparison = StringComparison.Ordinal)
         {

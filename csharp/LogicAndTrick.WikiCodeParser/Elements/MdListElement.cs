@@ -155,6 +155,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public class ListNode : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             public string Tag { get; }
             public List<ListItemNode> Items { get; }
 
@@ -207,6 +209,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public class ListItemNode : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             public INode Content { get; set; }
             public List<ListNode> Subtrees { get; }
 

@@ -32,7 +32,7 @@ public class QuoteElementTest
     [DynamicData(nameof(GetBalanceQuotesData), DynamicDataSourceType.Method)]
     public void BalanceQuotesTest(string input, string output)
     {
-        var lines = new Lines(input);
+        var lines = new Lines(0, input);
         lines.Next();
         Assert.AreEqual(output, QuoteElement.BalanceQuotes(lines, out _, out _));
     }
@@ -41,7 +41,7 @@ public class QuoteElementTest
     [DynamicData(nameof(GetBalanceQuotesData), DynamicDataSourceType.Method)]
     public void BalanceQuotesUpperCaseTest(string input, string? output)
     {
-        var lines = new Lines(input.ToUpper());
+        var lines = new Lines(0, input.ToUpper());
         lines.Next();
         Assert.AreEqual(output?.ToUpper(), QuoteElement.BalanceQuotes(lines, out _, out _));
     }
@@ -52,7 +52,7 @@ public class QuoteElementTest
         var input = "[quote=Name]Test[/quote]";
         var output = "Test";
         var author = "Name";
-        var lines = new Lines(input);
+        var lines = new Lines(0, input);
         lines.Next();
         var result = QuoteElement.BalanceQuotes(lines, out var name, out _);
         Assert.AreEqual(output, result);
@@ -65,7 +65,7 @@ public class QuoteElementTest
         var input = "[quote]Test[/quote]ASDF";
         var output = "Test";
         var postfix = "ASDF";
-        var lines = new Lines(input);
+        var lines = new Lines(0, input);
         lines.Next();
         var result = QuoteElement.BalanceQuotes(lines, out _, out var rest);
         Assert.AreEqual(output, result);

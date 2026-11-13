@@ -6,6 +6,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 {
     internal class RemovedNode : INode
     {
+        public int Line => OriginalNode.Line;
+        public int Column => OriginalNode.Column;
         public INode OriginalNode { get; set; }
 
         public RemovedNode(INode originalNode)

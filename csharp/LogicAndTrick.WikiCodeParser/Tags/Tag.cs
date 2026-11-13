@@ -60,6 +60,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public virtual INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var tagPos = state.SourcePosition;
             var index = state.Index;
             var tokenLength = Token.Length;
 
@@ -88,6 +89,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 }
             }
 
+            var textPos = state.SourcePosition;
+
             if (IsNested)
             {
                 var stack = 1;
@@ -102,7 +105,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                     {
                         state.Seek(Token.Length + 3, false);
                         if (!Validate(options, text)) break;
-                        return FormatResult(parser, data, state, scope, options, text);
+                        return FormatResult(parser, data, state, scope, options, text, tagPos, textPos);
                     }
 
                     text += state.Next();
@@ -117,7 +120,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 if (string.Equals(state.Peek(tokenLength + 3), "[/" + Token + "]", StringComparison.InvariantCultureIgnoreCase) && Validate(options, text))
                 {
                     state.Seek(Token.Length + 3, false);
-                    return FormatResult(parser, data, state, scope, options, text);
+                    return FormatResult(parser, data, state, scope, options, text, tagPos, textPos);
                 }
                 else
                 {
@@ -129,16 +132,18 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public virtual bool Validate(Dictionary<string, string> options, string text) => true;
 
-        public virtual INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
+        public virtual INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += '>';
             var after = "</" + Element + '>';
-            var content = parser.ParseTags(data, text, scope, TagContext);
+            var content = parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column);
             return new HtmlNode(before, content, after)
             {
-                IsBlockNode = IsBlock
+                IsBlockNode = IsBlock,
+                Line = tagPosition.Line,
+                Column = tagPosition.Column
             };
         }
     }

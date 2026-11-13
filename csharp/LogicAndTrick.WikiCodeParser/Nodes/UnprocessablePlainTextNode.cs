@@ -8,6 +8,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         public static INode Empty => new UnprocessablePlainTextNode(string.Empty);
         public static INode NewLine => new UnprocessablePlainTextNode("\n");
 
+        public int Line { get; set; }
+        public int Column { get; set; }
         public string Text { get; set; }
 
         public UnprocessablePlainTextNode(string text)

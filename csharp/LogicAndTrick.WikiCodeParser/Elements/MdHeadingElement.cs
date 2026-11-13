@@ -47,6 +47,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public class HeadingNode : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             public int Level { get; }
             public string ID { get; }
             public INode Text { get; set; }

@@ -69,6 +69,8 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public class ColumnNode : INode
         {
+            public int Line { get; set; }
+            public int Column { get; set; }
             public int Width { get; }
             public INode Content { get; set; }
 

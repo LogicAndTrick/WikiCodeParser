@@ -6,91 +6,147 @@ public class StateTests
     [TestMethod]
     public void ScanTo()
     {
-        var st = new State("A B C");
-        Assert.AreEqual(st.ScanTo("B"), "A ");
-        Assert.AreEqual(st.ScanTo("C"), "B ");
-        Assert.AreEqual(st.ScanTo("D"), "C");
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual("A ", st.ScanTo("B"));
+        Assert.AreEqual("B ", st.ScanTo("C"));
+        Assert.AreEqual("C", st.ScanTo("D"));
     }
 
     [TestMethod]
     public void SkipWhitespace()
     {
-        var st = new State("A B C");
+        var st = new State(0, 0, "A B C");
         st.SkipWhitespace();
-        Assert.AreEqual(st.Index, 0);
+        Assert.AreEqual(0, st.Index);
         st.Seek(1, false);
         st.SkipWhitespace();
-        Assert.AreEqual(st.Index, 2);
+        Assert.AreEqual(2, st.Index);
         st.Seek(1, false);
         st.SkipWhitespace();
-        Assert.AreEqual(st.Index, 4);
+        Assert.AreEqual(4, st.Index);
     }
 
     [TestMethod]
     public void PeekTo()
     {
-        var st = new State("A B C");
-        Assert.AreEqual(st.PeekTo("B"), "A ");
-        Assert.AreEqual(st.PeekTo("C"), "A B ");
-        Assert.AreEqual(st.PeekTo("D"), null);
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual("A ", st.PeekTo("B"));
+        Assert.AreEqual("A B ", st.PeekTo("C"));
+        Assert.AreEqual(null, st.PeekTo("D"));
         st.Seek(2, false);
-        Assert.AreEqual(st.PeekTo("B"), "");
-        Assert.AreEqual(st.PeekTo("C"), "B ");
-        Assert.AreEqual(st.PeekTo("D"), null);
+        Assert.AreEqual("", st.PeekTo("B"));
+        Assert.AreEqual("B ", st.PeekTo("C"));
+        Assert.AreEqual(null, st.PeekTo("D"));
     }
 
     [TestMethod]
     public void Seek()
     {
-        var st = new State("A B C");
-        Assert.AreEqual(st.Index, 0);
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual(0, st.Index);
         st.Seek(1, false);
-        Assert.AreEqual(st.Index, 1);
+        Assert.AreEqual(1, st.Index);
         st.Seek(1, false);
-        Assert.AreEqual(st.Index, 2);
+        Assert.AreEqual(2, st.Index);
         st.Seek(3, false);
-        Assert.AreEqual(st.Index, 5);
+        Assert.AreEqual(5, st.Index);
         st.Seek(3, true);
-        Assert.AreEqual(st.Index, 3);
+        Assert.AreEqual(3, st.Index);
     }
 
     [TestMethod]
     public void Peek()
     {
-        var st = new State("A B C");
-        Assert.AreEqual(st.Peek(2), "A ");
-        Assert.AreEqual(st.Peek(4), "A B ");
-        Assert.AreEqual(st.Peek(6), "A B C");
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual("A ", st.Peek(2));
+        Assert.AreEqual("A B ", st.Peek(4));
+        Assert.AreEqual("A B C", st.Peek(6));
         st.Seek(2, false);
-        Assert.AreEqual(st.Peek(2), "B ");
-        Assert.AreEqual(st.Peek(4), "B C");
-        Assert.AreEqual(st.Peek(6), "B C");
+        Assert.AreEqual("B ", st.Peek(2));
+        Assert.AreEqual("B C", st.Peek(4));
+        Assert.AreEqual("B C", st.Peek(6));
     }
 
     [TestMethod]
     public void Next()
     {
-        var st = new State("A B C");
-        Assert.AreEqual(st.Next(), 'A');
-        Assert.AreEqual(st.Next(), ' ');
-        Assert.AreEqual(st.Next(), 'B');
-        Assert.AreEqual(st.Next(), ' ');
-        Assert.AreEqual(st.Next(), 'C');
-        Assert.AreEqual(st.Next(), '\0');
-        Assert.AreEqual(st.Next(), '\0');
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual('A', st.Next());
+        Assert.AreEqual(' ', st.Next());
+        Assert.AreEqual('B', st.Next());
+        Assert.AreEqual(' ', st.Next());
+        Assert.AreEqual('C', st.Next());
+        Assert.AreEqual('\0', st.Next());
+        Assert.AreEqual('\0', st.Next());
     }
 
     [TestMethod]
     public void GetToken()
     {
-        Assert.AreEqual(new State("none").GetToken(), null);
-        Assert.AreEqual(new State("[some]").GetToken(), "some");
-        Assert.AreEqual(new State("[some=thing]").GetToken(), "some");
-        Assert.AreEqual(new State("[some thing]").GetToken(), "some");
-        var st = new State("a [some] b");
+        Assert.AreEqual(null, new State(0, 0, "none").GetToken());
+        Assert.AreEqual("some", new State(0, 0, "[some]").GetToken());
+        Assert.AreEqual("some", new State(0, 0, "[some=thing]").GetToken());
+        Assert.AreEqual("some", new State(0, 0, "[some thing]").GetToken());
+        var st = new State(0, 0, "a [some] b");
         st.ScanTo("[");
-        Assert.AreEqual(st.Index, 2);
-        Assert.AreEqual(st.GetToken(), "some");
-        Assert.AreEqual(st.Index, 2);
+        Assert.AreEqual(2, st.Index);
+        Assert.AreEqual("some", st.GetToken());
+        Assert.AreEqual(2, st.Index);
+    }
+
+    [TestMethod]
+    public void LineNumber1()
+    {
+        var st = new State(1, 0, "A\nB\nC");
+        Assert.AreEqual(1, st.SourceLine);
+        Assert.AreEqual(0, st.SourceColumn);
+
+        Assert.AreEqual('A', st.Next());
+        Assert.AreEqual(1, st.SourceLine);
+        Assert.AreEqual(1, st.SourceColumn);
+
+        Assert.AreEqual('\n', st.Next());
+        Assert.AreEqual(2, st.SourceLine);
+        Assert.AreEqual(0, st.SourceColumn);
+
+        Assert.AreEqual('B', st.Next());
+        Assert.AreEqual(2, st.SourceLine);
+        Assert.AreEqual(1, st.SourceColumn);
+
+        Assert.AreEqual('\n', st.Next());
+        Assert.AreEqual(3, st.SourceLine);
+        Assert.AreEqual(0, st.SourceColumn);
+
+        Assert.AreEqual('C', st.Next());
+        Assert.AreEqual(3, st.SourceLine);
+        Assert.AreEqual(1, st.SourceColumn);
+    }
+
+    [TestMethod]
+    public void LineNumber2()
+    {
+        var st = new State(5, 15, "A\nB\nC");
+        Assert.AreEqual(5, st.SourceLine);
+        Assert.AreEqual(15, st.SourceColumn);
+
+        Assert.AreEqual('A', st.Next());
+        Assert.AreEqual(5, st.SourceLine);
+        Assert.AreEqual(16, st.SourceColumn);
+
+        Assert.AreEqual('\n', st.Next());
+        Assert.AreEqual(6, st.SourceLine);
+        Assert.AreEqual(0, st.SourceColumn);
+
+        Assert.AreEqual('B', st.Next());
+        Assert.AreEqual(6, st.SourceLine);
+        Assert.AreEqual(1, st.SourceColumn);
+
+        Assert.AreEqual('\n', st.Next());
+        Assert.AreEqual(7, st.SourceLine);
+        Assert.AreEqual(0, st.SourceColumn);
+
+        Assert.AreEqual('C', st.Next());
+        Assert.AreEqual(7, st.SourceLine);
+        Assert.AreEqual(1, st.SourceColumn);
     }
 }

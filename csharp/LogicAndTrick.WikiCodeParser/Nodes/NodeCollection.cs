@@ -8,6 +8,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
     /// </summary>
     public class NodeCollection : INode
     {
+        public int Line => Nodes.Count == 0 ? 0 : Nodes[0].Line;
+        public int Column => Nodes.Count == 0 ? 0 : Nodes[0].Column;
         public List<INode> Nodes { get; set; }
 
         public NodeCollection(params INode[] nodes) : this(nodes.AsEnumerable())

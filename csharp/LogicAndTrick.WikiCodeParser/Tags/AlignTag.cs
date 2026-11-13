@@ -17,7 +17,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             IsBlock = true;
         }
 
-        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
         {
             var before = "<" + Element;
             var cls = ElementClass + " ";

@@ -7,11 +7,14 @@
     {
         public string[] Content { get; set; }
         public int Index { get; set; }
+        private readonly int _startSourceLine;
+        public int SourceLine => _startSourceLine == 0 ? 0 : _startSourceLine + System.Math.Max(0, Index);
 
-        public Lines(string content)
+        public Lines(int startSourceLine, string content)
         {
             Content = content.Split('\n');
             Index = -1;
+            _startSourceLine = startSourceLine;
         }
 
         public void Back() => Index--;
@@ -19,5 +22,6 @@
         public string Value() => Content[Index];
         public int Current() => Index;
         public void SetCurrent(int index) => Index = index;
+        public bool IsEmpty() => string.IsNullOrWhiteSpace(Value());
     }
 }

@@ -13,6 +13,8 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         private readonly Dictionary<string, string> _styles;
 
         public string Tag { get; }
+        public int Line { get; set; }
+        public int Column { get; set; }
         public IReadOnlyDictionary<string, string> Attributes => _attributes;
         public IReadOnlyList<string> Props => _props;
         public IReadOnlyCollection<string> Classes => _classes;
@@ -25,12 +27,22 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         {
             if (!HtmlHelper.ValidateTagName(tag)) throw new ArgumentException("Invalid tag.");
 
+            Line = 0;
+            Column = 0;
             Tag = tag;
+            
             _attributes = new Dictionary<string, string>();
             _props = new List<string>();
             _classes = new HashSet<string>();
             _styles = new Dictionary<string, string>();
             Contents = new List<INode>();
+        }
+
+        public HtmlNodeBuilder Position(int line, int column)
+        {
+            Line = line;
+            Column = column;
+            return this;
         }
 
         public HtmlNodeBuilder If(bool test, Action<HtmlNodeBuilder> action)
@@ -158,7 +170,9 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
             {
                 IsBlockNode = isBlockNode,
                 PlainBefore = plainBefore,
-                PlainAfter = plainAfter
+                PlainAfter = plainAfter,
+                Line = Line,
+                Column = Column
             };
         }
     }

@@ -13,7 +13,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Options = new[] {"color", "colour", "size"};
         }
 
-        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text)
+        public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
         {
             var before = "<" + Element;
             if (ElementClass != null) before += " class=\"" + ElementClass + "\"";
