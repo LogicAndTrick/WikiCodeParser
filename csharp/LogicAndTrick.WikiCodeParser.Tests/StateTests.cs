@@ -1,6 +1,7 @@
 ﻿namespace LogicAndTrick.WikiCodeParser.Tests;
 
 [TestClass]
+[TestCategory("Basic")]
 public class StateTests
 {
     [TestMethod]

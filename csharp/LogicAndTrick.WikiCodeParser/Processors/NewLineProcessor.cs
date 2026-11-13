@@ -30,12 +30,25 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 }
             }
 
+            // track the number of sequential newlines, to collapse 3+ newlines into 2 newlines
+            int numSequentialBreaks = 0;
+
             for (var i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];
-                yield return new PlainTextNode(line);
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    yield return new PlainTextNode(line);
+                    numSequentialBreaks = 0;
+                }
+
                 // Don't emit a line break after the final line of the text as it did not end with a newline
-                if (i < lines.Count - 1) yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
+                if (i >= lines.Count - 1) continue;
+
+                numSequentialBreaks++;
+                if (numSequentialBreaks > 2) continue;
+
+                yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
             }
         }
     }

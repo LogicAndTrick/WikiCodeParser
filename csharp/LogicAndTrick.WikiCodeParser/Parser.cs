@@ -28,7 +28,6 @@ namespace LogicAndTrick.WikiCodeParser
         public ParseResult ParseResult(string text, string scope = "")
         {
             var data = new ParseData();
-            text = Util.Trim(text);
             var node = ParseElements(data, text, scope, 1);
             node = RunProcessors(null, node, data, scope);
             return new ParseResult
@@ -51,6 +50,8 @@ namespace LogicAndTrick.WikiCodeParser
             var root = new NodeCollection();
 
             // Elements are line-based scopes, an element cannot start in the middle of a line.
+            // this is fine to do for line numbers as long as the \r characters at the end of the line, which is normal.
+            // \r in the middle of a line will cause column positions to be wrong, but column positions are nice-to-haves anyway, so we don't really need to handle that.
             text = text.Replace("\r", "");
 
             var lines = new Lines(line, text);
@@ -74,7 +75,7 @@ namespace LogicAndTrick.WikiCodeParser
                     // if we have any plain text, create a node for it
                     if (plain.Count > 0)
                     {
-                        root.Nodes.Add(TrimWhitespace(ParseTags(data, Util.Trim(String.Join("\n", plain)), scope, TagParseContext.Block, plainStart, 0)));
+                        root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain), scope, TagParseContext.Block, plainStart, 0)));
                         root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Newline before next element
                     }
                     plain.Clear();
@@ -90,7 +91,7 @@ namespace LogicAndTrick.WikiCodeParser
             }
 
             // parse any plain text that might be left
-            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, Util.Trim(String.Join("\n", plain)), scope, TagParseContext.Block, plainStart, 0)));
+            if (plain.Count > 0) root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain), scope, TagParseContext.Block, plainStart, 0)));
             
             // Trim off any whitespace nodes at the end
             while (root.Nodes.Count > 0 && root.Nodes[root.Nodes.Count - 1] is UnprocessablePlainTextNode ptn && string.IsNullOrWhiteSpace(ptn.Text))
@@ -115,6 +116,8 @@ namespace LogicAndTrick.WikiCodeParser
                 node.Walk(x =>
                 {
                     if (x is NodeCollection) return true;
+                    if (x is UnprocessablePlainTextNode uptn && uptn.Text != null) uptn.Text = Util.TrimStart(uptn.Text ?? "");
+                    if (x is PlainTextNode ptn && ptn.Text != null) ptn.Text = Util.TrimStart(ptn.Text ?? "");
                     if (x.HasContent()) return false;
                     if (x is UnprocessablePlainTextNode || x is PlainTextNode) removeNodes.Add(x);
                     return true;
@@ -126,6 +129,8 @@ namespace LogicAndTrick.WikiCodeParser
                 node.WalkBack(x =>
                 {
                     if (x is NodeCollection) return true;
+                    if (x is UnprocessablePlainTextNode uptn && uptn.Text != null) uptn.Text = Util.TrimEnd(uptn.Text ?? "");
+                    if (x is PlainTextNode ptn && ptn.Text != null) ptn.Text = Util.TrimEnd(ptn.Text ?? "");
                     if (x.HasContent()) return false;
                     if (x is UnprocessablePlainTextNode || x is PlainTextNode) removeNodes.Add(x);
                     return true;
@@ -153,9 +158,6 @@ namespace LogicAndTrick.WikiCodeParser
         public INode ParseTags(ParseData data, string text, string scope, TagParseContext context, int line = 0, int column = 0)
         {
             data.CurrentTagDepth++;
-
-            // trim 3 or more newlines down to 2 newlines
-            text = Regex.Replace(text, "\n{3,}", "\n\n");
 
             var state = new State(line, column, text);
             var root = new NodeCollection();

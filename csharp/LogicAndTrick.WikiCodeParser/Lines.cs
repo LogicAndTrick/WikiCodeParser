@@ -8,7 +8,7 @@
         public string[] Content { get; set; }
         public int Index { get; set; }
         private readonly int _startSourceLine;
-        public int SourceLine => _startSourceLine == 0 ? 0 : _startSourceLine + System.Math.Max(0, Index);
+        public int SourceLine => _startSourceLine + System.Math.Max(0, Index);
 
         public Lines(int startSourceLine, string content)
         {

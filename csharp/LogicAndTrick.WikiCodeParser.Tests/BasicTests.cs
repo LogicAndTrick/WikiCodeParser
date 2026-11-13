@@ -6,6 +6,7 @@ using LogicAndTrick.WikiCodeParser.Tags;
 namespace LogicAndTrick.WikiCodeParser.Tests;
 
 [TestClass]
+[TestCategory("Basic")]
 public class BasicTests
 {
     [TestMethod]
@@ -13,11 +14,11 @@ public class BasicTests
     {
         var parser = new Parser(new ParserConfiguration("http://example.com"));
         var result = parser.ParseResult("1 & 2");
-        Assert.IsInstanceOfType(result.Content, typeof(NodeCollection));
+        Assert.IsInstanceOfType<NodeCollection>(result.Content);
         var leaves = GetLeaves(result.Content);
         Assert.AreEqual(1, leaves.Count);
         var node = leaves[0];
-        Assert.IsInstanceOfType(node, typeof(PlainTextNode));
+        Assert.IsInstanceOfType<PlainTextNode>(node);
         var ptnode = (PlainTextNode)node;
         Assert.AreEqual("1 & 2", ptnode.Text);
         Assert.AreEqual("1 &amp; 2", ptnode.ToHtml());
@@ -31,17 +32,17 @@ public class BasicTests
         config.Tags.Add(new QuickLinkTag());
         var parser = new Parser(config);
         var result = parser.ParseResult("[https://example.com|ex&ple]");
-        Assert.IsInstanceOfType(result.Content, typeof(NodeCollection));
+        Assert.IsInstanceOfType<NodeCollection>(result.Content);
         var leaves = CollapseCollections(result.Content);
         Assert.AreEqual(1, leaves.Count);
         var node = leaves[0];
-        Assert.IsInstanceOfType(node, typeof(HtmlNode));
+        Assert.IsInstanceOfType<HtmlNode>(node);
         var htnode = (HtmlNode)node;
         Assert.AreEqual("<a href=\"https://example.com\">", htnode.HtmlBefore);
         Assert.AreEqual("</a>", htnode.HtmlAfter);
         var content = CollapseCollections(htnode.Content);
         Assert.AreEqual(1, content.Count);
-        Assert.IsInstanceOfType(content[0], typeof(UnprocessablePlainTextNode));
+        Assert.IsInstanceOfType<UnprocessablePlainTextNode>(content[0]);
         var ptnode = (UnprocessablePlainTextNode)content[0];
         Assert.AreEqual("ex&ple", ptnode.Text);
     }
@@ -56,6 +57,39 @@ public class BasicTests
         config.Elements.Add(new MdHeadingElement());
         config.Processors.Add(new NewLineProcessor());
         var parser = new Parser(config);
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
+    }
+
+    [TestMethod]
+    [DataRow("\n\n\nA\n\n\n")]
+    [DataRow("A\n\n\n")]
+    [DataRow("\n\n\nA")]
+    [DataRow("     A")]
+    [DataRow(" \n \n \n \n A")]
+    [DataRow("A     ")]
+    [DataRow("A \n \n \n \n ")]
+    [DataRow(" \n \n \n \n A \n \n \n \n ")]
+    public void TestLeadingAndTrailingWhitespace(string input)
+    {
+        var parser = new Parser(new ParserConfiguration("http://example.com"));
+
+        var result = parser.ParseResult(input);
+
+        Assert.AreEqual("A", result.ToHtml(TestCaseUtils.Sanitise));
+    }
+
+    [TestMethod]
+    public void TestMiddleWhitespace()
+    {
+        var input = "A\n\n\n\nB";
+        var output = TestCaseUtils.Sanitise("A<br/>\n<br/>\nB");
+
+        var config = new ParserConfiguration("http://example.com");
+        config.Processors.Add(new NewLineProcessor());
+        var parser = new Parser(config);
+
         var result = parser.ParseResult(input);
 
         Assert.AreEqual(output, result.ToHtml(TestCaseUtils.Sanitise));
