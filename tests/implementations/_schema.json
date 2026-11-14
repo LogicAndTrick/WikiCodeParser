@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WikiCodeParser implementation test",
+  "type": "object",
+  "properties": {
+    "config": {
+      "description": "Configuration for the parser",
+      "type": "object",
+      "properties": {
+        "base": {
+          "description": "The base configuration for the parser",
+          "enum": ["none", "twhl", "snarkpit"],
+          "default": "none"
+        },
+        "elements": {
+          "description": "The elements to register",
+          "type": "array",
+          "items": {
+            "enum": [
+              "MdCode",
+              "MdColumns",
+              "MdHeading",
+              "MdLine",
+              "MdList",
+              "MdPanel",
+              "MdQuote",
+              "MdTable",
+              "Pre",
+              "Quote",
+              "Ref"
+            ]
+          }
+        },
+        "tags": {
+          "description": "The tags to register",
+          "type": "array",
+          "items": {
+            "enum": [
+              "Strong",
+              "Emphasis",
+              "Underline",
+              "Strikethrough",
+              "Align",
+              "Code",
+              "Color",
+              "Font",
+              "Image",
+              "Link",
+              "List",
+              "Pre",
+              "QuickLink",
+              "Quote",
+              "Size",
+              "Spoiler",
+              "VaultEmbed",
+              "WikiArchive",
+              "WikiBook",
+              "WikiCategory",
+              "WikiCredit",
+              "WikiFile",
+              "WikiImage",
+              "WikiLink",
+              "WikiYoutube",
+              "Youtube"
+            ]
+          }
+        },
+        "processors": {
+          "description": "The processors to register",
+          "type": "array",
+          "items": {
+            "enum": [
+              "AutoLinking",
+              "MarkdownText",
+              "NewLine",
+              "Smilies",
+              "TrimWhitespace"
+            ]
+          }
+        }
+      }
+    },
+    "input": {
+      "description": "The input string for the test",
+      "type": "string"
+    },
+    "html": {
+      "description": "The expected output html for the test",
+      "type": "string"
+    },
+    "plain": {
+      "description": "The expected output plain text for the test",
+      "type": "string"
+    },
+    "nodes": {
+      "description": "The expected output nodes for the test",
+      "$ref": "#/$defs/position"
+    }
+  },
+  "required": ["config", "input", "html", "plain", "nodes"],
+  "$defs": {
+    "position": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The node name (for displaying in test assertions)",
+          "type": "string"
+        },
+        "type": {
+          "description": "The node type",
+          "type": "string",
+          "anyOf": [
+            { "enum": ["list", "plain", "html", "meta", "ref"] },
+            { "type": "string" }
+          ]
+        },
+        "pos": {
+          "description": "The source line number and column number",
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "children": {
+          "description": "Child nodes",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/position"
+          }
+        }
+      },
+      "required": ["type", "pos"]
+    }
+  }
+}

@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Ganss.Xss;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+﻿using Ganss.Xss;
 
 namespace LogicAndTrick.WikiCodeParser.Tests;
 
@@ -64,32 +64,31 @@ public static class TestCaseUtils
 
         if (expectedMeta != null)
         {
-            var resultMetaObjects = result.GetMetadata().Select(x => new { x.Key, Value = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(x.Value)) }).ToList();
-            var expectedMetaObjects = expectedMeta.Split('\n').Select(x => x.Trim().Split('=', 2)).Select(x => new { Key = x[0], Value = JsonConvert.DeserializeObject(x[1]) }).ToList();
+            var resultMetaObjects = result.GetMetadata().Select(x => new { x.Key, Value = JsonSerializer.SerializeToNode(x.Value) }).ToList();
+            var expectedMetaObjects = expectedMeta.Split('\n').Select(x => x.Trim().Split('=', 2)).Select(x => new { Key = x[0], Value = JsonNode.Parse(x[1]) }).ToList();
             Assert.AreEqual(expectedMetaObjects.Count, resultMetaObjects.Count);
             for (var i = 0; i < resultMetaObjects.Count; i++)
             {
                 var rmo = resultMetaObjects[i];
                 var emo = expectedMetaObjects[i];
 
-                var robj = rmo.Value as JObject;
-                var eobj = emo.Value as JObject;
+                var robj = rmo.Value as JsonObject;
+                var eobj = emo.Value as JsonObject;
 
-                if (robj == eobj) continue;
+                if (robj == null && eobj == null) continue;
 
                 Assert.IsNotNull(robj);
                 Assert.IsNotNull(eobj);
 
-                var rkeys = robj.Properties().Where(x => x.Value != null && x.Value.ToString() is not "0" and not "").Select(x => x.Name).Order().ToList();
-                var ekeys = eobj.Properties().Select(x => x.Name).Order().ToList();
+                var rkeys = robj.Where(x => x.Value != null && x.Value.ToString() is not "0" and not "").Select(x => x.Key).Order().ToList();
+                var ekeys = eobj.Select(x => x.Key).Order().ToList();
                 CollectionAssert.AreEqual(rkeys, ekeys);
 
                 if (emo.Value?.ToString() == rmo.Value?.ToString()) continue;
-                foreach (var ep in eobj.Properties())
+                foreach (var ep in eobj)
                 {
-                    var rp = robj.Property(ep.Name)!;
                     var ev = ep.Value?.ToString();
-                    var rv = rp.Value?.ToString();
+                    var rv = robj[ep.Key]?.ToString();
                     Assert.AreEqual(ev, rv);
                 }
             }
@@ -120,9 +119,9 @@ public static class TestCaseUtils
     public static IEnumerable<string> GetTestCaseNames(string folder)
     {
         var dir = GetTestCaseDirectory(folder);
-        foreach (var file in Directory.GetFiles(dir).Where(x => !Path.GetFileName(x).StartsWith("ignored")))
+        foreach (var file in Directory.GetFiles(dir).Where(x => !Path.GetFileName(x).StartsWith('_')))
         {
-            yield return Path.GetFileName(file);
+            yield return Path.GetFileNameWithoutExtension(file);
         }
     }
 

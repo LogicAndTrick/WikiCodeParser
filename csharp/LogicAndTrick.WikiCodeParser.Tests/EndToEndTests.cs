@@ -3,7 +3,7 @@
 [TestClass]
 public class EndToEndTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("wikicode-page")]
     public void EndToEndTest(string name)
     {

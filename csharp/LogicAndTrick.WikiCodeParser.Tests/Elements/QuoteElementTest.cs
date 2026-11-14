@@ -29,7 +29,7 @@ public class QuoteElementTest
     }
 
     [TestMethod]
-    [DynamicData(nameof(GetBalanceQuotesData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetBalanceQuotesData))]
     public void BalanceQuotesTest(string input, string output)
     {
         var lines = new Lines(0, input);
@@ -38,7 +38,7 @@ public class QuoteElementTest
     }
 
     [TestMethod]
-    [DynamicData(nameof(GetBalanceQuotesData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetBalanceQuotesData))]
     public void BalanceQuotesUpperCaseTest(string input, string? output)
     {
         var lines = new Lines(0, input.ToUpper());
