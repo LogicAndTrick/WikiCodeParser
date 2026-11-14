@@ -1,0 +1,32 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["QuickLink"]
+  },
+  "input": "[https://example.com|test]",
+  "html": "<a href=\"https://example.com\">test</a>",
+  "plain": "test (https://example.com)",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "a",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<a href=\"https://example.com\">", "</a>"],
+        "plain": ["", " (https://example.com)"],
+        "children": [
+          {
+            "name": "test",
+            "type": "plain",
+            "pos": [1, 0],
+            "text": "test"
+          }
+        ]
+      }
+    ]
+  }
+}

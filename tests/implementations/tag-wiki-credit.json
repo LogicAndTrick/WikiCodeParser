@@ -1,0 +1,30 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiCredit"]
+  },
+  "input": "[credit:test5|user:456|name:zzz|url:http://example.com]",
+  "html": "",
+  "plain": "",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "metadata",
+        "type": "meta",
+        "pos": [1, 0],
+        "key": "WikiCredit",
+        "value": {
+          "Type": "c",
+          "Description": "test5",
+          "UserID": 456,
+          "Name": "zzz",
+          "Url": "http://example.com"
+        }
+      }
+    ]
+  }
+}

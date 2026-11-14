@@ -1,0 +1,32 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["Size"]
+  },
+  "input": "[size=20]test[/size]",
+  "html": "<span style=\"font-size: 20px;\">test</span>",
+  "plain": "test",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "span",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<span style=\"font-size: 20px;\">", "</span>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "test",
+            "type": "plain",
+            "pos": [1, 9],
+            "text": "test"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["List"]
+  },
+  "input": "[list]\n[*]test\n[/list]",
+  "html": "<ul>\n<li>test</li>\n</ul>",
+  "plain": "* test\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "ul",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<ul>\n", "</ul>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "li",
+            "type": "html",
+            "pos": [1, 8],
+            "html": ["<li>", "</li>\n"],
+            "plain": ["* ", "\n"],
+            "children": [
+              {
+                "name": "test",
+                "type": "plain",
+                "pos": [1, 11],
+                "text": "test"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiArchive"]
+  },
+  "input": "[archive:test4|url:http://example.com|wayback:1111122222333]",
+  "html": "",
+  "plain": "",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "metadata",
+        "type": "meta",
+        "pos": [1, 0],
+        "key": "WikiCredit",
+        "value": {
+          "Type": "a",
+          "Name": "test4",
+          "Url": "http://example.com",
+          "WaybackUrl": "https://web.archive.org/web/1111122222333/http://example.com"
+        }
+      }
+    ]
+  }
+}

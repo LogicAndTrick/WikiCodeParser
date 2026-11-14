@@ -1,0 +1,32 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["Code"]
+  },
+  "input": "[code]test[/code]",
+  "html": "<code>test</code>",
+  "plain": "test",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "code",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<code>", "</code>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "test",
+            "type": "plain",
+            "pos": [1, 6],
+            "text": "test"
+          }
+        ]
+      }
+    ]
+  }
+}

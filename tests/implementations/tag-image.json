@@ -1,0 +1,28 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["Image"]
+  },
+  "input": "[img]https://example.com/image.jpg[/img]",
+  "html": "<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/image.jpg\" alt=\"User posted image\" /></span></div>",
+  "plain": "\n[User posted image]\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "img",
+        "type": "html",
+        "pos": [1, 0],
+        "html": [
+          "<div class=\"embedded image\"><span class=\"caption-panel\"><img class=\"caption-body\" src=\"https://example.com/image.jpg\" alt=\"User posted image\" />",
+          "</span></div>"
+        ],
+        "plain": ["\n[User posted image]\n", ""],
+        "children": []
+      }
+    ]
+  }
+}

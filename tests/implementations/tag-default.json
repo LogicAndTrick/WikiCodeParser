@@ -16,11 +16,14 @@
         "name": "b",
         "type": "html",
         "pos": [1, 0],
+        "html": ["<strong>", "</strong>"],
+        "plain": ["", ""],
         "children": [
           {
             "name": "test",
             "type": "plain",
-            "pos": [1, 3]
+            "pos": [1, 3],
+            "text": "test"
           }
         ]
       }

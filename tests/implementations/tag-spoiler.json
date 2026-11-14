@@ -1,0 +1,39 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["Spoiler"]
+  },
+  "input": "[spoiler=a]test[/spoiler]",
+  "html": "<span class=\"spoiler\" title=\"a\">test</span>",
+  "plain": "[a](spoiler text)",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "span",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<span class=\"spoiler\" title=\"a\">", "</span>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "test",
+            "type": "SpoilerNode",
+            "pos": [1, 0],
+            "children": [
+              {
+                "name": "test",
+                "type": "plain",
+                "pos": [1, 11],
+                "text": "test"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiYoutube"]
+  },
+  "input": "[youtube:bbbbbbb|caption]",
+  "html": "<div class=\"embedded video\"><div class=\"caption-panel\"><div class=\"video-container caption-body\"><div class=\"video-content\"><div class=\"uninitialised\" data-youtube-id=\"bbbbbbb\" style=\"background-image: url('https://i.ytimg.com/vi/bbbbbbb/hqdefault.jpg');\"></div></div></div><span class=\"caption\">caption</span></div></div>",
+  "plain": "[YouTube video] caption\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "embed",
+        "type": "html",
+        "pos": [1, 0],
+        "html": [
+          "<div class=\"embedded video\"><div class=\"caption-panel\"><div class=\"video-container caption-body\"><div class=\"video-content\"><div class=\"uninitialised\" data-youtube-id=\"bbbbbbb\" style=\"background-image: url('https://i.ytimg.com/vi/bbbbbbb/hqdefault.jpg');\"></div></div></div>",
+          "</div></div>"
+        ],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "caption",
+            "type": "html",
+            "pos": [1, 0],
+            "html": ["<span class=\"caption\">", "</span>"],
+            "plain": ["[YouTube video] ", "\n"],
+            "children": [
+              {
+                "type": "plain",
+                "text": "caption",
+                "pos": [1, 0]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

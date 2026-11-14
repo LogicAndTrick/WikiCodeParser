@@ -1,0 +1,37 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["Youtube"]
+  },
+  "input": "[youtube]abcdefg[/youtube]",
+  "html": "<div class=\"embedded video\"> <div class=\"caption-panel\">  <div class=\"video-container caption-body\">   <div class=\"video-content\">    <div class=\"uninitialised\" data-youtube-id=\"abcdefg\" style=\"background-image: url('https://i.ytimg.com/vi/abcdefg/hqdefault.jpg');\"></div>   </div>  </div></div></div>",
+  "plain": "[YouTube video] \n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "embed",
+        "type": "html",
+        "pos": [1, 0],
+        "html": [
+          "<div class=\"embedded video\"> <div class=\"caption-panel\">  <div class=\"video-container caption-body\">   <div class=\"video-content\">    <div class=\"uninitialised\" data-youtube-id=\"abcdefg\" style=\"background-image: url('https://i.ytimg.com/vi/abcdefg/hqdefault.jpg');\"></div>   </div>  </div>",
+          "</div></div>"
+        ],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "caption",
+            "type": "html",
+            "pos": [1, 0],
+            "html": ["", ""],
+            "plain": ["[YouTube video] ", "\n"],
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}

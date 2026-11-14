@@ -1,0 +1,31 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiCategory"]
+  },
+  "input": "[cat:Test1]\n[cat:Test2]",
+  "html": "",
+  "plain": "",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "metadata",
+        "type": "meta",
+        "pos": [1, 0],
+        "key": "WikiCategory",
+        "value": "Test1"
+      },
+      {
+        "name": "metadata",
+        "type": "meta",
+        "pos": [2, 0],
+        "key": "WikiCategory",
+        "value": "Test2"
+      }
+    ]
+  }
+}

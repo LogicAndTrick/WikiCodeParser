@@ -1,0 +1,48 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiFile"]
+  },
+  "input": "[file:test.png]",
+  "html": "<span class=\"embedded-inline download\" data-info=\"https://example.com/wiki/embed-info/test.png\"><a href=\"https://example.com/wiki/embed/test.png\"><span class=\"fa fa-download\"></span> test.png</a></span>",
+  "plain": "test.png",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "a",
+        "type": "html",
+        "pos": [1, 0],
+        "html": [
+          "<span class=\"embedded-inline download\" data-info=\"https://example.com/wiki/embed-info/test.png\"><a href=\"https://example.com/wiki/embed/test.png\"><span class=\"fa fa-download\"></span> ",
+          "</a></span>"
+        ],
+        "plain": ["", ""],
+        "children": [
+          {
+            "type": "list",
+            "pos": [1, 0],
+            "children": [
+              {
+                "name": "meta",
+                "type": "meta",
+                "pos": [1, 0],
+                "key": "WikiUpload",
+                "value": "test.png"
+              },
+              {
+                "name": "test",
+                "type": "plain",
+                "pos": [1, 0],
+                "text": "test.png"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

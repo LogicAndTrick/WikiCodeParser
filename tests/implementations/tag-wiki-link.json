@@ -1,0 +1,45 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiLink"]
+  },
+  "input": "[[page|test]]",
+  "html": "<a href=\"https://example.com/wiki/page/page\">test</a>",
+  "plain": "test",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "a",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<a href=\"https://example.com/wiki/page/page\">", "</a>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "type": "list",
+            "pos": [1, 0],
+            "children": [
+              {
+                "name": "meta",
+                "type": "meta",
+                "pos": [1, 0],
+                "key": "WikiLink",
+                "value": "page"
+              },
+              {
+                "name": "test",
+                "type": "plain",
+                "pos": [1, 0],
+                "text": "test"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

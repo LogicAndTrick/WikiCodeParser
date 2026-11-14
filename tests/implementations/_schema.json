@@ -3,6 +3,10 @@
   "title": "WikiCodeParser implementation test",
   "type": "object",
   "properties": {
+    "notes": {
+      "description": "Notes related to the test",
+      "type": "string"
+    },
     "config": {
       "description": "Configuration for the parser",
       "type": "object",
@@ -129,9 +133,71 @@
           "items": {
             "$ref": "#/$defs/position"
           }
+        },
+        "text": {
+          "description": "The text content of the node",
+          "type": "string"
+        },
+        "html": {
+          "description": "The HTML content of the node (before and after)",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "plain": {
+          "description": "The plain text content of the node (before and after)",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "key": {
+          "description": "The metadata key",
+          "type": "string"
+        },
+        "value": {
+          "description": "The metadata value",
+          "oneOf": [{ "type": "object" }, { "type": "string" }]
         }
       },
-      "required": ["type", "pos"]
+      "required": ["type", "pos"],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "plain" }
+            }
+          },
+          "then": {
+            "required": ["text"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "html" }
+            }
+          },
+          "then": {
+            "required": ["html", "plain"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "meta" }
+            }
+          },
+          "then": {
+            "required": ["key", "value"]
+          }
+        }
+      ]
     }
   }
 }

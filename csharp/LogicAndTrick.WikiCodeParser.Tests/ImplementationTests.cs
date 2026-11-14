@@ -1,7 +1,7 @@
 
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using LogicAndTrick.WikiCodeParser.Elements;
 using LogicAndTrick.WikiCodeParser.Nodes;
 using LogicAndTrick.WikiCodeParser.Processors;
@@ -81,7 +81,7 @@ public class ImplementationTests
                 "WikiCategory" => new WikiCategoryTag(),
                 "WikiCredit" => new WikiCreditTag(),
                 "WikiFile" => new WikiFileTag(),
-                "WikiImage" => new WikiImageTag(),
+                "WikiImage" => new WikiImageTag { TwhlBehaviour = true },
                 "WikiLink" => new WikiLinkTag(),
                 "WikiYoutube" => new WikiYoutubeTag(),
                 "Youtube" => new YoutubeTag(),
@@ -114,7 +114,47 @@ public class ImplementationTests
         { "html", nameof(HtmlNode) },
         { "meta", nameof(MetadataNode) },
         { "ref", nameof(RefNode) },
+        { "removed", nameof(RemovedNode) },
     };
+
+    private static void AssertMetadata(JsonNode? expected, JsonNode? actual)
+    {
+        if (expected == null)
+        {
+            Assert.IsNull(actual);
+            return;
+        }
+
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(expected.GetValueKind(), actual.GetValueKind());
+
+        if (expected is JsonValue eval)
+        {
+            var rval = (JsonValue) actual;
+            Assert.AreEqual(eval.ToJsonString(), rval.ToJsonString());
+        }
+        else if (expected is JsonObject eobj)
+        {
+            var robj = (JsonObject) actual;
+
+            if (robj == null && eobj == null) return;
+
+            Assert.IsNotNull(robj);
+            Assert.IsNotNull(eobj);
+
+            var rkeys = robj.Where(x => x.Value != null && x.Value.ToString() is not "0" and not "").Select(x => x.Key).Order().ToList();
+            var ekeys = eobj.Select(x => x.Key).Order().ToList();
+            Assert.AreSequenceEqual(rkeys, ekeys);
+
+            if (expected?.ToString() == actual?.ToString()) return;
+            foreach (var ep in eobj)
+            {
+                var ev = ep.Value?.ToString();
+                var rv = robj[ep.Key]?.ToString();
+                Assert.AreEqual(ev, rv);
+            }
+        }
+    }
 
     private static void AssertNodeHierarchy(TestNode expected, INode node, int lineOffset)
     {
@@ -132,8 +172,41 @@ public class ImplementationTests
 
         Assert.AreEqual(expectedType, actualType);
 
-        var children = node.GetChildren();
-        Assert.HasCount(expected.Children.Count, children);
+        switch (expectedType)
+        {
+            case nameof(PlainTextNode):
+                var ptxt = node switch
+                {
+                    PlainTextNode p => p.Text,
+                    UnprocessablePlainTextNode u => u.Text,
+                    _ => throw new InvalidOperationException("Unexpected node type")
+                };
+                Assert.AreEqual(expected.Text, ptxt);
+                break;
+            case nameof(HtmlNode):
+                var hn = node as HtmlNode;
+                Assert.IsNotNull(hn);
+                Assert.HasCount(2, expected.Html, "Invalid test configuration");
+                Assert.HasCount(2, expected.Plain, "Invalid test configuration");
+                Assert.AreEqual(expected.Html[0], hn.HtmlBefore);
+                Assert.AreEqual(expected.Html[1], hn.HtmlAfter);
+                Assert.AreEqual(expected.Plain[0], hn.PlainBefore);
+                Assert.AreEqual(expected.Plain[1], hn.PlainAfter);
+                break;
+            case nameof(MetadataNode):
+                var mn = node as MetadataNode;
+                Assert.IsNotNull(mn);
+                Assert.AreEqual(expected.Key, mn.Key);
+                AssertMetadata(expected.Value, JsonSerializer.SerializeToNode(mn.Value));
+                break;
+        }
+
+        var children = node.GetChildren().Where(x => x is not RemovedNode).ToList();
+        Assert.HasCount(
+            expected.Children.Count, children,
+            $"Wrong number of child nodes for '{expected.Name ?? expected.Type}'.\n" +
+            "Actual children: [" + string.Join(", ", children.Select(x => x.GetType().Name)) + "]"
+        );
 
         for (int i = 0; i < expected.Children.Count; i++)
         {
@@ -151,6 +224,7 @@ public class ImplementationTests
         var input = def.Input;
         var config = CreateConfig(def.Config);
         var parser = new Parser(config);
+        Action<ParseResult> afterParse = _ => { };
 
         if (lineOffset > 0)
         {
@@ -159,17 +233,11 @@ public class ImplementationTests
             // finally add a check to remove that element from the result.
             input = new string('\n', lineOffset + 1) + input;
             config.Elements.Insert(0, new LineOffsetEaterElement(lineOffset));
+            afterParse = RemoveLineOffsetElement;
         }
 
         var result = parser.ParseResult(input);
-        
-        if (lineOffset > 0 && result.Content is NodeCollection nc && nc.Nodes.Count >= 2)
-        {
-            if (nc.Nodes[0] is UnprocessablePlainTextNode r1 && nc.Nodes[1] is UnprocessablePlainTextNode r2)
-            {
-                if (r1.Text == RemovedContentGuid && r2.Text == "\n") nc.Nodes.RemoveRange(0, 2);
-            }
-        }
+        afterParse(result);
 
         var resultHtml = result.ToHtml(TestCaseUtils.Sanitise);
         var resultPlain = result.ToPlainText();
@@ -181,6 +249,19 @@ public class ImplementationTests
         Assert.AreEqual(expectedPlain, resultPlain);
 
         AssertNodeHierarchy(def.Nodes, result.Content, lineOffset);
+    }
+
+    private static void RemoveLineOffsetElement(ParseResult result)
+    {
+        // remove the guid node
+        if (result.Content is not NodeCollection nc || nc.Nodes.Count < 1) return;
+        if (nc.Nodes[0] is not UnprocessablePlainTextNode r1 || r1.Text != RemovedContentGuid) return;
+        nc.Nodes.RemoveAt(0);
+
+        // if there's more nodes, then the guid element node will have a blank line following it, remove that too
+        if (nc.Nodes.Count < 1) return;
+        if (nc.Nodes[0] is not UnprocessablePlainTextNode r2 || r2.Text != "\n") return;
+        nc.Nodes.RemoveAt(0);
     }
 
     private static readonly string RemovedContentGuid = Guid.NewGuid().ToString();

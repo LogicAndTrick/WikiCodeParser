@@ -1,0 +1,72 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["WikiImage"]
+  },
+  "input": "[img:test2|caption]",
+  "html": "<div class=\"embedded image\" title=\"caption\"><span class=\"caption-panel\"><img class=\"caption-body\" alt=\"caption\" src=\"https://example.com/wiki/embed/test2\" /><span class=\"caption\">caption</span></span></div>",
+  "plain": "[Image] caption",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "embedded image",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<div class=\"embedded image\" title=\"caption\">", "</div>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "panel",
+            "type": "html",
+            "pos": [1, 0],
+            "html": ["<span class=\"caption-panel\">", "</span>"],
+            "plain": ["", ""],
+            "children": [
+              {
+                "type": "list",
+                "pos": [1, 0],
+                "children": [
+                  {
+                    "type": "meta",
+                    "pos": [1, 0],
+                    "key": "WikiUpload",
+                    "value": "test2"
+                  },
+                  {
+                    "name": "embed",
+                    "type": "html",
+                    "pos": [1, 0],
+                    "html": [
+                      "<img class=\"caption-body\" alt=\"caption\" src=\"https://example.com/wiki/embed/test2\" />",
+                      ""
+                    ],
+                    "plain": ["[Image]", ""],
+                    "children": [{ "type": "list", "pos": [1, 0] }]
+                  },
+                  {
+                    "name": "caption",
+                    "type": "html",
+                    "pos": [1, 0],
+                    "html": ["<span class=\"caption\">", "</span>"],
+                    "plain": [" ", ""],
+                    "children": [
+                      {
+                        "type": "plain",
+                        "text": "caption",
+                        "pos": [1, 0]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
