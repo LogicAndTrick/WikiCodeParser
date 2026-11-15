@@ -7,6 +7,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\State;
 
 class CodeTag extends Tag
@@ -18,7 +19,7 @@ class CodeTag extends Tag
         $this->element = 'code';
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text, Position $tagPosition, Position $textPosition): INode|null
     {
         return new HtmlNode('<code>', new UnprocessablePlainTextNode($text), '</code>');
     }

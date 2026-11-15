@@ -13,6 +13,8 @@ use LogicAndTrick\WikiCodeParser\Util;
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class ColumnNode implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     public int $width;
     public INode $content;
 

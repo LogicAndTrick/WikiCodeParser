@@ -15,6 +15,8 @@ use LogicAndTrick\WikiCodeParser\Util;
 
 class TableCell implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     public string $type;
     public INode $contents;
 
@@ -53,6 +55,8 @@ class TableCell implements INode
 
 class TableRow implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     public array $cells;
 
     public function __construct(array $cells)

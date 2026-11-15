@@ -164,7 +164,7 @@ public class ImplementationTests
             Assert.AreEqual(expected.Column, node.Column, $"Wrong column for '{expected.Name ?? expected.Type}'");
         }
 
-        var expectedType = _commonNames.GetValueOrDefault(expected.Type, node.GetType().Name);
+        var expectedType = _commonNames.GetValueOrDefault(expected.Type, expected.Type);
         if (expectedType == nameof(UnprocessablePlainTextNode)) expectedType = nameof(PlainTextNode);
 
         var actualType = node.GetType().Name;

@@ -2,6 +2,8 @@
 
 namespace LogicAndTrick\WikiCodeParser;
 
+use LogicAndTrick\WikiCodeParser\Position;
+
 /**
  * Character-indexed state tracker for a string
  */
@@ -15,11 +17,51 @@ class State
         return $this->index >= $this->length;
     }
 
-    public function __construct(string $text)
+    private array $newlinePositions;
+    private int $startSourceLine;
+    private int $startSourceColumn;
+
+    public function __construct(int $startSourceLine, int $startSourceColumn, string $text)
     {
         $this->text = $text;
         $this->length = strlen($text);
         $this->index = 0;
+
+        $this->startSourceLine = $startSourceLine;
+        $this->startSourceColumn = $startSourceColumn;
+        // get the positions of every newline character, so we can count them
+        $nlpos = [-1]; // lines are 1-indexed, we always start with a newline
+        $idx = strpos($text, "\n");
+        while ($idx !== false) {
+            $nlpos[] = $idx;
+            $idx = strpos($text, "\n", $idx + 1);
+        }
+        $this->newlinePositions = $nlpos;
+    }
+
+    public int $sourceLine {
+        get {
+            $count = 0;
+            foreach ($this->newlinePositions as $x) {
+                if ($x < $this->index) $count++;
+            }
+            return $this->startSourceLine + $count - 1; // the input line is 1-indexed too, so subtract 1 here.
+        }
+    }
+
+    public int $sourceColumn {
+        get {
+            $last = 0;
+            foreach ($this->newlinePositions as $x) {
+                if ($x < $this->index) $last = $x;
+            }
+            $last += 1;
+            return $this->index - $last + ($last == 0 ? $this->startSourceColumn : 0);
+        }
+    }
+
+    public Position $sourcePosition {
+        get => new Position($this->sourceLine, $this->sourceColumn);
     }
 
     /**

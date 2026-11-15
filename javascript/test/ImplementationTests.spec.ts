@@ -279,7 +279,7 @@ function AssertNodeHierarchy(expected: TestNode, node: INode, lineOffset: number
         expect(node.Column).toBe(expected.pos[1]);
     }
 
-    let expectedType = commonNames[expected.type] ?? node.constructor.name;
+    let expectedType = commonNames[expected.type] ?? expected.type;
     if (expectedType === 'UnprocessablePlainTextNode') expectedType = 'PlainTextNode';
 
     let actualType = node.constructor.name;

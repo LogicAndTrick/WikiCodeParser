@@ -4,6 +4,12 @@ namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 class MetadataNode implements INode
 {
+    public int $line {
+        get => 0;
+    }
+    public int $column {
+        get => 0;
+    }
     public string $key;
     public mixed $value;
 

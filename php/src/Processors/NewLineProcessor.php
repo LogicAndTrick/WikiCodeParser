@@ -47,12 +47,24 @@ class NewLineProcessor implements INodeProcessor
             }
         }
 
+        // track the number of sequential newlines, to collapse 3+ newlines into 2 newlines
+        $numSequentialBreaks = 0;
+
         $ret = [];
         for ($i = 0; $i < count($lines); $i++) {
             $line = $lines[$i];
-            $ret[] = new PlainTextNode($line);
+            if ($line && Util::Trim($line) !== '') {
+                $ret[] = new PlainTextNode($line);
+                $numSequentialBreaks = 0;
+            }
+
             // Don't emit a line break after the final line of the text as it did not end with a newline
-            if ($i < count($lines) - 1) $ret[] = new HtmlNode('<br/>', UnprocessablePlainTextNode::NewLine(), '');
+            if ($i >= count($lines) - 1) continue;
+
+            $numSequentialBreaks++;
+            if ($numSequentialBreaks > 2) continue;
+
+            $ret[] = new HtmlNode('<br/>', UnprocessablePlainTextNode::NewLine(), '');
         }
         return $ret;
     }

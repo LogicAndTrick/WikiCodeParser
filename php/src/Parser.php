@@ -27,25 +27,28 @@ class Parser
     public function ParseResult(string $text, string $scope = ''): ParseResult
     {
         $data = new ParseData();
-        $text = Util::Trim($text);
-        $node = $this->ParseElements($data, $text, $scope);
+        $node = $this->ParseElements($data, $text, $scope, 1);
         $node = $this->RunProcessors(null, $node, $data, $scope);
         $res = new ParseResult();
         $res->content = $node;
         return $res;
     }
 
-    public function ParseElements(ParseData $data, string $text, string $scope): INode
+    public function ParseElements(ParseData $data, string $text, string $scope, int $line = 0): INode
     {
         $data->current_element_depth++;
         $root = new NodeCollection();
 
         // Elements are line-based scopes, an element cannot start in the middle of a line.
+        // this is fine to do for line numbers as long as the \r characters at the end of the line, which is normal.
+        // \r in the middle of a line will cause column positions to be wrong, but column positions are nice-to-haves anyway, so we don't really need to handle that.
         $text = str_replace("\r", '', $text);
 
-        $lines = new Lines($text);
+        $lines = new Lines($line, $text);
         $inscope = Util::OrderByDescending(array_filter($this->configuration->elements, fn(Element $x) => $x->InScope($scope)), fn(Element $x) => $x->priority);
         if ($data->current_element_depth > $this->configuration->max_element_depth) $inscope = [];
+
+        $plainStart = $lines->sourceLine;
         $plain = [];
 
         while ($lines->Next()) {
@@ -60,10 +63,11 @@ class Parser
 
                 // if we have any plain text, create a node for it
                 if (count($plain) > 0) {
-                    $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, Util::Trim(implode("\n", $plain)), $scope, TagParseContext::Block));
+                    $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, implode("\n", $plain), $scope, TagParseContext::Block, $plainStart, 0));
                     $root->nodes[] = UnprocessablePlainTextNode::NewLine(); // Newline before next element
                 }
                 $plain = [];
+                $plainStart = $lines->sourceLine;
 
                 $root->nodes[] = $con;
                 $root->nodes[] = UnprocessablePlainTextNode::NewLine(); // Elements always have a newline after
@@ -75,7 +79,7 @@ class Parser
         }
 
         // parse any plain text that might be left
-        if (count($plain) > 0) $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, Util::Trim(implode("\n", $plain)), $scope, TagParseContext::Block));
+        if (count($plain) > 0) $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, implode("\n", $plain), $scope, TagParseContext::Block, $plainStart, 0));
 
         // Trim off any whitespace nodes at the end
         $shouldTrim = function () use ($root) {
@@ -101,6 +105,8 @@ class Parser
         if ($start) {
             NodeExtensions::Walk($node, function (INode $x) use (&$removedNodes) {
                 if ($x instanceof NodeCollection) return true;
+                if ($x instanceof UnprocessablePlainTextNode && $x->text !== null) $x->text = Util::TrimStart($x->text);
+                if ($x instanceof PlainTextNode && $x->text !== null) $x->text = Util::TrimStart($x->text);
                 if ($x->HasContent()) return false;
                 if ($x instanceof UnprocessablePlainTextNode || $x instanceof PlainTextNode) $removedNodes[] = $x;
                 return true;
@@ -110,6 +116,8 @@ class Parser
         if ($end) {
             NodeExtensions::WalkBack($node, function (INode $x) use (&$removedNodes) {
                 if ($x instanceof NodeCollection) return true;
+                if ($x instanceof UnprocessablePlainTextNode && $x->text !== null) $x->text = Util::TrimEnd($x->text);
+                if ($x instanceof PlainTextNode && $x->text !== null) $x->text = Util::TrimEnd($x->text);
                 if ($x->HasContent()) return false;
                 if ($x instanceof UnprocessablePlainTextNode || $x instanceof PlainTextNode) $removedNodes[] = $x;
                 return true;
@@ -123,21 +131,27 @@ class Parser
         return $node;
     }
 
-    public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context): INode
+    public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context, int $line = 0, int $column = 0): INode
     {
         $data->current_tag_depth++;
 
         // trim 3 or more newlines down to 2 newlines
         $text = preg_replace('/\n{3,}/i', "\n\n", $text) ?? '';
 
-        $state = new State($text);
+        $state = new State($line, $column, $text);
         $root = new NodeCollection();
         $inscope = Util::OrderByDescending(array_filter($this->configuration->tags, fn(Tag $x) => $x->InScope($scope)), fn(Tag $x) => $x->priority);
         if ($data->current_tag_depth > $this->configuration->max_tag_depth) $inscope = [];
 
         while (!$state->Done()) {
+            $pos = $state->sourcePosition;
             $plain = $state->ScanTo('[');
-            if ($plain !== null && $plain !== '') $root->nodes[] = new PlainTextNode($plain);
+            if ($plain !== null && $plain !== '') {
+                $p = new PlainTextNode($plain);
+                $p->line = $pos->line;
+                $p->column = $pos->column;
+                $root->nodes[] = $p;
+            }
             if ($state->Done()) break;
 
             $token = $state->GetToken();
@@ -156,7 +170,12 @@ class Parser
 
             if (!$found) {
                 $plain = $state->Next();
-                if ($plain && $plain != '') $root->nodes[] = new PlainTextNode($plain);
+                if ($plain && $plain != '') {
+                    $p = new PlainTextNode($plain);
+                    $p->line = $pos->line;
+                    $p->column = $pos->column;
+                    $root->nodes[] = $p;
+                }
             }
         }
 

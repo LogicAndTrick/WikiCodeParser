@@ -4,6 +4,12 @@ namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 class NodeCollection implements INode
 {
+    public int $line {
+        get => count($this->nodes) == 0 ? 0 : $this->nodes[0]->line;
+    }
+    public int $column {
+        get => count($this->nodes) == 0 ? 0 : $this->nodes[0]->column;
+    }
     /**
      * @var INode[]
      */

@@ -4,6 +4,12 @@ namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 class RemovedNode implements INode
 {
+    public int $line {
+        get => $this->originalNode->line;
+    }
+    public int $column {
+        get => $this->originalNode->column;
+    }
     public INode $originalNode;
 
     public function __construct(INode $originalNode)

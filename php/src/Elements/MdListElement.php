@@ -16,6 +16,8 @@ use LogicAndTrick\WikiCodeParser\Util;
 
 class ListNode implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     public string $tag;
     public array $items;
 
@@ -65,6 +67,8 @@ class ListNode implements INode
 
 class ListItemNode implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     public INode $content;
     public array $subtrees;
 

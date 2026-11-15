@@ -4,6 +4,9 @@ namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 class HtmlNode implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
+
     public string $htmlBefore;
     public INode $content;
     public string $htmlAfter;

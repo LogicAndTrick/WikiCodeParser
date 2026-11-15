@@ -33,7 +33,7 @@ class QuoteElementTest extends TestCase
     #[DataProvider('getBalanceQuotesData')]
     public function testBalanceQuotes(string $input, string|null $output)
     {
-        $lines = new Lines($input);
+        $lines = new Lines(0, $input);
         $lines->next();
         $this->assertEquals($output, QuoteElement::BalanceQuotes($lines, $name, $rest));
     }
@@ -41,7 +41,7 @@ class QuoteElementTest extends TestCase
     #[DataProvider('getBalanceQuotesData')]
     public function testBalanceQuotesUpperCase(string $input, string|null $output)
     {
-        $lines = new Lines(strtoupper($input));
+        $lines = new Lines(0, strtoupper($input));
         $lines->next();
         $this->assertEquals($output ? strtoupper($output) : null, QuoteElement::BalanceQuotes($lines, $name, $rest));
     }
@@ -51,7 +51,7 @@ class QuoteElementTest extends TestCase
         $input = "[quote=Name]Test[/quote]";
         $output = "Test";
         $author = "Name";
-        $lines = new Lines($input);
+        $lines = new Lines(0, $input);
         $lines->next();
         $result = QuoteElement::BalanceQuotes($lines, $name, $rest);
         $this->assertEquals($output, $result);
@@ -63,7 +63,7 @@ class QuoteElementTest extends TestCase
         $input = "[quote]Test[/quote]ASDF";
         $output = "Test";
         $postfix = "ASDF";
-        $lines = new Lines($input);
+        $lines = new Lines(0, $input);
         $lines->next();
         $result = QuoteElement::BalanceQuotes($lines, $name, $rest);
         $this->assertEquals($output, $result);

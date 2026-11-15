@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\State;
 
 class ImageTag extends Tag
@@ -22,7 +23,7 @@ class ImageTag extends Tag
         $this->isBlock = true;
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text, Position $tagPosition, Position $textPosition): INode|null
     {
         $url = HtmlHelper::AttributeEncode(self::BuildUrl($options, $text));
 

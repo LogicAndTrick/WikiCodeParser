@@ -8,7 +8,7 @@ class StateTest extends TestCase
 {
     public function testScanTo()
     {
-        $st = new State('A B C');
+        $st = new State(0, 0, 'A B C');
         self::assertEquals('A ', $st->ScanTo('B'));
         self::assertEquals('B ', $st->ScanTo('C'));
         self::assertEquals('C', $st->ScanTo('D'));
@@ -16,7 +16,7 @@ class StateTest extends TestCase
 
     public function testSkipWhitespace()
     {
-        $st = new State("A B C");
+        $st = new State(0, 0, "A B C");
         $st->SkipWhitespace();
         self::assertEquals(0, $st->index);
         $st->Seek(1, false);
@@ -29,7 +29,7 @@ class StateTest extends TestCase
 
     public function testPeekTo()
     {
-        $st = new State("A B C");
+        $st = new State(0, 0, "A B C");
         self::assertEquals("A ", $st->PeekTo("B"));
         self::assertEquals("A B ", $st->PeekTo("C"));
         self::assertEquals(null, $st->PeekTo("D"));
@@ -38,7 +38,7 @@ class StateTest extends TestCase
         self::assertEquals("B ", $st->PeekTo("C"));
         self::assertEquals(null, $st->PeekTo("D"));
 
-        $st = new State("Hello, [[AAAAA]] [[BB]]");
+        $st = new State(0, 0, "Hello, [[AAAAA]] [[BB]]");
         self::assertEquals("Hello, ", $st->ScanTo('[['));
         $st->Seek(2, false);
         self::assertEquals("AAAAA", $st->ScanTo(']]'));
@@ -48,7 +48,7 @@ class StateTest extends TestCase
 
     public function testSeek()
     {
-        $st = new State("A B C");
+        $st = new State(0, 0, "A B C");
         self::assertEquals(0, $st->index);
         $st->Seek(1, false);
         self::assertEquals(1, $st->index);
@@ -62,7 +62,7 @@ class StateTest extends TestCase
 
     public function testPeek()
     {
-        $st = new State("A B C");
+        $st = new State(0, 0, "A B C");
         self::assertEquals("A ", $st->Peek(2));
         self::assertEquals("A B ", $st->Peek(4));
         self::assertEquals("A B C", $st->Peek(6));
@@ -74,7 +74,7 @@ class StateTest extends TestCase
 
     public function testNext()
     {
-        $st = new State("A B C");
+        $st = new State(0, 0, "A B C");
         self::assertEquals('A', $st->Next());
         self::assertEquals(' ', $st->Next());
         self::assertEquals('B', $st->Next());
@@ -86,11 +86,11 @@ class StateTest extends TestCase
 
     public function testGetToken()
     {
-        self::assertEquals(null, (new State("none"))->GetToken());
-        self::assertEquals("some", (new State("[some]"))->GetToken());
-        self::assertEquals("some", (new State("[some=thing]"))->GetToken());
-        self::assertEquals("some", (new State("[some thing]"))->GetToken());
-        $st = new State("a [some] b");
+        self::assertEquals(null, (new State(0, 0, "none"))->GetToken());
+        self::assertEquals("some", (new State(0, 0, "[some]"))->GetToken());
+        self::assertEquals("some", (new State(0, 0, "[some=thing]"))->GetToken());
+        self::assertEquals("some", (new State(0, 0, "[some thing]"))->GetToken());
+        $st = new State(0, 0, "a [some] b");
         $st->ScanTo("[");
         self::assertEquals(2, $st->index);
         self::assertEquals("some", $st->GetToken());

@@ -7,11 +7,14 @@ use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\State;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class SpoilerNode implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     private string $visibleText;
     private INode $spoilerContent;
 
@@ -61,7 +64,7 @@ class SpoilerTag extends Tag
         $this->allOptionsInMain = true;
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text, Position $tagPosition, Position $textPosition): INode|null
     {
         $visibleText = 'Spoiler';
         if (isset($options['text']) && strlen($options['text']) > 0) $visibleText = $options['text'];

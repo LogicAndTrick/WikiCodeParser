@@ -14,6 +14,8 @@ use LogicAndTrick\WikiCodeParser\Util;
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class HeadingNode implements INode
 {
+    public int $line = 0;
+    public int $column = 0;
     public int $level;
     public string $id;
     public INode $text;

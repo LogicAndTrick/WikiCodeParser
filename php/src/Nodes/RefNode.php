@@ -6,6 +6,12 @@ use LogicAndTrick\WikiCodeParser\ParseData;
 
 class RefNode implements INode
 {
+    public int $line {
+        get => $this->GetNode()->line;
+    }
+    public int $column {
+        get => $this->GetNode()->column;
+    }
     public ParseData $data;
     public string $name;
 

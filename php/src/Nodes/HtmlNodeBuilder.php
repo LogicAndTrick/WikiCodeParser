@@ -16,6 +16,8 @@ class HtmlNodeBuilder
     private array $styles;
 
     public string $tag;
+    public int $line;
+    public int $column;
 
     public function GetAttributes(): array
     {
@@ -49,12 +51,21 @@ class HtmlNodeBuilder
     {
         if (!HtmlHelper::ValidateTagName($tag)) throw new \InvalidArgumentException('Invalid tag.');
 
+        $this->line = 0;
+        $this->column = 0;
         $this->tag = $tag;
         $this->attributes = [];
         $this->props = [];
         $this->classes = [];
         $this->styles = [];
         $this->contents = [];
+    }
+
+    public function Position(int $line, int $column): HtmlNodeBuilder
+    {
+        $this->line = $line;
+        $this->column = $column;
+        return $this;
     }
 
     public function If(bool $test, callable $action): HtmlNodeBuilder
@@ -183,6 +194,8 @@ class HtmlNodeBuilder
         $node->isBlockNode = $isBlockNode;
         $node->plainBefore = $plainBefore;
         $node->plainAfter = $plainAfter;
+        $node->line = $this->line;
+        $node->column = $this->column;
         return $node;
     }
 }

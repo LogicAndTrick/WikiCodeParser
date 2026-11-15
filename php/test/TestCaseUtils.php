@@ -98,7 +98,7 @@ class TestCaseUtils
         }
     }
 
-    private static function GetTestCaseDirectory(string $folder): string
+    public static function GetTestCaseDirectory(string $folder): string
     {
         return __DIR__ . '/../../tests/' . $folder;
     }
@@ -107,7 +107,7 @@ class TestCaseUtils
     {
         $dir = TestCaseUtils::GetTestCaseDirectory($folder);
         $files = scandir($dir);
-        return array_filter($files, fn(string $s) => $s != '..' && $s != '.' && !str_starts_with($s, 'ignored'));
+        return array_map(fn(string $s) => pathinfo($s, PATHINFO_FILENAME), array_filter($files, fn(string $s) => $s != '..' && $s != '.' && !str_starts_with($s, '_')));
     }
 
     public static function RunTestCase(ParserConfiguration $config, string $folder, string $name, bool $split = false): void

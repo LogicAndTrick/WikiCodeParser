@@ -6,6 +6,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
@@ -79,6 +80,7 @@ class Tag
         // a null token requires the superclass to override this method
         if (!$this->token) return null;
 
+        $tagPos = $state->sourcePosition;
         $index = $state->index;
         $tokenLength = strlen($this->token);
 
@@ -101,6 +103,8 @@ class Tag
             }
         }
 
+        $textPos = $state->sourcePosition;
+
         if ($this->isNested) {
             $stack = 1;
             $text = '';
@@ -112,7 +116,7 @@ class Tag
                 if ($stack == 0) {
                     $state->Seek(strlen($this->token) + 3, false);
                     if (!$this->Validate($options, $text)) break;
-                    return $this->FormatResult($parser, $data, $state, $scope, $options, $text);
+                    return $this->FormatResult($parser, $data, $state, $scope, $options, $text, $tagPos, $textPos);
                 }
 
                 $text .= $state->Next();
@@ -124,7 +128,7 @@ class Tag
             $text = $state->ScanTo('[/' . $this->token . ']', true);
             if (strtolower(trim($state->Peek($tokenLength + 3))) == '[/' . strtolower($this->token) . ']' && $this->Validate($options, $text)) {
                 $state->Seek(strlen($this->token) + 3, false);
-                return $this->FormatResult($parser, $data, $state, $scope, $options, $text);
+                return $this->FormatResult($parser, $data, $state, $scope, $options, $text, $tagPos, $textPos);
             } else {
                 $state->Seek($index, true);
                 return null;
@@ -137,15 +141,17 @@ class Tag
         return true;
     }
 
-    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text): INode|null
+    public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text, Position $tagPosition, Position $textPosition): INode|null
     {
         $before = '<' . $this->element;
         if ($this->elementClass) $before .= ' class="' . $this->elementClass . '"';
         $before .= '>';
         $after = '</' . $this->element . '>';
-        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());
+        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column);
         $ret = new HtmlNode($before, $content, $after);
         $ret->isBlockNode = $this->isBlock;
+        $ret->line = $tagPosition->line;
+        $ret->column = $tagPosition->column;
         return $ret;
     }
 

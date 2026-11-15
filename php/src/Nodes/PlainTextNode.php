@@ -16,6 +16,8 @@ class PlainTextNode implements INode
         return new PlainTextNode("\n");
     }
 
+    public int $line = 0;
+    public int $column = 0;
     public string $text;
 
     public function __construct(string $text)

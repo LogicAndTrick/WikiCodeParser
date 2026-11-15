@@ -11,10 +11,16 @@ class Lines
 
     public int $index;
 
-    public function __construct(string $content)
+    private int $startSourceLine;
+    public int $sourceLine {
+        get => $this->startSourceLine + max(0, $this->index);
+    }
+
+    public function __construct(int $startSourceLine, string $content)
     {
         $this->content = explode("\n", $content);
         $this->index = -1;
+        $this->startSourceLine = $startSourceLine;
     }
     public function Back(): void
     {
@@ -35,5 +41,9 @@ class Lines
     public function SetCurrent(int $index): void
     {
         $this->index = $index;
+    }
+    public function IsEmpty(): bool
+    {
+        return Util::Trim($this->Value()) === '';
     }
 }
