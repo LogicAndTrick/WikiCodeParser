@@ -22,14 +22,14 @@
           {
             "name": "li",
             "type": "html",
-            "pos": [1, 8],
+            "pos": [2, 0],
             "html": ["<li>", "</li>\n"],
             "plain": ["* ", "\n"],
             "children": [
               {
                 "name": "test",
                 "type": "plain",
-                "pos": [1, 11],
+                "pos": [2, 3],
                 "text": "test"
               }
             ]

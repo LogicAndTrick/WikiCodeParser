@@ -45,7 +45,7 @@
                       ""
                     ],
                     "plain": ["[Image]", ""],
-                    "children": [{ "type": "list", "pos": [1, 0] }]
+                    "children": [{ "type": "list", "pos": [0, 0] }]
                   },
                   {
                     "name": "caption",

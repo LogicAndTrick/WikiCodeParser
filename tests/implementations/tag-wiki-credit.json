@@ -10,7 +10,7 @@
   "nodes": {
     "name": "root",
     "type": "list",
-    "pos": [1, 0],
+    "pos": [0, 0],
     "children": [
       {
         "name": "metadata",
