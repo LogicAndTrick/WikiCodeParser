@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { Trim } from '../Util';
 import { Tag } from './Tag';
@@ -16,7 +17,16 @@ export class PreTag extends Tag {
         this.IsBlock = true;
     }
 
-    public override FormatResult(_parser: Parser, _data: ParseData, _state: State, _scope: string, _options: Record<string, string>, text: string): INode {
+    public override FormatResult(
+        _parser: Parser,
+        _data: ParseData,
+        _state: State,
+        _scope: string,
+        _options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += '><code>';

@@ -3,6 +3,7 @@ import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { Tag } from './Tag';
 
@@ -15,7 +16,16 @@ export class YoutubeTag extends Tag {
         this.Options = ['id'];
     }
 
-    public override FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
+    public override FormatResult(
+        parser: Parser,
+        data: ParseData,
+        state: State,
+        scope: string,
+        options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         let id = text;
         if (options['id']) id = options['id'];
 

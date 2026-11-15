@@ -3,6 +3,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { Tag } from './Tag';
 
@@ -13,7 +14,16 @@ export class CodeTag extends Tag {
         this.Element = 'code';
     }
 
-    public override FormatResult(_parser: Parser, _data: ParseData, _state: State, _scope: string, _options: Record<string, string>, text: string): INode {
+    public override FormatResult(
+        _parser: Parser,
+        _data: ParseData,
+        _state: State,
+        _scope: string,
+        _options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         return new HtmlNode('<code>', new UnprocessablePlainTextNode(text), '</code>');
     }
 }

@@ -1,6 +1,9 @@
 import { INode } from './INode';
 
 export class HtmlNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
+
     public HtmlBefore: string;
     public Content: INode;
     public HtmlAfter: string;

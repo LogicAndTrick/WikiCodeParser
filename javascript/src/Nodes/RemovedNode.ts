@@ -1,6 +1,12 @@
 import { INode } from './INode';
 
 export class RemovedNode implements INode {
+    public get Line(): number {
+        return this.OriginalNode.Line;
+    }
+    public get Column(): number {
+        return this.OriginalNode.Column;
+    }
     public OriginalNode: INode;
 
     constructor(originalNode: INode) {

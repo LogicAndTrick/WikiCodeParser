@@ -10,7 +10,7 @@ import { ParseResult } from './ParseResult';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { State } from './State';
 import { TagParseContext } from './TagParseContext';
-import { OrderByDescending, Trim } from './Util';
+import { OrderByDescending, TrimEnd, TrimStart } from './Util';
 
 export class Parser {
     public Configuration: ParserConfiguration;
@@ -21,27 +21,30 @@ export class Parser {
 
     public ParseResult(text: string, scope = ''): ParseResult {
         const data = new ParseData();
-        text = Trim(text);
-        let node = this.ParseElements(data, text, scope);
+        let node = this.ParseElements(data, text, scope, 1);
         node = this.RunProcessors(null, node, data, scope);
         const res = new ParseResult();
         res.Content = node;
         return res;
     }
 
-    public ParseElements(data: ParseData, text: string, scope: string): INode {
+    public ParseElements(data: ParseData, text: string, scope: string, line: number = 0): INode {
         data.CurrentElementDepth++;
         const root = new NodeCollection();
 
         // Elements are line-based scopes, an element cannot start in the middle of a line.
+        // this is fine to do for line numbers as long as the \r characters at the end of the line, which is normal.
+        // \r in the middle of a line will cause column positions to be wrong, but column positions are nice-to-haves anyway, so we don't really need to handle that.
         text = text.replace(/\r/g, '');
 
-        const lines = new Lines(text);
+        const lines = new Lines(line, text);
         const inscope = OrderByDescending(
             this.Configuration.Elements.filter(x => x.InScope(scope)),
             x => x.Priority
         );
         if (data.CurrentElementDepth > this.Configuration.MaxElementDepth) inscope.splice(0, inscope.length);
+
+        let plainStart = lines.SourceLine;
         const plain: string[] = [];
 
         while (lines.Next()) {
@@ -55,10 +58,11 @@ export class Parser {
 
                 // if we have any plain text, create a node for it
                 if (plain.length > 0) {
-                    root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, Trim(plain.join('\n')), scope, TagParseContext.Block)));
+                    root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, plain.join('\n'), scope, TagParseContext.Block, plainStart, 0)));
                     root.Nodes.push(UnprocessablePlainTextNode.NewLine()); // Newline before next element
                 }
                 plain.splice(0, plain.length);
+                plainStart = lines.SourceLine;
 
                 root.Nodes.push(con);
                 root.Nodes.push(UnprocessablePlainTextNode.NewLine()); // Elements always have a newline after
@@ -70,7 +74,7 @@ export class Parser {
         }
 
         // parse any plain text that might be left
-        if (plain.length > 0) root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, Trim(plain.join('\n')), scope, TagParseContext.Block)));
+        if (plain.length > 0) root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, plain.join('\n'), scope, TagParseContext.Block, plainStart, 0)));
 
         // Trim off any whitespace nodes at the end
         const shouldTrim = () => {
@@ -96,6 +100,8 @@ export class Parser {
         if (start) {
             NodeExtensions.Walk(node, x => {
                 if (x instanceof NodeCollection) return true;
+                if (x instanceof UnprocessablePlainTextNode && x.Text != null) x.Text = TrimStart(x.Text ?? '');
+                if (x instanceof PlainTextNode && x.Text != null) x.Text = TrimStart(x.Text ?? '');
                 if (x.HasContent()) return false;
                 if (x instanceof UnprocessablePlainTextNode || x instanceof PlainTextNode) removeNodes.push(x);
                 return true;
@@ -105,6 +111,8 @@ export class Parser {
         if (end) {
             NodeExtensions.WalkBack(node, x => {
                 if (x instanceof NodeCollection) return true;
+                if (x instanceof UnprocessablePlainTextNode && x.Text != null) x.Text = TrimEnd(x.Text ?? '');
+                if (x instanceof PlainTextNode && x.Text != null) x.Text = TrimEnd(x.Text ?? '');
                 if (x.HasContent()) return false;
                 if (x instanceof UnprocessablePlainTextNode || x instanceof PlainTextNode) removeNodes.push(x);
                 return true;
@@ -118,13 +126,10 @@ export class Parser {
         return node;
     }
 
-    public ParseTags(data: ParseData, text: string, scope: string, context: TagParseContext): INode {
+    public ParseTags(data: ParseData, text: string, scope: string, context: TagParseContext, line: number = 0, column: number = 0): INode {
         data.CurrentTagDepth++;
 
-        // trim 3 or more newlines down to 2 newlines
-        text = text.replace(/\n{3,}/g, '\n\n');
-
-        const state = new State(text);
+        const state = new State(line, column, text);
         const root = new NodeCollection();
         const inscope = OrderByDescending(
             this.Configuration.Tags.filter(x => x.InScope(scope)),
@@ -133,8 +138,14 @@ export class Parser {
         if (data.CurrentTagDepth > this.Configuration.MaxTagDepth) inscope.splice(0, inscope.length);
 
         while (!state.Done) {
+            const pos = state.SourcePosition;
             let plain = state.ScanTo('[');
-            if (plain && plain != '') root.Nodes.push(new PlainTextNode(plain));
+            if (plain && plain != '') {
+                const p = new PlainTextNode(plain);
+                p.Line = pos.Line;
+                p.Column = pos.Column;
+                root.Nodes.push(p);
+            }
             if (state.Done) break;
 
             const token = state.GetToken();
@@ -153,7 +164,12 @@ export class Parser {
 
             if (!found) {
                 plain = state.Next();
-                if (plain && plain != '') root.Nodes.push(new PlainTextNode(plain));
+                if (plain && plain != '') {
+                    const p = new PlainTextNode(plain);
+                    p.Line = pos.Line;
+                    p.Column = pos.Column;
+                    root.Nodes.push(p);
+                }
             }
         }
 

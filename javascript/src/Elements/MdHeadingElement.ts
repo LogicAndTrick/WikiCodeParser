@@ -8,6 +8,8 @@ import { Trim } from '../Util';
 import { Element } from './Element';
 
 class HeadingNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Level: number;
     public ID: string;
     public Text: INode;

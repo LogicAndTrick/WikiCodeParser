@@ -10,6 +10,9 @@ export class HtmlNodeBuilder {
     private readonly _styles: Map<string, string>;
 
     public readonly tag: string;
+    public line: number;
+    public column: number;
+
     public get attributes(): ReadonlyMap<string, string> {
         return this._attributes;
     }
@@ -31,12 +34,20 @@ export class HtmlNodeBuilder {
     constructor(tag: string) {
         if (!HtmlHelper.ValidateTagName(tag)) throw new Error('Invalid tag.');
 
+        this.line = 0;
+        this.column = 0;
         this.tag = tag;
         this._attributes = new Map<string, string>();
         this._props = [];
         this._classes = new Set<string>();
         this._styles = new Map<string, string>();
         this.contents = [];
+    }
+
+    public position(line: number, column: number): HtmlNodeBuilder {
+        this.line = line;
+        this.column = column;
+        return this;
     }
 
     public if(test: boolean, action: (builder: HtmlNodeBuilder) => void): HtmlNodeBuilder {
@@ -152,6 +163,8 @@ export class HtmlNodeBuilder {
         node.IsBlockNode = isBlockNode;
         node.PlainBefore = plainBefore;
         node.PlainAfter = plainAfter;
+        node.Line = this.line;
+        node.Column = this.column;
         return node;
     }
 }

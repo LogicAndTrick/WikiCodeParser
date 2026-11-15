@@ -8,6 +8,8 @@ import { ParseIntStrict, TrimEnd } from '../Util';
 import { Element } from './Element';
 
 class ColumnNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Width: number;
     public Content: INode;
     constructor(width: number, content: INode) {

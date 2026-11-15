@@ -1,5 +1,6 @@
 import { expect } from '@jest/globals';
 import DOMPurify, { RemovedAttribute, RemovedElement } from 'dompurify';
+import { readdirSync } from 'fs';
 import { JSDOM } from 'jsdom';
 
 const jsdom = new JSDOM('');
@@ -23,4 +24,18 @@ export function sanitise(html: string): string {
         .map(r => (r.element ? `removed element <${r.element.nodeName}>` : `removed attribute '${r.attribute?.name}' from <${r.from?.nodeName}>`));
     expect(removed).toEqual([]);
     return ret;
+}
+
+export function GetTestCaseDirectory(folder: string): string {
+    return `${__dirname}/../../tests/${folder}`;
+}
+
+export function GetTestCaseNames(folder: string): string[] {
+    const dir = GetTestCaseDirectory(folder);
+    return readdirSync(dir)
+        .filter(x => !x.startsWith('_'))
+        .map(x => {
+            const i = x.lastIndexOf('.');
+            return i >= 0 ? x.substring(0, i) : x;
+        });
 }

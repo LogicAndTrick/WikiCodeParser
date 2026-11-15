@@ -1,8 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { Parser } from '../src/Parser';
 import { ParserConfiguration } from '../src/ParserConfiguration';
-import { sanitise } from './Util';
+import { GetTestCaseDirectory, GetTestCaseNames, sanitise } from './Util';
 
 function AssertSame(name: string, expected: string, actual: string, split: boolean): void {
     if (split) {
@@ -37,15 +37,6 @@ function Test(config: ParserConfiguration, input: string, expectedOutput: string
     if (expectedMeta) {
         expect(resultMeta).toBe(expectedMeta);
     }
-}
-
-function GetTestCaseDirectory(folder: string): string {
-    return `${__dirname}/../../tests/${folder}`;
-}
-
-function GetTestCaseNames(folder: string): string[] {
-    const dir = GetTestCaseDirectory(folder);
-    return readdirSync(dir).filter(x => !x.startsWith('ignored'));
 }
 
 function RunTestCase(config: ParserConfiguration, folder: string, name: string, split = false) {

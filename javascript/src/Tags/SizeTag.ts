@@ -2,6 +2,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { FontTag } from './FontTag';
 import { Tag } from './Tag';
@@ -16,7 +17,16 @@ export class SizeTag extends Tag {
         this.AllOptionsInMain = true;
     }
 
-    public override FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
+    public override FormatResult(
+        parser: Parser,
+        data: ParseData,
+        state: State,
+        scope: string,
+        options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         if (options['size'] && FontTag.IsValidSize(options['size'])) {

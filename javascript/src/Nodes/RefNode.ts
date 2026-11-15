@@ -3,6 +3,8 @@ import { INode } from './INode';
 import { UnprocessablePlainTextNode } from './UnprocessablePlainTextNode';
 
 export class RefNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Data: ParseData;
     public Name: string;
 

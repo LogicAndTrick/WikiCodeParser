@@ -1,3 +1,5 @@
+import { Position } from './Position';
+
 export class State {
     public readonly Text: string;
     public get Length(): number {
@@ -8,9 +10,35 @@ export class State {
         return this.Index >= this.Length;
     }
 
-    public constructor(text: string) {
+    private readonly newlinePositions: Array<number>;
+    private readonly startSourceLine: number;
+    private readonly startSourceColumn: number;
+
+    public constructor(startSourceLine: number, startSourceColumn: number, text: string) {
         this.Text = text;
         this.Index = 0;
+
+        this.startSourceLine = startSourceLine;
+        this.startSourceColumn = startSourceColumn;
+        // get the positions of every newline character, so we can count them
+        const nlpos: number[] = [-1]; // lines are 1-indexed, we always start with a newline
+        let idx = text.indexOf('\n');
+        while (idx >= 0) {
+            nlpos.push(idx);
+            idx = text.indexOf('\n', idx + 1);
+        }
+        this.newlinePositions = nlpos;
+    }
+
+    public get SourceLine(): number {
+        return this.startSourceLine + this.newlinePositions.filter(x => x < this.Index).length - 1; // the input line is 1-indexed too, so subtract 1 here.
+    }
+    public get SourceColumn(): number {
+        const last = (this.newlinePositions.filter(x => x < this.Index).pop() ?? 0) + 1;
+        return this.Index - last + (last == 0 ? this.startSourceColumn : 0);
+    }
+    public get SourcePosition(): Position {
+        return new Position(this.SourceLine, this.SourceColumn);
     }
 
     public ScanTo(find: string, ignoreCase = false): string {

@@ -2,6 +2,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
 import { Trim } from '../Util';
@@ -62,6 +63,7 @@ export class Tag {
         // a null token requires the superclass to override this method
         if (!this.Token) return null;
 
+        const tagPos = state.SourcePosition;
         const index = state.Index;
         const tokenLength = this.Token.length;
 
@@ -84,6 +86,8 @@ export class Tag {
             }
         }
 
+        const textPos = state.SourcePosition;
+
         if (this.IsNested) {
             let stack = 1;
             let text = '';
@@ -104,7 +108,7 @@ export class Tag {
                 if (stack == 0) {
                     state.Seek(this.Token.length + 3, false);
                     if (!this.Validate(options, text)) break;
-                    return this.FormatResult(parser, data, state, scope, options, text);
+                    return this.FormatResult(parser, data, state, scope, options, text, tagPos, textPos);
                 }
 
                 text += state.Next();
@@ -116,7 +120,7 @@ export class Tag {
             const text = state.ScanTo('[/' + this.Token + ']', true);
             if (state.Peek(tokenLength + 3).toLowerCase() == '[/' + this.Token.toLowerCase() + ']' && this.Validate(options, text)) {
                 state.Seek(this.Token.length + 3, false);
-                return this.FormatResult(parser, data, state, scope, options, text);
+                return this.FormatResult(parser, data, state, scope, options, text, tagPos, textPos);
             } else {
                 state.Seek(index, true);
                 return null;
@@ -129,14 +133,25 @@ export class Tag {
         return true;
     }
 
-    public FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
+    public FormatResult(
+        parser: Parser,
+        data: ParseData,
+        state: State,
+        scope: string,
+        options: Record<string, string>,
+        text: string,
+        tagPosition: Position,
+        textPosition: Position
+    ): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += '>';
         const after = '</' + this.Element + '>';
-        const content = parser.ParseTags(data, text, scope, this.TagContext());
+        const content = parser.ParseTags(data, text, scope, this.TagContext(), textPosition.Line, textPosition.Column);
         const ret = new HtmlNode(before, content, after);
         ret.IsBlockNode = this.IsBlock === true;
+        ret.Line = tagPosition.Line;
+        ret.Column = tagPosition.Column;
         return ret;
     }
 

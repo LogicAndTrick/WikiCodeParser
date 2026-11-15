@@ -9,6 +9,8 @@ export class UnprocessablePlainTextNode implements INode {
         return new UnprocessablePlainTextNode('\n');
     }
 
+    public Line: number = 0;
+    public Column: number = 0;
     public Text: string;
 
     constructor(text: string) {

@@ -1,10 +1,21 @@
+import { Util } from '.';
+
+/**
+ * Line-based state tracker for a multi-line string
+ */
 export class Lines {
     public Content: string[];
     public Index: number;
 
-    constructor(content: string) {
+    private readonly startSourceLine: number;
+    public get SourceLine(): number {
+        return this.startSourceLine + Math.max(0, this.Index);
+    }
+
+    constructor(startSourceLine: number, content: string) {
         this.Content = content.split('\n');
         this.Index = -1;
+        this.startSourceLine = startSourceLine;
     }
 
     public Back() {
@@ -21,5 +32,8 @@ export class Lines {
     }
     public SetCurrent(index: number) {
         this.Index = index;
+    }
+    public IsEmpty(): boolean {
+        return Util.Trim(this.Value()).length === 0;
     }
 }

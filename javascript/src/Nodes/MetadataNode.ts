@@ -1,6 +1,8 @@
 import { INode } from './INode';
 
 export class MetadataNode implements INode {
+    public readonly Line: number = 0;
+    public readonly Column: number = 0;
     public Key: string;
     public Value: any;
 

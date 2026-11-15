@@ -3,10 +3,13 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { Tag } from './Tag';
 
 class SpoilerNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     private VisibleText: string;
     private SpoilerContent: INode;
 
@@ -48,7 +51,16 @@ export class SpoilerTag extends Tag {
         this.AllOptionsInMain = true;
     }
 
-    public FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
+    public FormatResult(
+        parser: Parser,
+        data: ParseData,
+        state: State,
+        scope: string,
+        options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         let visibleText = 'Spoiler';
         if (options['text'] && options['text'].length > 0) visibleText = options['text'];
 

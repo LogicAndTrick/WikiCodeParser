@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { Trim } from '../Util';
 import { Tag } from './Tag';
@@ -17,7 +18,16 @@ export class LinkTag extends Tag {
         this.Options = ['url'];
     }
 
-    public FormatResult(parser: Parser, data: ParseData, state: State, scope: string, options: Record<string, string>, text: string): INode {
+    public FormatResult(
+        parser: Parser,
+        data: ParseData,
+        state: State,
+        scope: string,
+        options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         const url = HtmlHelper.AttributeEncode(this.BuildUrl(options, text));
 
         const classes = [];

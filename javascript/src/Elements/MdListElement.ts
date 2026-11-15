@@ -9,6 +9,8 @@ import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 
 class ListNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Tag: string;
     public Items: ListItemNode[];
     constructor(tag: string, ...items: ListItemNode[]) {
@@ -43,6 +45,8 @@ class ListNode implements INode {
 }
 
 class ListItemNode implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Content: INode;
     public Subtrees: ListNode[];
     constructor(content: INode) {

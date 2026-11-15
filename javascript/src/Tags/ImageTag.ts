@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { Tag } from './Tag';
 
@@ -17,7 +18,16 @@ export class ImageTag extends Tag {
         this.IsBlock = true;
     }
 
-    public FormatResult(_parser: Parser, _data: ParseData, state: State, _scope: string, options: Record<string, string>, text: string): INode {
+    public FormatResult(
+        _parser: Parser,
+        _data: ParseData,
+        state: State,
+        _scope: string,
+        options: Record<string, string>,
+        text: string,
+        _tagPosition: Position,
+        _textPosition: Position
+    ): INode {
         const url = HtmlHelper.AttributeEncode(ImageTag.BuildUrl(options, text));
 
         const classes = ['embedded', 'image'];

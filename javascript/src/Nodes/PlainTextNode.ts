@@ -6,6 +6,8 @@ export class PlainTextNode implements INode {
         return new PlainTextNode('');
     }
 
+    public Line: number = 0;
+    public Column: number = 0;
     public Text: string;
 
     constructor(text: string) {

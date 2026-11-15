@@ -1,6 +1,12 @@
 import { INode } from './INode';
 
 export class NodeCollection implements INode {
+    public get Line(): number {
+        return this.Nodes.length == 0 ? 0 : this.Nodes[0].Line;
+    }
+    public get Column(): number {
+        return this.Nodes.length == 0 ? 0 : this.Nodes[0].Column;
+    }
     public Nodes: INode[];
 
     constructor(...nodes: INode[]) {

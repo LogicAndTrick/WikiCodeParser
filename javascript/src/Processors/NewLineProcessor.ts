@@ -4,7 +4,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
-import { TrimEnd, TrimStart } from '../Util';
+import { Trim, TrimEnd, TrimStart } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
 export class NewLineProcessor implements INodeProcessor {
@@ -28,12 +28,24 @@ export class NewLineProcessor implements INodeProcessor {
             }
         }
 
+        // track the number of sequential newlines, to collapse 3+ newlines into 2 newlines
+        let numSequentialBreaks = 0;
+
         const ret: INode[] = [];
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
-            ret.push(new PlainTextNode(line));
+            if (line && Trim(line) !== '') {
+                ret.push(new PlainTextNode(line));
+                numSequentialBreaks = 0;
+            }
+
             // Don't emit a line break after the final line of the text as it did not end with a newline
-            if (i < lines.length - 1) ret.push(new HtmlNode('<br/>', UnprocessablePlainTextNode.NewLine(), ''));
+            if (i >= lines.length - 1) continue;
+
+            numSequentialBreaks++;
+            if (numSequentialBreaks > 2) continue;
+
+            ret.push(new HtmlNode('<br/>', UnprocessablePlainTextNode.NewLine(), ''));
         }
         return ret;
     }

@@ -10,6 +10,8 @@ import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
 
 class TableCell implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Type: string;
     public Contents: INode;
 
@@ -41,6 +43,8 @@ class TableCell implements INode {
 }
 
 class TableRow implements INode {
+    public Line: number = 0;
+    public Column: number = 0;
     public Cells: TableCell[];
 
     constructor(...cells: TableCell[]) {

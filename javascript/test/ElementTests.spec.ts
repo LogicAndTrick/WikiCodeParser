@@ -24,14 +24,14 @@ describe('QuoteElementTest', () => {
     const data = Array.from(getBalanceQuotesData());
 
     test.each(data)('BalanceQuotesTest (%s)', (input, output) => {
-        const lines = new Lines(input);
+        const lines = new Lines(0, input);
         lines.Next();
         const { text } = QuoteElement.BalanceQuotes(lines);
         expect(text).toBe(output);
     });
 
     test.each(data)('BalanceQuotesUpperCaseTest (%s)', (input, output) => {
-        const lines = new Lines(input.toUpperCase());
+        const lines = new Lines(0, input.toUpperCase());
         lines.Next();
         const { text } = QuoteElement.BalanceQuotes(lines);
         expect(text).toBe(output === null ? null : output.toUpperCase());
@@ -41,7 +41,7 @@ describe('QuoteElementTest', () => {
         const input = '[quote=Name]Test[/quote]';
         const output = 'Test';
         const author = 'Name';
-        const lines = new Lines(input);
+        const lines = new Lines(0, input);
         lines.Next();
         const { text: result, author: name } = QuoteElement.BalanceQuotes(lines);
         expect(result).toBe(output);
@@ -52,7 +52,7 @@ describe('QuoteElementTest', () => {
         const input = '[quote]Test[/quote]ASDF';
         const output = 'Test';
         const postfix = 'ASDF';
-        const lines = new Lines(input);
+        const lines = new Lines(0, input);
         lines.Next();
         const { text: result, postfix: rest } = QuoteElement.BalanceQuotes(lines);
         expect(result).toBe(output);
