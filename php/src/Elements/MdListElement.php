@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
 
@@ -174,7 +175,7 @@ class MdListElement extends Element
         $current = $lines->Current();
 
         // Put all the subtrees into a dummy item node
-        $item = new ListItemNode(PlainTextNode::Empty());
+        $item = new ListItemNode(PlainTextNode::Empty(Position::Zero()));
         $this->CreateListItems($item, '', $parser, $data, $lines, $scope);
 
         if (count($item->subtrees) == 0) {
@@ -230,7 +231,7 @@ class MdListElement extends Element
                     $name = $res[1];
                     $pt = new RefNode($data, $name);
                 } else {
-                    $pt = $parser->ParseElements($data, $value, $scope);
+                    $pt = $parser->ParseElements($data, $value, $scope, 0);
                 }
 
                 $lastItemNode = new ListItemNode($pt);

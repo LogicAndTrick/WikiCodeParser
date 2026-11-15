@@ -36,9 +36,9 @@ class LinkTag extends Tag
         $after = "</$element>";
 
         $content = isset($options['url'])
-            ? $parser->ParseTags($data, $text, $scope, $this->TagContext())
-            : new UnprocessablePlainTextNode($text);
-        return new HtmlNode($before, $content, $after);
+            ? $parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column)
+            : new UnprocessablePlainTextNode($textPosition, $text);
+        return new HtmlNode($tagPosition, $before, $content, $after);
     }
 
     public function Validate(array $options, string $text): bool

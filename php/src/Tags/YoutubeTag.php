@@ -29,7 +29,7 @@ class YoutubeTag extends Tag
         $classes = ['embedded', 'video'];
         if ($this->elementClass != null) $classes[] = $this->elementClass;
 
-        $captionNode = new HtmlNode('', PlainTextNode::Empty(), '');
+        $captionNode = new HtmlNode($tagPosition, '', PlainTextNode::Empty($tagPosition), '');
         $captionNode->plainBefore = '[YouTube video] ';
         $captionNode->plainAfter = "\n";
 
@@ -42,7 +42,7 @@ class YoutubeTag extends Tag
             '   </div>' .
             '  </div>';
         $after = '</div></div>';
-        $ret = new HtmlNode($before, $captionNode, $after);
+        $ret = new HtmlNode($tagPosition, $before, $captionNode, $after);
         $ret->isBlockNode = true;
         return $ret;
     }

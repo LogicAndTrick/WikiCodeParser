@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
@@ -55,9 +56,9 @@ class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
 
             if ($child instanceof HtmlNode && $child->isBlockNode) {
                 $trimStart = true;
-                $ret[] = UnprocessablePlainTextNode::NewLine();
+                $ret[] = UnprocessablePlainTextNode::NewLine(Position::Zero());
                 $ret[] = $child;
-                $ret[] = UnprocessablePlainTextNode::NewLine();
+                $ret[] = UnprocessablePlainTextNode::NewLine(Position::Zero());
             } else {
                 $trimStart = false;
                 $ret[] = $child;

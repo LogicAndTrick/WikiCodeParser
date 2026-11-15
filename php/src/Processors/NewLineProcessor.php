@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class NewLineProcessor implements INodeProcessor
@@ -54,7 +55,7 @@ class NewLineProcessor implements INodeProcessor
         for ($i = 0; $i < count($lines); $i++) {
             $line = $lines[$i];
             if ($line && Util::Trim($line) !== '') {
-                $ret[] = new PlainTextNode($line);
+                $ret[] = new PlainTextNode(Position::Zero(), $line);
                 $numSequentialBreaks = 0;
             }
 
@@ -64,7 +65,7 @@ class NewLineProcessor implements INodeProcessor
             $numSequentialBreaks++;
             if ($numSequentialBreaks > 2) continue;
 
-            $ret[] = new HtmlNode('<br/>', UnprocessablePlainTextNode::NewLine(), '');
+            $ret[] = new HtmlNode(Position::Zero(), '<br/>', UnprocessablePlainTextNode::NewLine(Position::Zero()), '');
         }
         return $ret;
     }

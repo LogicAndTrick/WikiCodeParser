@@ -32,6 +32,7 @@ class WikiFileTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
 
         $tag = self::GetTag($state);
@@ -63,9 +64,9 @@ class WikiFileTag extends Tag
         $after = '</a></span>';
 
         $content = new NodeCollection();
-        $content->nodes[] = new MetadataNode('WikiUpload', $page);
-        $content->nodes[] = new PlainTextNode($text);
+        $content->nodes[] = new MetadataNode($pos, 'WikiUpload', $page);
+        $content->nodes[] = new PlainTextNode($pos, $text);
 
-        return new HtmlNode($before, $content, $after);
+        return new HtmlNode($pos, $before, $content, $after);
     }
 }

@@ -34,6 +34,7 @@ class WikiLinkTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
 
         if ($state->Next() != '[' || $state->Next() != '[') {
@@ -70,9 +71,9 @@ class WikiLinkTag extends Tag
         $after = '</a>';
 
         $content = new NodeCollection();
-        $content->nodes[] = new MetadataNode('WikiLink', $page);
-        $content->nodes[] = new PlainTextNode($text);
+        $content->nodes[] = new MetadataNode($pos, 'WikiLink', $page);
+        $content->nodes[] = new PlainTextNode($pos, $text);
 
-        return new HtmlNode($before, $content, $after);
+        return new HtmlNode($pos, $before, $content, $after);
     }
 }

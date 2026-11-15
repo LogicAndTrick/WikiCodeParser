@@ -13,6 +13,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
@@ -48,6 +49,7 @@ class WikiImageTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
 
         $tag = self::GetTag($state);
@@ -76,7 +78,7 @@ class WikiImageTag extends Tag
         $src = $image;
         if (!str_contains($image, '/')) {
             if ($this->twhlBehaviour) {
-                $content->nodes[] = new MetadataNode('WikiUpload', $image);
+                $content->nodes[] = new MetadataNode($pos, 'WikiUpload', $image);
                 $slug = WikiRevision::CreateSlug($image);
                 $src = $parser->configuration->BuildUrl("/wiki/embed/$slug");
             } else {
@@ -111,7 +113,7 @@ class WikiImageTag extends Tag
         if ($url != null) $url = HtmlHelper::StripControlCharacters($url);
         if ($tag == 'img' && $url != null && HtmlHelper::ValidateUrl($url)) {
             if ($this->twhlBehaviour && HtmlHelper::GetUrlScheme($url) == null) {
-                $content->nodes[] = new MetadataNode('WikiLink', $url);
+                $content->nodes[] = new MetadataNode($pos, 'WikiLink', $url);
                 $slug = WikiRevision::CreateSlug($url);
                 $url = $parser->configuration->BuildUrl("/wiki/page/$slug");
             }
@@ -130,37 +132,37 @@ class WikiImageTag extends Tag
             $el = 'div';
         }
 
-        $embed = self::GetEmbedObject($tag, $src, $caption, $loop);
+        $embed = self::GetEmbedObject($pos, $tag, $src, $caption, $loop);
         if ($embed != null) $content->nodes[] = $embed;
-        if ($caption != null) $content->nodes[] = HtmlNodeBuilder::Make('span')->AddClass('caption')->Add(new PlainTextNode($caption))->ToNode(plainBefore: ' ');
+        if ($caption != null) $content->nodes[] = HtmlNodeBuilder::Make('span', $pos)->AddClass('caption')->Add(new PlainTextNode($pos, $caption))->ToNode(plainBefore: ' ');
 
-        $panel = HtmlNodeBuilder::Make('span')->AddClass('caption-panel')->Add($content)->ToNode();
-        $wrapper = !$url || strlen($url) == 0 ? $panel : HtmlNodeBuilder::Make('a')->Attr('href', $url)->Add($panel)->ToNode();
+        $panel = HtmlNodeBuilder::Make('span', $pos)->AddClass('caption-panel')->Add($content)->ToNode();
+        $wrapper = !$url || strlen($url) == 0 ? $panel : HtmlNodeBuilder::Make('a', $pos)->Attr('href', $url)->Add($panel)->ToNode();
 
-        return HtmlNodeBuilder::Make($el)
+        return HtmlNodeBuilder::Make($el, $pos)
             ->AddClasses($classes)
             ->If($caption && strlen($caption) > 0, fn(HtmlNodeBuilder $x) => $x->Attr('title', $caption))
             ->Add($wrapper)
             ->ToNode(isBlockNode: $el == 'div');
     }
 
-    private static function GetEmbedObject(string $tag, string $url, ?string $caption, bool $loop): ?INode
+    private static function GetEmbedObject(Position $pos, string $tag, string $url, ?string $caption, bool $loop): ?INode
     {
         switch ($tag) {
             case 'img':
-                return HtmlNodeBuilder::Make('img')
+                return HtmlNodeBuilder::Make('img', $pos)
                     ->AddClass('caption-body')
                     ->Attr('src', $url)
                     ->Attr('alt', $caption ?? 'User posted image')
                     ->ToNode(plainBefore: '[Image]', selfClosing: true);
             case 'video':
             case 'audio':
-                return HtmlNodeBuilder::Make($tag)
+                return HtmlNodeBuilder::Make($tag, $pos)
                     ->AddClass('caption-body')
                     ->Attr('src', $url)
                     ->Prop('playsinline')->Prop('controls')
                     ->If($loop, fn(HtmlNodeBuilder $x) => $x->Prop('autoplay')->Prop('loop')->Prop('muted'))
-                    ->Add(new UnprocessablePlainTextNode("Your browser doesn't support embedded {$tag}."))
+                    ->Add(new UnprocessablePlainTextNode($pos, "Your browser doesn't support embedded {$tag}."))
                     ->ToNode(plainBefore: strtoupper(substr($tag, 0, 1)) . substr($tag, 1), selfClosing: true);
             default:
                 return null;

@@ -32,9 +32,9 @@ class AlignTag extends Tag
             $cls .= 'text-' . self::ConvertAlign($options['align']);
         }
         $before .= ' class="' . Util::Trim($cls) . '">';
-        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());
+        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column);
         $after = '</' . $this->element . '>';
-        $ret = new HtmlNode($before, $content, $after);
+        $ret = new HtmlNode($tagPosition, $before, $content, $after);
         $ret->isBlockNode = true;
         return $ret;
     }

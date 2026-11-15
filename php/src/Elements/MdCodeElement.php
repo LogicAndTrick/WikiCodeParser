@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class MdCodeElement extends Element
@@ -74,10 +75,10 @@ class MdCodeElement extends Element
         // Dedent all lines by the longest common whitespace
         $arr = array_map(fn($a) => substr($a, min($longestWhitespace, strlen($a))), $arr);
 
-        $plain = new UnprocessablePlainTextNode(implode("\n", $arr));
+        $plain = new UnprocessablePlainTextNode(Position::Zero(), implode("\n", $arr));
         $cls = !$lang || trim($lang) == '' ? '' : " class=\"lang-$lang\"";
         $before = "<pre{$cls}><code>";
         $after = '</code></pre>';
-        return new HtmlNode($before, $plain, $after);
+        return new HtmlNode(Position::Zero(), $before, $plain, $after);
     }
 }

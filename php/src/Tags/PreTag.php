@@ -40,7 +40,7 @@ class PreTag extends Tag
         $arr = PreElement::FixCodeIndentation($arr);
         $text = implode("\n", $arr);
 
-        $ret = new HtmlNode($before, new UnprocessablePlainTextNode($text), $after);
+        $ret = new HtmlNode($tagPosition, $before, new UnprocessablePlainTextNode($textPosition, $text), $after);
         $ret->isBlockNode = true;
         return $ret;
     }

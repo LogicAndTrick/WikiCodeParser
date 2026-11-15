@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 
 class AutoLinkingProcessor implements INodeProcessor
 {
@@ -74,20 +75,20 @@ class AutoLinkingProcessor implements INodeProcessor
             if (isset($urlMatch['url']) && !HtmlHelper::ValidateUrl($matchingText)) continue;
 
             // return the prefix text
-            if ($idx > $start) $ret[] = new PlainTextNode(substr($text, $start, $idx - $start));
+            if ($idx > $start) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start, $idx - $start));
 
             if (isset($urlMatch['url'])) {
                 $enc = HtmlHelper::AttributeEncode(HtmlHelper::SanitiseUrl($matchingText));
-                $ret[] = new HtmlNode("<a href=\"$enc\">", new UnprocessablePlainTextNode($matchingText), '</a>');
+                $ret[] = new HtmlNode(Position::Zero(), "<a href=\"$enc\">", new UnprocessablePlainTextNode(Position::Zero(), $matchingText), '</a>');
             } else if (isset($urlMatch['email'])) {
                 $enc = HtmlHelper::AttributeEncode($matchingText);
-                $ret[] = new HtmlNode("<a href=\"mailto:$enc\">", new UnprocessablePlainTextNode($matchingText), '</a>');
+                $ret[] = new HtmlNode(Position::Zero(), "<a href=\"mailto:$enc\">", new UnprocessablePlainTextNode(Position::Zero(), $matchingText), '</a>');
             }
             $start = $idx + $len;
         }
 
         // return the remaining text
-        if ($start < strlen($text)) $ret[] = new PlainTextNode(substr($text, $start));
+        if ($start < strlen($text)) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start));
 
         return $ret;
     }

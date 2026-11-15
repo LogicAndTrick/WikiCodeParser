@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class SmileyDefinition
@@ -91,7 +92,7 @@ class SmiliesProcessor implements INodeProcessor
         $numSmilies = 0;
         while ($index + 1 < strlen($text) && ($index = Util::IndexOfAny($text, $this->tokenStarts, $index + 1)) >= 0) {
             if ($numSmilies >= self::$MaxSmilies) {
-                $ret[] = new HtmlNode('<em class="text-danger">', new UnprocessablePlainTextNode(' [warning: too many smilies in post] '), '</em>');
+                $ret[] = new HtmlNode(Position::Zero(), '<em class="text-danger">', new UnprocessablePlainTextNode(Position::Zero(), ' [warning: too many smilies in post] '), '</em>');
                 break;
             }
 
@@ -122,10 +123,10 @@ class SmiliesProcessor implements INodeProcessor
             if ($index + strlen($token) == strlen($text) && !NodeExtensions::NextNodeStartsWith($node, $parentNode, self::AllowedEndChars)) continue;
 
             // We have a smiley
-            if ($start < $index) $ret[] = new PlainTextNode(substr($text, $start, $index - $start));
+            if ($start < $index) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start, $index - $start));
             $src = HtmlHelper::AttributeEncode($parser->configuration->BuildUrl(Util::Template($this->urlFormatString, ['0' => $definition->name])));
             $alt = HtmlHelper::AttributeEncode($token);
-            $smiley_node = new HtmlNode("<img class=\"smiley\" src=\"{$src}\" alt=\"{$alt}\" />", PlainTextNode::Empty(), '');
+            $smiley_node = new HtmlNode(Position::Zero(), "<img class=\"smiley\" src=\"{$src}\" alt=\"{$alt}\" />", PlainTextNode::Empty(Position::Zero()), '');
             $smiley_node->plainBefore = $token;
             $ret[] = $smiley_node;
             $start = $index + strlen($token);
@@ -134,7 +135,7 @@ class SmiliesProcessor implements INodeProcessor
             $numSmilies++;
         }
 
-        if ($start < strlen($text)) $ret[] = new PlainTextNode(substr($text, $start));
+        if ($start < strlen($text)) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start));
         return $ret;
     }
 

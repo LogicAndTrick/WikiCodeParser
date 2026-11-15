@@ -31,6 +31,7 @@ class WikiYoutubeTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
 
         if ($state->ScanTo(':') != '[youtube' || $state->Next() != ':') {
@@ -73,8 +74,9 @@ class WikiYoutubeTag extends Tag
         if (!$caption || trim($caption) == '') $caption = null;
 
         $captionNode = new HtmlNode(
+            $pos,
             $caption != null ? '<span class="caption">' : '',
-            new PlainTextNode($caption ?? ''),
+            new PlainTextNode($pos, $caption ?? ''),
             $caption != null ? '</span>' : ''
         );
         $captionNode->plainBefore = '[YouTube video] ';
@@ -89,7 +91,7 @@ class WikiYoutubeTag extends Tag
             '</div>' .
             '</div>';
         $after = '</div></div>';
-        $ret = new HtmlNode($before, $captionNode, $after);
+        $ret = new HtmlNode($pos, $before, $captionNode, $after);
         $ret->isBlockNode = true;
         return $ret;
     }

@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
 
@@ -47,13 +48,13 @@ class QuoteElement extends Element
             $plainBefore = $author . " said: " . $plainBefore;
         }
 
-        $node = new HtmlNode($before, $parser->parseElements($data, $text, $scope), "</blockquote>");
+        $node = new HtmlNode(Position::Zero(), $before, $parser->parseElements($data, $text, $scope, 0), "</blockquote>");
         $node->plainBefore = $plainBefore;
         $node->plainAfter = "\n[/quote]";
         $node->isBlockNode = true;
 
         if ($postfix !== null && trim($postfix) !== '') {
-            return new NodeCollection($node, $parser->parseTags($data, $postfix, $scope, TagParseContext::Inline));
+            return new NodeCollection($node, $parser->parseTags($data, $postfix, $scope, TagParseContext::Inline, 0, 0));
         }
         return $node;
     }

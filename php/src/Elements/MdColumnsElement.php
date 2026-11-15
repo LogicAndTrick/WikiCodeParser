@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
@@ -87,7 +88,7 @@ class MdColumnsElement extends Element
         while ($lines->Next() && $i < count($colDefs)) {
             $value = Util::TrimEnd($lines->Value());
             if ($value == '%%') {
-                $cols[] = new ColumnNode($colDefs[$i], $parser->ParseElements($data, implode("\n", $arr), $scope));
+                $cols[] = new ColumnNode($colDefs[$i], $parser->ParseElements($data, implode("\n", $arr), $scope, 0));
                 $arr = [];
                 $i++;
             } else {
@@ -101,6 +102,6 @@ class MdColumnsElement extends Element
             return null;
         }
 
-        return new HtmlNode('<div class="row">', new NodeCollection(...$cols), '</div>');
+        return new HtmlNode(Position::Zero(), '<div class="row">', new NodeCollection(...$cols), '</div>');
     }
 }

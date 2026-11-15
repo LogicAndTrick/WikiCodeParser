@@ -30,6 +30,7 @@ class WikiCreditTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
         if ($state->Next() != '[') {
             $state->Seek($index, true);
@@ -76,6 +77,6 @@ class WikiCreditTag extends Tag
         }
 
         $state->SkipWhitespace();
-        return new MetadataNode('WikiCredit', $credit);
+        return new MetadataNode($pos, 'WikiCredit', $credit);
     }
 }

@@ -33,6 +33,7 @@ class QuickLinkTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
 
         if ($state->Next() != '[') {
@@ -64,8 +65,8 @@ class QuickLinkTag extends Tag
         $before = "<$this->element href=\"$url\">";
         $after = "</$this->element>";
 
-        $content = new UnprocessablePlainTextNode($text);
-        $ret = new HtmlNode($before, $content, $after);
+        $content = new UnprocessablePlainTextNode($pos, $text);
+        $ret = new HtmlNode($pos, $before, $content, $after);
         $ret->plainAfter = isset($match[2]) && strlen($match[2]) > 0 ? " ($url)" : '';
         return $ret;
     }

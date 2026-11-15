@@ -2,6 +2,8 @@
 
 namespace LogicAndTrick\WikiCodeParser\Nodes;
 
+use LogicAndTrick\WikiCodeParser\Position;
+
 class HtmlNode implements INode
 {
     public int $line = 0;
@@ -15,15 +17,16 @@ class HtmlNode implements INode
     public string $plainAfter;
     public bool $isBlockNode;
 
-    public function __construct(string $htmlBefore, INode $content, string $htmlAfter)
+    public function __construct(Position $pos, string $htmlBefore, INode $content, string $htmlAfter)
     {
+        $this->line = $pos->line;
+        $this->column = $pos->column;
         $this->htmlBefore = $htmlBefore;
         $this->content = $content;
         $this->htmlAfter = $htmlAfter;
         $this->plainBefore = $this->plainAfter = '';
         $this->isBlockNode = false;
     }
-
 
     function ToHtml(): string
     {

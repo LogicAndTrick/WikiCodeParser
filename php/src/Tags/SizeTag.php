@@ -29,8 +29,8 @@ class SizeTag extends Tag
             $before .= ' style="font-size: ' . $options['size'] . 'px;"';
         }
         $before .= '>';
-        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext());
+        $content = $parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column);
         $after = '</' . $this->element . '>';
-        return new HtmlNode($before, $content, $after);
+        return new HtmlNode($tagPosition, $before, $content, $after);
     }
 }

@@ -30,6 +30,7 @@ class VaultEmbedTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
 
         if ($state->ScanTo(':') != '[vault' || $state->Next() != ':') {
@@ -61,7 +62,7 @@ class VaultEmbedTag extends Tag
             "<div class=\"uninitialised\" data-embed-type=\"vault\" data-vault-id=\"$id\">" .
             "Loading embedded content: Vault Item #{$id}";
         $after = '</div></div></div></div>';
-        $ret = new HtmlNode($before, PlainTextNode::Empty(), $after);
+        $ret = new HtmlNode($pos, $before, PlainTextNode::Empty($pos), $after);
         $ret->plainBefore = "[TWHL vault item #$id]";
         $ret->plainAfter = "\n";
         $ret->isBlockNode = true;

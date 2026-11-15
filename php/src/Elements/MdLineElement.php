@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class MdLineElement extends Element
@@ -20,7 +21,7 @@ class MdLineElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
-        $ret = new HtmlNode('<hr />', PlainTextNode::Empty(), '');
+        $ret = new HtmlNode(Position::Zero(), '<hr />', PlainTextNode::Empty(Position::Zero()), '');
         $ret->plainBefore = '---';
         return $ret;
     }

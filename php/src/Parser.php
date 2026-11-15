@@ -34,7 +34,7 @@ class Parser
         return $res;
     }
 
-    public function ParseElements(ParseData $data, string $text, string $scope, int $line = 0): INode
+    public function ParseElements(ParseData $data, string $text, string $scope, int $line): INode
     {
         $data->current_element_depth++;
         $root = new NodeCollection();
@@ -64,13 +64,13 @@ class Parser
                 // if we have any plain text, create a node for it
                 if (count($plain) > 0) {
                     $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, implode("\n", $plain), $scope, TagParseContext::Block, $plainStart, 0));
-                    $root->nodes[] = UnprocessablePlainTextNode::NewLine(); // Newline before next element
+                    $root->nodes[] = UnprocessablePlainTextNode::NewLine(new Position($lines->sourceLine, 0)); // Newline before next element
                 }
                 $plain = [];
                 $plainStart = $lines->sourceLine;
 
                 $root->nodes[] = $con;
-                $root->nodes[] = UnprocessablePlainTextNode::NewLine(); // Elements always have a newline after
+                $root->nodes[] = UnprocessablePlainTextNode::NewLine(new Position($lines->sourceLine, 0)); // Elements always have a newline after
                 $matched = true;
                 break;
             }
@@ -131,7 +131,7 @@ class Parser
         return $node;
     }
 
-    public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context, int $line = 0, int $column = 0): INode
+    public function ParseTags(ParseData $data, string $text, string $scope, TagParseContext $context, int $line, int $column): INode
     {
         $data->current_tag_depth++;
 
@@ -147,7 +147,7 @@ class Parser
             $pos = $state->sourcePosition;
             $plain = $state->ScanTo('[');
             if ($plain !== null && $plain !== '') {
-                $p = new PlainTextNode($plain);
+                $p = new PlainTextNode($pos, $plain);
                 $p->line = $pos->line;
                 $p->column = $pos->column;
                 $root->nodes[] = $p;
@@ -171,7 +171,7 @@ class Parser
             if (!$found) {
                 $plain = $state->Next();
                 if ($plain && $plain != '') {
-                    $p = new PlainTextNode($plain);
+                    $p = new PlainTextNode($pos, $plain);
                     $p->line = $pos->line;
                     $p->column = $pos->column;
                     $root->nodes[] = $p;

@@ -28,6 +28,7 @@ class WikiCategoryTag extends Tag
 
     public function Parse(Parser $parser, ParseData $data, State $state, string $scope, TagParseContext $context): INode|null
     {
+        $pos = $state->sourcePosition;
         $index = $state->index;
         if ($state->ScanTo(':') != '[cat' || $state->Next() != ':') {
             $state->Seek($index, true);
@@ -41,6 +42,6 @@ class WikiCategoryTag extends Tag
         }
 
         $state->SkipWhitespace();
-        return new MetadataNode('WikiCategory', Util::Trim($str));
+        return new MetadataNode($pos, 'WikiCategory', Util::Trim($str));
     }
 }

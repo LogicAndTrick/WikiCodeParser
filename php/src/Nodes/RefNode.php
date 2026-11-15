@@ -3,6 +3,7 @@
 namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 use LogicAndTrick\WikiCodeParser\ParseData;
+use LogicAndTrick\WikiCodeParser\Position;
 
 class RefNode implements INode
 {
@@ -24,7 +25,7 @@ class RefNode implements INode
     private function GetNode(): INode
     {
         /** @var INode */
-        return $this->data->Get("Ref::{$this->name}", fn() => UnprocessablePlainTextNode::Empty());
+        return $this->data->Get("Ref::{$this->name}", fn() => UnprocessablePlainTextNode::Empty(Position::Zero()));
     }
 
     function ToHtml(): string

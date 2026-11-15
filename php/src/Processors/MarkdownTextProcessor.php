@@ -9,6 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class MarkdownTextProcessor implements INodeProcessor
@@ -77,7 +78,7 @@ class MarkdownTextProcessor implements INodeProcessor
 
         // code tokens cannot be nested
         if ($token == '`') {
-            $contents = new UnprocessablePlainTextNode($str);
+            $contents = new UnprocessablePlainTextNode(Position::Zero(), $str);
         } else {
             $toks = self::ParseTokens($tracker, $str);
             $contents = count($toks) == 1 ? $toks[0] : new NodeCollection(...$toks);
@@ -87,7 +88,7 @@ class MarkdownTextProcessor implements INodeProcessor
 
         $endPosition = intval($endToken);
 
-        $ret = new HtmlNode(self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
+        $ret = new HtmlNode(Position::Zero(), self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
         $ret->plainBefore = $token;
         $ret->plainAfter = $token;
         return $ret;
@@ -122,13 +123,13 @@ class MarkdownTextProcessor implements INodeProcessor
             if ($parsed == null) {
                 $index = $nextIndex + 1; // no match, skip this token
             } else {
-                if ($plainStart < $nextIndex) $ret[] = new PlainTextNode(substr($text, $plainStart, $nextIndex - $plainStart));
+                if ($plainStart < $nextIndex) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $plainStart, $nextIndex - $plainStart));
                 $ret[] = $parsed;
                 $index = $plainStart = $endIndex + 1;
             }
         }
         // Return the rest of the text as plain
-        if ($plainStart < strlen($text)) $ret[] = new PlainTextNode(substr($text, $plainStart));
+        if ($plainStart < strlen($text)) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $plainStart));
 
         return $ret;
     }

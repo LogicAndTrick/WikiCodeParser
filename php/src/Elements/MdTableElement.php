@@ -10,6 +10,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
 
@@ -125,7 +126,7 @@ class MdTableElement extends Element
             $arr[] = new TableRow($cells);
         } while ($lines->Next());
 
-        return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');
+        return new HtmlNode(Position::Zero(), '<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');
     }
 
     private static function SplitTable(string $text): array
@@ -156,6 +157,6 @@ class MdTableElement extends Element
             $name = $res[1];
             return new RefNode($data, $name);
         }
-        return $parser->ParseTags($data, $text, $scope, TagParseContext::Block);
+        return $parser->ParseTags($data, $text, $scope, TagParseContext::Block, 0, 0);
     }
 }

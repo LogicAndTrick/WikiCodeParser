@@ -7,6 +7,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class MdQuoteElement extends Element
@@ -31,7 +32,7 @@ class MdQuoteElement extends Element
         }
 
         $text = Util::Trim(implode("\n", $arr));
-        $ret = new HtmlNode('<blockquote>', $parser->ParseElements($data, $text, $scope), '</blockquote>');
+        $ret = new HtmlNode(Position::Zero(), '<blockquote>', $parser->ParseElements($data, $text, $scope, 0), '</blockquote>');
         $ret->plainBefore = "[quote]\n";
         $ret->plainAfter = "\n[/quote]";
         return $ret;

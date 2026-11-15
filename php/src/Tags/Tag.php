@@ -148,10 +148,8 @@ class Tag
         $before .= '>';
         $after = '</' . $this->element . '>';
         $content = $parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column);
-        $ret = new HtmlNode($before, $content, $after);
+        $ret = new HtmlNode($tagPosition, $before, $content, $after);
         $ret->isBlockNode = $this->isBlock;
-        $ret->line = $tagPosition->line;
-        $ret->column = $tagPosition->column;
         return $ret;
     }
 

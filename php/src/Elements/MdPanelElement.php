@@ -8,6 +8,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
+use LogicAndTrick\WikiCodeParser\Position;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class MdPanelElement extends Element
@@ -52,10 +53,10 @@ class MdPanelElement extends Element
         $before = "<div class=\"embed-panel card $cls\">" .
             ($title != '' ? "<div class=\"card-header\">{$encTitle}</div>" : '') .
             '<div class="card-body">';
-        $content = $parser->ParseElements($data, implode("\n", $arr), $scope);
+        $content = $parser->ParseElements($data, implode("\n", $arr), $scope, 0);
         $after = '</div></div>';
 
-        $node = new HtmlNode($before, $content, $after);
+        $node = new HtmlNode(Position::Zero(), $before, $content, $after);
         $node->plainBefore = $title == '' ? '' : $title . "\n" . str_repeat('-', strlen($title)) . "\n";
         return $node;
     }

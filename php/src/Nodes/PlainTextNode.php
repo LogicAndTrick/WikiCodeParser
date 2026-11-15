@@ -3,25 +3,23 @@
 namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
+use LogicAndTrick\WikiCodeParser\Position;
 
 class PlainTextNode implements INode
 {
-    public static function Empty(): INode
+    public static function Empty(Position $pos): INode
     {
-        return new PlainTextNode('');
-    }
-
-    public static function NewLine(): INode
-    {
-        return new PlainTextNode("\n");
+        return new PlainTextNode($pos, '');
     }
 
     public int $line = 0;
     public int $column = 0;
     public string $text;
 
-    public function __construct(string $text)
+    public function __construct(Position $pos, string $text)
     {
+        $this->line = $pos->line;
+        $this->column = $pos->column;
         $this->text = $text;
     }
 

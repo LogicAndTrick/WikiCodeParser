@@ -3,6 +3,7 @@
 namespace LogicAndTrick\WikiCodeParser\Tags;
 
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
+use LogicAndTrick\WikiCodeParser\Nodes\HtmlNodeBuilder;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeCollection;
 use LogicAndTrick\WikiCodeParser\ParseData;
@@ -37,20 +38,33 @@ class ListTag extends Tag
         $before .= ">\n";
 
         $content = new NodeCollection();
-        $items = array_filter(
-            array_map(fn(string $x) => Util::Trim($x), explode('[*]', $text)),
-            fn(string $x) => $x && strlen($x) > 0
-        );
-        foreach ($items as $item) {
-            $node = new HtmlNode('<li>', $parser->ParseTags($data, $item, $scope, $this->TagContext()), "</li>\n");
-            $node->plainBefore = '* ';
-            $node->plainAfter = "\n";
-            $content->nodes[] = $node;
+
+        $itemState = new State($textPosition->line, $textPosition->column, $text);
+        $itemPos = $textPosition;
+        while (!$itemState->Done()) {
+            $plainPos = $itemState->sourcePosition;
+            $plain = $itemState->ScanTo("[*]");
+
+            $itemNode = $this->CreateListItemNode($parser, $data, $itemState, $scope, $plain, $plainPos, $itemPos);
+            if ($itemNode != null) $content->nodes[] = $itemNode;
+
+            $itemPos = $itemState->sourcePosition;
+            $itemState->Seek(3, false); // read the [*]
         }
 
         $after = '</' . $this->element . '>';
-        $ret = new HtmlNode($before, $content, $after);
+        $ret = new HtmlNode($tagPosition, $before, $content, $after);
         $ret->isBlockNode = true;
         return $ret;
+    }
+
+    private function CreateListItemNode(Parser $parser, ParseData $data, State $state, string $scope, string $text, Position $textPosition, Position $tagPosition): HtmlNode|null
+    {
+        $text = Util::Trim($text);
+        if (strlen($text) == 0) return null;
+
+        return HtmlNodeBuilder::Make("li", $tagPosition)
+            ->Add($parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column))
+            ->ToNode(plainBefore: "* ", plainAfter: "\n", htmlAfter: "\n");
     }
 }

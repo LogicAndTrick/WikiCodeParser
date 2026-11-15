@@ -13,8 +13,12 @@ use LogicAndTrick\WikiCodeParser\State;
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class SpoilerNode implements INode
 {
-    public int $line = 0;
-    public int $column = 0;
+    public int $line {
+        get => $this->spoilerContent->line;
+    }
+    public int $column {
+        get => $this->spoilerContent->column;
+    }
     private string $visibleText;
     private INode $spoilerContent;
 
@@ -73,6 +77,6 @@ class SpoilerTag extends Tag
         if ($this->elementClass != null) $before .= ' class="' . $this->elementClass . '"';
         $before .= " title=\"" . HtmlHelper::Encode($visibleText) . "\">";
         $after = "</{$this->element}>";
-        return new HtmlNode($before, new SpoilerNode($visibleText, $parser->ParseTags($data, $text, $scope, $this->TagContext())), $after);
+        return new HtmlNode($tagPosition, $before, new SpoilerNode($visibleText, $parser->ParseTags($data, $text, $scope, $this->TagContext(), $textPosition->line, $textPosition->column)), $after);
     }
 }

@@ -359,6 +359,6 @@ class LineOffsetEaterElement extends Element
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): INode
     {
         for ($i = 0; $i < $this->lineOffset; $i++) $lines->Next();
-        return new UnprocessablePlainTextNode(ImplementationTest::$RemovedContentGuid);
+        return new UnprocessablePlainTextNode(new Position(1, 0), ImplementationTest::$RemovedContentGuid);
     }
 }

@@ -21,6 +21,6 @@ class CodeTag extends Tag
 
     public function FormatResult(Parser $parser, ParseData $data, State $state, string $scope, array $options, string $text, Position $tagPosition, Position $textPosition): INode|null
     {
-        return new HtmlNode('<code>', new UnprocessablePlainTextNode($text), '</code>');
+        return new HtmlNode($tagPosition, '<code>', new UnprocessablePlainTextNode($textPosition, $text), '</code>');
     }
 }

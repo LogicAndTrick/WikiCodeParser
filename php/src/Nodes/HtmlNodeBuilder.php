@@ -3,6 +3,7 @@
 namespace LogicAndTrick\WikiCodeParser\Nodes;
 
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
+use LogicAndTrick\WikiCodeParser\Position;
 
 class HtmlNodeBuilder
 {
@@ -42,17 +43,17 @@ class HtmlNodeBuilder
     /** @var INode[] */
     public array $contents;
 
-    public static function Make(string $tag): HtmlNodeBuilder
+    public static function Make(string $tag, Position $pos): HtmlNodeBuilder
     {
-        return new HtmlNodeBuilder($tag);
+        return new HtmlNodeBuilder($tag, $pos);
     }
 
-    public function __construct(string $tag)
+    public function __construct(string $tag, Position $pos)
     {
         if (!HtmlHelper::ValidateTagName($tag)) throw new \InvalidArgumentException('Invalid tag.');
 
-        $this->line = 0;
-        $this->column = 0;
+        $this->line = $pos->line;
+        $this->column = $pos->column;
         $this->tag = $tag;
         $this->attributes = [];
         $this->props = [];
@@ -139,13 +140,15 @@ class HtmlNodeBuilder
         bool $isBlockNode = false,
         string $plainBefore = '',
         string $plainAfter = '',
-        bool $selfClosing = false
+        bool $selfClosing = false,
+        string $htmlBefore = '',
+        string $htmlAfter = '',
     ): HtmlNode {
         if (count($this->contents) > 0) $selfClosing = false;
 
         $tag = HtmlHelper::ValidateTagName($this->tag) ? $this->tag : 'div';
         $content = count($this->contents) === 1 ? $this->contents[0] : new NodeCollection(...$this->contents);
-        $html = '<' . $tag;
+        $html = $htmlBefore . '<' . $tag;
         if (count($this->classes) > 0) {
             $classes = $this->classes;
             sort($classes);
@@ -188,14 +191,13 @@ class HtmlNodeBuilder
             $html .= ' /';
             $after = '';
         }
+        $after .= $htmlAfter;
         $html .= '>';
 
-        $node = new HtmlNode($html, $content, $after);
+        $node = new HtmlNode(new Position($this->line, $this->column), $html, $content, $after);
         $node->isBlockNode = $isBlockNode;
         $node->plainBefore = $plainBefore;
         $node->plainAfter = $plainAfter;
-        $node->line = $this->line;
-        $node->column = $this->column;
         return $node;
     }
 }

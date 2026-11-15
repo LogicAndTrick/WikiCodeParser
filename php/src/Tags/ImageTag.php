@@ -43,7 +43,7 @@ class ImageTag extends Tag
             '<img class="caption-body" src="' . $url . '" alt="User posted image" />';
         $after = "</span></$element>";
         $plainsp = $element == 'div' ? "\n" : '';
-        $ret = new HtmlNode($before, PlainTextNode::Empty(), $after);
+        $ret = new HtmlNode($tagPosition, $before, PlainTextNode::Empty($textPosition), $after);
         $ret->plainBefore = $plainsp . "[User posted image]" . $plainsp;
         $ret->isBlockNode = $element == 'div';
         return $ret;
