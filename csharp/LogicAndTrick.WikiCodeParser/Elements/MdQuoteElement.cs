@@ -31,7 +31,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
 
             var text = Util.Trim(String.Join("\n", arr));
-            return new HtmlNode("<blockquote>", parser.ParseElements(data, text, scope), "</blockquote>")
+            return new HtmlNode(Position.Zero, "<blockquote>", parser.ParseElements(data, text, scope, 0), "</blockquote>")
             {
                 PlainBefore = "[quote]\n",
                 PlainAfter = "\n[/quote]"

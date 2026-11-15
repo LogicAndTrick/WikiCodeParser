@@ -10,7 +10,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = "quote";
             Element = "blockquote";
             MainOption = "name";
-            Options = new[] {"name"};
+            Options = new[] { "name" };
             AllOptionsInMain = true;
             IsBlock = true;
             IsNested = true;
@@ -26,8 +26,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 before += "<strong class=\"quote-name\">" + HtmlHelper.Encode(options["name"]) + " said:</strong><br/>";
             }
             var after = "</" + Element + '>';
-            var content = parser.ParseTags(data, text == null ? null : Util.Trim(text), scope, TagContext);
-            return new HtmlNode(before, content, after)
+            var content = parser.ParseTags(data, text == null ? null : Util.Trim(text), scope, TagContext, textPosition.Line, textPosition.Column);
+            return new HtmlNode(tagPosition, before, content, after)
             {
                 PlainBefore = (options.ContainsKey("name") ? options["name"] + " said: " : "") + "[quote]\n",
                 PlainAfter = "\n[/quote]",

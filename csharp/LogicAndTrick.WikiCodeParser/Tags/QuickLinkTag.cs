@@ -11,7 +11,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = null;
             Element = "a";
             MainOption = "url";
-            Options = new[] {"url"};
+            Options = new[] { "url" };
         }
 
         public override bool Matches(State state, string token, TagParseContext context)
@@ -25,6 +25,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
 
             if (state.Next() != '[')
@@ -49,7 +50,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var url = HtmlHelper.StripControlCharacters(match.Groups[1].Value);
             var text = match.Groups[2].Length > 0 ? match.Groups[2].Value : url;
-            var options = new Dictionary<string, string> {{"url", url}};
+            var options = new Dictionary<string, string> { { "url", url } };
             if (!Validate(options, text))
             {
                 state.Seek(index, true);
@@ -60,8 +61,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var before = $"<{Element} href=\"{url}\">";
             var after = $"</{Element}>";
 
-            var content = new UnprocessablePlainTextNode(text);
-            return new HtmlNode(before, content, after)
+            var content = new UnprocessablePlainTextNode(pos, text);
+            return new HtmlNode(pos, before, content, after)
             {
                 PlainAfter = match.Groups[2].Length > 0 ? $" ({url})" : ""
             };

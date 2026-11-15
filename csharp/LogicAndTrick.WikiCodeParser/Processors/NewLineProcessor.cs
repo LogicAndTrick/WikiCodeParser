@@ -38,7 +38,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 var line = lines[i];
                 if (!string.IsNullOrWhiteSpace(line))
                 {
-                    yield return new PlainTextNode(line);
+                    yield return new PlainTextNode(Position.Zero, line);
                     numSequentialBreaks = 0;
                 }
 
@@ -48,7 +48,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 numSequentialBreaks++;
                 if (numSequentialBreaks > 2) continue;
 
-                yield return new HtmlNode("<br/>", UnprocessablePlainTextNode.NewLine, "");
+                yield return new HtmlNode(Position.Zero, "<br/>", UnprocessablePlainTextNode.NewLine(Position.Zero), "");
             }
         }
     }

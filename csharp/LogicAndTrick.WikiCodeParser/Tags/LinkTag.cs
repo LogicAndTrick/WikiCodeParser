@@ -13,7 +13,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = "url";
             Element = "a";
             MainOption = "url";
-            Options = new[] {"url"};
+            Options = new[] { "url" };
         }
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
@@ -28,9 +28,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var after = $"</{Element}>";
 
             var content = options.ContainsKey("url")
-                ? parser.ParseTags(data, text, scope, TagContext)
-                : new UnprocessablePlainTextNode(text);
-            return new HtmlNode(before, content, after);
+                ? parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column)
+                : new UnprocessablePlainTextNode(textPosition, text);
+            return new HtmlNode(tagPosition, before, content, after);
         }
 
         public override bool Validate(Dictionary<string, string> options, string text)

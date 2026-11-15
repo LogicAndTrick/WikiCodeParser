@@ -10,7 +10,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = "font";
             Element = "span";
             MainOption = "color";
-            Options = new[] {"color", "colour", "size"};
+            Options = new[] { "color", "colour", "size" };
         }
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
@@ -26,11 +26,11 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 before = before.TrimEnd(' ') + "\"";
             }
             before += ">";
-            var content = parser.ParseTags(data, text, scope, TagContext);
+            var content = parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column);
             var after = "</" + Element + ">";
-            return new HtmlNode(before, content, after);
+            return new HtmlNode(tagPosition, before, content, after);
         }
-        
+
         internal static bool IsValidSize(string text)
         {
             return Util.TryParseIntStrict(text, out var num) && num >= 6 && num <= 40;

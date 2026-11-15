@@ -11,7 +11,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = "youtube";
             Element = "div";
             MainOption = "id";
-            Options = new[] {"id"};
+            Options = new[] { "id" };
         }
 
         public override INode FormatResult(Parser parser, ParseData data, State state, string scope, Dictionary<string, string> options, string text, Position tagPosition, Position textPosition)
@@ -19,10 +19,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var id = text;
             if (options.ContainsKey("id")) id = options["id"];
 
-            var classes = new List<string> {"embedded", "video"};
+            var classes = new List<string> { "embedded", "video" };
             if (ElementClass != null) classes.Add(ElementClass);
 
-            var captionNode = new HtmlNode("", new PlainTextNode(""), "") { PlainBefore = "[YouTube video] ", PlainAfter = "\n" };
+            var captionNode = new HtmlNode(tagPosition, "", new PlainTextNode(tagPosition, ""), "") { PlainBefore = "[YouTube video] ", PlainAfter = "\n" };
 
             var before = $"<div class=\"{string.Join(" ", classes)}\">" +
                          $" <div class=\"caption-panel\">" +
@@ -32,7 +32,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                          $"   </div>" +
                          $"  </div>";
             var after = $"</div></div>";
-            return new HtmlNode(before, captionNode, after)
+            return new HtmlNode(tagPosition, before, captionNode, after)
             {
                 IsBlockNode = true
             };

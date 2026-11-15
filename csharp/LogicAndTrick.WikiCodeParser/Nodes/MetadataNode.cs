@@ -8,13 +8,15 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
     /// </summary>
     public class MetadataNode : INode
     {
-        public int Line => 0;
-        public int Column => 0;
+        public int Line { get; set; }
+        public int Column { get; set; }
         public string Key { get; set; }
         public object Value { get; set; }
 
-        public MetadataNode(string key, object value)
+        public MetadataNode(Position pos, string key, object value)
         {
+            Line = pos.Line;
+            Column = pos.Column;
             Key = key;
             Value = value;
         }

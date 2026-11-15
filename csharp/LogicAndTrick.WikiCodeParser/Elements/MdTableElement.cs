@@ -30,7 +30,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 arr.Add(new TableRow(cells));
             } while (lines.Next());
 
-            return new HtmlNode("<div class=\"table-responsive\"><table class=\"table table-bordered\">", new NodeCollection(arr), "</table></div>");
+            return new HtmlNode(Position.Zero, "<div class=\"table-responsive\"><table class=\"table table-bordered\">", new NodeCollection(arr), "</table></div>");
         }
         
         private static IEnumerable<string> SplitTable(string text)
@@ -65,7 +65,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var name = res.Groups[1].Value;
                 return new RefNode(data, name);
             }
-            return parser.ParseTags(data, text, scope, TagParseContext.Block);
+            return parser.ParseTags(data, text, scope, TagParseContext.Block, 0, 0);
         }
 
         private class TableRow : INode

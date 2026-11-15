@@ -5,15 +5,17 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 {
     public class UnprocessablePlainTextNode : INode
     {
-        public static INode Empty => new UnprocessablePlainTextNode(string.Empty);
-        public static INode NewLine => new UnprocessablePlainTextNode("\n");
+        public static INode Empty(Position pos) => new UnprocessablePlainTextNode(pos, string.Empty);
+        public static INode NewLine(Position pos) => new UnprocessablePlainTextNode(pos, "\n");
 
         public int Line { get; set; }
         public int Column { get; set; }
         public string Text { get; set; }
 
-        public UnprocessablePlainTextNode(string text)
+        public UnprocessablePlainTextNode(Position pos, string text)
         {
+            Line = pos.Line;
+            Column = pos.Column;
             Text = text;
         }
 

@@ -44,7 +44,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 plainBefore = author + " said: " + plainBefore;
             }
 
-            var node = new HtmlNode(before, parser.ParseElements(data, text, scope), "</blockquote>")
+            var node = new HtmlNode(Position.Zero, before, parser.ParseElements(data, text, scope, 0), "</blockquote>")
             {
                 PlainBefore = plainBefore,
                 PlainAfter = "\n[/quote]",
@@ -52,7 +52,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             };
             if (!string.IsNullOrWhiteSpace(postfix))
             {
-                return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline));
+                return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline, 0, 0));
             }
             return node;
         }

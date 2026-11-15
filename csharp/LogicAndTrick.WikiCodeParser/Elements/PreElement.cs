@@ -132,11 +132,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var highlights = string.Join("", highlight.Select(
                 h => $"<div class=\"line-highlight\" style=\"top: {h.firstLine}em; height: {h.numLines}em; background: {h.color};\"></div>")
             );
-            var plain = new UnprocessablePlainTextNode(String.Join("\n", arr));
+            var plain = new UnprocessablePlainTextNode(Position.Zero, String.Join("\n", arr));
             var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
             var before = $"<pre{cls}><code>{highlights}";
             var after = "</code></pre>";
-            return new HtmlNode(before, plain, after);
+            return new HtmlNode(Position.Zero, before, plain, after);
         }
 
         public static List<string> FixCodeIndentation(List<string> arr)

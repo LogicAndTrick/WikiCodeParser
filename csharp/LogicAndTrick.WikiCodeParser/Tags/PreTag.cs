@@ -33,7 +33,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             arr = PreElement.FixCodeIndentation(arr);
             text = string.Join("\n", arr);
 
-            return new HtmlNode(before, new UnprocessablePlainTextNode(text), after)
+            return new HtmlNode(tagPosition, before, new UnprocessablePlainTextNode(textPosition, text), after)
             {
                 IsBlockNode = true
             };

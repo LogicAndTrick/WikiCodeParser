@@ -12,7 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Element = "span";
             ElementClass = "spoiler";
             MainOption = "text";
-            Options = new[] {"text"};
+            Options = new[] { "text" };
             AllOptionsInMain = true;
         }
 
@@ -25,13 +25,13 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (ElementClass != null) before += " class=\"" + ElementClass + '"';
             before += $" title=\"{HtmlHelper.Encode(visibleText)}\">";
             var after = "</" + Element + '>';
-            return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, TagContext)), after);
+            return new HtmlNode(tagPosition, before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column)), after);
         }
 
         private class SpoilerNode : INode
         {
-            public int Line { get; set; }
-            public int Column { get; set; }
+            public int Line => SpoilerContent.Line;
+            public int Column => SpoilerContent.Column;
             private string VisibleText { get; }
             private INode SpoilerContent { get; set; }
 
@@ -53,7 +53,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             public IList<INode> GetChildren()
             {
-                return new[] {SpoilerContent};
+                return new[] { SpoilerContent };
             }
 
             public void ReplaceChild(int i, INode node)

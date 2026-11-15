@@ -47,7 +47,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             {
                 if (numSmilies >= MaxSmilies)
                 {
-                    yield return new HtmlNode("<em class=\"text-danger\">", new UnprocessablePlainTextNode(" [warning: too many smilies in post] "), "</em>");
+                    yield return new HtmlNode(Position.Zero, "<em class=\"text-danger\">", new UnprocessablePlainTextNode(Position.Zero, " [warning: too many smilies in post] "), "</em>");
                     break;
                 }
 
@@ -76,17 +76,17 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (index + token.Length == text.Length && !node.NextNodeStartsWith(parentNode, AllowedEndChars)) continue;
 
                 // We have a smiley
-                if (start < index) yield return new PlainTextNode(text.Substring(start, index - start));
+                if (start < index) yield return new PlainTextNode(Position.Zero, text.Substring(start, index - start));
                 var src = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(String.Format(UrlFormatString, definition.Name)));
                 var alt = HtmlHelper.AttributeEncode(token);
-                yield return new HtmlNode($"<img class=\"smiley\" src=\"{src}\" alt=\"{alt}\" />", PlainTextNode.Empty, "") { PlainBefore = token };
+                yield return new HtmlNode(Position.Zero, $"<img class=\"smiley\" src=\"{src}\" alt=\"{alt}\" />", PlainTextNode.Empty(Position.Zero), "") { PlainBefore = token };
                 start = index + token.Length;
                 index += token.Length;
 
                 numSmilies++;
             }
             
-            if (start < text.Length) yield return new PlainTextNode(text.Substring(start));
+            if (start < text.Length) yield return new PlainTextNode(Position.Zero, text.Substring(start));
         }
 
         public SmiliesProcessor Add(string name, params string[] tokens)

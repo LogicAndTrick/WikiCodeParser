@@ -21,14 +21,14 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         public IReadOnlyDictionary<string, string> Styles => _styles;
         public List<INode> Contents { get; set; }
         
-        public static HtmlNodeBuilder Make(string tag) => new HtmlNodeBuilder(tag);
+        public static HtmlNodeBuilder Make(string tag, Position pos) => new HtmlNodeBuilder(tag, pos);
 
-        public HtmlNodeBuilder(string tag)
+        public HtmlNodeBuilder(string tag, Position pos)
         {
             if (!HtmlHelper.ValidateTagName(tag)) throw new ArgumentException("Invalid tag.");
 
-            Line = 0;
-            Column = 0;
+            Line = pos.Line;
+            Column = pos.Column;
             Tag = tag;
             
             _attributes = new Dictionary<string, string>();
@@ -112,14 +112,16 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
             bool isBlockNode = false,
             string plainBefore = "",
             string plainAfter = "",
-            bool selfClosing = false
+            bool selfClosing = false,
+            string htmlBefore = "",
+            string htmlAfter = ""
         )
         {
             if (Contents.Count > 0) selfClosing = false;
 
             var tag = HtmlHelper.ValidateTagName(Tag) ? Tag : "div";
             INode content = Contents.Count == 1 ? Contents[0] : new NodeCollection(Contents);
-            var sb = new StringBuilder("<");
+            var sb = new StringBuilder(htmlBefore + "<");
             sb.Append(tag);
             if (_classes.Count > 0)
             {
@@ -164,15 +166,14 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
                 sb.Append(" /");
                 after = "";
             }
+            after += htmlAfter;
             sb.Append(">");
 
-            return new HtmlNode(sb.ToString(), content, after)
+            return new HtmlNode( new Position(Line, Column), sb.ToString(), content, after)
             {
                 IsBlockNode = isBlockNode,
                 PlainBefore = plainBefore,
-                PlainAfter = plainAfter,
-                Line = Line,
-                Column = Column
+                PlainAfter = plainAfter
             };
         }
     }

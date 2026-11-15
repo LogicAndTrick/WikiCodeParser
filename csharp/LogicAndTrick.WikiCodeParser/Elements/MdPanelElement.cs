@@ -48,10 +48,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var before = $"<div class=\"embed-panel card {cls}\">" +
                          (title != "" ? $"<div class=\"card-header\">{HtmlHelper.Encode(title)}</div>" : "") +
                          "<div class=\"card-body\">";
-            var content = parser.ParseElements(data, string.Join("\n", arr), scope);
+            var content = parser.ParseElements(data, string.Join("\n", arr), scope, 0);
             var after = "</div></div>";
 
-            return new HtmlNode(before, content, after)
+            return new HtmlNode(Position.Zero, before, content, after)
             {
                 PlainBefore = title == "" ? "" : title + "\n" + new string('-', title.Length) + "\n"
             };

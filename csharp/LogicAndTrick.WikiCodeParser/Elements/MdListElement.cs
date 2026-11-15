@@ -57,7 +57,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var current = lines.Current();
 
             // Put all the subtrees into a dummy item node
-            var item = new ListItemNode(PlainTextNode.Empty);
+            var item = new ListItemNode(PlainTextNode.Empty(Position.Zero));
             var _ = CreateListItems(item, "", parser, data, lines, scope).ToList();
 
             if (!item.Subtrees.Any())
@@ -130,7 +130,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                     }
                     else
                     {
-                        pt = parser.ParseElements(data, value, scope);
+                        pt = parser.ParseElements(data, value, scope, 0);
                     }
 
                     lastItemNode = new ListItemNode(pt);

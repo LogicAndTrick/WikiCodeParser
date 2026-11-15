@@ -12,7 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = null;
             Element = "div";
             MainOption = "id";
-            Options = new[] {"id"};
+            Options = new[] { "id" };
         }
 
         public override bool Matches(State state, string token, TagParseContext context)
@@ -24,6 +24,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
             if (state.ScanTo(":") != "[youtube" || state.Next() != ':')
             {
@@ -57,7 +58,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             state.SkipWhitespace();
 
             string caption = null;
-            var classes = new List<string> {"embedded", "video"};
+            var classes = new List<string> { "embedded", "video" };
             if (ElementClass != null) classes.Add(ElementClass);
             foreach (var p in @params)
             {
@@ -69,10 +70,12 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (string.IsNullOrWhiteSpace(caption)) caption = null;
 
             var captionNode = new HtmlNode(
+                pos,
                 caption != null ? "<span class=\"caption\">" : "",
-                new PlainTextNode(caption ?? ""),
+                new PlainTextNode(pos, caption ?? ""),
                 caption != null ? "</span>" : ""
-            ) { PlainBefore = "[YouTube video] ", PlainAfter = "\n" };
+            )
+            { PlainBefore = "[YouTube video] ", PlainAfter = "\n" };
 
             var before = $"<div class=\"{string.Join(" ", classes)}\">" +
                           $"<div class=\"caption-panel\">" +
@@ -82,7 +85,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                           $"</div>" +
                          $"</div>";
             var after = $"</div></div>";
-            return new HtmlNode(before, captionNode, after)
+            return new HtmlNode(pos, before, captionNode, after)
             {
                 IsBlockNode = true
             };

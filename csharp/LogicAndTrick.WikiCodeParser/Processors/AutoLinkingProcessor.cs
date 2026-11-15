@@ -57,21 +57,21 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (match.Groups["url"].Success && !HtmlHelper.ValidateUrl(matchingText)) continue;
 
                 // return the prefix text
-                if (idx > start) yield return new PlainTextNode(text.Substring(start, idx - start));
+                if (idx > start) yield return new PlainTextNode(Position.Zero, text.Substring(start, idx - start));
 
                 if (match.Groups["url"].Success)
                 {
-                    yield return new HtmlNode($"<a href=\"{HtmlHelper.AttributeEncode(HtmlHelper.SanitiseUrl(matchingText))}\">", new UnprocessablePlainTextNode(matchingText), "</a>");
+                    yield return new HtmlNode(Position.Zero, $"<a href=\"{HtmlHelper.AttributeEncode(HtmlHelper.SanitiseUrl(matchingText))}\">", new UnprocessablePlainTextNode(Position.Zero, matchingText), "</a>");
                 }
                 else if (match.Groups["email"].Success)
                 {
-                    yield return new HtmlNode($"<a href=\"mailto:{HtmlHelper.AttributeEncode(matchingText)}\">", new UnprocessablePlainTextNode(matchingText), "</a>");
+                    yield return new HtmlNode(Position.Zero, $"<a href=\"mailto:{HtmlHelper.AttributeEncode(matchingText)}\">", new UnprocessablePlainTextNode(Position.Zero, matchingText), "</a>");
                 }
                 start = idx + len;
             }
             
             // return the remaining text
-            if (start < text.Length) yield return new PlainTextNode(text.Substring(start));
+            if (start < text.Length) yield return new PlainTextNode(Position.Zero, text.Substring(start));
         }
 
         private static readonly HashSet<char> Punctuation = new HashSet<char> { '.', '!', '?', ',' };

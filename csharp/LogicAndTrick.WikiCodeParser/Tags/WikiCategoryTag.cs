@@ -19,6 +19,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
             if (state.ScanTo(":") != "[cat" || state.Next() != ':')
             {
@@ -34,7 +35,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             state.SkipWhitespace();
-            return new MetadataNode("WikiCategory", Util.Trim(str));
+            return new MetadataNode(pos, "WikiCategory", Util.Trim(str));
         }
     }
 }

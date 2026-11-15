@@ -18,8 +18,10 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
         public string PlainAfter { get; set; }
         public bool IsBlockNode { get; set; }
 
-        public HtmlNode(string htmlBefore, INode content, string htmlAfter)
+        public HtmlNode(Position pos, string htmlBefore, INode content, string htmlAfter)
         {
+            Line = pos.Line;
+            Column = pos.Column;
             HtmlBefore = htmlBefore;
             Content = content;
             HtmlAfter = htmlAfter;
@@ -38,7 +40,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
         public IList<INode> GetChildren()
         {
-            return new[] {Content};
+            return new[] { Content };
         }
 
         public void ReplaceChild(int i, INode node)

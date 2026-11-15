@@ -20,6 +20,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
             if (state.Next() != '[')
             {
@@ -43,10 +44,11 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var sections = str.Split('|');
             foreach (var section in sections)
             {
-                var spl = section.Split(new[] {':'}, 2);
+                var spl = section.Split(new[] { ':' }, 2);
                 var key = spl[0];
                 var val = spl.Length > 1 ? spl[1] : "";
-                switch (key) {
+                switch (key)
+                {
                     case "archive":
                         credit.Name = val;
                         break;
@@ -54,12 +56,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                         credit.Description = val;
                         break;
                     case "url":
-                        if (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val)) {
+                        if (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val))
+                        {
                             credit.Url = val;
                         }
                         break;
                     case "wayback":
-                        if (long.TryParse(val, out _) || (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val))) {
+                        if (long.TryParse(val, out _) || (HtmlHelper.GetUrlScheme(val) != null && HtmlHelper.ValidateUrl(val)))
+                        {
                             credit.WaybackUrl = val;
                         }
                         break;
@@ -74,7 +78,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
 
             state.SkipWhitespace();
-            return new MetadataNode("WikiCredit", credit);
+            return new MetadataNode(pos, "WikiCredit", credit);
         }
     }
 }

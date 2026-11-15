@@ -20,6 +20,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
 
             if (state.Next() != '[' || state.Next() != '[')
@@ -52,16 +53,16 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 page = spl[0];
                 hash = "#" + Regex.Replace(spl[1], @"[^\da-z?/:@\-._~!$&\'()*+,;=]", "_", RegexOptions.IgnoreCase);
             }
-            
+
             var url = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl($"/wiki/page/{WikiRevision.CreateSlug(page)}")) + hash;
             var before = $"<a href=\"{url}\">";
             var after = "</a>";
-            
-            var content = new NodeCollection();
-            content.Nodes.Add(new MetadataNode("WikiLink", page));
-            content.Nodes.Add(new PlainTextNode(text));
 
-            return new HtmlNode(before, content, after);
+            var content = new NodeCollection();
+            content.Nodes.Add(new MetadataNode(pos, "WikiLink", page));
+            content.Nodes.Add(new PlainTextNode(pos, text));
+
+            return new HtmlNode(pos, before, content, after);
         }
     }
 }

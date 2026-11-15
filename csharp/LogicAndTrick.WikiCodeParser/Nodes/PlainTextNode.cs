@@ -8,14 +8,16 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
     /// </summary>
     public class PlainTextNode : INode
     {
-        public static INode Empty => new PlainTextNode(string.Empty);
+        public static INode Empty(Position pos) => new PlainTextNode(pos, string.Empty);
 
         public int Line { get; set; }
         public int Column { get; set; }
         public string Text { get; set; }
 
-        public PlainTextNode(string text)
+        public PlainTextNode(Position pos, string text)
         {
+            Line = pos.Line;
+            Column = pos.Column;
             Text = text;
         }
 

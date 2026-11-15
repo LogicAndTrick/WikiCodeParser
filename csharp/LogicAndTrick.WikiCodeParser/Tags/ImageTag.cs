@@ -12,7 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Token = "img";
             Element = "div";
             MainOption = "url";
-            Options = new[] {"url"};
+            Options = new[] { "url" };
             IsBlock = true;
         }
 
@@ -21,7 +21,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var url = BuildUrl(options, text);
             url = HtmlHelper.AttributeEncode(url);
 
-            var classes = new List<string>{"embedded", "image"};
+            var classes = new List<string> { "embedded", "image" };
             if (ElementClass != null) classes.Add(ElementClass);
             var element = Element;
 
@@ -40,7 +40,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                          $"<img class=\"caption-body\" src=\"{url}\" alt=\"User posted image\" />";
             var after = $"</span></{element}>";
             var plainsp = element == "div" ? "\n" : "";
-            return new HtmlNode(before, PlainTextNode.Empty, after)
+            return new HtmlNode(tagPosition, before, PlainTextNode.Empty(textPosition), after)
             {
                 PlainBefore = $"{plainsp}[User posted image]{plainsp}",
                 IsBlockNode = element == "div"

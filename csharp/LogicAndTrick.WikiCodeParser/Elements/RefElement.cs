@@ -62,12 +62,12 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
 
             // Store the ref node
-            var node = parser.ParseElements(data, Util.Trim(string.Join("\n", arr)), scope);
+            var node = parser.ParseElements(data, Util.Trim(string.Join("\n", arr)), scope, 0);
             RemoveRefNodes(node);
             data.Set($"Ref::{name}", node);
 
             // Return nothing
-            return PlainTextNode.Empty;
+            return PlainTextNode.Empty(Position.Zero);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var ch = children[i];
                 if (ch is RefNode rn)
                 {
-                    node.ReplaceChild(i, new UnprocessablePlainTextNode($":ref={rn.Name}"));
+                    node.ReplaceChild(i, new UnprocessablePlainTextNode(Position.Zero, $":ref={rn.Name}"));
                 }
                 else
                 {

@@ -49,7 +49,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 var value = Util.TrimEnd(lines.Value());
                 if (value == "%%")
                 {
-                    cols.Add(new ColumnNode(colDefs[i], parser.ParseElements(data, String.Join("\n", arr), scope)));
+                    cols.Add(new ColumnNode(colDefs[i], parser.ParseElements(data, String.Join("\n", arr), scope, 0)));
                     arr.Clear();
                     i++;
                 } else {
@@ -64,7 +64,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 return null;
             }
 
-            return new HtmlNode("<div class=\"row\">", new NodeCollection(cols), "</div>");
+            return new HtmlNode(Position.Zero, "<div class=\"row\">", new NodeCollection(cols), "</div>");
         }
 
         public class ColumnNode : INode

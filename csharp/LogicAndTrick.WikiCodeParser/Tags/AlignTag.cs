@@ -26,9 +26,12 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 cls += "text-" + ConvertAlign(options["align"]);
             }
             before += " class=\"" + Util.Trim(cls) + "\">";
-            var content = parser.ParseTags(data, text, scope, TagContext);
+            var content = parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column);
             var after = "</" + Element + ">";
-            return new HtmlNode(before, content, after) { IsBlockNode = true };
+            return new HtmlNode(tagPosition, before, content, after)
+            {
+                IsBlockNode = true
+            };
         }
 
         private static bool IsValidAlign(string text)

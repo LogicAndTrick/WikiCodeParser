@@ -33,7 +33,7 @@ public class ParserTest
     {
         var parser = new Parser(new ParserConfiguration("http://example.com"));
         var data = new ParseData();
-        var coll = (NodeCollection) parser.ParseElements(data, "A", "");
+        var coll = (NodeCollection) parser.ParseElements(data, "A", "", 0);
         Assert.AreEqual(1, coll.Nodes.Count);
         var ptn = (PlainTextNode)coll.Nodes[0];
         Assert.AreEqual("A", ptn.Text);
@@ -46,7 +46,7 @@ public class ParserTest
         config.Elements.Add(new PreElement());
         var parser = new Parser(config);
         var data = new ParseData();
-        var coll = (NodeCollection) parser.ParseElements(data, "A\n[pre]\nB\n[/pre]\nC", "");
+        var coll = (NodeCollection) parser.ParseElements(data, "A\n[pre]\nB\n[/pre]\nC", "", 0);
         Assert.AreEqual(5, coll.Nodes.Count);
         Assert.AreEqual("A", ((PlainTextNode)coll.Nodes[0]).Text);
         Assert.AreEqual("\n", ((UnprocessablePlainTextNode)coll.Nodes[1]).Text);
@@ -64,7 +64,7 @@ public class ParserTest
     {
         var parser = new Parser(new ParserConfiguration("http://example.com"));
         var data = new ParseData();
-        var coll = (NodeCollection) parser.ParseTags(data, "A", "", TagParseContext.Block);
+        var coll = (NodeCollection) parser.ParseTags(data, "A", "", TagParseContext.Block, 0, 0);
         Assert.AreEqual(1, coll.Nodes.Count);
         var ptn = (PlainTextNode)coll.Nodes[0];
         Assert.AreEqual("A", ptn.Text);
@@ -77,7 +77,7 @@ public class ParserTest
         config.Tags.Add(new Tag("test", "span", "test"));
         var parser = new Parser(config);
         var data = new ParseData();
-        var coll = (NodeCollection) parser.ParseTags(data, "A [test]B[/test] C", "", TagParseContext.Block);
+        var coll = (NodeCollection) parser.ParseTags(data, "A [test]B[/test] C", "", TagParseContext.Block, 0, 0);
         Assert.AreEqual(3, coll.Nodes.Count);
         Assert.AreEqual("A ", ((PlainTextNode)coll.Nodes[0]).Text);
         Assert.AreEqual(" C", ((PlainTextNode)coll.Nodes[2]).Text);
@@ -93,14 +93,14 @@ public class ParserTest
     public void TestTrimWhitespace()
     {
         var coll = new NodeCollection();
-        coll.Nodes.Add(PlainTextNode.Empty);
-        coll.Nodes.Add(UnprocessablePlainTextNode.NewLine);
-        coll.Nodes.Add(new PlainTextNode("A"));
-        coll.Nodes.Add(PlainTextNode.Empty);
-        coll.Nodes.Add(UnprocessablePlainTextNode.NewLine);
-        coll.Nodes.Add(new PlainTextNode("B"));
-        coll.Nodes.Add(PlainTextNode.Empty);
-        coll.Nodes.Add(UnprocessablePlainTextNode.NewLine);
+        coll.Nodes.Add(PlainTextNode.Empty(Position.Zero));
+        coll.Nodes.Add(UnprocessablePlainTextNode.NewLine(Position.Zero));
+        coll.Nodes.Add(new PlainTextNode(Position.Zero, "A"));
+        coll.Nodes.Add(PlainTextNode.Empty(Position.Zero));
+        coll.Nodes.Add(UnprocessablePlainTextNode.NewLine(Position.Zero));
+        coll.Nodes.Add(new PlainTextNode(Position.Zero, "B"));
+        coll.Nodes.Add(PlainTextNode.Empty(Position.Zero));
+        coll.Nodes.Add(UnprocessablePlainTextNode.NewLine(Position.Zero));
 
         Parser.TrimWhitespace(coll, true, true);
 
@@ -117,11 +117,11 @@ public class ParserTest
     [TestMethod]
     public void TestFlattenNestedNodeCollections()
     {
-        var l3 = PlainTextNode.Empty;
+        var l3 = PlainTextNode.Empty(Position.Zero);
         var l2 = new NodeCollection(l3);
         var l1 = new NodeCollection(l2);
         var coll = new NodeCollection(l1);
-        var html = new HtmlNode("", coll, "");
+        var html = new HtmlNode(Position.Zero, "", coll, "");
 
         Parser.FlattenNestedNodeCollections(html);
         Assert.AreEqual(l3, html.Content);

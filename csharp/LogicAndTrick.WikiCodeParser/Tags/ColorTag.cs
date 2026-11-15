@@ -26,9 +26,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 before = before.TrimEnd(' ') + "\"";
             }
             before += ">";
-            var content = parser.ParseTags(data, text, scope, TagContext);
+            var content = parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column);
             var after = "</" + Element + ">";
-            return new HtmlNode(before, content, after);
+            return new HtmlNode(tagPosition, before, content, after);
         }
     }
 }

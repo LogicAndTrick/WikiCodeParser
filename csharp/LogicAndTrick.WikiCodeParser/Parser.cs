@@ -43,7 +43,7 @@ namespace LogicAndTrick.WikiCodeParser
         /// <param name="scope">The scope to parse in</param>
         /// <param name="line">The starting line number in the source input</param>
         /// <returns>The nodes of the parsed text</returns>
-        public INode ParseElements(ParseData data, string text, string scope, int line = 0)
+        public INode ParseElements(ParseData data, string text, string scope, int line)
         {
             data.CurrentElementDepth++;
             var root = new NodeCollection();
@@ -75,13 +75,13 @@ namespace LogicAndTrick.WikiCodeParser
                     if (plain.Count > 0)
                     {
                         root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain), scope, TagParseContext.Block, plainStart, 0)));
-                        root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Newline before next element
+                        root.Nodes.Add(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Newline before next element
                     }
                     plain.Clear();
                     plainStart = lines.SourceLine;
 
                     root.Nodes.Add(con);
-                    root.Nodes.Add(UnprocessablePlainTextNode.NewLine); // Elements always have a newline after
+                    root.Nodes.Add(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Elements always have a newline after
                     matched = true;
                     break;
                 }
@@ -154,7 +154,7 @@ namespace LogicAndTrick.WikiCodeParser
         /// <param name="column">The starting column number in the source input</param>
         /// <param name="context">The parse context - block or inline</param>
         /// <returns>The node of the parsed text</returns>
-        public INode ParseTags(ParseData data, string text, string scope, TagParseContext context, int line = 0, int column = 0)
+        public INode ParseTags(ParseData data, string text, string scope, TagParseContext context, int line, int column)
         {
             data.CurrentTagDepth++;
 
@@ -167,7 +167,7 @@ namespace LogicAndTrick.WikiCodeParser
             {
                 var pos = state.SourcePosition;
                 var plain = state.ScanTo("[");
-                if (!String.IsNullOrEmpty(plain)) root.Nodes.Add(new PlainTextNode(plain) { Line = pos.Line, Column = pos.Column });
+                if (!String.IsNullOrEmpty(plain)) root.Nodes.Add(new PlainTextNode(pos, plain));
                 if (state.Done) break;
 
                 var token = state.GetToken();
@@ -189,7 +189,7 @@ namespace LogicAndTrick.WikiCodeParser
                 if (!found)
                 {
                     plain = state.Next().ToString();
-                    if (!String.IsNullOrEmpty(plain)) root.Nodes.Add(new PlainTextNode(plain) { Line = pos.Line, Column = pos.Column });
+                    if (!String.IsNullOrEmpty(plain)) root.Nodes.Add(new PlainTextNode(pos, plain));
                 }
             }
 

@@ -22,6 +22,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
 
             var tag = GetTag(state);
@@ -57,10 +58,10 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             var after = "</a></span>";
 
             var content = new NodeCollection();
-            content.Nodes.Add(new MetadataNode("WikiUpload", page));
-            content.Nodes.Add(new PlainTextNode(text));
+            content.Nodes.Add(new MetadataNode(pos, "WikiUpload", page));
+            content.Nodes.Add(new PlainTextNode(pos, text));
 
-            return new HtmlNode(before, content, after);
+            return new HtmlNode(pos, before, content, after);
         }
     }
 }

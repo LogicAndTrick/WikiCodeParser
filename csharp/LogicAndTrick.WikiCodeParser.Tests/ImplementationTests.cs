@@ -284,7 +284,7 @@ public class ImplementationTests
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
             for (var i = 0; i < _lineOffset; i++) lines.Next();
-            return new UnprocessablePlainTextNode(RemovedContentGuid);
+            return new UnprocessablePlainTextNode(new Position(1, 0), RemovedContentGuid);
         }
     }
 }

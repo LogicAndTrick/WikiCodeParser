@@ -50,7 +50,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             INode contents;
             if (token == '`')
             {
-                contents = new UnprocessablePlainTextNode(str);
+                contents = new UnprocessablePlainTextNode(Position.Zero, str);
             }
             else
             {
@@ -62,7 +62,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
 
             endPosition = endToken;
 
-            return new HtmlNode(OpenTags[tokenIndex], contents, CloseTags[tokenIndex])
+            return new HtmlNode(Position.Zero, OpenTags[tokenIndex], contents, CloseTags[tokenIndex])
             {
                 PlainBefore = token.ToString(),
                 PlainAfter = token.ToString()
@@ -95,13 +95,13 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 }
                 else
                 {
-                    if (plainStart < nextIndex) yield return new PlainTextNode(text.Substring(plainStart, nextIndex - plainStart));
+                    if (plainStart < nextIndex) yield return new PlainTextNode(Position.Zero, text.Substring(plainStart, nextIndex - plainStart));
                     yield return parsed;
                     index = plainStart = endIndex + 1;
                 }
             }
             // Return the rest of the text as plain
-            if (plainStart < text.Length) yield return new PlainTextNode(text.Substring(plainStart));
+            if (plainStart < text.Length) yield return new PlainTextNode(Position.Zero, text.Substring(plainStart));
         }
 
         public IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope)

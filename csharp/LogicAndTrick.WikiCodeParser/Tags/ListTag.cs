@@ -29,16 +29,33 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             before += ">\n";
 
             var content = new NodeCollection();
-            var items = text.Split(new[] { "[*]" }, StringSplitOptions.None)
-                .Select(x => Util.Trim(x))
-                .Where(x => x.Length > 0);
-            foreach (var item in items)
+
+            var itemState = new State(textPosition.Line, textPosition.Column, text);
+            var itemPos = textPosition;
+            while (!itemState.Done)
             {
-                content.Nodes.Add(new HtmlNode("<li>", parser.ParseTags(data, item, scope, TagContext), "</li>\n") { PlainBefore = "* ", PlainAfter = "\n" });
+                var plainPos = itemState.SourcePosition;
+                var plain = itemState.ScanTo("[*]");
+
+                var itemNode = CreateListItemNode(parser, data, itemState, scope, plain, plainPos, itemPos);
+                if (itemNode != null) content.Nodes.Add(itemNode);
+
+                itemPos = new Position(itemState.SourceLine, itemState.SourceColumn);
+                itemState.Seek(3, false); // read the [*]
             }
 
             var after = "</" + Element + ">";
-            return new HtmlNode(before, content, after) { IsBlockNode = true };
+            return new HtmlNode(tagPosition, before, content, after) { IsBlockNode = true };
+        }
+
+        private HtmlNode CreateListItemNode(Parser parser, ParseData data, State state, string scope, string text, Position textPosition, Position tagPosition)
+        {
+            text = Util.Trim(text);
+            if (text.Length == 0) return null;
+            
+            return HtmlNodeBuilder.Make("li", tagPosition)
+                .Add(parser.ParseTags(data, text, scope, TagContext, textPosition.Line, textPosition.Column))
+                .ToNode(plainBefore: "* ", plainAfter: "\n", htmlAfter: "\n");
         }
     }
 }

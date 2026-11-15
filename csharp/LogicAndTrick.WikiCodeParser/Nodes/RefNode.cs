@@ -18,7 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Nodes
 
         private INode GetNode()
         {
-            return Data.Get($"Ref::{Name}", () => UnprocessablePlainTextNode.Empty);
+            return Data.Get($"Ref::{Name}", () => UnprocessablePlainTextNode.Empty(Position.Zero));
         }
 
         public string ToHtml()

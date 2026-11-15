@@ -17,7 +17,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             Element = "img";
         }
 
-        private static readonly string[] Tags = {"img", "video", "audio"};
+        private static readonly string[] Tags = { "img", "video", "audio" };
 
         private static string GetTag(State state)
         {
@@ -39,6 +39,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
 
             var tag = GetTag(state);
@@ -73,8 +74,8 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             {
                 if (TwhlBehaviour)
                 {
-                    content.Nodes.Add(new MetadataNode("WikiUpload", image));
-                    src =  parser.Configuration.BuildUrl($"/wiki/embed/{WikiRevision.CreateSlug(image)}");
+                    content.Nodes.Add(new MetadataNode(pos, "WikiUpload", image));
+                    src = parser.Configuration.BuildUrl($"/wiki/embed/{WikiRevision.CreateSlug(image)}");
                 }
                 else
                 {
@@ -96,7 +97,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             string caption = null;
             var loop = false;
 
-            var classes = new List<string> {"embedded", "image"};
+            var classes = new List<string> { "embedded", "image" };
             if (ElementClass != null) classes.Add(ElementClass);
 
             foreach (var p in @params)
@@ -115,7 +116,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             {
                 if (TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null)
                 {
-                    content.Nodes.Add(new MetadataNode("WikiLink", url));
+                    content.Nodes.Add(new MetadataNode(pos, "WikiLink", url));
                     url = parser.Configuration.BuildUrl($"/wiki/page/{WikiRevision.CreateSlug(url)}");
                 }
             }
@@ -136,45 +137,46 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 el = "div";
             }
 
-            var embed = GetEmbedObject(tag, src, caption, loop);
+            var embed = GetEmbedObject(pos, tag, src, caption, loop);
             if (embed != null) content.Nodes.Add(embed);
-            if (caption != null) content.Nodes.Add(HtmlNodeBuilder.Make("span").AddClass("caption").Add(new PlainTextNode(caption)).ToNode(plainBefore: " "));
+            if (caption != null) content.Nodes.Add(HtmlNodeBuilder.Make("span", pos).AddClass("caption").Add(new PlainTextNode(pos, caption)).ToNode(plainBefore: " "));
 
-            var panel = HtmlNodeBuilder.Make("span").AddClass("caption-panel").Add(content).ToNode();
-            var wrapper = url.Length == 0 ? panel : HtmlNodeBuilder.Make("a").Attr("href", url).Add(panel).ToNode();
+            var panel = HtmlNodeBuilder.Make("span", pos).AddClass("caption-panel").Add(content).ToNode();
+            var wrapper = url.Length == 0 ? panel : HtmlNodeBuilder.Make("a", pos).Attr("href", url).Add(panel).ToNode();
 
-            return HtmlNodeBuilder.Make(el)
+            return HtmlNodeBuilder.Make(el, pos)
                 .AddClasses(classes)
                 .If(caption?.Length > 0, x => x.Attr("title", caption))
                 .Add(wrapper)
                 .ToNode(isBlockNode: el == "div");
         }
 
-        private static INode GetEmbedObject(string tag, string url, string caption, bool loop)
+        private static INode GetEmbedObject(Position pos, string tag, string url, string caption, bool loop)
         {
-            switch (tag) {
+            switch (tag)
+            {
                 case "img":
-                    return HtmlNodeBuilder.Make("img")
+                    return HtmlNodeBuilder.Make("img", pos)
                         .AddClass("caption-body")
                         .Attr("src", url)
                         .Attr("alt", caption ?? "User posted image")
                         .ToNode(plainBefore: "[Image]", selfClosing: true);
                 case "video":
                 case "audio":
-                    return HtmlNodeBuilder.Make(tag)
+                    return HtmlNodeBuilder.Make(tag, pos)
                         .AddClass("caption-body")
                         .Attr("src", url)
                         .Prop("playsinline")
                         .Prop("controls")
                         .If(loop, x => x.Prop("autoplay").Prop("loop").Prop("muted"))
-                        .Add(new UnprocessablePlainTextNode($"Your browser doesn't support embedded ${tag}."))
+                        .Add(new UnprocessablePlainTextNode(pos, $"Your browser doesn't support embedded ${tag}."))
                         .ToNode(plainBefore: tag.Substring(0, 1).ToUpper() + tag.Substring(1), selfClosing: true);
                 default:
                     return null;
             }
         }
 
-        private static readonly string[] ValidClasses = {"large", "medium", "small", "thumb", "left", "right", "center", "inline"};
+        private static readonly string[] ValidClasses = { "large", "medium", "small", "thumb", "left", "right", "center", "inline" };
         private static bool IsClass(string param) => ValidClasses.Contains(param);
     }
 }

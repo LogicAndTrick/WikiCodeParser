@@ -9,7 +9,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             Element = "div";
             MainOption = "id";
-            Options = new[] {"id"};
+            Options = new[] { "id" };
         }
 
         public override bool Matches(State state, string token, TagParseContext context)
@@ -21,6 +21,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
         public override INode Parse(Parser parser, ParseData data, State state, string scope, TagParseContext context)
         {
+            var pos = state.SourcePosition;
             var index = state.Index;
 
             if (state.ScanTo(":") != "[vault" || state.Next() != ':')
@@ -42,7 +43,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                 return null;
             }
 
-            var classes = new List<string> {"embedded", "vault"};
+            var classes = new List<string> { "embedded", "vault" };
             if (ElementClass != null) classes.Add(ElementClass);
 
             state.SkipWhitespace();
@@ -53,7 +54,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                          $"<div class=\"uninitialised\" data-embed-type=\"vault\" data-vault-id=\"{id}\">" +
                          $"Loading embedded content: Vault Item #{id}";
             var after = "</div></div></div></div>";
-            return new HtmlNode(before, PlainTextNode.Empty, after)
+            return new HtmlNode(pos, before, new PlainTextNode(pos, ""), after)
             {
                 PlainBefore = $"[TWHL vault item #{id}]",
                 PlainAfter = "\n",
