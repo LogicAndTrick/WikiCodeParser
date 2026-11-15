@@ -4,6 +4,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
 
@@ -44,10 +45,10 @@ export class MdPanelElement extends Element {
         else cls = 'card-default';
 
         const before = `<div class="embed-panel card ${cls}">` + (title != '' ? `<div class="card-header">${HtmlHelper.Encode(title)}</div>` : '') + '<div class="card-body">';
-        const content = parser.ParseElements(data, arr.join('\n'), scope);
+        const content = parser.ParseElements(data, arr.join('\n'), scope, 0);
         const after = '</div></div>';
 
-        const node = new HtmlNode(before, content, after);
+        const node = new HtmlNode(Position.Zero(), before, content, after);
         node.PlainBefore = title == '' ? '' : title + '\n' + '-'.repeat(title.length) + '\n';
         return node;
     }

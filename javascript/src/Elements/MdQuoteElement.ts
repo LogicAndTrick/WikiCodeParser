@@ -3,6 +3,7 @@ import { HtmlNode } from '../Nodes/HtmlNode';
 import { INode } from '../Nodes/INode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim } from '../Util';
 import { Element } from './Element';
 
@@ -24,7 +25,7 @@ export class MdQuoteElement extends Element {
         }
 
         const text = Trim(arr.join('\n'));
-        const ret = new HtmlNode('<blockquote>', parser.ParseElements(data, text, scope), '</blockquote>');
+        const ret = new HtmlNode(Position.Zero(), '<blockquote>', parser.ParseElements(data, text, scope, 0), '</blockquote>');
         ret.PlainBefore = '[quote]\n';
         ret.PlainAfter = '\n[/quote]';
         return ret;

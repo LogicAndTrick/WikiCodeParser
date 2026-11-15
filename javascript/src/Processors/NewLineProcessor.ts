@@ -4,6 +4,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim, TrimEnd, TrimStart } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
@@ -35,7 +36,7 @@ export class NewLineProcessor implements INodeProcessor {
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             if (line && Trim(line) !== '') {
-                ret.push(new PlainTextNode(line));
+                ret.push(new PlainTextNode(Position.Zero(), line));
                 numSequentialBreaks = 0;
             }
 
@@ -45,7 +46,7 @@ export class NewLineProcessor implements INodeProcessor {
             numSequentialBreaks++;
             if (numSequentialBreaks > 2) continue;
 
-            ret.push(new HtmlNode('<br/>', UnprocessablePlainTextNode.NewLine(), ''));
+            ret.push(new HtmlNode(Position.Zero(), '<br/>', UnprocessablePlainTextNode.NewLine(Position.Zero()), ''));
         }
         return ret;
     }

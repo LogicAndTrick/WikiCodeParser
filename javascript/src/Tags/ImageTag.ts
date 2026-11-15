@@ -25,8 +25,8 @@ export class ImageTag extends Tag {
         _scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         const url = HtmlHelper.AttributeEncode(ImageTag.BuildUrl(options, text));
 
@@ -44,7 +44,7 @@ export class ImageTag extends Tag {
         const before = `<${element} class="${classes.join(' ')}">` + '<span class="caption-panel">' + `<img class="caption-body" src="${url}" alt="User posted image" />`;
         const after = `</span></${element}>`;
         const plainsp = element == 'div' ? '\n' : '';
-        const ret = new HtmlNode(before, PlainTextNode.Empty(), after);
+        const ret = new HtmlNode(tagPosition, before, PlainTextNode.Empty(textPosition), after);
         ret.PlainBefore = `${plainsp}[User posted image]${plainsp}`;
         ret.IsBlockNode = element == 'div';
         return ret;

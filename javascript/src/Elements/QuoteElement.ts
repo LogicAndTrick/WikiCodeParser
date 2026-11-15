@@ -5,6 +5,7 @@ import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { TagParseContext } from '../TagParseContext';
 import { Trim, TrimStart } from '../Util';
 import { Element } from './Element';
@@ -41,13 +42,13 @@ export class QuoteElement extends Element {
             plainBefore = `${author} said: ${plainBefore}`;
         }
 
-        const node = new HtmlNode(before, parser.ParseElements(data, text, scope), '</blockquote>');
+        const node = new HtmlNode(Position.Zero(), before, parser.ParseElements(data, text, scope, 0), '</blockquote>');
         node.PlainBefore = plainBefore;
         node.PlainAfter = '\n[/quote]';
         node.IsBlockNode = true;
 
         if (postfix) {
-            return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline));
+            return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline, 0, 0));
         }
         return node;
     }

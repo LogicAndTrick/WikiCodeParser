@@ -7,6 +7,7 @@ import { UnprocessablePlainTextNode } from './Nodes/UnprocessablePlainTextNode';
 import { ParseData } from './ParseData';
 import { ParserConfiguration } from './ParserConfiguration';
 import { ParseResult } from './ParseResult';
+import { Position } from './Position';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { State } from './State';
 import { TagParseContext } from './TagParseContext';
@@ -28,7 +29,7 @@ export class Parser {
         return res;
     }
 
-    public ParseElements(data: ParseData, text: string, scope: string, line: number = 0): INode {
+    public ParseElements(data: ParseData, text: string, scope: string, line: number): INode {
         data.CurrentElementDepth++;
         const root = new NodeCollection();
 
@@ -59,13 +60,13 @@ export class Parser {
                 // if we have any plain text, create a node for it
                 if (plain.length > 0) {
                     root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, plain.join('\n'), scope, TagParseContext.Block, plainStart, 0)));
-                    root.Nodes.push(UnprocessablePlainTextNode.NewLine()); // Newline before next element
+                    root.Nodes.push(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Newline before next element
                 }
                 plain.splice(0, plain.length);
                 plainStart = lines.SourceLine;
 
                 root.Nodes.push(con);
-                root.Nodes.push(UnprocessablePlainTextNode.NewLine()); // Elements always have a newline after
+                root.Nodes.push(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Elements always have a newline after
                 matched = true;
                 break;
             }
@@ -126,7 +127,7 @@ export class Parser {
         return node;
     }
 
-    public ParseTags(data: ParseData, text: string, scope: string, context: TagParseContext, line: number = 0, column: number = 0): INode {
+    public ParseTags(data: ParseData, text: string, scope: string, context: TagParseContext, line: number, column: number): INode {
         data.CurrentTagDepth++;
 
         const state = new State(line, column, text);
@@ -141,7 +142,7 @@ export class Parser {
             const pos = state.SourcePosition;
             let plain = state.ScanTo('[');
             if (plain && plain != '') {
-                const p = new PlainTextNode(plain);
+                const p = new PlainTextNode(pos, plain);
                 p.Line = pos.Line;
                 p.Column = pos.Column;
                 root.Nodes.push(p);
@@ -165,7 +166,7 @@ export class Parser {
             if (!found) {
                 plain = state.Next();
                 if (plain && plain != '') {
-                    const p = new PlainTextNode(plain);
+                    const p = new PlainTextNode(pos, plain);
                     p.Line = pos.Line;
                     p.Column = pos.Column;
                     root.Nodes.push(p);

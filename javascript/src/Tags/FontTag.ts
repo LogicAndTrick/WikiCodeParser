@@ -24,8 +24,8 @@ export class FontTag extends Tag {
         scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
@@ -37,9 +37,9 @@ export class FontTag extends Tag {
             before = before.trimEnd() + '"';
         }
         before += '>';
-        const content = parser.ParseTags(data, text, scope, this.TagContext());
+        const content = parser.ParseTags(data, text, scope, this.TagContext(), textPosition.Line, textPosition.Column);
         const after = '</' + this.Element + '>';
-        return new HtmlNode(before, content, after);
+        return new HtmlNode(tagPosition, before, content, after);
     }
 
     static IsValidSize(text: string): boolean {

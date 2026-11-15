@@ -24,8 +24,8 @@ export class PreTag extends Tag {
         _scope: string,
         _options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
@@ -43,7 +43,7 @@ export class PreTag extends Tag {
         arr = PreElement.FixCodeIndentation(arr);
         text = arr.join('\n');
 
-        const ret = new HtmlNode(before, new UnprocessablePlainTextNode(text), after);
+        const ret = new HtmlNode(tagPosition, before, new UnprocessablePlainTextNode(textPosition, text), after);
         ret.IsBlockNode = true;
         return ret;
     }

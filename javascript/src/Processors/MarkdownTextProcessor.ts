@@ -5,6 +5,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { IndexOfAny, Trim } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
@@ -58,7 +59,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
         // code tokens cannot be nested
         let contents: INode;
         if (token == '`') {
-            contents = new UnprocessablePlainTextNode(str);
+            contents = new UnprocessablePlainTextNode(Position.Zero(), str);
         } else {
             const toks = MarkdownTextProcessor.ParseTokens(tracker, str);
             contents = toks.length == 1 ? toks[0] : new NodeCollection(...toks);
@@ -68,7 +69,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
 
         endPositionObj.endPosition = endToken;
 
-        const ret = new HtmlNode(MarkdownTextProcessor.OpenTags[tokenIndex], contents, MarkdownTextProcessor.CloseTags[tokenIndex]);
+        const ret = new HtmlNode(Position.Zero(), MarkdownTextProcessor.OpenTags[tokenIndex], contents, MarkdownTextProcessor.CloseTags[tokenIndex]);
         ret.PlainBefore = token;
         ret.PlainAfter = token;
         return ret;
@@ -98,13 +99,13 @@ export class MarkdownTextProcessor implements INodeProcessor {
             if (parsed == null) {
                 index = nextIndex + 1; // no match, skip this token
             } else {
-                if (plainStart < nextIndex) ret.push(new PlainTextNode(text.substring(plainStart, nextIndex)));
+                if (plainStart < nextIndex) ret.push(new PlainTextNode(Position.Zero(), text.substring(plainStart, nextIndex)));
                 ret.push(parsed);
                 index = plainStart = endIndexObj.endPosition + 1;
             }
         }
         // Return the rest of the text as plain
-        if (plainStart < text.length) ret.push(new PlainTextNode(text.substring(plainStart)));
+        if (plainStart < text.length) ret.push(new PlainTextNode(Position.Zero(), text.substring(plainStart)));
 
         return ret;
     }

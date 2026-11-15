@@ -21,6 +21,7 @@ export class WikiCategoryTag extends Tag {
     }
 
     public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
         if (state.ScanTo(':') != '[cat' || state.Next() != ':') {
             state.Seek(index, true);
@@ -34,6 +35,6 @@ export class WikiCategoryTag extends Tag {
         }
 
         state.SkipWhitespace();
-        return new MetadataNode('WikiCategory', Trim(str));
+        return new MetadataNode(pos, 'WikiCategory', Trim(str));
     }
 }

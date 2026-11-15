@@ -22,6 +22,7 @@ export class WikiArchiveTag extends Tag {
     }
 
     public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
         if (state.Next() != '[') {
             state.Seek(index, true);
@@ -76,6 +77,6 @@ export class WikiArchiveTag extends Tag {
         }
 
         state.SkipWhitespace();
-        return new MetadataNode('WikiCredit', credit);
+        return new MetadataNode(pos, 'WikiCredit', credit);
     }
 }

@@ -21,9 +21,9 @@ export class CodeTag extends Tag {
         _scope: string,
         _options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
-        return new HtmlNode('<code>', new UnprocessablePlainTextNode(text), '</code>');
+        return new HtmlNode(tagPosition, '<code>', new UnprocessablePlainTextNode(textPosition, text), '</code>');
     }
 }

@@ -27,8 +27,8 @@ export class QuoteTag extends Tag {
         scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         let before = '<' + this.Element;
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
@@ -37,8 +37,8 @@ export class QuoteTag extends Tag {
             before += '<strong class="quote-name">' + HtmlHelper.Encode(options['name']) + ' said:</strong><br/>';
         }
         const after = '</' + this.Element + '>';
-        const content = parser.ParseTags(data, Trim(text), scope, this.TagContext());
-        const ret = new HtmlNode(before, content, after);
+        const content = parser.ParseTags(data, Trim(text), scope, this.TagContext(), textPosition.Line, textPosition.Column);
+        const ret = new HtmlNode(tagPosition, before, content, after);
         ret.PlainBefore = (options['name'] ? options['name'] + ' said: ' : '') + '[quote]\n';
         ret.PlainAfter = '\n[/quote]';
         ret.IsBlockNode = this.IsBlock === true;

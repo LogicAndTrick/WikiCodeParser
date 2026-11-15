@@ -24,6 +24,7 @@ export class WikiYoutubeTag extends Tag {
     }
 
     public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
         if (state.ScanTo(':') != '[youtube' || state.Next() != ':') {
             state.Seek(index, true);
@@ -63,7 +64,7 @@ export class WikiYoutubeTag extends Tag {
 
         if (!caption || caption.trim() == '') caption = null;
 
-        const captionNode = new HtmlNode(caption != null ? '<span class="caption">' : '', new PlainTextNode(caption ?? ''), caption != null ? '</span>' : '');
+        const captionNode = new HtmlNode(pos, caption != null ? '<span class="caption">' : '', new PlainTextNode(pos, caption ?? ''), caption != null ? '</span>' : '');
         captionNode.PlainBefore = '[YouTube video] ';
         captionNode.PlainAfter = '\n';
 
@@ -76,7 +77,7 @@ export class WikiYoutubeTag extends Tag {
             '</div>' +
             '</div>';
         const after = '</div></div>';
-        const ret = new HtmlNode(before, captionNode, after);
+        const ret = new HtmlNode(pos, before, captionNode, after);
         ret.IsBlockNode = true;
         return ret;
     }

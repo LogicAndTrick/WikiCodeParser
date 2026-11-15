@@ -1,4 +1,5 @@
 import { ParseData } from '../ParseData';
+import { Position } from '../Position';
 import { INode } from './INode';
 import { UnprocessablePlainTextNode } from './UnprocessablePlainTextNode';
 
@@ -18,7 +19,7 @@ export class RefNode implements INode {
     }
 
     private GetNode(): INode {
-        return this.Data.Get(`Ref::${this.Name}`, () => UnprocessablePlainTextNode.Empty());
+        return this.Data.Get(`Ref::${this.Name}`, () => UnprocessablePlainTextNode.Empty(Position.Zero()));
     }
 
     ToHtml(): string {

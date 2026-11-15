@@ -8,6 +8,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { State } from '../State';
 import { TagParseContext } from '../TagParseContext';
 import { Trim } from '../Util';
@@ -39,6 +40,7 @@ export class WikiImageTag extends Tag {
     }
 
     public override Parse(parser: Parser, _data: ParseData, state: State, _scope: string, context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
 
         const tag = WikiImageTag.GetTag(state);
@@ -68,7 +70,7 @@ export class WikiImageTag extends Tag {
         let src = image;
         if (!image.includes('/')) {
             if (this.TwhlBehaviour) {
-                content.Nodes.push(new MetadataNode('WikiUpload', image));
+                content.Nodes.push(new MetadataNode(pos, 'WikiUpload', image));
                 src = parser.Configuration.BuildUrl(`/wiki/embed/${WikiRevision.CreateSlug(image)}`);
             } else {
                 state.Seek(index, true);
@@ -102,7 +104,7 @@ export class WikiImageTag extends Tag {
         if (url != null) url = HtmlHelper.StripControlCharacters(url);
         if (tag == 'img' && url != null && HtmlHelper.ValidateUrl(url)) {
             if (this.TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null) {
-                content.Nodes.push(new MetadataNode('WikiLink', url));
+                content.Nodes.push(new MetadataNode(pos, 'WikiLink', url));
                 url = parser.Configuration.BuildUrl(`/wiki/page/${WikiRevision.CreateSlug(url)}`);
             }
         } else {
@@ -120,37 +122,37 @@ export class WikiImageTag extends Tag {
             el = 'div';
         }
 
-        const embed = WikiImageTag.GetEmbedObject(tag, src, caption, loop);
+        const embed = WikiImageTag.GetEmbedObject(pos, tag, src, caption, loop);
         if (embed != null) content.Nodes.push(embed);
-        if (caption != null) content.Nodes.push(HtmlNodeBuilder.make('span').addClass('caption').add(new PlainTextNode(caption)).toNode({ plainBefore: ' ' }));
+        if (caption != null) content.Nodes.push(HtmlNodeBuilder.make('span', pos).addClass('caption').add(new PlainTextNode(pos, caption)).toNode({ plainBefore: ' ' }));
 
-        const panel = HtmlNodeBuilder.make('span').addClass('caption-panel').add(content).toNode();
-        const wrapper = !url || url.length == 0 ? panel : HtmlNodeBuilder.make('a').attr('href', url).add(panel).toNode();
+        const panel = HtmlNodeBuilder.make('span', pos).addClass('caption-panel').add(content).toNode();
+        const wrapper = !url || url.length == 0 ? panel : HtmlNodeBuilder.make('a', pos).attr('href', url).add(panel).toNode();
 
-        return HtmlNodeBuilder.make(el)
+        return HtmlNodeBuilder.make(el, pos)
             .addClasses(classes)
             .if(!!caption && caption.length > 0, x => x.attr('title', caption))
             .add(wrapper)
             .toNode({ isBlockNode: el == 'div' });
     }
 
-    private static GetEmbedObject(tag: string, url: string, caption: string | null, loop: boolean): INode | null {
+    private static GetEmbedObject(pos: Position, tag: string, url: string, caption: string | null, loop: boolean): INode | null {
         switch (tag) {
             case 'img':
-                return HtmlNodeBuilder.make('img')
+                return HtmlNodeBuilder.make('img', pos)
                     .addClass('caption-body')
                     .attr('src', url)
                     .attr('alt', caption ?? 'User posted image')
                     .toNode({ plainBefore: '[Image]', selfClosing: true });
             case 'video':
             case 'audio':
-                return HtmlNodeBuilder.make(tag)
+                return HtmlNodeBuilder.make(tag, pos)
                     .addClass('caption-body')
                     .attr('src', url)
                     .prop('playsinline')
                     .prop('controls')
                     .if(loop, x => x.prop('autoplay').prop('loop').prop('muted'))
-                    .add(new UnprocessablePlainTextNode(`Your browser doesn't support embedded ${tag}.`))
+                    .add(new UnprocessablePlainTextNode(pos, `Your browser doesn't support embedded ${tag}.`))
                     .toNode({ plainBefore: tag.substring(0, 1).toUpperCase() + tag.substring(1), selfClosing: true });
             default:
                 return null;

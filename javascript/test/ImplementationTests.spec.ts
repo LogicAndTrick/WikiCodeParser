@@ -54,6 +54,7 @@ import {
     WikiYoutubeTag,
     YoutubeTag,
 } from '../src';
+import { Position } from '../src/Position';
 import { JsonNode, TestConfig, TestDefinition, TestNode } from './TestModels';
 import { GetTestCaseDirectory, GetTestCaseNames, sanitise } from './Util';
 
@@ -387,7 +388,7 @@ class LineOffsetEaterElement extends Element {
 
     Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode {
         for (let i = 0; i < this.lineOffset; i++) lines.Next();
-        return new UnprocessablePlainTextNode(RemovedContentGuid);
+        return new UnprocessablePlainTextNode(new Position(1, 0), RemovedContentGuid);
     }
 }
 

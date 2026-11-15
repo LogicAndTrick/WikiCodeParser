@@ -1,19 +1,22 @@
 import { HtmlHelper } from '../HtmlHelper';
+import { Position } from '../Position';
 import { INode } from './INode';
 
 export class UnprocessablePlainTextNode implements INode {
-    public static Empty(): INode {
-        return new UnprocessablePlainTextNode('');
+    public static Empty(pos: Position): INode {
+        return new UnprocessablePlainTextNode(pos, '');
     }
-    public static NewLine(): INode {
-        return new UnprocessablePlainTextNode('\n');
+    public static NewLine(pos: Position): INode {
+        return new UnprocessablePlainTextNode(pos, '\n');
     }
 
     public Line: number = 0;
     public Column: number = 0;
     public Text: string;
 
-    constructor(text: string) {
+    constructor(pos: Position, text: string) {
+        this.Line = pos.Line;
+        this.Column = pos.Column;
         this.Text = text;
     }
 

@@ -23,7 +23,7 @@ export class YoutubeTag extends Tag {
         scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
+        tagPosition: Position,
         _textPosition: Position
     ): INode {
         let id = text;
@@ -32,7 +32,7 @@ export class YoutubeTag extends Tag {
         const classes = ['embedded', 'video'];
         if (this.ElementClass != null) classes.push(this.ElementClass);
 
-        const captionNode = new HtmlNode('', PlainTextNode.Empty(), '');
+        const captionNode = new HtmlNode(tagPosition, '', PlainTextNode.Empty(tagPosition), '');
         captionNode.PlainBefore = '[YouTube video] ';
         captionNode.PlainAfter = '\n';
 
@@ -45,7 +45,7 @@ export class YoutubeTag extends Tag {
             '   </div>' +
             '  </div>';
         const after = '</div></div>';
-        const ret = new HtmlNode(before, captionNode, after);
+        const ret = new HtmlNode(tagPosition, before, captionNode, after);
         ret.IsBlockNode = true;
         return ret;
     }

@@ -1,4 +1,5 @@
 import { HtmlHelper } from '../HtmlHelper';
+import { Position } from '../Position';
 import { HtmlNode } from './HtmlNode';
 import { INode } from './INode';
 import { NodeCollection } from './NodeCollection';
@@ -27,15 +28,15 @@ export class HtmlNodeBuilder {
     }
     public contents: INode[];
 
-    public static make(tag: string): HtmlNodeBuilder {
-        return new HtmlNodeBuilder(tag);
+    public static make(tag: string, pos: Position): HtmlNodeBuilder {
+        return new HtmlNodeBuilder(tag, pos);
     }
 
-    constructor(tag: string) {
+    constructor(tag: string, pos: Position) {
         if (!HtmlHelper.ValidateTagName(tag)) throw new Error('Invalid tag.');
 
-        this.line = 0;
-        this.column = 0;
+        this.line = pos.Line;
+        this.column = pos.Column;
         this.tag = tag;
         this._attributes = new Map<string, string>();
         this._props = [];
@@ -111,17 +112,21 @@ export class HtmlNodeBuilder {
         plainBefore = '',
         plainAfter = '',
         selfClosing = false,
+        htmlBefore = '',
+        htmlAfter = '',
     }: {
         isBlockNode?: boolean;
         plainBefore?: string;
         plainAfter?: string;
         selfClosing?: boolean;
+        htmlBefore?: string;
+        htmlAfter?: string;
     } = {}): HtmlNode {
         if (this.contents.length > 0) selfClosing = false;
 
         const tag = HtmlHelper.ValidateTagName(this.tag) ? this.tag : 'div';
         const content: INode = this.contents.length === 1 ? this.contents[0] : new NodeCollection(...this.contents);
-        let html = '<' + tag;
+        let html = htmlBefore + '<' + tag;
         if (this._classes.size > 0) {
             const classes = [...this._classes].sort().join(' ');
             html += ` class="${HtmlHelper.AttributeEncode(classes)}"`;
@@ -157,14 +162,13 @@ export class HtmlNodeBuilder {
             html += ' /';
             after = '';
         }
+        after += htmlAfter;
         html += '>';
 
-        const node = new HtmlNode(html, content, after);
+        const node = new HtmlNode(new Position(this.line, this.column), html, content, after);
         node.IsBlockNode = isBlockNode;
         node.PlainBefore = plainBefore;
         node.PlainAfter = plainAfter;
-        node.Line = this.line;
-        node.Column = this.column;
         return node;
     }
 }

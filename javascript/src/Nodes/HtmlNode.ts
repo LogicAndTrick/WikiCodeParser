@@ -1,3 +1,4 @@
+import { Position } from '../Position';
 import { INode } from './INode';
 
 export class HtmlNode implements INode {
@@ -12,7 +13,9 @@ export class HtmlNode implements INode {
     public PlainAfter: string;
     public IsBlockNode: boolean;
 
-    constructor(htmlBefore: string, content: INode, htmlAfter: string) {
+    constructor(pos: Position, htmlBefore: string, content: INode, htmlAfter: string) {
+        this.Line = pos.Line;
+        this.Column = pos.Column;
         this.HtmlBefore = htmlBefore;
         this.Content = content;
         this.HtmlAfter = htmlAfter;

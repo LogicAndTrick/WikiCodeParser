@@ -25,8 +25,8 @@ export class LinkTag extends Tag {
         scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         const url = HtmlHelper.AttributeEncode(this.BuildUrl(options, text));
 
@@ -36,8 +36,10 @@ export class LinkTag extends Tag {
         const before = `<${this.Element} ` + (classes.length > 0 ? `class="${classes.join(' ')}" ` : '') + `href="${url}">`;
         const after = `</${this.Element}>`;
 
-        const content = options['url'] ? parser.ParseTags(data, text, scope, this.TagContext()) : new UnprocessablePlainTextNode(text);
-        return new HtmlNode(before, content, after);
+        const content = options['url']
+            ? parser.ParseTags(data, text, scope, this.TagContext(), textPosition.Line, textPosition.Column)
+            : new UnprocessablePlainTextNode(textPosition, text);
+        return new HtmlNode(tagPosition, before, content, after);
     }
 
     public Validate(options: Record<string, string>, text: string): boolean {

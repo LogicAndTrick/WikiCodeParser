@@ -8,8 +8,12 @@ import { State } from '../State';
 import { Tag } from './Tag';
 
 class SpoilerNode implements INode {
-    public Line: number = 0;
-    public Column: number = 0;
+    public get Line(): number {
+        return this.SpoilerContent.Line;
+    }
+    public get Column(): number {
+        return this.SpoilerContent.Column;
+    }
     private VisibleText: string;
     private SpoilerContent: INode;
 
@@ -58,8 +62,8 @@ export class SpoilerTag extends Tag {
         scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         let visibleText = 'Spoiler';
         if (options['text'] && options['text'].length > 0) visibleText = options['text'];
@@ -68,6 +72,11 @@ export class SpoilerTag extends Tag {
         if (this.ElementClass != null) before += ' class="' + this.ElementClass + '"';
         before += ` title="${HtmlHelper.Encode(visibleText)}">`;
         const after = `</${this.Element}>`;
-        return new HtmlNode(before, new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, this.TagContext())), after);
+        return new HtmlNode(
+            tagPosition,
+            before,
+            new SpoilerNode(visibleText, parser.ParseTags(data, text, scope, this.TagContext(), textPosition.Line, textPosition.Column)),
+            after
+        );
     }
 }

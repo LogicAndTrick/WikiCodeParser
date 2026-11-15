@@ -148,10 +148,8 @@ export class Tag {
         before += '>';
         const after = '</' + this.Element + '>';
         const content = parser.ParseTags(data, text, scope, this.TagContext(), textPosition.Line, textPosition.Column);
-        const ret = new HtmlNode(before, content, after);
+        const ret = new HtmlNode(tagPosition, before, content, after);
         ret.IsBlockNode = this.IsBlock === true;
-        ret.Line = tagPosition.Line;
-        ret.Column = tagPosition.Column;
         return ret;
     }
 

@@ -6,6 +6,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { INodeProcessor } from './INodeProcessor';
 
 export class AutoLinkingProcessor implements INodeProcessor {
@@ -68,17 +69,31 @@ export class AutoLinkingProcessor implements INodeProcessor {
             if (urlMatch.groups && urlMatch.groups['url'] && !HtmlHelper.ValidateUrl(matchingText)) continue;
 
             // return the prefix text
-            if (idx > start) ret.push(new PlainTextNode(text.substring(start, urlMatch.index)));
+            if (idx > start) ret.push(new PlainTextNode(Position.Zero(), text.substring(start, urlMatch.index)));
             if (urlMatch.groups && urlMatch.groups['url']) {
-                ret.push(new HtmlNode(`<a href="${HtmlHelper.AttributeEncode(HtmlHelper.SanitiseUrl(matchingText))}">`, new UnprocessablePlainTextNode(matchingText), '</a>'));
+                ret.push(
+                    new HtmlNode(
+                        Position.Zero(),
+                        `<a href="${HtmlHelper.AttributeEncode(HtmlHelper.SanitiseUrl(matchingText))}">`,
+                        new UnprocessablePlainTextNode(Position.Zero(), matchingText),
+                        '</a>'
+                    )
+                );
             } else if (urlMatch.groups && urlMatch.groups['email']) {
-                ret.push(new HtmlNode(`<a href="mailto:${HtmlHelper.AttributeEncode(matchingText)}">`, new UnprocessablePlainTextNode(matchingText), '</a>'));
+                ret.push(
+                    new HtmlNode(
+                        Position.Zero(),
+                        `<a href="mailto:${HtmlHelper.AttributeEncode(matchingText)}">`,
+                        new UnprocessablePlainTextNode(Position.Zero(), matchingText),
+                        '</a>'
+                    )
+                );
             }
             start = idx + len;
         }
 
         // return the remaining text
-        if (start < text.length) ret.push(new PlainTextNode(text.substring(start)));
+        if (start < text.length) ret.push(new PlainTextNode(Position.Zero(), text.substring(start)));
 
         return ret;
     }

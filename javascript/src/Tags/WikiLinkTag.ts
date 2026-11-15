@@ -23,6 +23,7 @@ export class WikiLinkTag extends Tag {
     }
 
     public override Parse(parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
 
         if (state.Next() != '[' || state.Next() != '[') {
@@ -58,9 +59,9 @@ export class WikiLinkTag extends Tag {
         const after = '</a>';
 
         const content = new NodeCollection();
-        content.Nodes.push(new MetadataNode('WikiLink', page));
-        content.Nodes.push(new PlainTextNode(text));
+        content.Nodes.push(new MetadataNode(pos, 'WikiLink', page));
+        content.Nodes.push(new PlainTextNode(pos, text));
 
-        return new HtmlNode(before, content, after);
+        return new HtmlNode(pos, before, content, after);
     }
 }

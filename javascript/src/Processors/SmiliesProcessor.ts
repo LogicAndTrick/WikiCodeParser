@@ -6,6 +6,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { IndexOfAny, Template } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
@@ -72,7 +73,9 @@ export class SmiliesProcessor implements INodeProcessor {
         let numSmilies = 0;
         while (index + 1 < text.length && (index = IndexOfAny(text, this._tokenStarts, index + 1)) >= 0) {
             if (numSmilies >= SmiliesProcessor.MaxSmilies) {
-                ret.push(new HtmlNode('<em class="text-danger">', new UnprocessablePlainTextNode(' [warning: too many smilies in post] '), '</em>'));
+                ret.push(
+                    new HtmlNode(Position.Zero(), '<em class="text-danger">', new UnprocessablePlainTextNode(Position.Zero(), ' [warning: too many smilies in post] '), '</em>')
+                );
                 break;
             }
 
@@ -100,10 +103,10 @@ export class SmiliesProcessor implements INodeProcessor {
             if (index + token.length == text.length && !NodeExtensions.NextNodeStartsWith(node, parentNode, SmiliesProcessor.AllowedEndChars)) continue;
 
             // We have a smiley
-            if (start < index) ret.push(new PlainTextNode(text.substring(start, index)));
+            if (start < index) ret.push(new PlainTextNode(Position.Zero(), text.substring(start, index)));
             const src = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(Template(this.UrlFormatString, { 0: definition.Name })));
             const alt = HtmlHelper.AttributeEncode(token);
-            const smileyNode = new HtmlNode(`<img class="smiley" src="${src}" alt="${alt}" />`, PlainTextNode.Empty(), '');
+            const smileyNode = new HtmlNode(Position.Zero(), `<img class="smiley" src="${src}" alt="${alt}" />`, PlainTextNode.Empty(Position.Zero()), '');
             smileyNode.PlainBefore = token;
             ret.push(smileyNode);
             start = index + token.length;
@@ -112,7 +115,7 @@ export class SmiliesProcessor implements INodeProcessor {
             numSmilies++;
         }
 
-        if (start < text.length) ret.push(new PlainTextNode(text.substring(start)));
+        if (start < text.length) ret.push(new PlainTextNode(Position.Zero(), text.substring(start)));
         return ret;
     }
 

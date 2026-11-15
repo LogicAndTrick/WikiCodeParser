@@ -5,6 +5,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { TrimEnd, TrimStart } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
@@ -35,9 +36,9 @@ export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
 
             if (child instanceof HtmlNode && child.IsBlockNode) {
                 trimStart = true;
-                ret.push(UnprocessablePlainTextNode.NewLine());
+                ret.push(UnprocessablePlainTextNode.NewLine(Position.Zero()));
                 ret.push(child);
-                ret.push(UnprocessablePlainTextNode.NewLine());
+                ret.push(UnprocessablePlainTextNode.NewLine(Position.Zero()));
             } else {
                 trimStart = false;
                 ret.push(child);

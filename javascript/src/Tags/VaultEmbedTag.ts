@@ -23,6 +23,7 @@ export class VaultEmbedTag extends Tag {
     }
 
     public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
 
         if (state.ScanTo(':') != '[vault' || state.Next() != ':') {
@@ -54,7 +55,7 @@ export class VaultEmbedTag extends Tag {
             `<div class="uninitialised" data-embed-type="vault" data-vault-id="${id}">` +
             `Loading embedded content: Vault Item #${id}`;
         const after = '</div></div></div></div>';
-        const ret = new HtmlNode(before, PlainTextNode.Empty(), after);
+        const ret = new HtmlNode(pos, before, PlainTextNode.Empty(pos), after);
         ret.PlainBefore = `[TWHL vault item #${id}]`;
         ret.PlainAfter = '\n';
         ret.IsBlockNode = true;

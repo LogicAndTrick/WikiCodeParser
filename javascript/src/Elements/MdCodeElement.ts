@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 import { PreElement } from './PreElement';
@@ -68,10 +69,10 @@ export class MdCodeElement extends Element {
         // Dedent all lines by the longest common whitespace
         arr = arr.map(a => a.substring(Math.min(longestWhitespace, a.length)));
 
-        const plain = new UnprocessablePlainTextNode(arr.join('\n'));
+        const plain = new UnprocessablePlainTextNode(Position.Zero(), arr.join('\n'));
         const cls = !lang || lang.trim() == '' ? '' : ` class="lang-${lang}"`;
         const before = `<pre${cls}><code>`;
         const after = '</code></pre>';
-        return new HtmlNode(before, plain, after);
+        return new HtmlNode(Position.Zero(), before, plain, after);
     }
 }

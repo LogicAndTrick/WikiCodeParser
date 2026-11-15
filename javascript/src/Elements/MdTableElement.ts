@@ -5,6 +5,7 @@ import { NodeCollection } from '../Nodes/NodeCollection';
 import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { TagParseContext } from '../TagParseContext';
 import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
@@ -103,7 +104,7 @@ export class MdTableElement extends Element {
             arr.push(new TableRow(...cells));
         } while (lines.Next());
 
-        return new HtmlNode('<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...arr), '</table></div>');
+        return new HtmlNode(Position.Zero(), '<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...arr), '</table></div>');
     }
 
     private static SplitTable(text: string): string[] {
@@ -133,6 +134,6 @@ export class MdTableElement extends Element {
             const name = res[1];
             return new RefNode(data, name);
         }
-        return parser.ParseTags(data, text, scope, TagParseContext.Block);
+        return parser.ParseTags(data, text, scope, TagParseContext.Block, 0, 0);
     }
 }

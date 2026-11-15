@@ -5,6 +5,7 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { RefNode } from '../Nodes/RefNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 
@@ -131,7 +132,7 @@ export class MdListElement extends Element {
         const current = lines.Current();
 
         // Put all the subtrees into a dummy item node
-        const item = new ListItemNode(PlainTextNode.Empty());
+        const item = new ListItemNode(PlainTextNode.Empty(Position.Zero()));
         this.CreateListItems(item, '', parser, data, lines, scope);
 
         if (item.Subtrees.length == 0) {
@@ -190,7 +191,7 @@ export class MdListElement extends Element {
                     const name = res[1];
                     pt = new RefNode(data, name);
                 } else {
-                    pt = parser.ParseElements(data, value, scope);
+                    pt = parser.ParseElements(data, value, scope, 0);
                 }
 
                 lastItemNode = new ListItemNode(pt);

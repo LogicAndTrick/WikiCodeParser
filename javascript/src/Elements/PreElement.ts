@@ -5,6 +5,7 @@ import { INode } from '../Nodes/INode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim, TrimEnd, TrimStart } from '../Util';
 import { Element } from './Element';
 
@@ -134,11 +135,11 @@ export class PreElement extends Element {
         arr = PreElement.FixCodeIndentation(arr);
 
         const highlights = highlight.map(h => `<div class="line-highlight" style="top: ${h.firstLine}em; height: ${h.numLines}em; background: ${h.color};"></div>`).join('');
-        const plain = new UnprocessablePlainTextNode(arr.join('\n'));
+        const plain = new UnprocessablePlainTextNode(Position.Zero(), arr.join('\n'));
         const cls = !lang || lang.trim() == '' ? '' : ` class="lang-${lang}"`;
         const before = `<pre${cls}><code>${highlights}`;
         const after = '</code></pre>';
-        return new HtmlNode(before, plain, after);
+        return new HtmlNode(Position.Zero(), before, plain, after);
     }
 
     public static FixCodeIndentation(arr: string[]): string[] {

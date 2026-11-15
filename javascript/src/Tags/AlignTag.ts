@@ -25,8 +25,8 @@ export class AlignTag extends Tag {
         scope: string,
         options: Record<string, string>,
         text: string,
-        _tagPosition: Position,
-        _textPosition: Position
+        tagPosition: Position,
+        textPosition: Position
     ): INode {
         let before = '<' + this.Element;
         let cls = (this.ElementClass || '') + ' ';
@@ -34,9 +34,9 @@ export class AlignTag extends Tag {
             cls += 'text-' + AlignTag.ConvertAlign(options['align']);
         }
         before += ' class="' + Trim(cls) + '">';
-        const content = parser.ParseTags(data, text, scope, this.TagContext());
+        const content = parser.ParseTags(data, text, scope, this.TagContext(), textPosition.Line, textPosition.Column);
         const after = '</' + this.Element + '>';
-        const ret = new HtmlNode(before, content, after);
+        const ret = new HtmlNode(tagPosition, before, content, after);
         ret.IsBlockNode = true;
         return ret;
     }

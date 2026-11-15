@@ -1,3 +1,4 @@
+import { Position } from '../Position';
 import { INode } from './INode';
 
 export class MetadataNode implements INode {
@@ -6,7 +7,9 @@ export class MetadataNode implements INode {
     public Key: string;
     public Value: any;
 
-    constructor(key: string, value: any) {
+    constructor(pos: Position, key: string, value: any) {
+        this.Line = pos.Line;
+        this.Column = pos.Column;
         this.Key = key;
         this.Value = value;
     }

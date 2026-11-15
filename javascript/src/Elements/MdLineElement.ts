@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { TrimEnd } from '../Util';
 import { Element } from './Element';
 
@@ -14,7 +15,7 @@ export class MdLineElement extends Element {
     }
 
     public Consume(_parser: Parser, _data: ParseData, _lines: Lines, _scope: string): INode | null {
-        const ret = new HtmlNode('<hr />', PlainTextNode.Empty(), '');
+        const ret = new HtmlNode(Position.Zero(), '<hr />', PlainTextNode.Empty(Position.Zero()), '');
         ret.PlainBefore = '---';
         return ret;
     }

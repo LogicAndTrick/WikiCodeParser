@@ -4,6 +4,7 @@ import { INode } from '../Nodes/INode';
 import { NodeCollection } from '../Nodes/NodeCollection';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { ParseIntStrict, TrimEnd } from '../Util';
 import { Element } from './Element';
 
@@ -67,7 +68,7 @@ export class MdColumnsElement extends Element {
         while (lines.Next() && i < colDefs.length) {
             const value = TrimEnd(lines.Value());
             if (value == '%%') {
-                cols.push(new ColumnNode(colDefs[i], parser.ParseElements(data, arr.join('\n'), scope)));
+                cols.push(new ColumnNode(colDefs[i], parser.ParseElements(data, arr.join('\n'), scope, 0)));
                 arr = [];
                 i++;
             } else {
@@ -81,6 +82,6 @@ export class MdColumnsElement extends Element {
             return null;
         }
 
-        return new HtmlNode('<div class="row">', new NodeCollection(...cols), '</div>');
+        return new HtmlNode(Position.Zero(), '<div class="row">', new NodeCollection(...cols), '</div>');
     }
 }

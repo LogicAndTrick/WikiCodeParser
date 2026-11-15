@@ -5,6 +5,7 @@ import { RefNode } from '../Nodes/RefNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
+import { Position } from '../Position';
 import { Trim, TrimEnd } from '../Util';
 import { Element } from './Element';
 
@@ -52,12 +53,12 @@ export class RefElement extends Element {
         }
 
         // Store the ref node
-        const node = parser.ParseElements(data, Trim(arr.join('\n')), scope);
+        const node = parser.ParseElements(data, Trim(arr.join('\n')), scope, 0);
         RefElement.RemoveRefNodes(node);
         data.Set(`Ref::${name}`, node);
 
         // Return nothing
-        return PlainTextNode.Empty();
+        return PlainTextNode.Empty(Position.Zero());
     }
 
     private static RemoveRefNodes(node: INode): void {
@@ -65,7 +66,7 @@ export class RefElement extends Element {
         for (let i = 0; i < children.length; i++) {
             const ch = children[i];
             if (ch instanceof RefNode) {
-                node.ReplaceChild(i, new UnprocessablePlainTextNode(`:ref=${ch.Name}`));
+                node.ReplaceChild(i, new UnprocessablePlainTextNode(Position.Zero(), `:ref=${ch.Name}`));
             } else {
                 RefElement.RemoveRefNodes(ch);
             }

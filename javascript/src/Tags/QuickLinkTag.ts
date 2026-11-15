@@ -26,6 +26,7 @@ export class QuickLinkTag extends Tag {
     }
 
     public override Parse(_parser: Parser, _data: ParseData, state: State, _scope: string, _context: TagParseContext): INode | null {
+        const pos = state.SourcePosition;
         const index = state.Index;
 
         if (state.Next() != '[') {
@@ -57,8 +58,8 @@ export class QuickLinkTag extends Tag {
         const before = `<${this.Element} href="${url}">`;
         const after = `</${this.Element}>`;
 
-        const content = new UnprocessablePlainTextNode(text);
-        const ret = new HtmlNode(before, content, after);
+        const content = new UnprocessablePlainTextNode(pos, text);
+        const ret = new HtmlNode(pos, before, content, after);
         ret.PlainAfter = match[2]?.length > 0 ? ` (${url})` : '';
         return ret;
     }
