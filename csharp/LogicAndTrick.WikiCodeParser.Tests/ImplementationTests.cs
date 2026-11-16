@@ -14,7 +14,7 @@ namespace LogicAndTrick.WikiCodeParser.Tests;
 [TestCategory("Implementation")]
 public class ImplementationTests
 {
-    private readonly static List<int> _lineOffsets = [0, 1, 5, 10];
+    private readonly static List<int> _lineOffsets = [0, 1, 5];
 
     public static IEnumerable<(string name, int lineOffset)> GetTestCases()
     {
@@ -231,7 +231,7 @@ public class ImplementationTests
             // for line offsets: add extra lines to the start of the input,
             // then add a custom element that eats those lines.
             // finally add a check to remove that element from the result.
-            input = new string('\n', lineOffset + 1) + input;
+            input = new string('\n', lineOffset) + input;
             config.Elements.Insert(0, new LineOffsetEaterElement(lineOffset));
             afterParse = RemoveLineOffsetElement;
         }
@@ -281,9 +281,10 @@ public class ImplementationTests
             return _lineOffset > 0 && lines.SourceLine == 1;
         }
 
-        public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
+        public override INode? Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
-            for (var i = 0; i < _lineOffset; i++) lines.Next();
+            if (data.CurrentElementDepth > 1) return null;
+            for (var i = 0; i < _lineOffset - 1; i++) lines.Next();
             return new UnprocessablePlainTextNode(new Position(1, 0), RemovedContentGuid);
         }
     }

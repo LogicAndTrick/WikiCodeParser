@@ -28,7 +28,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                     break;
                 }
 
-                if (value.Length > 1 && value[0] == ':') title = Util.Trim(value.Substring(1));
+                if (arr.Count == 0 && value.Length > 1 && value[0] == ':') title = Util.Trim(value.Substring(1));
                 else arr.Add(value);
             }
 

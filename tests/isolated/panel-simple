@@ -9,6 +9,7 @@ Two
 
 ~~~info
 Three
+:title
 ~~~
 
 ###
@@ -17,7 +18,8 @@ Three
 
 <div class="embed-panel card card-default"><div class="card-header">title</div><div class="card-body">Two</div></div>
 
-<div class="embed-panel card card-info"><div class="card-body">Three</div></div>
+<div class="embed-panel card card-info"><div class="card-body">Three<br/>
+:title</div></div>
 
 ###
 
@@ -28,3 +30,4 @@ title
 Two
 
 Three
+:title

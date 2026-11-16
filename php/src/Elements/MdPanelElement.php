@@ -34,7 +34,7 @@ class MdPanelElement extends Element
                 break;
             }
 
-            if (strlen($value) > 1 && $value[0] == ':') $title = Util::Trim(substr($value, 1));
+            if (count($arr) == 0 && strlen($value) > 1 && $value[0] == ':') $title = Util::Trim(substr($value, 1));
             else $arr[] = $value;
         }
 

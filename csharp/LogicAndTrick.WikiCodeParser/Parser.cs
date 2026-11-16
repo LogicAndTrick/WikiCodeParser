@@ -75,10 +75,10 @@ namespace LogicAndTrick.WikiCodeParser
                     if (plain.Count > 0)
                     {
                         root.Nodes.Add(TrimWhitespace(ParseTags(data, String.Join("\n", plain), scope, TagParseContext.Block, plainStart, 0)));
-                        root.Nodes.Add(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Newline before next element
+                        root.Nodes.Add(UnprocessablePlainTextNode.NewLine(new Position(plainStart + plain.Count - 1, plain[plain.Count - 1].Length))); // Newline before next element
                     }
                     plain.Clear();
-                    plainStart = lines.SourceLine;
+                    plainStart = lines.SourceLine + 1; // plain starts on the next line
 
                     root.Nodes.Add(con);
                     root.Nodes.Add(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Elements always have a newline after

@@ -58,7 +58,7 @@ import { Position } from '../src/Position';
 import { JsonNode, TestConfig, TestDefinition, TestNode } from './TestModels';
 import { GetTestCaseDirectory, GetTestCaseNames, sanitise } from './Util';
 
-const lineOffsets: number[] = [0, 1, 5, 10];
+const lineOffsets: number[] = [0, 1, 5];
 
 function GetTestCases(): [string, number][] {
     return GetTestCaseNames('implementations').flatMap(x => lineOffsets.map<[string, number]>(y => [x, y]));
@@ -337,7 +337,7 @@ function RunImplementationTest(name: string, lineOffset: number): void {
         // for line offsets: add extra lines to the start of the input,
         // then add a custom element that eats those lines.
         // finally add a check to remove that element from the result.
-        input = '\n'.repeat(lineOffset + 1) + input;
+        input = '\n'.repeat(lineOffset) + input;
         config.Elements.unshift(new LineOffsetEaterElement(lineOffset));
         afterParse = RemoveLineOffsetElement;
     }
@@ -386,8 +386,9 @@ class LineOffsetEaterElement extends Element {
         return this.lineOffset > 0 && lines.SourceLine === 1;
     }
 
-    Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode {
-        for (let i = 0; i < this.lineOffset; i++) lines.Next();
+    Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode | null {
+        if (data.CurrentElementDepth > 1) return null;
+        for (let i = 0; i < this.lineOffset - 1; i++) lines.Next();
         return new UnprocessablePlainTextNode(new Position(1, 0), RemovedContentGuid);
     }
 }

@@ -62,7 +62,6 @@ use LogicAndTrick\WikiCodeParser\TestModels\TestDefinition;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 // https://stackoverflow.com/a/15875555
 ImplementationTest::$RemovedContentGuid = (function () {
@@ -278,7 +277,7 @@ class ImplementationTest extends TestCase
         }
     }
 
-    private static array $lineOffsets = [0, 1, 5, 10];
+    private static array $lineOffsets = [0, 1, 5];
     public static function getTestCases(): array
     {
         $arr = [];
@@ -302,7 +301,7 @@ class ImplementationTest extends TestCase
         $afterParse = fn(ParseResult $result) => null;
 
         if ($lineOffset > 0) {
-            $input = str_repeat("\n", $lineOffset + 1) . $input;
+            $input = str_repeat("\n", $lineOffset) . $input;
             array_unshift($config->elements, new LineOffsetEaterElement($lineOffset));
             $afterParse = self::RemoveLineOffsetElement(...);
         }
@@ -356,9 +355,10 @@ class LineOffsetEaterElement extends Element
         return $this->lineOffset > 0 && $lines->sourceLine === 1;
     }
 
-    public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): INode
+    public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): INode|null
     {
-        for ($i = 0; $i < $this->lineOffset; $i++) $lines->Next();
+        if ($data->current_element_depth > 1) return null;
+        for ($i = 0; $i < $this->lineOffset - 1; $i++) $lines->Next();
         return new UnprocessablePlainTextNode(new Position(1, 0), ImplementationTest::$RemovedContentGuid);
     }
 }

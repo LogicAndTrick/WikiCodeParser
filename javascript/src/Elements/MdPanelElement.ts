@@ -28,7 +28,7 @@ export class MdPanelElement extends Element {
                 break;
             }
 
-            if (value.length > 1 && value[0] == ':') title = Trim(value.substring(1));
+            if (arr.length == 0 && value.length > 1 && value[0] == ':') title = Trim(value.substring(1));
             else arr.push(value);
         }
 

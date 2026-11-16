@@ -64,10 +64,10 @@ class Parser
                 // if we have any plain text, create a node for it
                 if (count($plain) > 0) {
                     $root->nodes[] = self::TrimWhitespace($this->ParseTags($data, implode("\n", $plain), $scope, TagParseContext::Block, $plainStart, 0));
-                    $root->nodes[] = UnprocessablePlainTextNode::NewLine(new Position($lines->sourceLine, 0)); // Newline before next element
+                    $root->nodes[] = UnprocessablePlainTextNode::NewLine(new Position($plainStart + count($plain) - 1, strlen($plain[count($plain) - 1]))); // Newline before next element
                 }
                 $plain = [];
-                $plainStart = $lines->sourceLine;
+                $plainStart = $lines->sourceLine + 1; // plain starts on the next line
 
                 $root->nodes[] = $con;
                 $root->nodes[] = UnprocessablePlainTextNode::NewLine(new Position($lines->sourceLine, 0)); // Elements always have a newline after

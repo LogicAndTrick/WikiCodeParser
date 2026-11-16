@@ -60,10 +60,10 @@ export class Parser {
                 // if we have any plain text, create a node for it
                 if (plain.length > 0) {
                     root.Nodes.push(Parser.TrimWhitespace(this.ParseTags(data, plain.join('\n'), scope, TagParseContext.Block, plainStart, 0)));
-                    root.Nodes.push(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Newline before next element
+                    root.Nodes.push(UnprocessablePlainTextNode.NewLine(new Position(plainStart + plain.length - 1, plain[plain.length - 1].length))); // Newline before next element
                 }
                 plain.splice(0, plain.length);
-                plainStart = lines.SourceLine;
+                plainStart = lines.SourceLine + 1; // plain starts on the next line
 
                 root.Nodes.push(con);
                 root.Nodes.push(UnprocessablePlainTextNode.NewLine(new Position(lines.SourceLine, 0))); // Elements always have a newline after
