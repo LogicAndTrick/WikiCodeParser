@@ -1,0 +1,41 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "elements": ["Ref", "MdList"]
+  },
+  "input": "- :ref=name\n\n[ref=name]\ncontent\n[/ref]",
+  "html": "<ul>\n<li>content</li>\n</ul>\n",
+  "plain": "- content\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "list",
+        "type": "ListNode",
+        "pos": [1, 0],
+        "children": [
+          {
+            "type": "ListItemNode",
+            "pos": [1, 0],
+            "children": [
+              {
+                "type": "ref",
+                "pos": [4, 0],
+                "children": [
+                  {
+                    "type": "plain",
+                    "pos": [4, 0],
+                    "text": "content"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

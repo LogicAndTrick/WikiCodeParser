@@ -12,7 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
-            return new HtmlNode(Position.Zero, "<hr />", PlainTextNode.Empty(Position.Zero), "")
+            return new HtmlNode(new Position(lines.SourceLine, 0), "<hr />", PlainTextNode.Empty(new Position(lines.SourceLine, 0)), "")
             {
                 PlainBefore = "---"
             };

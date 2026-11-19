@@ -1,0 +1,53 @@
+{
+  "$schema": "_schema.json",
+  "notes": "Since the list node supports continuations and re-parses its content as elements rather than tags, all column numbers will by off by the length of the list prefix length. This is too difficult to fix in a sane way, so for now it is an acceptable compromise.",
+  "config": {
+    "base": "none",
+    "elements": ["MdList"]
+  },
+  "input": "- one\n-- two",
+  "html": "<ul>\n<li>one<ul>\n<li>two</li>\n</ul>\n</li>\n</ul>\n",
+  "plain": "- one\n-- two\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "list",
+        "type": "ListNode",
+        "pos": [1, 0],
+        "children": [
+          {
+            "type": "ListItemNode",
+            "pos": [1, 0],
+            "children": [
+              {
+                "type": "plain",
+                "pos": [1, 0],
+                "text": "one"
+              },
+              {
+                "type": "ListNode",
+                "pos": [2, 0],
+                "children": [
+                  {
+                    "type": "ListItemNode",
+                    "pos": [2, 0],
+                    "children": [
+                      {
+                        "type": "plain",
+                        "pos": [2, 0],
+                        "text": "two"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

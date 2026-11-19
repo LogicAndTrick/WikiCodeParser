@@ -1,0 +1,34 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "elements": ["MdPanel"]
+  },
+  "input": "~~~\n:title\ncontent\n~~~",
+  "html": "<div class=\"embed-panel card card-default\"><div class=\"card-header\">title</div><div class=\"card-body\">content</div></div>",
+  "plain": "title\n-----\ncontent",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "div",
+        "type": "html",
+        "pos": [1, 0],
+        "html": [
+          "<div class=\"embed-panel card card-default\"><div class=\"card-header\">title</div><div class=\"card-body\">",
+          "</div></div>"
+        ],
+        "plain": ["title\n-----\n", ""],
+        "children": [
+          {
+            "type": "plain",
+            "pos": [3, 0],
+            "text": "content"
+          }
+        ]
+      }
+    ]
+  }
+}

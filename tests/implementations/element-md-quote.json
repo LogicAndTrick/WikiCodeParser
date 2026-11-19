@@ -1,0 +1,60 @@
+{
+  "$schema": "_schema.json",
+  "notes": "Similar to the list element, the quote has indented content which offsets the columns of child elements. Line numbers for content start at 0 for now, it's fine.",
+  "config": {
+    "base": "none",
+    "elements": ["MdQuote"]
+  },
+  "input": "> one\n>> two",
+  "html": "<blockquote>one\n<blockquote>two</blockquote></blockquote>",
+  "plain": "[quote]\none\n[quote]\ntwo\n[/quote]\n[/quote]",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "outer",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<blockquote>", "</blockquote>"],
+        "plain": ["[quote]\n", "\n[/quote]"],
+        "children": [
+          {
+            "type": "list",
+            "pos": [1, 0],
+            "children": [
+              {
+                "name": "one",
+                "type": "plain",
+                "pos": [1, 0],
+                "text": "one"
+              },
+              {
+                "name": "blank",
+                "type": "plain",
+                "pos": [1, 3],
+                "text": "\n"
+              },
+              {
+                "name": "inner",
+                "type": "html",
+                "pos": [2, 0],
+                "html": ["<blockquote>", "</blockquote>"],
+                "plain": ["[quote]\n", "\n[/quote]"],
+                "children": [
+                  {
+                    "name": "two",
+                    "type": "plain",
+                    "pos": [2, 0],
+                    "text": "two"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

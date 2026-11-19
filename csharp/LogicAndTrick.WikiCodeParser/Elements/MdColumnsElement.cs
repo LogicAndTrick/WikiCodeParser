@@ -15,6 +15,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var startLine = lines.SourceLine;
             var current = lines.Current();
 
             var meta = lines.Value().Substring(10);
@@ -43,14 +44,16 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var i = 0;
 
             var arr = new List<string>();
+            var arrStart = lines.SourceLine + 1;
             var cols = new List<ColumnNode>();
             while (lines.Next() && i < colDefs.Count)
             {
                 var value = Util.TrimEnd(lines.Value());
                 if (value == "%%")
                 {
-                    cols.Add(new ColumnNode(colDefs[i], parser.ParseElements(data, String.Join("\n", arr), scope, 0)));
+                    cols.Add(new ColumnNode(colDefs[i], parser.ParseElements(data, String.Join("\n", arr), scope, arrStart)));
                     arr.Clear();
+                    arrStart = lines.SourceLine + 1;
                     i++;
                 } else {
                     arr.Add(value);
@@ -64,13 +67,13 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 return null;
             }
 
-            return new HtmlNode(Position.Zero, "<div class=\"row\">", new NodeCollection(cols), "</div>");
+            return new HtmlNode(new Position(startLine, 0), "<div class=\"row\">", new NodeCollection(cols), "</div>");
         }
 
         public class ColumnNode : INode
         {
-            public int Line { get; set; }
-            public int Column { get; set; }
+            public int Line => Content.Line;
+            public int Column => Content.Column;
             public int Width { get; }
             public INode Content { get; set; }
 

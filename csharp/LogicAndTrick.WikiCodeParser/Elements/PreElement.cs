@@ -24,6 +24,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var startLine = lines.SourceLine;
             var current = lines.Current();
             var arr = new List<string>();
 
@@ -132,11 +133,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var highlights = string.Join("", highlight.Select(
                 h => $"<div class=\"line-highlight\" style=\"top: {h.firstLine}em; height: {h.numLines}em; background: {h.color};\"></div>")
             );
-            var plain = new UnprocessablePlainTextNode(Position.Zero, String.Join("\n", arr));
+            var plain = new UnprocessablePlainTextNode(new Position(startLine + 1, 0), String.Join("\n", arr));
             var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
             var before = $"<pre{cls}><code>{highlights}";
             var after = "</code></pre>";
-            return new HtmlNode(Position.Zero, before, plain, after);
+            return new HtmlNode(new Position(startLine, 0), before, plain, after);
         }
 
         public static List<string> FixCodeIndentation(List<string> arr)

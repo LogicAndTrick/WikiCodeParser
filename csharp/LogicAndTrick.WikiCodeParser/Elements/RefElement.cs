@@ -15,6 +15,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var startLine = lines.SourceLine;
             var current = lines.Current();
             var arr = new List<string>();
 
@@ -62,7 +63,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
 
             // Store the ref node
-            var node = parser.ParseElements(data, Util.Trim(string.Join("\n", arr)), scope, 0);
+            var node = parser.ParseElements(data, Util.Trim(string.Join("\n", arr)), scope, startLine + 1);
             RemoveRefNodes(node);
             data.Set($"Ref::{name}", node);
 

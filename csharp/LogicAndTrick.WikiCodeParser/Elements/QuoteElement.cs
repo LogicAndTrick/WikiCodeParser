@@ -18,6 +18,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var startLine = lines.SourceLine;
             var current = lines.Current();
             var arr = new List<string>();
 
@@ -44,7 +45,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 plainBefore = author + " said: " + plainBefore;
             }
 
-            var node = new HtmlNode(Position.Zero, before, parser.ParseElements(data, text, scope, 0), "</blockquote>")
+            var node = new HtmlNode(new Position(startLine, 0), before, parser.ParseElements(data, text, scope, startLine), "</blockquote>")
             {
                 PlainBefore = plainBefore,
                 PlainAfter = "\n[/quote]",
@@ -52,7 +53,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             };
             if (!string.IsNullOrWhiteSpace(postfix))
             {
-                return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline, 0, 0));
+                return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline, lines.SourceLine, 0));
             }
             return node;
         }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using LogicAndTrick.WikiCodeParser.Nodes;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace LogicAndTrick.WikiCodeParser.Elements
 {
@@ -57,7 +56,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var current = lines.Current();
 
             // Put all the subtrees into a dummy item node
-            var item = new ListItemNode(PlainTextNode.Empty(Position.Zero));
+            var item = new ListItemNode(0, 0, PlainTextNode.Empty(Position.Zero));
             var _ = CreateListItems(item, "", parser, data, lines, scope).ToList();
 
             if (!item.Subtrees.Any())
@@ -130,10 +129,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                     }
                     else
                     {
-                        pt = parser.ParseElements(data, value, scope, 0);
+                        pt = parser.ParseElements(data, value, scope, lines.SourceLine);
                     }
 
-                    lastItemNode = new ListItemNode(pt);
+                    lastItemNode = new ListItemNode(lines.SourceLine, 0, pt);
                     yield return lastItemNode;
 
                 }
@@ -141,7 +140,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
                 {
                     // Sublist
                     var tag = IsSortedToken(value[0]) ? "ol" : "ul";
-                    var sublist = new ListNode(tag, CreateListItems(lastItemNode, prefix + value[0], parser, data, lines, scope));
+                    var sublist = new ListNode(lines.SourceLine, 0, tag, CreateListItems(lastItemNode, prefix + value[0], parser, data, lines, scope));
                     lastItemNode.Subtrees.Add(sublist);
                 }
                 else
@@ -160,8 +159,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             public string Tag { get; }
             public List<ListItemNode> Items { get; }
 
-            public ListNode(string tag, IEnumerable<ListItemNode> items)
+            public ListNode(int line, int column, string tag, IEnumerable<ListItemNode> items)
             {
+                Line = line;
+                Column = column;
                 Tag = tag;
                 Items = items.ToList();
             }
@@ -214,8 +215,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             public INode Content { get; set; }
             public List<ListNode> Subtrees { get; }
 
-            public ListItemNode(INode content)
+            public ListItemNode(int line, int column, INode content)
             {
+                Line = line;
+                Column = column;
                 Content = content;
                 Subtrees = new List<ListNode>();
             }

@@ -1,0 +1,30 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "elements": ["Pre"]
+  },
+  "input": "[pre]\ntest\n[/pre]",
+  "html": "<pre><code>test</code></pre>",
+  "plain": "test",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<pre><code>", "</code></pre>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "type": "plain",
+            "pos": [2, 0],
+            "text": "test"
+          }
+        ]
+      }
+    ]
+  }
+}

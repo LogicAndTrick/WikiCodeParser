@@ -1,0 +1,56 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "elements": ["MdColumns"]
+  },
+  "input": "%%columns=3:9\none\n%%\ntwo\n%%",
+  "html": "<div class=\"row\"><div class=\"col-md-3\">\none</div>\n<div class=\"col-md-9\">\ntwo</div>\n</div>",
+  "plain": "one\n\ntwo\n\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "row",
+        "type": "html",
+        "html": ["<div class=\"row\">", "</div>"],
+        "plain": ["", ""],
+        "pos": [1, 0],
+        "children": [
+          {
+            "type": "list",
+            "pos": [2, 0],
+            "children": [
+              {
+                "name": "col 1",
+                "type": "ColumnNode",
+                "pos": [2, 0],
+                "children": [
+                  {
+                    "type": "plain",
+                    "pos": [2, 0],
+                    "text": "one"
+                  }
+                ]
+              },
+              {
+                "name": "col 2",
+                "type": "ColumnNode",
+                "pos": [4, 0],
+                "children": [
+                  {
+                    "type": "plain",
+                    "pos": [4, 0],
+                    "text": "two"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

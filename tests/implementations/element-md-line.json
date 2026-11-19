@@ -1,0 +1,24 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "elements": ["MdLine"]
+  },
+  "input": "-----",
+  "html": "<hr />",
+  "plain": "---",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "hr",
+        "type": "html",
+        "pos": [1, 0],
+        "html": ["<hr />", ""],
+        "plain": ["---", ""]
+      }
+    ]
+  }
+}

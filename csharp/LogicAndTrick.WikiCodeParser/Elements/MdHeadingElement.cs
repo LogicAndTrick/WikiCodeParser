@@ -20,10 +20,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var level = Math.Min(6, res.Groups[1].Value.Length);
             var text = Util.Trim(res.Groups[2].Value);
 
-            var contents = parser.ParseTags(data, text, scope, TagParseContext.Inline, 0, 0);
+            var contents = parser.ParseTags(data, text, scope, TagParseContext.Inline, lines.SourceLine, res.Groups[1].Value.Length);
             var contentsPlainText = parser.RunProcessors(null, contents, data, scope).ToPlainText();
             var id = GetUniqueAnchor(data, contentsPlainText);
-            return new HeadingNode(level, id, contents);
+            return new HeadingNode(lines.SourceLine, 0, level, id, contents);
         }
 
         private static string GetUniqueAnchor(ParseData data, string text)
@@ -53,8 +53,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             public string ID { get; }
             public INode Text { get; set; }
 
-            public HeadingNode(int level, string id, INode text)
+            public HeadingNode(int line, int column, int level, string id, INode text)
             {
+                Line = line;
+                Column = column;
                 Level = level;
                 ID = id;
                 Text = text;

@@ -12,6 +12,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var startLine = lines.SourceLine;
             var current = lines.Current();
 
             var meta = Util.Trim(lines.Value().Substring(3));
@@ -48,10 +49,10 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             var before = $"<div class=\"embed-panel card {cls}\">" +
                          (title != "" ? $"<div class=\"card-header\">{HtmlHelper.Encode(title)}</div>" : "") +
                          "<div class=\"card-body\">";
-            var content = parser.ParseElements(data, string.Join("\n", arr), scope, 0);
+            var content = parser.ParseElements(data, string.Join("\n", arr), scope, startLine + 1 + (title != "" ? 1 : 0));
             var after = "</div></div>";
 
-            return new HtmlNode(Position.Zero, before, content, after)
+            return new HtmlNode(new Position(startLine, 0), before, content, after)
             {
                 PlainBefore = title == "" ? "" : title + "\n" + new string('-', title.Length) + "\n"
             };

@@ -1,0 +1,78 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "elements": ["MdTable"]
+  },
+  "input": "|= One | Two\n|- Three | Four",
+  "html": "<div class=\"table-responsive\"><table class=\"table table-bordered\"><tr>\n<th>One</th>\n<th>Two</th>\n</tr>\n<tr>\n<td>Three</td>\n<td>Four</td>\n</tr>\n</table></div>",
+  "plain": "One | Two\nThree | Four\n",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "table",
+        "type": "html",
+        "pos": [1, 0],
+        "html": [
+          "<div class=\"table-responsive\"><table class=\"table table-bordered\">",
+          "</table></div>"
+        ],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "rows",
+            "type": "list",
+            "pos": [1, 0],
+            "children": [
+              {
+                "name": "row 1",
+                "type": "TableRow",
+                "pos": [1, 0],
+                "children": [
+                  {
+                    "type": "TableCell",
+                    "pos": [1, 3],
+                    "children": [
+                      { "type": "plain", "pos": [1, 3], "text": "One" }
+                    ]
+                  },
+                  {
+                    "type": "TableCell",
+                    "pos": [1, 9],
+                    "children": [
+                      { "type": "plain", "pos": [1, 9], "text": "Two" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "row 2",
+                "type": "TableRow",
+                "pos": [2, 0],
+                "children": [
+                  {
+                    "type": "TableCell",
+                    "pos": [2, 3],
+                    "children": [
+                      { "type": "plain", "pos": [2, 3], "text": "Three" }
+                    ]
+                  },
+                  {
+                    "type": "TableCell",
+                    "pos": [2, 11],
+                    "children": [
+                      { "type": "plain", "pos": [2, 11], "text": "Four" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

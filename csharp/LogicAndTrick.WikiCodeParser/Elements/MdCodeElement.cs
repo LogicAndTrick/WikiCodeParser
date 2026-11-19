@@ -26,6 +26,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var line = lines.SourceLine;
             var current = lines.Current();
             var firstLine = Util.TrimEnd(lines.Value().Substring(3));
 
@@ -82,11 +83,11 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             // Dedent all lines by the longest common whitespace
             arr = arr.Select(a => a.Substring(Math.Min(longestWhitespace, a.Length))).ToList();
 
-            var plain = new UnprocessablePlainTextNode(Position.Zero, String.Join("\n", arr));
+            var plain = new UnprocessablePlainTextNode(new Position(line + 1, 0), String.Join("\n", arr));
             var cls = string.IsNullOrWhiteSpace(lang) ? "" : $" class=\"lang-{lang}\"";
             var before = $"<pre{cls}><code>";
             var after = "</code></pre>";
-            return new HtmlNode(Position.Zero, before, plain, after);
+            return new HtmlNode(new Position(line, 0), before, plain, after);
         }
     }
 }

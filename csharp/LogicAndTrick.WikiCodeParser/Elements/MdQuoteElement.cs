@@ -14,6 +14,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
 
         public override INode Consume(Parser parser, ParseData data, Lines lines, string scope)
         {
+            var startLine = lines.SourceLine;
             var value = lines.Value();
             var arr = new List<string>
             {
@@ -31,7 +32,7 @@ namespace LogicAndTrick.WikiCodeParser.Elements
             }
 
             var text = Util.Trim(String.Join("\n", arr));
-            return new HtmlNode(Position.Zero, "<blockquote>", parser.ParseElements(data, text, scope, 0), "</blockquote>")
+            return new HtmlNode(new Position(startLine, 0), "<blockquote>", parser.ParseElements(data, text, scope, startLine), "</blockquote>")
             {
                 PlainBefore = "[quote]\n",
                 PlainAfter = "\n[/quote]"
