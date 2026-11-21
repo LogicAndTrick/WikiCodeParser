@@ -21,8 +21,10 @@ class TableCell implements INode
     public string $type;
     public INode $contents;
 
-    public function __construct(string $type, INode $contents)
+    public function __construct(int $line, int $column, string $type, INode $contents)
     {
+        $this->line = $line;
+        $this->column = $column;
         $this->type = $type;
         $this->contents = $contents;
     }
@@ -60,8 +62,10 @@ class TableRow implements INode
     public int $column = 0;
     public array $cells;
 
-    public function __construct(array $cells)
+    public function __construct(int $line, int $column, array $cells)
     {
+        $this->line = $line;
+        $this->column = $column;
         $this->cells = $cells;
     }
 
@@ -114,49 +118,70 @@ class MdTableElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $arr = [];
         do {
-            $value = Util::TrimEnd($lines->Value());
+            $value = $lines->Value();
             if (strlen($value) < 2 || $value[0] != '|' || ($value[1] != '=' && $value[1] != '-')) {
                 $lines->Back();
                 break;
             }
+            $line = $lines->sourceLine;
             $type = $value[1] == '=' ? 'th' : 'td';
-            $cells = array_map(fn(string $x) => new TableCell($type, self::ResolveCell($x, $parser, $data, $scope)), self::SplitTable(substr($value, 2)));
-            $arr[] = new TableRow($cells);
+            $cells = array_map(fn(array $x) => new TableCell($line, $x['col'], $type, self::ResolveCell($x['text'], $parser, $data, $scope, $line, $x['col'])), self::SplitTable(2, $value));
+            $arr[] = new TableRow($line, 0, $cells);
         } while ($lines->Next());
 
-        return new HtmlNode(Position::Zero(), '<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');
+        return new HtmlNode(new Position($startLine, 0), '<div class="table-responsive"><table class="table table-bordered">', new NodeCollection(...$arr), '</table></div>');
     }
 
-    private static function SplitTable(string $text): array
+    /**
+     * @return array<array{col: int, text: string}>
+     */
+    private static function SplitTable(int $start, string $text): array
     {
         $ret = [];
         $level = 0;
-        $last = 0;
-        $text = Util::Trim($text);
+        $last = $start;
         $len =  strlen($text);
-        for ($i = 0; $i < $len; $i++) {
+        for ($i = $start; $i < $len; $i++) {
             $c = $text[$i];
             if ($c == '[') $level++;
             else if ($c == ']') {
                 if ($level > 0) $level--;
             } else if (($c == '|' && $level == 0) || $i == $len - 1) {
-                $ret[] = Util::Trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
+                $ret[] = self::CreateTableText($text, $last, $i);
                 $last = $i + 1;
             }
         }
-        if ($last < $len) $ret[] = Util::Trim(substr($text, $last, ($i - $last) + ($i == $len - 1 ? 1 : 0)));
+        if ($last < $len) $ret[] = self::CreateTableText($text, $last, $i);
         return $ret;
     }
 
-    private static function ResolveCell(string $text, Parser $parser, ParseData $data, string $scope): INode
+    /**
+     * @return array{col: int, text: string}
+     */
+    private static function CreateTableText(string $text, int $start, int $end): array
     {
-        $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', Util::Trim($text), $res);
+        // get the text length
+        $col = $start;
+        $txt = substr($text, $start, ($end - $start) + ($end == strlen($text) - 1 ? 1 : 0));
+
+        // trim the start of the text - the number of removed chars is how much we need to add to the column
+        $ol = strlen($txt);
+        $ts = Util::TrimStart($txt);
+        $col += $ol - strlen($ts);
+
+        return ['col' => $col, 'text' => Util::TrimEnd($ts)];
+    }
+
+    private static function ResolveCell(string $text, Parser $parser, ParseData $data, string $scope, int $line, int $column): INode
+    {
+        $success = preg_match('/^:ref=([a-z0-9 ]+)$/i', $text, $res);
         if ($success) {
             $name = $res[1];
             return new RefNode($data, $name);
         }
-        return $parser->ParseTags($data, $text, $scope, TagParseContext::Block, 0, 0);
+        return $parser->ParseTags($data, $text, $scope, TagParseContext::Block, $line, $column);
     }
 }

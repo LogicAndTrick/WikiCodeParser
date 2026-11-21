@@ -53,6 +53,7 @@ class PreElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $current = $lines->Current();
         $arr = [];
 
@@ -145,11 +146,11 @@ class PreElement extends Element
         $arr = PreElement::FixCodeIndentation($arr);
 
         $highlights = implode('', array_map(fn($h) => "<div class=\"line-highlight\" style=\"top: {$h['firstLine']}em; height: {$h['numLines']}em; background: {$h['color']};\"></div>", $highlight));
-        $plain = new UnprocessablePlainTextNode(Position::Zero(), implode("\n", $arr));
+        $plain = new UnprocessablePlainTextNode(new Position($startLine + 1, 0), implode("\n", $arr));
         $cls = !$lang || trim($lang) == '' ? '' : " class=\"lang-$lang\"";
         $before = "<pre$cls><code>$highlights";
         $after = '</code></pre>';
-        return new HtmlNode(Position::Zero(), $before, $plain, $after);
+        return new HtmlNode(new Position($startLine, 0), $before, $plain, $after);
     }
 
     public static function FixCodeIndentation(array $arr): array

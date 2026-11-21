@@ -14,8 +14,12 @@ use LogicAndTrick\WikiCodeParser\Util;
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 class ColumnNode implements INode
 {
-    public int $line = 0;
-    public int $column = 0;
+    public int $line {
+        get => $this->content->line;
+    }
+    public int $column {
+        get => $this->content->column;
+    }
     public int $width;
     public INode $content;
 
@@ -61,6 +65,7 @@ class MdColumnsElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $current = $lines->Current();
 
         $meta = substr($lines->Value(), 10);
@@ -84,12 +89,14 @@ class MdColumnsElement extends Element
         $i = 0;
 
         $arr = [];
+        $arrStart = $lines->sourceLine + 1;
         $cols = [];
         while ($lines->Next() && $i < count($colDefs)) {
             $value = Util::TrimEnd($lines->Value());
             if ($value == '%%') {
-                $cols[] = new ColumnNode($colDefs[$i], $parser->ParseElements($data, implode("\n", $arr), $scope, 0));
+                $cols[] = new ColumnNode($colDefs[$i], $parser->ParseElements($data, implode("\n", $arr), $scope, $arrStart));
                 $arr = [];
+                $arrStart = $lines->sourceLine + 1;
                 $i++;
             } else {
                 $arr[] = $value;
@@ -102,6 +109,6 @@ class MdColumnsElement extends Element
             return null;
         }
 
-        return new HtmlNode(Position::Zero(), '<div class="row">', new NodeCollection(...$cols), '</div>');
+        return new HtmlNode(new Position($startLine, 0), '<div class="row">', new NodeCollection(...$cols), '</div>');
     }
 }

@@ -10,7 +10,6 @@ use LogicAndTrick\WikiCodeParser\Nodes\RefNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\Position;
-use LogicAndTrick\WikiCodeParser\TagParseContext;
 use LogicAndTrick\WikiCodeParser\Util;
 
 /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
@@ -22,8 +21,10 @@ class ListNode implements INode
     public string $tag;
     public array $items;
 
-    public function __construct(string $tag, ListItemNode ...$items)
+    public function __construct(int $line, int $column, string $tag, ListItemNode ...$items)
     {
+        $this->line = $line;
+        $this->column = $column;
         $this->tag = $tag;
         $this->items = $items;
     }
@@ -73,8 +74,10 @@ class ListItemNode implements INode
     public INode $content;
     public array $subtrees;
 
-    public function __construct(INode $content)
+    public function __construct(int $line, int $column, INode $content)
     {
+        $this->line = $line;
+        $this->column = $column;
         $this->content = $content;
         $this->subtrees = [];
     }
@@ -175,7 +178,7 @@ class MdListElement extends Element
         $current = $lines->Current();
 
         // Put all the subtrees into a dummy item node
-        $item = new ListItemNode(PlainTextNode::Empty(Position::Zero()));
+        $item = new ListItemNode(0, 0, PlainTextNode::Empty(Position::Zero()));
         $this->CreateListItems($item, '', $parser, $data, $lines, $scope);
 
         if (count($item->subtrees) == 0) {
@@ -231,15 +234,15 @@ class MdListElement extends Element
                     $name = $res[1];
                     $pt = new RefNode($data, $name);
                 } else {
-                    $pt = $parser->ParseElements($data, $value, $scope, 0);
+                    $pt = $parser->ParseElements($data, $value, $scope, $lines->sourceLine);
                 }
 
-                $lastItemNode = new ListItemNode($pt);
+                $lastItemNode = new ListItemNode($lines->sourceLine, 0, $pt);
                 $ret[] = $lastItemNode;
             } else if (strlen($value) > 2 && self::IsListToken($value[0]) && $value[1] == ' ' && $lastItemNode != null) {
                 // Sublist
                 $tag = self::IsSortedToken($value[0]) ? 'ol' : 'ul';
-                $sublist = new ListNode($tag, ...$this->CreateListItems($lastItemNode, $prefix . $value[0], $parser, $data, $lines, $scope));
+                $sublist = new ListNode($lines->sourceLine, 0, $tag, ...$this->CreateListItems($lastItemNode, $prefix . $value[0], $parser, $data, $lines, $scope));
                 $lastItemNode->subtrees[] = $sublist;
             } else {
                 // Cannot parse this line, list is complete

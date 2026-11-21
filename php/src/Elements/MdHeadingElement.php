@@ -20,8 +20,10 @@ class HeadingNode implements INode
     public string $id;
     public INode $text;
 
-    public function __construct(int $level, string $id, INode $text)
+    public function __construct(int $line, int $column, int $level, string $id, INode $text)
     {
+        $this->line = $line;
+        $this->column = $column;
         $this->level = $level;
         $this->id = $id;
         $this->text = $text;
@@ -84,10 +86,10 @@ class MdHeadingElement extends Element
         $level = min(6, strlen($res[1]));
         $text = Util::Trim($res[2]);
 
-        $contents = $parser->ParseTags($data, $text, $scope, TagParseContext::Inline, 0, 0);
+        $contents = $parser->ParseTags($data, $text, $scope, TagParseContext::Inline, $lines->sourceLine, strlen($res[1]));
         $contentsPlainText = $parser->RunProcessors(null, $contents, $data, $scope)->ToPlainText();
         $id = MdHeadingElement::GetUniqueAnchor($data, $contentsPlainText);
-        return new HeadingNode($level, $id, $contents);
+        return new HeadingNode($lines->sourceLine, 0, $level, $id, $contents);
     }
 
     private static function GetUniqueAnchor(ParseData $data, string $text): string

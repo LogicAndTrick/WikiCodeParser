@@ -20,6 +20,7 @@ class MdQuoteElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $value = $lines->Value();
         $arr = [Util::Trim(substr($value, 1))];
         while ($lines->Next()) {
@@ -32,7 +33,7 @@ class MdQuoteElement extends Element
         }
 
         $text = Util::Trim(implode("\n", $arr));
-        $ret = new HtmlNode(Position::Zero(), '<blockquote>', $parser->ParseElements($data, $text, $scope, 0), '</blockquote>');
+        $ret = new HtmlNode(new Position($startLine, 0), '<blockquote>', $parser->ParseElements($data, $text, $scope, $startLine), '</blockquote>');
         $ret->plainBefore = "[quote]\n";
         $ret->plainAfter = "\n[/quote]";
         return $ret;

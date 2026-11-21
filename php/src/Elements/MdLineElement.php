@@ -21,7 +21,7 @@ class MdLineElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
-        $ret = new HtmlNode(Position::Zero(), '<hr />', PlainTextNode::Empty(Position::Zero()), '');
+        $ret = new HtmlNode(new Position($lines->sourceLine, 0), '<hr />', PlainTextNode::Empty(new Position($lines->sourceLine, 0)), '');
         $ret->plainBefore = '---';
         return $ret;
     }

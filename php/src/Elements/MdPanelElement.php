@@ -20,6 +20,7 @@ class MdPanelElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $current = $lines->Current();
 
         $meta = Util::Trim(substr($lines->Value(), 3));
@@ -53,10 +54,10 @@ class MdPanelElement extends Element
         $before = "<div class=\"embed-panel card $cls\">" .
             ($title != '' ? "<div class=\"card-header\">{$encTitle}</div>" : '') .
             '<div class="card-body">';
-        $content = $parser->ParseElements($data, implode("\n", $arr), $scope, 0);
+        $content = $parser->ParseElements($data, implode("\n", $arr), $scope, $startLine + 1 + ($title != '' ? 1 : 0));
         $after = '</div></div>';
 
-        $node = new HtmlNode(Position::Zero(), $before, $content, $after);
+        $node = new HtmlNode(new Position($startLine, 0), $before, $content, $after);
         $node->plainBefore = $title == '' ? '' : $title . "\n" . str_repeat('-', strlen($title)) . "\n";
         return $node;
     }

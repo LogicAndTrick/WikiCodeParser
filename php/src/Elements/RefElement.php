@@ -22,6 +22,7 @@ class RefElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $current = $lines->Current();
         $arr = [];
 
@@ -60,7 +61,7 @@ class RefElement extends Element
         }
 
         // Store the ref node
-        $node = $parser->ParseElements($data, Util::Trim(implode("\n", $arr)), $scope, 0);
+        $node = $parser->ParseElements($data, Util::Trim(implode("\n", $arr)), $scope, $startLine + 1);
         RefElement::RemoveRefNodes($node);
         $data->Set("Ref::$name", $node);
 

@@ -27,6 +27,7 @@ class MdCodeElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $line = $lines->sourceLine;
         $current = $lines->Current();
         $firstLine = Util::TrimEnd(substr($lines->Value(), 3));
 
@@ -75,10 +76,10 @@ class MdCodeElement extends Element
         // Dedent all lines by the longest common whitespace
         $arr = array_map(fn($a) => substr($a, min($longestWhitespace, strlen($a))), $arr);
 
-        $plain = new UnprocessablePlainTextNode(Position::Zero(), implode("\n", $arr));
+        $plain = new UnprocessablePlainTextNode(new Position($line + 1, 0), implode("\n", $arr));
         $cls = !$lang || trim($lang) == '' ? '' : " class=\"lang-$lang\"";
         $before = "<pre{$cls}><code>";
         $after = '</code></pre>';
-        return new HtmlNode(Position::Zero(), $before, $plain, $after);
+        return new HtmlNode(new Position($line, 0), $before, $plain, $after);
     }
 }

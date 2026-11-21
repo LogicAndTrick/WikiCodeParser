@@ -26,6 +26,7 @@ class QuoteElement extends Element
 
     public function Consume(Parser $parser, ParseData $data, Lines $lines, string $scope): ?INode
     {
+        $startLine = $lines->sourceLine;
         $current = $lines->current();
         $arr = [];
 
@@ -48,13 +49,13 @@ class QuoteElement extends Element
             $plainBefore = $author . " said: " . $plainBefore;
         }
 
-        $node = new HtmlNode(Position::Zero(), $before, $parser->parseElements($data, $text, $scope, 0), "</blockquote>");
+        $node = new HtmlNode(new Position($startLine, 0), $before, $parser->parseElements($data, $text, $scope, $startLine), "</blockquote>");
         $node->plainBefore = $plainBefore;
         $node->plainAfter = "\n[/quote]";
         $node->isBlockNode = true;
 
         if ($postfix !== null && trim($postfix) !== '') {
-            return new NodeCollection($node, $parser->parseTags($data, $postfix, $scope, TagParseContext::Inline, 0, 0));
+            return new NodeCollection($node, $parser->parseTags($data, $postfix, $scope, TagParseContext::Inline, $lines->sourceLine, 0));
         }
         return $node;
     }
