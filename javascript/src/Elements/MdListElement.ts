@@ -14,7 +14,9 @@ class ListNode implements INode {
     public Column: number = 0;
     public Tag: string;
     public Items: ListItemNode[];
-    constructor(tag: string, ...items: ListItemNode[]) {
+    constructor(line: number, column: number, tag: string, ...items: ListItemNode[]) {
+        this.Line = line;
+        this.Column = column;
         this.Tag = tag;
         this.Items = items;
     }
@@ -50,7 +52,9 @@ class ListItemNode implements INode {
     public Column: number = 0;
     public Content: INode;
     public Subtrees: ListNode[];
-    constructor(content: INode) {
+    constructor(line: number, column: number, content: INode) {
+        this.Line = line;
+        this.Column = column;
         this.Content = content;
         this.Subtrees = [];
     }
@@ -132,7 +136,7 @@ export class MdListElement extends Element {
         const current = lines.Current();
 
         // Put all the subtrees into a dummy item node
-        const item = new ListItemNode(PlainTextNode.Empty(Position.Zero()));
+        const item = new ListItemNode(0, 0, PlainTextNode.Empty(Position.Zero()));
         this.CreateListItems(item, '', parser, data, lines, scope);
 
         if (item.Subtrees.length == 0) {
@@ -191,15 +195,15 @@ export class MdListElement extends Element {
                     const name = res[1];
                     pt = new RefNode(data, name);
                 } else {
-                    pt = parser.ParseElements(data, value, scope, 0);
+                    pt = parser.ParseElements(data, value, scope, lines.SourceLine);
                 }
 
-                lastItemNode = new ListItemNode(pt);
+                lastItemNode = new ListItemNode(lines.SourceLine, 0, pt);
                 ret.push(lastItemNode);
             } else if (value.length > 2 && MdListElement.IsListToken(value[0]) && value[1] == ' ' && lastItemNode != null) {
                 // Sublist
                 const tag = MdListElement.IsSortedToken(value[0]) ? 'ol' : 'ul';
-                const sublist = new ListNode(tag, ...this.CreateListItems(lastItemNode, prefix + value[0], parser, data, lines, scope));
+                const sublist = new ListNode(lines.SourceLine, 0, tag, ...this.CreateListItems(lastItemNode, prefix + value[0], parser, data, lines, scope));
                 lastItemNode.Subtrees.push(sublist);
             } else {
                 // Cannot parse this line, list is complete

@@ -9,8 +9,12 @@ import { ParseIntStrict, TrimEnd } from '../Util';
 import { Element } from './Element';
 
 class ColumnNode implements INode {
-    public Line: number = 0;
-    public Column: number = 0;
+    public get Line(): number {
+        return this.Content.Line;
+    }
+    public get Column(): number {
+        return this.Content.Column;
+    }
     public Width: number;
     public Content: INode;
     constructor(width: number, content: INode) {
@@ -41,6 +45,7 @@ export class MdColumnsElement extends Element {
         return value.startsWith('%%columns=');
     }
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
+        const startLine = lines.SourceLine;
         const current = lines.Current();
 
         const meta = lines.Value().substring(10);
@@ -64,12 +69,14 @@ export class MdColumnsElement extends Element {
         let i = 0;
 
         let arr: string[] = [];
+        let arrStart = lines.SourceLine + 1;
         const cols: ColumnNode[] = [];
         while (lines.Next() && i < colDefs.length) {
             const value = TrimEnd(lines.Value());
             if (value == '%%') {
-                cols.push(new ColumnNode(colDefs[i], parser.ParseElements(data, arr.join('\n'), scope, 0)));
+                cols.push(new ColumnNode(colDefs[i], parser.ParseElements(data, arr.join('\n'), scope, arrStart)));
                 arr = [];
+                arrStart = lines.SourceLine + 1;
                 i++;
             } else {
                 arr.push(value);
@@ -82,6 +89,6 @@ export class MdColumnsElement extends Element {
             return null;
         }
 
-        return new HtmlNode(Position.Zero(), '<div class="row">', new NodeCollection(...cols), '</div>');
+        return new HtmlNode(new Position(startLine, 0), '<div class="row">', new NodeCollection(...cols), '</div>');
     }
 }

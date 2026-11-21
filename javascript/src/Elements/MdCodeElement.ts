@@ -21,6 +21,7 @@ export class MdCodeElement extends Element {
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode | null {
+        const line = lines.SourceLine;
         const current = lines.Current();
         let firstLine = TrimEnd(lines.Value().substring(3));
 
@@ -69,10 +70,10 @@ export class MdCodeElement extends Element {
         // Dedent all lines by the longest common whitespace
         arr = arr.map(a => a.substring(Math.min(longestWhitespace, a.length)));
 
-        const plain = new UnprocessablePlainTextNode(Position.Zero(), arr.join('\n'));
+        const plain = new UnprocessablePlainTextNode(new Position(line + 1, 0), arr.join('\n'));
         const cls = !lang || lang.trim() == '' ? '' : ` class="lang-${lang}"`;
         const before = `<pre${cls}><code>`;
         const after = '</code></pre>';
-        return new HtmlNode(Position.Zero(), before, plain, after);
+        return new HtmlNode(new Position(line, 0), before, plain, after);
     }
 }

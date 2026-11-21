@@ -14,6 +14,7 @@ export class MdPanelElement extends Element {
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
+        const startLine = lines.SourceLine;
         const current = lines.Current();
 
         const meta = Trim(lines.Value().substring(3));
@@ -45,10 +46,10 @@ export class MdPanelElement extends Element {
         else cls = 'card-default';
 
         const before = `<div class="embed-panel card ${cls}">` + (title != '' ? `<div class="card-header">${HtmlHelper.Encode(title)}</div>` : '') + '<div class="card-body">';
-        const content = parser.ParseElements(data, arr.join('\n'), scope, 0);
+        const content = parser.ParseElements(data, arr.join('\n'), scope, startLine + 1 + (title != '' ? 1 : 0));
         const after = '</div></div>';
 
-        const node = new HtmlNode(Position.Zero(), before, content, after);
+        const node = new HtmlNode(new Position(startLine, 0), before, content, after);
         node.PlainBefore = title == '' ? '' : title + '\n' + '-'.repeat(title.length) + '\n';
         return node;
     }

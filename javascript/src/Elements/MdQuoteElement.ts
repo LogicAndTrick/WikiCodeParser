@@ -13,6 +13,7 @@ export class MdQuoteElement extends Element {
         return value.length > 0 && value.startsWith('>');
     }
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
+        const startLine = lines.SourceLine;
         let value = lines.Value();
         const arr = [Trim(value.substring(1))];
         while (lines.Next()) {
@@ -25,7 +26,7 @@ export class MdQuoteElement extends Element {
         }
 
         const text = Trim(arr.join('\n'));
-        const ret = new HtmlNode(Position.Zero(), '<blockquote>', parser.ParseElements(data, text, scope, 0), '</blockquote>');
+        const ret = new HtmlNode(new Position(startLine, 0), '<blockquote>', parser.ParseElements(data, text, scope, startLine), '</blockquote>');
         ret.PlainBefore = '[quote]\n';
         ret.PlainAfter = '\n[/quote]';
         return ret;

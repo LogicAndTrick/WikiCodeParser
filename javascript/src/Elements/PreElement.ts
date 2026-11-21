@@ -43,6 +43,7 @@ export class PreElement extends Element {
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, _scope: string): INode | null {
+        const startLine = lines.SourceLine;
         const current = lines.Current();
         let arr: string[] = [];
 
@@ -135,11 +136,11 @@ export class PreElement extends Element {
         arr = PreElement.FixCodeIndentation(arr);
 
         const highlights = highlight.map(h => `<div class="line-highlight" style="top: ${h.firstLine}em; height: ${h.numLines}em; background: ${h.color};"></div>`).join('');
-        const plain = new UnprocessablePlainTextNode(Position.Zero(), arr.join('\n'));
+        const plain = new UnprocessablePlainTextNode(new Position(startLine + 1, 0), arr.join('\n'));
         const cls = !lang || lang.trim() == '' ? '' : ` class="lang-${lang}"`;
         const before = `<pre${cls}><code>${highlights}`;
         const after = '</code></pre>';
-        return new HtmlNode(Position.Zero(), before, plain, after);
+        return new HtmlNode(new Position(startLine, 0), before, plain, after);
     }
 
     public static FixCodeIndentation(arr: string[]): string[] {

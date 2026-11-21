@@ -15,6 +15,7 @@ export class RefElement extends Element {
         return value.length > 4 && value.startsWith('[ref=') && value.match(/\[ref=[a-z0-9 ]+\]/i) != null;
     }
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
+        const startLine = lines.SourceLine;
         const current = lines.Current();
         const arr: string[] = [];
 
@@ -53,7 +54,7 @@ export class RefElement extends Element {
         }
 
         // Store the ref node
-        const node = parser.ParseElements(data, Trim(arr.join('\n')), scope, 0);
+        const node = parser.ParseElements(data, Trim(arr.join('\n')), scope, startLine + 1);
         RefElement.RemoveRefNodes(node);
         data.Set(`Ref::${name}`, node);
 

@@ -20,6 +20,7 @@ export class QuoteElement extends Element {
     }
 
     public Consume(parser: Parser, data: ParseData, lines: Lines, scope: string): INode | null {
+        const startLine = lines.SourceLine;
         const current = lines.Current();
 
         const line = Trim(lines.Value());
@@ -42,13 +43,13 @@ export class QuoteElement extends Element {
             plainBefore = `${author} said: ${plainBefore}`;
         }
 
-        const node = new HtmlNode(Position.Zero(), before, parser.ParseElements(data, text, scope, 0), '</blockquote>');
+        const node = new HtmlNode(new Position(startLine, 0), before, parser.ParseElements(data, text, scope, startLine), '</blockquote>');
         node.PlainBefore = plainBefore;
         node.PlainAfter = '\n[/quote]';
         node.IsBlockNode = true;
 
         if (postfix) {
-            return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline, 0, 0));
+            return new NodeCollection(node, parser.ParseTags(data, postfix, scope, TagParseContext.Inline, lines.SourceLine, 0));
         }
         return node;
     }

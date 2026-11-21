@@ -14,8 +14,8 @@ export class MdLineElement extends Element {
         return value.length >= 3 && value == '-'.repeat(value.length);
     }
 
-    public Consume(_parser: Parser, _data: ParseData, _lines: Lines, _scope: string): INode | null {
-        const ret = new HtmlNode(Position.Zero(), '<hr />', PlainTextNode.Empty(Position.Zero()), '');
+    public Consume(_parser: Parser, _data: ParseData, lines: Lines, _scope: string): INode | null {
+        const ret = new HtmlNode(new Position(lines.SourceLine, 0), '<hr />', PlainTextNode.Empty(new Position(lines.SourceLine, 0)), '');
         ret.PlainBefore = '---';
         return ret;
     }
