@@ -56,6 +56,27 @@ namespace LogicAndTrick.WikiCodeParser
             return ret;
         }
 
+        public string ScanToAny(char[] find, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var pos = -1;
+            foreach (var f in find)
+            {
+                var idx = Text.IndexOf(f.ToString(), Index, comparison);
+                if (idx >= 0) pos = pos < 0 ? idx : Math.Min(pos, idx);
+            }
+            if (pos < 0) pos = Length;
+            var ret = Text.Substring(Index, pos - Index);
+            Index = pos;
+            return ret;
+        }
+
+        public string ScanToEnd()
+        {
+            var ret = Text.Substring(Index, Length - Index);
+            Index = Length;
+            return ret;
+        }
+
         public void SkipWhitespace()
         {
             while (Index < Length && Char.IsWhiteSpace(Text[Index])) Index++;
@@ -68,6 +89,13 @@ namespace LogicAndTrick.WikiCodeParser
             return Text.Substring(Index, pos - Index);
         }
 
+        public string PeekToAny(char[] find)
+        {
+            var pos = Text.IndexOfAny(find, Index);
+            if (pos < 0) return null;
+            return Text.Substring(Index, pos - Index);
+        }
+
         public void Seek(int index, bool fromStart)
         {
             Index = fromStart ? index : Index + index;
@@ -75,8 +103,16 @@ namespace LogicAndTrick.WikiCodeParser
 
         public string Peek(int count)
         {
-            if (Index + count > Length) count = Length - Index;
-            return Text.Substring(Index, count);
+            if (count < 0)
+            {
+                var start = Math.Max(0, Index + count);
+                return Text.Substring(start, Index - start);
+            }
+            else
+            {
+                if (Index + count > Length) count = Length - Index;
+                return Text.Substring(Index, count);
+            }
         }
 
         public char Next()

@@ -81,6 +81,30 @@ class State
     /**
      * @phpstan-impure
      */
+    public function ScanToAny(array $find, bool $ignoreCase = false): string
+    {
+        $pos = $ignoreCase
+            ? Util::IndexOfAny(strtolower($this->text), array_map('strtolower', $find), $this->index)
+            : Util::IndexOfAny($this->text, $find, $this->index);
+        if ($pos < 0) $pos = $this->length;
+        $ret = substr($this->text, $this->index, $pos - $this->index);
+        $this->index = $pos;
+        return $ret;
+    }
+
+    /**
+     * @phpstan-impure
+     */
+    public function ScanToEnd(): string
+    {
+        $ret = substr($this->text, $this->index, $this->length - $this->index);
+        $this->index = $this->length;
+        return $ret;
+    }
+
+    /**
+     * @phpstan-impure
+     */
     public function SkipWhitespace(): void
     {
         while ($this->index < $this->length && trim($this->text[$this->index]) == '') $this->index++;
@@ -94,6 +118,16 @@ class State
     }
 
     /**
+     * @param array<string> $find
+     */
+    public function PeekToAny(array $find): string | null
+    {
+        $pos = Util::IndexOfAny($this->text, $find, $this->index);
+        if ($pos < 0) return null;
+        return substr($this->text, $this->index, $pos - $this->index);
+    }
+
+    /**
      * @phpstan-impure
      */
     public function Seek(int $index, bool $fromStart): void
@@ -103,8 +137,13 @@ class State
 
     public function Peek(int $count): string
     {
-        if ($this->index + $count > $this->length) $count = $this->length - $this->index;
-        return substr($this->text, $this->index, $count);
+        if ($count < 0) {
+            $start = max(0, $this->index + $count);
+            return substr($this->text, $start, $this->index - $start);
+        } else {
+            if ($this->index + $count > $this->length) $count = $this->length - $this->index;
+            return substr($this->text, $this->index, $count);
+        }
     }
 
     /**

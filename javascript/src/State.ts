@@ -1,4 +1,5 @@
 import { Position } from './Position';
+import { IndexOfAny } from './Util';
 
 export class State {
     public readonly Text: string;
@@ -60,6 +61,31 @@ export class State {
         return ret;
     }
 
+    public ScanToAny(find: string[], ignoreCase = false): string {
+        let pos: number;
+
+        if (ignoreCase) {
+            const escaped = find.map(f => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            const regex = new RegExp(escaped.join('|'), 'gi');
+            regex.lastIndex = this.Index;
+            const match = regex.exec(this.Text);
+            pos = match ? match.index : this.Length;
+        } else {
+            pos = IndexOfAny(this.Text, find, this.Index);
+            if (pos < 0) pos = this.Length;
+        }
+        if (pos < 0) pos = this.Length;
+        const ret = this.Text.substring(this.Index, pos);
+        this.Index = pos;
+        return ret;
+    }
+
+    public ScanToEnd(): string {
+        const ret = this.Text.substring(this.Index, this.Length);
+        this.Index = this.Length;
+        return ret;
+    }
+
     public SkipWhitespace() {
         while (this.Index < this.Length && this.Text[this.Index].trim() == '') this.Index++;
     }
@@ -70,13 +96,24 @@ export class State {
         return this.Text.substring(this.Index, pos);
     }
 
+    public PeekToAny(find: string[]): string | null {
+        const pos = IndexOfAny(this.Text, find, this.Index);
+        if (pos < 0) return null;
+        return this.Text.substring(this.Index, pos);
+    }
+
     public Seek(index: number, fromStart: boolean) {
         this.Index = fromStart ? index : this.Index + index;
     }
 
     public Peek(count: number): string {
-        if (this.Index + count > this.Length) count = this.Length - this.Index;
-        return this.Text.substring(this.Index, this.Index + count);
+        if (count < 0) {
+            const start = Math.max(0, this.Index + count);
+            return this.Text.substring(start, this.Index);
+        } else {
+            if (this.Index + count > this.Length) count = this.Length - this.Index;
+            return this.Text.substring(this.Index, this.Index + count);
+        }
     }
 
     public Next(): string {

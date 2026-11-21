@@ -14,6 +14,52 @@ public class StateTests
     }
 
     [TestMethod]
+    public void ScanTo_CaseInsensitive()
+    {
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual("A ", st.ScanTo("b", StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual("B ", st.ScanTo("c", StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual("C", st.ScanTo("d", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [TestMethod]
+    public void ScanToAny()
+    {
+        var st = new State(0, 0, "A:B,C");
+        Assert.AreEqual("A", st.ScanToAny([':', ',']));
+        Assert.AreEqual(':', st.Next());
+        Assert.AreEqual("B", st.ScanToAny([':', ',']));
+        Assert.AreEqual(',', st.Next());
+        Assert.AreEqual("C", st.ScanToAny([':', ',']));
+        Assert.IsTrue(st.Done);
+        st.Seek(0, true);
+        Assert.AreEqual("A:B,C", st.ScanToAny(['!']));
+        Assert.IsTrue(st.Done);
+    }
+
+    [TestMethod]
+    public void ScanToAny_CaseInsensitive()
+    {
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual("A B C", st.ScanToAny(['b'], StringComparison.Ordinal));
+        Assert.IsTrue(st.Done);
+        st.Seek(0, true);
+        Assert.AreEqual("A ", st.ScanToAny(['b'], StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual("B ", st.ScanToAny(['c'], StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual("C", st.ScanToAny(['d'], StringComparison.OrdinalIgnoreCase));
+    }
+
+    [TestMethod]
+    public void ScanToEnd()
+    {
+        var st = new State(0, 0, "A B C");
+        Assert.AreEqual("A B C", st.ScanToEnd());
+        st.Seek(2, true);
+        Assert.AreEqual("B C", st.ScanToEnd());
+        Assert.IsTrue(st.Done);
+    }
+
+    [TestMethod]
     public void SkipWhitespace()
     {
         var st = new State(0, 0, "A B C");
@@ -41,6 +87,19 @@ public class StateTests
     }
 
     [TestMethod]
+    public void PeekToAny()
+    {
+        var st = new State(0, 0, "A:B,C");
+        Assert.AreEqual("A", st.PeekToAny([':', ',']));
+        Assert.AreEqual(null, st.PeekToAny([ '!' ]));
+        Assert.AreEqual(0, st.Index);
+        st.Seek(2, true);
+        Assert.AreEqual("B", st.PeekToAny([':', ',']));
+        Assert.AreEqual(null, st.PeekToAny([ '!' ]));
+        Assert.AreEqual(2, st.Index);
+    }
+
+    [TestMethod]
     public void Seek()
     {
         var st = new State(0, 0, "A B C");
@@ -62,10 +121,23 @@ public class StateTests
         Assert.AreEqual("A ", st.Peek(2));
         Assert.AreEqual("A B ", st.Peek(4));
         Assert.AreEqual("A B C", st.Peek(6));
+        Assert.AreEqual("", st.Peek(-2));
+        Assert.AreEqual("", st.Peek(-4));
+        Assert.AreEqual("", st.Peek(-6));
         st.Seek(2, false);
         Assert.AreEqual("B ", st.Peek(2));
         Assert.AreEqual("B C", st.Peek(4));
         Assert.AreEqual("B C", st.Peek(6));
+        Assert.AreEqual("A ", st.Peek(-2));
+        Assert.AreEqual("A ", st.Peek(-4));
+        Assert.AreEqual("A ", st.Peek(-6));
+        st.Seek(2, false);
+        Assert.AreEqual("C", st.Peek(2));
+        Assert.AreEqual("C", st.Peek(4));
+        Assert.AreEqual("C", st.Peek(6));
+        Assert.AreEqual("B ", st.Peek(-2));
+        Assert.AreEqual("A B ", st.Peek(-4));
+        Assert.AreEqual("A B ", st.Peek(-6));
     }
 
     [TestMethod]
