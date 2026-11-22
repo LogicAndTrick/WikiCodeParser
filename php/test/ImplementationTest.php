@@ -144,7 +144,7 @@ class ImplementationTest extends TestCase
                 "AutoLinking" => new AutoLinkingProcessor(),
                 "MarkdownText" => new MarkdownTextProcessor(),
                 "NewLine" => new NewLineProcessor(),
-                "Smilies" => new SmiliesProcessor("/smilies/{0}.png"),
+                "Smilies" => new SmiliesProcessor("/smilies/{0}.png")->Add('smile', ':)'),
                 "TrimWhitespace" => new TrimWhitespaceAroundBlockNodesProcessor(),
                 default => throw new InvalidArgumentException("Unknown processor name '$p'"),
             };

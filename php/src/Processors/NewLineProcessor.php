@@ -37,15 +37,21 @@ class NewLineProcessor implements INodeProcessor
         if (!($node instanceof PlainTextNode)) throw new \InvalidArgumentException('Node is not a PlainTextNode');
         $text = $node->text ?? '';
 
+        /** @var array<array{line: int, col: int, text: string}> */
         $lines = [];
+        $lineNum = $node->line;
+        $colNum = $node->column;
         foreach (explode("\n", $text) as $line) {
             $breaks = explode('<br>', $line);
             for ($i = 0; $i < count($breaks); $i++) {
                 $s = $breaks[$i];
                 if ($i > 0) $s = Util::TrimStart($s);
                 if ($i < count($breaks) - 1) $s = Util::TrimEnd($s);
-                $lines[] = $s;
+                $lines[] = ['line' => $lineNum, 'col' => $colNum, 'text' => $s];
+                $colNum += strlen($s) + 4;
             }
+            $lineNum++;
+            $colNum = 0;
         }
 
         // track the number of sequential newlines, to collapse 3+ newlines into 2 newlines
@@ -54,8 +60,8 @@ class NewLineProcessor implements INodeProcessor
         $ret = [];
         for ($i = 0; $i < count($lines); $i++) {
             $line = $lines[$i];
-            if ($line && Util::Trim($line) !== '') {
-                $ret[] = new PlainTextNode(Position::Zero(), $line);
+            if ($line['text'] && Util::Trim($line['text']) !== '') {
+                $ret[] = new PlainTextNode(new Position($line['line'], $line['col']), $line['text']);
                 $numSequentialBreaks = 0;
             }
 
@@ -65,7 +71,8 @@ class NewLineProcessor implements INodeProcessor
             $numSequentialBreaks++;
             if ($numSequentialBreaks > 2) continue;
 
-            $ret[] = new HtmlNode(Position::Zero(), '<br/>', UnprocessablePlainTextNode::NewLine(Position::Zero()), '');
+            $pos = new Position($line['line'], $line['col'] + strlen($line['text']));
+            $ret[] = new HtmlNode($pos, '<br/>', UnprocessablePlainTextNode::NewLine($pos), '');
         }
         return $ret;
     }

@@ -135,9 +135,6 @@ class Parser
     {
         $data->current_tag_depth++;
 
-        // trim 3 or more newlines down to 2 newlines
-        $text = preg_replace('/\n{3,}/i', "\n\n", $text) ?? '';
-
         $state = new State($line, $column, $text);
         $root = new NodeCollection();
         $inscope = Util::OrderByDescending(array_filter($this->configuration->tags, fn(Tag $x) => $x->InScope($scope)), fn(Tag $x) => $x->priority);

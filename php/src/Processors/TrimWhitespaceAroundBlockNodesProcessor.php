@@ -56,9 +56,10 @@ class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor
 
             if ($child instanceof HtmlNode && $child->isBlockNode) {
                 $trimStart = true;
-                $ret[] = UnprocessablePlainTextNode::NewLine(Position::Zero());
+                $ret[] = UnprocessablePlainTextNode::NewLine(new Position($child->line, $child->column));
                 $ret[] = $child;
-                $ret[] = UnprocessablePlainTextNode::NewLine(Position::Zero());
+                // this is sort of wrong, but it doesn't come from any source content, so it can be whatever.
+                $ret[] = UnprocessablePlainTextNode::NewLine(new Position($child->line, $child->column));
             } else {
                 $trimStart = false;
                 $ret[] = $child;

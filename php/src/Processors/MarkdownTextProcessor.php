@@ -9,7 +9,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
-use LogicAndTrick\WikiCodeParser\Position;
+use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class MarkdownTextProcessor implements INodeProcessor
@@ -47,89 +47,97 @@ class MarkdownTextProcessor implements INodeProcessor
     }
 
     /**
-     * @param int[] $tracker
-     * @param string $text
-     * @param int $position
-     * @param int $endPosition
-     * @return INode|null
+     * @param array<int> $tracker
      */
-    private static function ParseToken(array &$tracker, string $text, int $position, int &$endPosition): ?INode
+    private static function ParseToken(array &$tracker, State $state): ?INode
     {
-        $endPosition = -1;
-        $token = $text[$position];
+        $tokStart = $state->sourcePosition;
+        $index = $state->index;
+        $token = $state->Next();
         $tokenIndex = self::GetTokenIndex($token);
 
         // Make sure we're not already in this token
-        if ($tracker[$tokenIndex] != 0) return null;
+        if ($tracker[$tokenIndex] != 0) {
+            $state->Seek($index, true);
+            return null;
+        }
 
-        $endToken = strpos($text, $token, $position + 1);
-        if ($endToken <= $position + 1) return null;
-        $posCheck = strpos(substr($text, $position, $endToken - $position), "\n");
-        if ($posCheck !== false && $posCheck >= 0) return null; // no newlines
+        $strStart = $state->sourcePosition;
+        $str = $state->ScanTo($token);
+
+        // the contents cannot be empty or contain newlines, and the next char must be the token
+        if ($state->Next() != $token || strlen($str) == 0 || strpos($str, "\n") !== false) {
+            $state->Seek($index, true);
+            return null;
+        }
 
         // Make sure we can close this token
-        $valid = ($endToken + 1 == strlen($text) || self::IsEndBreakChar($text[$endToken + 1])) // end of string or before an end breaker
-            && Util::Trim($text[$endToken - 1]) != ''; // not whitespace previous
-        if (!$valid) return null;
-
-        $str = substr($text, $position + 1, $endToken - $position - 1);
+        $valid = ($state->Done() || self::IsEndBreakChar($state->Peek(1))) // end of string or before an end breaker
+            && strlen(Util::TrimEnd($str)) == strlen($str); // not whitespace previous
+        if (!$valid) {
+            $state->Seek($index, true);
+            return null;
+        }
 
         $tracker[$tokenIndex] = 1;
 
         // code tokens cannot be nested
         if ($token == '`') {
-            $contents = new UnprocessablePlainTextNode(Position::Zero(), $str);
+            $contents = new UnprocessablePlainTextNode($strStart, $str);
         } else {
-            $toks = self::ParseTokens($tracker, $str);
+            $toks = self::ParseTokens($strStart->line, $strStart->column, $tracker, $str);
             $contents = count($toks) == 1 ? $toks[0] : new NodeCollection(...$toks);
         }
 
         $tracker[$tokenIndex] = 0;
 
-        $endPosition = intval($endToken);
-
-        $ret = new HtmlNode(Position::Zero(), self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
+        $ret = new HtmlNode($tokStart, self::$OpenTags[$tokenIndex], $contents, self::$CloseTags[$tokenIndex]);
         $ret->plainBefore = $token;
         $ret->plainAfter = $token;
         return $ret;
     }
 
     /**
-     * @param int[] $tracker
+     * @param array<int> $tracker
      * @param string $text
      * @return INode[]
      */
-    private static function ParseTokens(array &$tracker, string $text): array
+    private static function ParseTokens(int $line, int $column, array &$tracker, string $text): array
     {
+        /** @var INode[] $ret */
         $ret = [];
-        $plainStart = 0;
-        $index = 0;
+        $state = new State($line, $column, $text);
+        $plainPos = $state->sourcePosition;
+        $plain = "";
+        $advanceToken = false;
+        while (!$state->Done()) {
+            // always advance one token except at the start, or after we find a valid token
+            if ($advanceToken) $plain .= $state->Next();
+            $advanceToken = true;
 
-        while (true) {
-            $nextIndex = Util::IndexOfAny($text, self::$Tokens, $index);
-            if ($nextIndex < 0) break;
+            $plain .= $state->ScanToAny(self::$Tokens);
+            if ($state->Done()) break;
 
             // Make sure we can start a new token
-            $valid = ($nextIndex == 0 || self::IsStartBreakChar($text[$nextIndex - 1])) // start of string or after a start breaker
-                && $nextIndex + 1 < strlen($text) // not end of string
-                && Util::Trim($text[$nextIndex + 1]) != ''; // not whitespace next
-            if (!$valid) {
-                $index = $nextIndex + 1;
-                continue;
-            }
+            $valid = ($state->index == 0 || self::IsStartBreakChar($state->text[$state->index - 1])) // start of string or after a start breaker
+                && $state->index + 1 < strlen($text) // not end of string
+                && Util::Trim($state->text[$state->index + 1]) != ""; // not whitespace next
+            if (!$valid) continue;
 
-            $endIndex = -1;
-            $parsed = self::ParseToken($tracker, $text, $nextIndex, $endIndex);
-            if ($parsed == null) {
-                $index = $nextIndex + 1; // no match, skip this token
-            } else {
-                if ($plainStart < $nextIndex) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $plainStart, $nextIndex - $plainStart));
-                $ret[] = $parsed;
-                $index = $plainStart = $endIndex + 1;
-            }
+            // Try to parse a token
+            $parsed = self::ParseToken($tracker, $state);
+            if ($parsed === null) continue;
+
+            if (strlen($plain) > 0) $ret[] = new PlainTextNode($plainPos, $plain);
+            $ret[] = $parsed;
+
+            $advanceToken = false;
+            $plain = "";
+            $plainPos = $state->sourcePosition;
         }
         // Return the rest of the text as plain
-        if ($plainStart < strlen($text)) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $plainStart));
+        $plain .= $state->ScanToEnd();
+        if (strlen($plain) > 0) $ret[] = new PlainTextNode($plainPos, $plain);
 
         return $ret;
     }
@@ -162,9 +170,9 @@ class MarkdownTextProcessor implements INodeProcessor
         // first and last character is NOT whitespace. everything else is fine except for newlines
         // post-condition: end of a line OR one of: !?^()+=[]{}"'<>,.:; OR whitespace
 
-        $tracker = array_map(fn(string $x) => 0, self::$Tokens);
+        $tracker = array_map(fn() => 0, self::$Tokens);
 
-        foreach (self::ParseTokens($tracker, $text) as $token) {
+        foreach (self::ParseTokens($node->line, $node->column, $tracker, $text) as $token) {
             $ret[] = $token;
         }
 

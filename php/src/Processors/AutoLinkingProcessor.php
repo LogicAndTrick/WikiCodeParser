@@ -4,6 +4,7 @@ namespace LogicAndTrick\WikiCodeParser\Processors;
 
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
+use LogicAndTrick\WikiCodeParser\Nodes\HtmlNodeBuilder;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeExtensions;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
@@ -11,6 +12,7 @@ use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
 use LogicAndTrick\WikiCodeParser\Position;
+use LogicAndTrick\WikiCodeParser\State;
 
 class AutoLinkingProcessor implements INodeProcessor
 {
@@ -37,6 +39,7 @@ class AutoLinkingProcessor implements INodeProcessor
         }
 
         $text = $node->text;
+        $state = new State($node->line, $node->column, $text); // just for tracking newlines
 
         $ret = [];
 
@@ -75,20 +78,32 @@ class AutoLinkingProcessor implements INodeProcessor
             if (isset($urlMatch['url']) && !HtmlHelper::ValidateUrl($matchingText)) continue;
 
             // return the prefix text
-            if ($idx > $start) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start, $idx - $start));
+            if ($idx > $start) {
+                $state->Seek($start, true);
+                $ret[] = new PlainTextNode($state->sourcePosition, substr($text, $start, $idx - $start));
+            }
 
             if (isset($urlMatch['url'])) {
-                $enc = HtmlHelper::AttributeEncode(HtmlHelper::SanitiseUrl($matchingText));
-                $ret[] = new HtmlNode(Position::Zero(), "<a href=\"$enc\">", new UnprocessablePlainTextNode(Position::Zero(), $matchingText), '</a>');
+                $state->Seek($idx, true);
+                $ret[] = HtmlNodeBuilder::Make('a', $state->sourcePosition)
+                    ->Attr('href', HtmlHelper::SanitiseUrl($matchingText))
+                    ->Add(new UnprocessablePlainTextNode($state->sourcePosition, $matchingText))
+                    ->ToNode();
             } else if (isset($urlMatch['email'])) {
-                $enc = HtmlHelper::AttributeEncode($matchingText);
-                $ret[] = new HtmlNode(Position::Zero(), "<a href=\"mailto:$enc\">", new UnprocessablePlainTextNode(Position::Zero(), $matchingText), '</a>');
+                $state->Seek($idx, true);
+                $ret[] = HtmlNodeBuilder::Make('a', $state->sourcePosition)
+                    ->Attr('href', "mailto:$matchingText")
+                    ->Add(new UnprocessablePlainTextNode($state->sourcePosition, $matchingText))
+                    ->ToNode();
             }
             $start = $idx + $len;
         }
 
         // return the remaining text
-        if ($start < strlen($text)) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start));
+        if ($start < strlen($text)) {
+            $state->Seek($start, true);
+            $ret[] = new PlainTextNode($state->sourcePosition, substr($text, $start));
+        }
 
         return $ret;
     }

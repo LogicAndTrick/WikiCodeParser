@@ -4,13 +4,14 @@ namespace LogicAndTrick\WikiCodeParser\Processors;
 
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
+use LogicAndTrick\WikiCodeParser\Nodes\HtmlNodeBuilder;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\NodeExtensions;
 use LogicAndTrick\WikiCodeParser\Nodes\PlainTextNode;
 use LogicAndTrick\WikiCodeParser\Nodes\UnprocessablePlainTextNode;
 use LogicAndTrick\WikiCodeParser\ParseData;
 use LogicAndTrick\WikiCodeParser\Parser;
-use LogicAndTrick\WikiCodeParser\Position;
+use LogicAndTrick\WikiCodeParser\State;
 use LogicAndTrick\WikiCodeParser\Util;
 
 class SmileyDefinition
@@ -27,12 +28,13 @@ class SmileyDefinition
         $this->tokens = $tokens;
     }
 
-    public function GetMatchingToken(string $text, int $startIndex): ?string
+    public function GetMatchingToken(State $state): ?string
     {
         foreach ($this->tokens as $token) {
-            if (strpos($text, $token, $startIndex) === $startIndex) {
+            if ($state->Peek(strlen($token)) == $token) {
                 // Must end with whitespace
-                if ($startIndex + strlen($token) < strlen($text) && trim($text[$startIndex + strlen($token)]) != '' && !in_array($text[$startIndex + strlen($token)], SmiliesProcessor::AllowedEndChars, true)) continue;
+                $next = substr($state->Peek(strlen($token) + 1), strlen($token));
+                if (strlen($next) > 0 && trim($next[0]) != '' && !in_array($next[0], SmiliesProcessor::AllowedEndChars, true)) continue;
                 return $token;
             }
         }
@@ -84,20 +86,29 @@ class SmiliesProcessor implements INodeProcessor
         }
 
         $ret = [];
-
         /** @var PlainTextNode $node */
-        $text = $node->text;
-        $start = 0;
-        $index = -1;
+        $ptn = $node;
         $numSmilies = 0;
-        while ($index + 1 < strlen($text) && ($index = Util::IndexOfAny($text, $this->tokenStarts, $index + 1)) >= 0) {
+
+        $state = new State($ptn->line, $ptn->column, $ptn->text);
+        $plainPos = $state->sourcePosition;
+        $plain = '';
+        $advanceToken = false;
+        while (!$state->Done()) {
+            // always advance one token except at the start, or after we find a valid smiley
+            if ($advanceToken) $plain .= $state->Next();
+            $advanceToken = true;
+
+            $plain .= $state->ScanToAny($this->tokenStarts);
+
             if ($numSmilies >= self::$MaxSmilies) {
-                $ret[] = new HtmlNode(Position::Zero(), '<em class="text-danger">', new UnprocessablePlainTextNode(Position::Zero(), ' [warning: too many smilies in post] '), '</em>');
+                $ret[] = new HtmlNode($state->sourcePosition, '<em class="text-danger">', new UnprocessablePlainTextNode($state->sourcePosition, ' [warning: too many smilies in post] '), '</em>');
                 break;
             }
 
             // Must start with whitespace
-            if ($index != 0 && trim($text[$index - 1]) != '' && !in_array($text[$index - 1], self::AllowedStartChars, true)) continue;
+            $prev = $state->Peek(-1);
+            if (strlen($prev) > 0 && trim($prev[0]) != '' && !in_array($prev[0], self::AllowedStartChars, true)) continue;
 
             // Find an appropriate definition
             /** @var ?SmileyDefinition $definition */
@@ -105,7 +116,7 @@ class SmiliesProcessor implements INodeProcessor
             /** @var ?string $token */
             $token = null;
             foreach ($this->definitions as $def) {
-                $token = $def->GetMatchingToken($text, $index);
+                $token = $def->GetMatchingToken($state);
                 if ($token == null) continue;
 
                 $definition = $def;
@@ -115,27 +126,33 @@ class SmiliesProcessor implements INodeProcessor
             /** @var string $token */
 
             // Must end with whitespace
-            if ($index + strlen($token) < strlen($text) && trim($text[$index + strlen($token)]) != '' && !in_array($text[$index + strlen($token)], self::AllowedEndChars, true)) continue;
+            $next = substr($state->Peek(strlen($token) + 1), strlen($token));
+            if (strlen($next) > 0 && trim($next[0]) != '' && !in_array($next[0], self::AllowedEndChars, true)) continue;
 
             // skip smileys starting on the first letter if the previous sibling doesn't end in whitespace or one of the allowed punctuation chars
-            if ($index == 0 && !NodeExtensions::PreviousNodeEndsWith($node, $parentNode, self::AllowedStartChars)) continue;
+            if ($state->index == 0 && !NodeExtensions::PreviousNodeEndsWith($node, $parentNode, self::AllowedStartChars)) continue;
             // same if the smiley ends on the last letter and the next sibling doesn't start with an allowed char
-            if ($index + strlen($token) == strlen($text) && !NodeExtensions::NextNodeStartsWith($node, $parentNode, self::AllowedEndChars)) continue;
+            if ($state->index + strlen($token) == $state->length && !NodeExtensions::NextNodeStartsWith($node, $parentNode, self::AllowedEndChars)) continue;
 
             // We have a smiley
-            if ($start < $index) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start, $index - $start));
-            $src = HtmlHelper::AttributeEncode($parser->configuration->BuildUrl(Util::Template($this->urlFormatString, ['0' => $definition->name])));
-            $alt = HtmlHelper::AttributeEncode($token);
-            $smiley_node = new HtmlNode(Position::Zero(), "<img class=\"smiley\" src=\"{$src}\" alt=\"{$alt}\" />", PlainTextNode::Empty(Position::Zero()), '');
-            $smiley_node->plainBefore = $token;
-            $ret[] = $smiley_node;
-            $start = $index + strlen($token);
-            $index += strlen($token);
+            if (strlen($plain) > 0) $ret[] = new PlainTextNode($plainPos, $plain);
+
+            $ret[] = HtmlNodeBuilder::Make("img", $state->sourcePosition)
+                ->AddClass("smiley")
+                ->Attr("src", $parser->configuration->BuildUrl(Util::Template($this->urlFormatString, ['0' => $definition->name])))
+                ->Attr("alt", $token)
+                ->ToNode(plainBefore: $token, selfClosing: true);
+
+            $state->Seek(strlen($token), false);
+            $advanceToken = false;
+            $plain = '';
+            $plainPos = $state->sourcePosition;
 
             $numSmilies++;
         }
 
-        if ($start < strlen($text)) $ret[] = new PlainTextNode(Position::Zero(), substr($text, $start));
+        $plain .= $state->ScanToEnd();
+        if (strlen($plain) > 0) $ret[] = new PlainTextNode($plainPos, $plain);
         return $ret;
     }
 
