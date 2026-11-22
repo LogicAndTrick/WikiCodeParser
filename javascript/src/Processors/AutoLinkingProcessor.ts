@@ -1,12 +1,13 @@
 import { HtmlHelper } from '../HtmlHelper';
 import { HtmlNode } from '../Nodes/HtmlNode';
+import { HtmlNodeBuilder } from '../Nodes/HtmlNodeBuilder';
 import { INode } from '../Nodes/INode';
 import { NodeExtensions } from '../Nodes/NodeExtensions';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
-import { Position } from '../Position';
+import { State } from '../State';
 import { INodeProcessor } from './INodeProcessor';
 
 export class AutoLinkingProcessor implements INodeProcessor {
@@ -27,6 +28,7 @@ export class AutoLinkingProcessor implements INodeProcessor {
         }
 
         const text = node.Text;
+        const state = new State(node.Line, node.Column, text); // just for tracking newlines
 
         const ret: INode[] = [];
 
@@ -69,31 +71,35 @@ export class AutoLinkingProcessor implements INodeProcessor {
             if (urlMatch.groups && urlMatch.groups['url'] && !HtmlHelper.ValidateUrl(matchingText)) continue;
 
             // return the prefix text
-            if (idx > start) ret.push(new PlainTextNode(Position.Zero(), text.substring(start, urlMatch.index)));
+            if (idx > start) {
+                state.Seek(start, true);
+                ret.push(new PlainTextNode(state.SourcePosition, text.substring(start, urlMatch.index)));
+            }
             if (urlMatch.groups && urlMatch.groups['url']) {
+                state.Seek(idx, true);
                 ret.push(
-                    new HtmlNode(
-                        Position.Zero(),
-                        `<a href="${HtmlHelper.AttributeEncode(HtmlHelper.SanitiseUrl(matchingText))}">`,
-                        new UnprocessablePlainTextNode(Position.Zero(), matchingText),
-                        '</a>'
-                    )
+                    HtmlNodeBuilder.make('a', state.SourcePosition)
+                        .attr('href', HtmlHelper.SanitiseUrl(matchingText))
+                        .add(new UnprocessablePlainTextNode(state.SourcePosition, matchingText))
+                        .toNode()
                 );
             } else if (urlMatch.groups && urlMatch.groups['email']) {
+                state.Seek(idx, true);
                 ret.push(
-                    new HtmlNode(
-                        Position.Zero(),
-                        `<a href="mailto:${HtmlHelper.AttributeEncode(matchingText)}">`,
-                        new UnprocessablePlainTextNode(Position.Zero(), matchingText),
-                        '</a>'
-                    )
+                    HtmlNodeBuilder.make('a', state.SourcePosition)
+                        .attr('href', `mailto:${matchingText}`)
+                        .add(new UnprocessablePlainTextNode(state.SourcePosition, matchingText))
+                        .toNode()
                 );
             }
             start = idx + len;
         }
 
         // return the remaining text
-        if (start < text.length) ret.push(new PlainTextNode(Position.Zero(), text.substring(start)));
+        if (start < text.length) {
+            state.Seek(start, true);
+            ret.push(new PlainTextNode(state.SourcePosition, text.substring(start)));
+        }
 
         return ret;
     }

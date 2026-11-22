@@ -18,15 +18,20 @@ export class NewLineProcessor implements INodeProcessor {
     Process(_parser: Parser, _data: ParseData, parentNode: INode | null, node: INode, _scope: string): INode[] {
         const text = (node as PlainTextNode).Text;
 
-        const lines: string[] = [];
+        const lines: { line: number; col: number; text: string }[] = [];
+        let lineNum = node.Line;
+        let colNum = node.Column;
         for (const line of text.split('\n')) {
             const breaks = line.split('<br>');
             for (let i = 0; i < breaks.length; i++) {
                 let s = breaks[i];
                 if (i > 0) s = TrimStart(s);
                 if (i < breaks.length - 1) s = TrimEnd(s);
-                lines.push(s);
+                lines.push({ line: lineNum, col: colNum, text: s });
+                colNum += s.length + 4;
             }
+            lineNum++;
+            colNum = 0;
         }
 
         // track the number of sequential newlines, to collapse 3+ newlines into 2 newlines
@@ -35,8 +40,8 @@ export class NewLineProcessor implements INodeProcessor {
         const ret: INode[] = [];
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
-            if (line && Trim(line) !== '') {
-                ret.push(new PlainTextNode(Position.Zero(), line));
+            if (line.text && Trim(line.text) !== '') {
+                ret.push(new PlainTextNode(new Position(line.line, line.col), line.text));
                 numSequentialBreaks = 0;
             }
 
@@ -46,7 +51,8 @@ export class NewLineProcessor implements INodeProcessor {
             numSequentialBreaks++;
             if (numSequentialBreaks > 2) continue;
 
-            ret.push(new HtmlNode(Position.Zero(), '<br/>', UnprocessablePlainTextNode.NewLine(Position.Zero()), ''));
+            const pos = new Position(line.line, line.col + line.text.length);
+            ret.push(new HtmlNode(pos, '<br/>', UnprocessablePlainTextNode.NewLine(pos), ''));
         }
         return ret;
     }

@@ -1,13 +1,13 @@
-import { HtmlHelper } from '../HtmlHelper';
 import { HtmlNode } from '../Nodes/HtmlNode';
+import { HtmlNodeBuilder } from '../Nodes/HtmlNodeBuilder';
 import { INode } from '../Nodes/INode';
 import { NodeExtensions } from '../Nodes/NodeExtensions';
 import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
-import { Position } from '../Position';
-import { IndexOfAny, Template } from '../Util';
+import { State } from '../State';
+import { Template } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
 
 class SmileyDefinition {
@@ -19,16 +19,12 @@ class SmileyDefinition {
         this.Tokens = tokens;
     }
 
-    public GetMatchingToken(text: string, startIndex: number): string | null {
+    public GetMatchingToken(state: State): string | null {
         for (const token of this.Tokens) {
-            if (text.indexOf(token, startIndex) == startIndex) {
+            if (state.Peek(token.length) == token) {
                 // Must end with whitespace
-                if (
-                    startIndex + token.length < text.length &&
-                    text[startIndex + token.length].trim() != '' &&
-                    !SmiliesProcessor.AllowedEndChars.has(text[startIndex + token.length])
-                )
-                    continue;
+                const next = state.Peek(token.length + 1).substring(token.length);
+                if (next.length > 0 && next[0].trim() != '' && !SmiliesProcessor.AllowedEndChars.has(next[0])) continue;
                 return token;
             }
         }
@@ -42,7 +38,7 @@ export class SmiliesProcessor implements INodeProcessor {
 
     private _definitions: SmileyDefinition[];
     private _initialised: boolean;
-    private _tokenStarts!: Set<string>;
+    private _tokenStarts!: Array<string>;
 
     private static MaxSmilies = 100;
 
@@ -61,32 +57,46 @@ export class SmiliesProcessor implements INodeProcessor {
 
     Process(parser: Parser, _data: ParseData, parentNode: INode | null, node: INode, _scope: string): INode[] {
         if (!this._initialised) {
-            this._tokenStarts = new Set<string>(this._definitions.flatMap(x => x.Tokens).map(x => x[0]));
+            this._tokenStarts = Array.from(new Set<string>(this._definitions.flatMap(x => x.Tokens).map(x => x[0])));
             this._initialised = true;
         }
 
         const ret: INode[] = [];
-
-        const text = (node as PlainTextNode).Text;
-        let start = 0;
-        let index = -1;
+        const ptn = node as PlainTextNode;
         let numSmilies = 0;
-        while (index + 1 < text.length && (index = IndexOfAny(text, this._tokenStarts, index + 1)) >= 0) {
+
+        const state = new State(ptn.Line, ptn.Column, ptn.Text);
+        let plainPos = state.SourcePosition;
+        let plain = '';
+        let advanceToken = false;
+        while (!state.Done) {
+            // always advance one token except at the start, or after we find a valid smiley
+            if (advanceToken) plain += state.Next();
+            advanceToken = true;
+
+            plain += state.ScanToAny(this._tokenStarts);
+
             if (numSmilies >= SmiliesProcessor.MaxSmilies) {
                 ret.push(
-                    new HtmlNode(Position.Zero(), '<em class="text-danger">', new UnprocessablePlainTextNode(Position.Zero(), ' [warning: too many smilies in post] '), '</em>')
+                    new HtmlNode(
+                        state.SourcePosition,
+                        '<em class="text-danger">',
+                        new UnprocessablePlainTextNode(state.SourcePosition, ' [warning: too many smilies in post] '),
+                        '</em>'
+                    )
                 );
                 break;
             }
 
             // Must start with whitespace
-            if (index != 0 && text[index - 1].trim() != '' && !SmiliesProcessor.AllowedStartChars.has(text[index - 1])) continue;
+            const prev = state.Peek(-1);
+            if (prev.length > 0 && prev[0].trim() != '' && !SmiliesProcessor.AllowedStartChars.has(prev[0])) continue;
 
             // Find an appropriate definition
             let definition: SmileyDefinition | null = null;
             let token: string | null = null;
             for (const def of this._definitions) {
-                token = def.GetMatchingToken(text, index);
+                token = def.GetMatchingToken(state);
                 if (token == null) continue;
 
                 definition = def;
@@ -95,27 +105,35 @@ export class SmiliesProcessor implements INodeProcessor {
             if (definition == null || token == null) continue;
 
             // Must end with whitespace
-            if (index + token.length < text.length && text[index + token.length].trim() != '' && !SmiliesProcessor.AllowedEndChars.has(text[index + token.length])) continue;
+            const next = state.Peek(token.length + 1).substring(token.length);
+            if (next.length > 0 && next[0].trim() != '' && !SmiliesProcessor.AllowedEndChars.has(next[0])) continue;
 
             // skip smileys starting on the first letter if the previous sibling doesn't end in whitespace or one of the allowed punctuation chars
-            if (index == 0 && !NodeExtensions.PreviousNodeEndsWith(node, parentNode, SmiliesProcessor.AllowedStartChars)) continue;
+            if (state.Index == 0 && !NodeExtensions.PreviousNodeEndsWith(node, parentNode, SmiliesProcessor.AllowedStartChars)) continue;
             // same if the smiley ends on the last letter and the next sibling doesn't start with an allowed char
-            if (index + token.length == text.length && !NodeExtensions.NextNodeStartsWith(node, parentNode, SmiliesProcessor.AllowedEndChars)) continue;
+            if (state.Index + token.length == state.Length && !NodeExtensions.NextNodeStartsWith(node, parentNode, SmiliesProcessor.AllowedEndChars)) continue;
 
             // We have a smiley
-            if (start < index) ret.push(new PlainTextNode(Position.Zero(), text.substring(start, index)));
-            const src = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(Template(this.UrlFormatString, { 0: definition.Name })));
-            const alt = HtmlHelper.AttributeEncode(token);
-            const smileyNode = new HtmlNode(Position.Zero(), `<img class="smiley" src="${src}" alt="${alt}" />`, PlainTextNode.Empty(Position.Zero()), '');
-            smileyNode.PlainBefore = token;
-            ret.push(smileyNode);
-            start = index + token.length;
-            index += token.length;
+            if (plain.length > 0) ret.push(new PlainTextNode(plainPos, plain));
+
+            ret.push(
+                HtmlNodeBuilder.make('img', state.SourcePosition)
+                    .addClass('smiley')
+                    .attr('src', parser.Configuration.BuildUrl(Template(this.UrlFormatString, { 0: definition.Name })))
+                    .attr('alt', token)
+                    .toNode({ plainBefore: token, selfClosing: true })
+            );
+
+            state.Seek(token.length, false);
+            advanceToken = false;
+            plain = '';
+            plainPos = state.SourcePosition;
 
             numSmilies++;
         }
 
-        if (start < text.length) ret.push(new PlainTextNode(Position.Zero(), text.substring(start)));
+        plain += state.ScanToEnd();
+        if (plain.length > 0) ret.push(new PlainTextNode(plainPos, plain));
         return ret;
     }
 

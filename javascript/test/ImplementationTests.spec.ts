@@ -219,7 +219,7 @@ function CreateConfig(config: TestConfig): ParserConfiguration {
                 con.Processors.push(new NewLineProcessor());
                 break;
             case 'Smilies':
-                con.Processors.push(new SmiliesProcessor('/smilies/{0}.png'));
+                con.Processors.push(new SmiliesProcessor('/smilies/{0}.png').Add('smile', ':)'));
                 break;
             case 'TrimWhitespace':
                 con.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());

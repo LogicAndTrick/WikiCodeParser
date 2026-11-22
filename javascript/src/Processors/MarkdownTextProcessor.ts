@@ -5,11 +5,9 @@ import { PlainTextNode } from '../Nodes/PlainTextNode';
 import { UnprocessablePlainTextNode } from '../Nodes/UnprocessablePlainTextNode';
 import { ParseData } from '../ParseData';
 import { Parser } from '../Parser';
-import { Position } from '../Position';
-import { IndexOfAny, Trim } from '../Util';
+import { State } from '../State';
+import { IndexOfAny, Trim, TrimEnd } from '../Util';
 import { INodeProcessor } from './INodeProcessor';
-
-type endPositionOutobject = { endPosition: number };
 
 export class MarkdownTextProcessor implements INodeProcessor {
     public Priority = 10;
@@ -34,78 +32,90 @@ export class MarkdownTextProcessor implements INodeProcessor {
         return MarkdownTextProcessor.StartBreakChars.includes(c) || MarkdownTextProcessor.ExtraEndBreakChars.includes(c) || MarkdownTextProcessor.Tokens.includes(c);
     }
 
-    private static ParseToken(tracker: number[], text: string, position: number, endPositionObj: endPositionOutobject): INode | null {
-        endPositionObj.endPosition = -1;
-        const token = text[position];
+    private static ParseToken(tracker: number[], state: State): INode | null {
+        const tokStart = state.SourcePosition;
+        const index = state.Index;
+        const token = state.Next();
         const tokenIndex = MarkdownTextProcessor.GetTokenIndex(token);
 
         // Make sure we're not already in this token
-        if (tracker[tokenIndex] != 0) return null;
+        if (tracker[tokenIndex] != 0) {
+            state.Seek(index, true);
+            return null;
+        }
 
-        const endToken = text.indexOf(token, position + 1);
-        if (endToken <= position + 1) return null;
-        if (text.substring(position, endToken).indexOf('\n') >= 0) return null; // no newlines
+        const strStart = state.SourcePosition;
+        const str = state.ScanTo(token);
+
+        // the contents cannot be empty or contain newlines, and the next char must be the token
+        if (state.Next() != token || str.length == 0 || str.indexOf('\n') >= 0) {
+            state.Seek(index, true);
+            return null;
+        }
 
         // Make sure we can close this token
         const valid =
-            (endToken + 1 == text.length || MarkdownTextProcessor.IsEndBreakChar(text[endToken + 1])) && // end of string or before an end breaker
-            Trim(text[endToken - 1]) != ''; // not whitespace previous
-        if (!valid) return null;
-
-        const str = text.substring(position + 1, endToken);
+            (state.Done || MarkdownTextProcessor.IsEndBreakChar(state.Peek(1))) && // end of string or before an end breaker
+            TrimEnd(str).length == str.length; // not whitespace previous
+        if (!valid) {
+            state.Seek(index, true);
+            return null;
+        }
 
         tracker[tokenIndex] = 1;
 
         // code tokens cannot be nested
         let contents: INode;
         if (token == '`') {
-            contents = new UnprocessablePlainTextNode(Position.Zero(), str);
+            contents = new UnprocessablePlainTextNode(strStart, str);
         } else {
-            const toks = MarkdownTextProcessor.ParseTokens(tracker, str);
+            const toks = MarkdownTextProcessor.ParseTokens(strStart.Line, strStart.Column, tracker, str);
             contents = toks.length == 1 ? toks[0] : new NodeCollection(...toks);
         }
 
         tracker[tokenIndex] = 0;
 
-        endPositionObj.endPosition = endToken;
-
-        const ret = new HtmlNode(Position.Zero(), MarkdownTextProcessor.OpenTags[tokenIndex], contents, MarkdownTextProcessor.CloseTags[tokenIndex]);
+        const ret = new HtmlNode(tokStart, MarkdownTextProcessor.OpenTags[tokenIndex], contents, MarkdownTextProcessor.CloseTags[tokenIndex]);
         ret.PlainBefore = token;
         ret.PlainAfter = token;
         return ret;
     }
 
-    private static ParseTokens(tracker: number[], text: string): INode[] {
-        const ret = [];
-        let plainStart = 0;
-        let index = 0;
+    private static ParseTokens(line: number, column: number, tracker: number[], text: string): INode[] {
+        const ret: INode[] = [];
+        const state = new State(line, column, text);
+        let plainPos = state.SourcePosition;
+        let plain = '';
+        let advanceToken = false;
+        while (!state.Done) {
+            // always advance one token except at the start, or after we find a valid token
+            if (advanceToken) plain += state.Next();
+            advanceToken = true;
 
-        while (true) {
-            const nextIndex = IndexOfAny(text, MarkdownTextProcessor.Tokens, index);
-            if (nextIndex < 0) break;
+            plain += state.ScanToAny(MarkdownTextProcessor.Tokens);
+            if (state.Done) break;
 
             // Make sure we can start a new token
             const valid =
-                (nextIndex == 0 || MarkdownTextProcessor.IsStartBreakChar(text[nextIndex - 1])) && // start of string or after a start breaker
-                nextIndex + 1 < text.length && // not end of string
-                Trim(text[nextIndex + 1]) != ''; // not whitespace next
-            if (!valid) {
-                index = nextIndex + 1;
-                continue;
-            }
+                (state.Index == 0 || MarkdownTextProcessor.IsStartBreakChar(state.Text[state.Index - 1])) && // start of string or after a start breaker
+                state.Index + 1 < text.length && // not end of string
+                Trim(state.Text[state.Index + 1]) != ''; // not whitespace next
+            if (!valid) continue;
 
-            const endIndexObj: endPositionOutobject = { endPosition: -1 };
-            const parsed = MarkdownTextProcessor.ParseToken(tracker, text, nextIndex, endIndexObj);
-            if (parsed == null) {
-                index = nextIndex + 1; // no match, skip this token
-            } else {
-                if (plainStart < nextIndex) ret.push(new PlainTextNode(Position.Zero(), text.substring(plainStart, nextIndex)));
-                ret.push(parsed);
-                index = plainStart = endIndexObj.endPosition + 1;
-            }
+            // Try to parse a token
+            const parsed = this.ParseToken(tracker, state);
+            if (parsed === null) continue;
+
+            if (plain.length > 0) ret.push(new PlainTextNode(plainPos, plain));
+            ret.push(parsed);
+
+            advanceToken = false;
+            plain = '';
+            plainPos = state.SourcePosition;
         }
         // Return the rest of the text as plain
-        if (plainStart < text.length) ret.push(new PlainTextNode(Position.Zero(), text.substring(plainStart)));
+        plain += state.ScanToEnd();
+        if (plain.length > 0) ret.push(new PlainTextNode(plainPos, plain));
 
         return ret;
     }
@@ -138,7 +148,7 @@ export class MarkdownTextProcessor implements INodeProcessor {
 
         const tracker: number[] = MarkdownTextProcessor.Tokens.map(() => 0);
 
-        for (const token of MarkdownTextProcessor.ParseTokens(tracker, text)) {
+        for (const token of MarkdownTextProcessor.ParseTokens(node.Line, node.Column, tracker, text)) {
             ret.push(token);
         }
 

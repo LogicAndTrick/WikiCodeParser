@@ -36,9 +36,10 @@ export class TrimWhitespaceAroundBlockNodesProcessor implements INodeProcessor {
 
             if (child instanceof HtmlNode && child.IsBlockNode) {
                 trimStart = true;
-                ret.push(UnprocessablePlainTextNode.NewLine(Position.Zero()));
+                ret.push(UnprocessablePlainTextNode.NewLine(new Position(child.Line, child.Column)));
                 ret.push(child);
-                ret.push(UnprocessablePlainTextNode.NewLine(Position.Zero()));
+                // this is sort of wrong, but it doesn't come from any source content, so it can be whatever.
+                ret.push(UnprocessablePlainTextNode.NewLine(new Position(child.Line, child.Column)));
             } else {
                 trimStart = false;
                 ret.push(child);
