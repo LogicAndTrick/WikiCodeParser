@@ -34,9 +34,10 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (child is HtmlNode html && html.IsBlockNode)
                 {
                     trimStart = true;
-                    yield return UnprocessablePlainTextNode.NewLine(Position.Zero);
+                    yield return UnprocessablePlainTextNode.NewLine(new Position(child.Line, child.Column));
                     yield return child;
-                    yield return UnprocessablePlainTextNode.NewLine(Position.Zero);
+                    // this is sort of wrong, but it doesn't come from any source content, so it can be whatever.
+                    yield return UnprocessablePlainTextNode.NewLine(new Position(child.Line, child.Column));
                 }
                 else
                 {

@@ -39,54 +39,72 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 _initialised = true;
             }
 
-            var text = ((PlainTextNode) node).Text;
-            var start = 0;
-            var index = -1;
+            var ptn = (PlainTextNode) node;
             var numSmilies = 0;
-            while (index + 1 < text.Length && (index = text.IndexOfAny(_tokenStarts, index + 1)) >= 0)
+
+            var state = new State(ptn.Line, ptn.Column, ptn.Text);
+            var plainPos = state.SourcePosition;
+            var plain = "";
+            var advanceToken = false;
+            while (!state.Done)
             {
+                // always advance one token except at the start, or after we find a valid smiley
+                if (advanceToken) plain += state.Next();
+                advanceToken = true;
+
+                plain += state.ScanToAny(_tokenStarts);
+
                 if (numSmilies >= MaxSmilies)
                 {
-                    yield return new HtmlNode(Position.Zero, "<em class=\"text-danger\">", new UnprocessablePlainTextNode(Position.Zero, " [warning: too many smilies in post] "), "</em>");
+                    yield return new HtmlNode(state.SourcePosition, "<em class=\"text-danger\">", new UnprocessablePlainTextNode(state.SourcePosition, " [warning: too many smilies in post] "), "</em>");
                     break;
                 }
 
                 // Must start with whitespace
-                if (index != 0 && !Char.IsWhiteSpace(text[index - 1]) && !AllowedStartChars.Contains(text[index - 1])) continue;
-
+                var prev = state.Peek(-1);
+                if (prev.Length > 0 && !Char.IsWhiteSpace(prev[0]) && !AllowedStartChars.Contains(prev[0])) continue;
+                
                 // Find an appropriate definition
                 SmileyDefinition definition = null;
                 string token = null;
                 foreach (var def in _definitions)
                 {
-                    token = def.GetMatchingToken(text, index);
+                    token = def.GetMatchingToken(state);
                     if (token == null) continue;
 
                     definition = def;
                     break;
                 }
                 if (definition == null) continue;
-
+                
                 // Must end with whitespace
-                if (index + token.Length < text.Length && !Char.IsWhiteSpace(text[index + token.Length]) && !AllowedEndChars.Contains(text[index + token.Length])) continue;
-
+                var next = state.Peek(token.Length + 1).Substring(token.Length);
+                if (next.Length > 0 && !Char.IsWhiteSpace(next[0]) && !AllowedEndChars.Contains(next[0])) continue;
+                
                 // skip smileys starting on the first letter if the previous sibling doesn't end in whitespace or one of the allowed punctuation chars
-                if (index == 0 && !node.PreviousNodeEndsWith(parentNode, AllowedStartChars)) continue;
+                if (state.Index == 0 && !node.PreviousNodeEndsWith(parentNode, AllowedStartChars)) continue;
                 // same if the smiley ends on the last letter and the next sibling doesn't start with an allowed char
-                if (index + token.Length == text.Length && !node.NextNodeStartsWith(parentNode, AllowedEndChars)) continue;
+                if (state.Index + token.Length == state.Length && !node.NextNodeStartsWith(parentNode, AllowedEndChars)) continue;
 
                 // We have a smiley
-                if (start < index) yield return new PlainTextNode(Position.Zero, text.Substring(start, index - start));
-                var src = HtmlHelper.AttributeEncode(parser.Configuration.BuildUrl(String.Format(UrlFormatString, definition.Name)));
-                var alt = HtmlHelper.AttributeEncode(token);
-                yield return new HtmlNode(Position.Zero, $"<img class=\"smiley\" src=\"{src}\" alt=\"{alt}\" />", PlainTextNode.Empty(Position.Zero), "") { PlainBefore = token };
-                start = index + token.Length;
-                index += token.Length;
+                if (plain.Length > 0) yield return new PlainTextNode(plainPos, plain);
+
+                yield return HtmlNodeBuilder.Make("img", state.SourcePosition)
+                    .AddClass("smiley")
+                    .Attr("src", parser.Configuration.BuildUrl(String.Format(UrlFormatString, definition.Name)))
+                    .Attr("alt", token)
+                    .ToNode(plainBefore: token, selfClosing: true);
+
+                state.Seek(token.Length, false);
+                advanceToken = false;
+                plain = "";
+                plainPos = state.SourcePosition;
 
                 numSmilies++;
             }
-            
-            if (start < text.Length) yield return new PlainTextNode(Position.Zero, text.Substring(start));
+
+            plain += state.ScanToEnd();
+            if (plain.Length > 0) yield return new PlainTextNode(plainPos, plain);
         }
 
         public SmiliesProcessor Add(string name, params string[] tokens)
@@ -261,13 +279,14 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 Tokens = tokens;
             }
 
-            public string GetMatchingToken(string text, int startIndex)
+            public string GetMatchingToken(State state)
             {
                 foreach (var token in Tokens)
                 {
-                    if (text.IndexOf(token, startIndex, StringComparison.Ordinal) == startIndex) {
+                    if (state.Peek(token.Length) == token) {
                         // Must end with whitespace
-                        if (startIndex + token.Length < text.Length && !Char.IsWhiteSpace(text[startIndex + token.Length]) && !AllowedEndChars.Contains(text[startIndex + token.Length])) continue;
+                        var next = state.Peek(token.Length + 1).Substring(token.Length);
+                        if (next.Length > 0 && !Char.IsWhiteSpace(next[0]) && !AllowedEndChars.Contains(next[0])) continue;
                         return token;
                     }
                 }

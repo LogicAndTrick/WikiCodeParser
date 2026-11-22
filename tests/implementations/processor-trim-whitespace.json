@@ -1,0 +1,55 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "tags": ["Pre"],
+    "processors": ["TrimWhitespace"]
+  },
+  "input": "a\n\n\n\n[pre]test[/pre]\nb",
+  "html": "a\n<pre><code>test</code></pre>\nb",
+  "plain": "a\ntest\nb",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "a",
+        "type": "plain",
+        "pos": [1, 0],
+        "text": "a"
+      },
+      {
+        "type": "plain",
+        "pos": [5, 0],
+        "text": "\n"
+      },
+      {
+        "name": "pre",
+        "type": "html",
+        "pos": [5, 0],
+        "html": ["<pre><code>", "</code></pre>"],
+        "plain": ["", ""],
+        "children": [
+          {
+            "name": "test",
+            "type": "plain",
+            "pos": [5, 5],
+            "text": "test"
+          }
+        ]
+      },
+      {
+        "type": "plain",
+        "pos": [5, 0],
+        "text": "\n"
+      },
+      {
+        "name": "b",
+        "type": "plain",
+        "pos": [5, 15],
+        "text": "b"
+      }
+    ]
+  }
+}

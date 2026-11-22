@@ -17,7 +17,9 @@ namespace LogicAndTrick.WikiCodeParser.Processors
         {
             var text = ((PlainTextNode)node).Text;
 
-            var lines = new List<string>();
+            var lines = new List<(int line, int col, string text)>();
+            var lineNum = node.Line;
+            var colNum = node.Column;
             foreach (var line in text.Split('\n'))
             {
                 var breaks = Regex.Split(line, "<br>");
@@ -26,8 +28,11 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                     var s = breaks[i];
                     if (i > 0) s = Util.TrimStart(s);
                     if (i < breaks.Length - 1) s = Util.TrimEnd(s);
-                    lines.Add(s);
+                    lines.Add((lineNum, colNum, s));
+                    colNum += s.Length + 4;
                 }
+                lineNum++;
+                colNum = 0;
             }
 
             // track the number of sequential newlines, to collapse 3+ newlines into 2 newlines
@@ -36,9 +41,9 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             for (var i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];
-                if (!string.IsNullOrWhiteSpace(line))
+                if (!string.IsNullOrWhiteSpace(line.text))
                 {
-                    yield return new PlainTextNode(Position.Zero, line);
+                    yield return new PlainTextNode(new Position(line.line, line.col), line.text);
                     numSequentialBreaks = 0;
                 }
 
@@ -48,7 +53,8 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 numSequentialBreaks++;
                 if (numSequentialBreaks > 2) continue;
 
-                yield return new HtmlNode(Position.Zero, "<br/>", UnprocessablePlainTextNode.NewLine(Position.Zero), "");
+                var pos = new Position(line.line, line.col + line.text.Length);
+                yield return new HtmlNode(pos, "<br/>", UnprocessablePlainTextNode.NewLine(pos), "");
             }
         }
     }

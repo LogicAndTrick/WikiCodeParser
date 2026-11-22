@@ -128,7 +128,7 @@ public class BasicTests
     public void TestSmiliesList()
     {
         var input = ":aggrieved:\n:glad:\n";
-        var output = TestCaseUtils.Sanitise("<img class=\"smiley\" src=\"https://twhl.info/images/smilies/aggrieved.png\" alt=\":aggrieved:\" /><br/>\n<img class=\"smiley\" src=\"https://twhl.info/images/smilies/glad.png\" alt=\":glad:\" />");
+        var output = TestCaseUtils.Sanitise("<img class=\"smiley\" alt=\":aggrieved:\" src=\"https://twhl.info/images/smilies/aggrieved.png\" /><br/>\n<img class=\"smiley\" alt=\":glad:\" src=\"https://twhl.info/images/smilies/glad.png\" />");
 
         var config = new ParserConfiguration("https://twhl.info");
         config.Processors.Add(new SmiliesProcessor("/images/smilies/{0}.png").AddTwhl());

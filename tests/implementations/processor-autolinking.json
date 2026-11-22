@@ -1,0 +1,44 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "processors": ["AutoLinking"]
+  },
+  "input": "a\n\nhttps://example.com b",
+  "html": "a\n\n<a href=\"https://example.com\">https://example.com</a> b",
+  "plain": "a\n\nhttps://example.com b",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "type": "list",
+        "pos": [1, 0],
+        "children": [
+          {
+            "name": "a",
+            "type": "plain",
+            "pos": [1, 0],
+            "text": "a\n\n"
+          },
+          {
+            "type": "html",
+            "pos": [3, 0],
+            "html": ["<a href=\"https://example.com\">", "</a>"],
+            "plain": ["", ""],
+            "children": [
+              { "type": "plain", "pos": [3, 0], "text": "https://example.com" }
+            ]
+          },
+          {
+            "name": "b",
+            "type": "plain",
+            "pos": [3, 19],
+            "text": " b"
+          }
+        ]
+      }
+    ]
+  }
+}

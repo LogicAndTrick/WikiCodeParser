@@ -19,30 +19,43 @@ namespace LogicAndTrick.WikiCodeParser.Processors
         {
             return node is PlainTextNode ptn && ptn.Text.IndexOfAny(Tokens) >= 0;
         }
-        
+
         private static int GetTokenIndex(char c) => Array.IndexOf(Tokens, c);
         private static bool IsStartBreakChar(char c) => StartBreakChars.Contains(c);
         private static bool IsEndBreakChar(char c) => StartBreakChars.Contains(c) || ExtraEndBreakChars.Contains(c) || Tokens.Contains(c);
-        
-        private static INode ParseToken(int[] tracker, string text, int position, out int endPosition)
+
+        private static INode ParseToken(int[] tracker, State state)
         {
-            endPosition = -1;
-            var token = text[position];
+            var tokStart = state.SourcePosition;
+            var index = state.Index;
+            var token = state.Next();
             var tokenIndex = GetTokenIndex(token);
 
             // Make sure we're not already in this token
-            if (tracker[tokenIndex] != 0) return null;
+            if (tracker[tokenIndex] != 0)
+            {
+                state.Seek(index, true);
+                return null;
+            }
 
-            var endToken = text.IndexOf(token, position + 1);
-            if (endToken <= position + 1) return null;
-            if (text.IndexOf('\n', position + 1, endToken - position - 1) >= 0) return null; // no newlines
-            
+            var strStart = state.SourcePosition;
+            var str = state.ScanTo(token.ToString());
+
+            // the contents cannot be empty or contain newlines, and the next char must be the token
+            if (state.Next() != token || str.Length == 0 || str.IndexOf('\n') >= 0)
+            {
+                state.Seek(index, true);
+                return null;
+            }
+
             // Make sure we can close this token
-            var valid = (endToken + 1 == text.Length || IsEndBreakChar(text[endToken + 1])) // end of string or before an end breaker
-                        && Util.Trim(text[endToken - 1].ToString()) != ""; // not whitespace previous
-            if (!valid) return null;
-
-            var str = text.Substring(position + 1, endToken - position - 1);
+            var valid = (state.Done || IsEndBreakChar(state.Peek(1)[0])) // end of string or before an end breaker
+                        && Util.TrimEnd(str).Length == str.Length; // not whitespace previous
+            if (!valid)
+            {
+                state.Seek(index, true);
+                return null;
+            }
 
             tracker[tokenIndex] = 1;
 
@@ -50,58 +63,58 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             INode contents;
             if (token == '`')
             {
-                contents = new UnprocessablePlainTextNode(Position.Zero, str);
+                contents = new UnprocessablePlainTextNode(strStart, str);
             }
             else
             {
-                var toks = ParseTokens(tracker, str).ToList();
+                var toks = ParseTokens(strStart.Line, strStart.Column, tracker, str).ToList();
                 contents = toks.Count == 1 ? toks[0] : new NodeCollection(toks);
             }
 
             tracker[tokenIndex] = 0;
 
-            endPosition = endToken;
-
-            return new HtmlNode(Position.Zero, OpenTags[tokenIndex], contents, CloseTags[tokenIndex])
+            return new HtmlNode(tokStart, OpenTags[tokenIndex], contents, CloseTags[tokenIndex])
             {
                 PlainBefore = token.ToString(),
                 PlainAfter = token.ToString()
             };
         }
 
-        private static IEnumerable<INode> ParseTokens(int[] tracker, string text)
+        private static IEnumerable<INode> ParseTokens(int line, int column, int[] tracker, string text)
         {
-            var plainStart = 0;
-            var index = 0;
-            while (true)
+            var state = new State(line, column, text);
+            var plainPos = state.SourcePosition;
+            var plain = "";
+            var advanceToken = false;
+            while (!state.Done)
             {
-                var nextIndex = text.IndexOfAny(Tokens, index);
-                if (nextIndex < 0) break;
+                // always advance one token except at the start, or after we find a valid token
+                if (advanceToken) plain += state.Next();
+                advanceToken = true;
+
+                plain += state.ScanToAny(Tokens);
+                if (state.Done) break;
 
                 // Make sure we can start a new token
-                var valid = (nextIndex == 0 || IsStartBreakChar(text[nextIndex - 1])) // start of string or after a start breaker
-                            && nextIndex + 1 < text.Length // not end of string
-                            && Util.Trim(text[nextIndex + 1].ToString()) != ""; // not whitespace next
-                if (!valid)
-                {
-                    index = nextIndex + 1;
-                    continue;
-                }
+                var valid = (state.Index == 0 || IsStartBreakChar(state.Text[state.Index - 1])) // start of string or after a start breaker
+                            && state.Index + 1 < text.Length // not end of string
+                            && Util.Trim(state.Text[state.Index + 1].ToString()) != ""; // not whitespace next
+                if (!valid) continue;
 
-                var parsed = ParseToken(tracker, text, nextIndex, out var endIndex);
-                if (parsed == null)
-                {
-                    index = nextIndex + 1; // no match, skip this token
-                }
-                else
-                {
-                    if (plainStart < nextIndex) yield return new PlainTextNode(Position.Zero, text.Substring(plainStart, nextIndex - plainStart));
-                    yield return parsed;
-                    index = plainStart = endIndex + 1;
-                }
+                // Try to parse a token
+                var parsed = ParseToken(tracker, state);
+                if (parsed == null) continue;
+
+                if (plain.Length > 0) yield return new PlainTextNode(plainPos, plain);
+                yield return parsed;
+
+                advanceToken = false;
+                plain = "";
+                plainPos = state.SourcePosition;
             }
             // Return the rest of the text as plain
-            if (plainStart < text.Length) yield return new PlainTextNode(Position.Zero, text.Substring(plainStart));
+            plain += state.ScanToEnd();
+            if (plain.Length > 0) yield return new PlainTextNode(plainPos, plain);
         }
 
         public IEnumerable<INode> Process(Parser parser, ParseData data, INode parentNode, INode node, string scope)
@@ -132,7 +145,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
 
             var tracker = new int[Tokens.Length];
 
-            foreach (var token in ParseTokens(tracker, text))
+            foreach (var token in ParseTokens(node.Line, node.Column, tracker, text))
             {
                 yield return token;
             }

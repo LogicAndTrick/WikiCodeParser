@@ -1,0 +1,47 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "processors": ["Smilies"]
+  },
+  "input": "a\n:) b",
+  "html": "a\n<img class=\"smiley\" alt=\":)\" src=\"https://example.com/smilies/smile.png\" /> b",
+  "plain": "a\n:) b",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "sublist",
+        "type": "list",
+        "pos": [1, 0],
+        "children": [
+          {
+            "name": "a",
+            "type": "plain",
+            "pos": [1, 0],
+            "text": "a\n"
+          },
+          {
+            "name": ":)",
+            "type": "html",
+            "pos": [2, 0],
+            "html": [
+              "<img class=\"smiley\" alt=\":)\" src=\"https://example.com/smilies/smile.png\" />",
+              ""
+            ],
+            "plain": [":)", ""],
+            "children": [{ "type": "list", "pos": [0, 0] }]
+          },
+          {
+            "name": "b",
+            "type": "plain",
+            "pos": [2, 2],
+            "text": " b"
+          }
+        ]
+      }
+    ]
+  }
+}

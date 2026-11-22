@@ -96,7 +96,7 @@ public class ImplementationTests
                 "AutoLinking" => new AutoLinkingProcessor(),
                 "MarkdownText" => new MarkdownTextProcessor(),
                 "NewLine" => new NewLineProcessor(),
-                "Smilies" => new SmiliesProcessor("/smilies/{0}.png"),
+                "Smilies" => new SmiliesProcessor("/smilies/{0}.png").Add("smile", ":)"),
                 "TrimWhitespace" => new TrimWhitespaceAroundBlockNodesProcessor(),
                 _ => throw new ArgumentException($"Unknown processor name '{p}'")
             });

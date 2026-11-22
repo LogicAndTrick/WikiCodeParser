@@ -1,0 +1,62 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "processors": ["NewLine"]
+  },
+  "input": "a\nbb<br><br><br>ccc",
+  "html": "a<br/>\nbb<br/>\n<br/>\nccc",
+  "plain": "a\nbb\n\nccc",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "type": "list",
+        "pos": [1, 0],
+        "children": [
+          {
+            "name": "a",
+            "type": "plain",
+            "pos": [1, 0],
+            "text": "a"
+          },
+          {
+            "type": "html",
+            "pos": [1, 1],
+            "html": ["<br/>", ""],
+            "plain": ["", ""],
+            "children": [{ "type": "plain", "pos": [1, 1], "text": "\n" }]
+          },
+          {
+            "name": "bb",
+            "type": "plain",
+            "pos": [2, 0],
+            "text": "bb"
+          },
+          {
+            "type": "html",
+            "pos": [2, 2],
+            "html": ["<br/>", ""],
+            "plain": ["", ""],
+            "children": [{ "type": "plain", "pos": [2, 2], "text": "\n" }]
+          },
+          {
+            "type": "html",
+            "pos": [2, 6],
+            "html": ["<br/>", ""],
+            "plain": ["", ""],
+            "children": [{ "type": "plain", "pos": [2, 6], "text": "\n" }]
+          },
+          {
+            "name": "ccc",
+            "type": "plain",
+            "pos": [2, 14],
+            "text": "ccc"
+          }
+        ]
+      }
+    ]
+  }
+}

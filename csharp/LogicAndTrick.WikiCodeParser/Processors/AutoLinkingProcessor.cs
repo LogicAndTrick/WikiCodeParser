@@ -32,6 +32,7 @@ namespace LogicAndTrick.WikiCodeParser.Processors
             }
 
             var text = ((PlainTextNode) node).Text;
+            var state = new State(node.Line, node.Column, text); // just for tracking newlines
 
             var urlMatches = UrlMatch.Matches(text);
             var emailMatches = EmailMatch.Matches(text);
@@ -57,21 +58,37 @@ namespace LogicAndTrick.WikiCodeParser.Processors
                 if (match.Groups["url"].Success && !HtmlHelper.ValidateUrl(matchingText)) continue;
 
                 // return the prefix text
-                if (idx > start) yield return new PlainTextNode(Position.Zero, text.Substring(start, idx - start));
+                if (idx > start)
+                {
+                    state.Seek(start, true);
+                    yield return new PlainTextNode(state.SourcePosition, text.Substring(start, idx - start));
+                }
 
                 if (match.Groups["url"].Success)
                 {
-                    yield return new HtmlNode(Position.Zero, $"<a href=\"{HtmlHelper.AttributeEncode(HtmlHelper.SanitiseUrl(matchingText))}\">", new UnprocessablePlainTextNode(Position.Zero, matchingText), "</a>");
+                    state.Seek(idx, true);
+                    yield return HtmlNodeBuilder.Make("a", state.SourcePosition)
+                        .Attr("href", HtmlHelper.SanitiseUrl(matchingText))
+                        .Add(new UnprocessablePlainTextNode(state.SourcePosition, matchingText))
+                        .ToNode();
                 }
                 else if (match.Groups["email"].Success)
                 {
-                    yield return new HtmlNode(Position.Zero, $"<a href=\"mailto:{HtmlHelper.AttributeEncode(matchingText)}\">", new UnprocessablePlainTextNode(Position.Zero, matchingText), "</a>");
+                    state.Seek(idx, true);
+                    yield return HtmlNodeBuilder.Make("a", state.SourcePosition)
+                        .Attr("href", $"mailto:{matchingText}")
+                        .Add(new UnprocessablePlainTextNode(state.SourcePosition, matchingText))
+                        .ToNode();
                 }
                 start = idx + len;
             }
             
             // return the remaining text
-            if (start < text.Length) yield return new PlainTextNode(Position.Zero, text.Substring(start));
+            if (start < text.Length)
+            {
+                state.Seek(start, true);
+                yield return new PlainTextNode(state.SourcePosition, text.Substring(start));
+            }
         }
 
         private static readonly HashSet<char> Punctuation = new HashSet<char> { '.', '!', '?', ',' };
