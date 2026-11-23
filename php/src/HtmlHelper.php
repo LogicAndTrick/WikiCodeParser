@@ -38,7 +38,12 @@ class HtmlHelper
 
     public static function ValidateUrl(string $url): bool
     {
-        $scheme = self::GetUrlScheme(trim(self::StripControlCharacters($url)));
+        if (!$url) return false;
+
+        $url = Util::Trim(self::StripControlCharacters($url));
+        if (strlen($url) === 0) return false;
+
+        $scheme = self::GetUrlScheme($url);
         return $scheme === null || in_array($scheme, self::ALLOWED_URL_SCHEMES, true);
     }
 
@@ -49,10 +54,16 @@ class HtmlHelper
      */
     public static function SanitiseUrl(?string $url): string
     {
-        if ($url === null) return '';
-        $scheme = self::GetUrlScheme(trim(self::StripControlCharacters($url)));
-        $hasValidScheme = $scheme !== null && in_array($scheme, self::ALLOWED_URL_SCHEMES, true);
-        return $hasValidScheme ? trim($url) : 'https://' . trim($url);
+        if (!$url) return '';
+
+        $url = Util::Trim(self::StripControlCharacters($url));
+        if (strlen($url) === 0) return '';
+
+        $scheme = self::GetUrlScheme($url);
+        $hasValidScheme = $scheme === null || in_array($scheme, self::ALLOWED_URL_SCHEMES, true);
+        if (!$hasValidScheme) return '';
+
+        return $scheme !== null ? $url : 'https://' . $url;
     }
 
     //@formatter:off

@@ -4,7 +4,6 @@ namespace LogicAndTrick\WikiCodeParser\Tags;
 
 use LogicAndTrick\WikiCodeParser\HtmlHelper;
 use LogicAndTrick\WikiCodeParser\Models\WikiRevision;
-use LogicAndTrick\WikiCodeParser\Nodes\HtmlNode;
 use LogicAndTrick\WikiCodeParser\Nodes\HtmlNodeBuilder;
 use LogicAndTrick\WikiCodeParser\Nodes\INode;
 use LogicAndTrick\WikiCodeParser\Nodes\MetadataNode;
@@ -73,7 +72,7 @@ class WikiImageTag extends Tag
 
         $content = new NodeCollection();
 
-        $image = $match[1];
+        $image = HtmlHelper::StripControlCharacters($match[1]);
         $params = isset($match[2]) && strlen($match[2]) > 0 ? explode('|', Util::Trim($match[2])) : [];
         $src = $image;
         if (!str_contains($image, '/')) {
@@ -85,13 +84,14 @@ class WikiImageTag extends Tag
                 $state->Seek($index, true);
                 return null;
             }
-        } else {
-            $src = HtmlHelper::StripControlCharacters($src);
-            if (!HtmlHelper::ValidateUrl($src)) {
-                $state->Seek($index, true);
-                return null;
-            }
         }
+
+        if (!HtmlHelper::ValidateUrl($src)) {
+            $state->Seek($index, true);
+            return null;
+        }
+
+        $src = HtmlHelper::SanitiseUrl($src);
 
         $url = null;
         $caption = null;
@@ -99,26 +99,51 @@ class WikiImageTag extends Tag
 
         $classes = ['embedded', 'image'];
         if ($this->elementClass != null) $classes[] = $this->elementClass;
+        $sizeClass = null;
+        $positionClass = null;
+        $valid = true;
 
         foreach ($params as $p) {
             $l = strtolower($p);
-            if (self::IsClass($l)) $classes[] = $l;
-            else if ($l == 'loop') $loop = true;
-            else if (strlen($l) > 4 && str_starts_with($l, 'url:')) $url = Util::Trim(substr($p, 4));
-            else $caption = Util::Trim($p);
+            if (self::IsSizeClass($l)) {
+                if ($sizeClass !== null) $valid = false;
+                $sizeClass = $l;
+                $classes[] = $l;
+            } else if (self::IsPositionClass($l)) {
+                if ($positionClass !== null) $valid = false;
+                $positionClass = $l;
+                $classes[] = $l;
+            } else if ($l == 'loop') {
+                if ($loop) $valid = false;
+                $loop = true;
+            } else if (strlen($l) > 4 && str_starts_with($l, 'url:')) {
+                if ($url !== null) $valid = false;
+                $url = Util::Trim(substr($p, 4));
+            } else {
+                if ($caption !== null) $valid = false;
+                $caption = Util::Trim($p);
+            }
+        }
+
+        if (!$valid) {
+            $state->Seek($index, true);
+            return null;
         }
 
         if (!$caption || trim($caption) == '') $caption = null;
 
-        if ($url != null) $url = HtmlHelper::StripControlCharacters($url);
-        if ($tag == 'img' && $url != null && HtmlHelper::ValidateUrl($url)) {
-            if ($this->twhlBehaviour && HtmlHelper::GetUrlScheme($url) == null) {
-                $content->nodes[] = new MetadataNode($pos, 'WikiLink', $url);
-                $slug = WikiRevision::CreateSlug($url);
-                $url = $parser->configuration->BuildUrl("/wiki/page/$slug");
+        if ($url !== null) {
+            if ($tag == 'img' && HtmlHelper::ValidateUrl($url)) {
+                if ($this->twhlBehaviour && HtmlHelper::GetUrlScheme($url) == null) {
+                    $content->nodes[] = new MetadataNode($pos, 'WikiLink', $url);
+                    $slug = WikiRevision::CreateSlug($url);
+                    $url = $parser->configuration->BuildUrl("/wiki/page/$slug");
+                }
+                $url = HtmlHelper::SanitiseUrl($url);
+            } else {
+                $state->Seek($index, true);
+                return null;
             }
-        } else {
-            $url = '';
         }
 
         $el = 'span';
@@ -137,7 +162,7 @@ class WikiImageTag extends Tag
         if ($caption != null) $content->nodes[] = HtmlNodeBuilder::Make('span', $pos)->AddClass('caption')->Add(new PlainTextNode($pos, $caption))->ToNode(plainBefore: ' ');
 
         $panel = HtmlNodeBuilder::Make('span', $pos)->AddClass('caption-panel')->Add($content)->ToNode();
-        $wrapper = !$url || strlen($url) == 0 ? $panel : HtmlNodeBuilder::Make('a', $pos)->Attr('href', $url)->Add($panel)->ToNode();
+        $wrapper = $url === null ? $panel : HtmlNodeBuilder::Make('a', $pos)->Attr('href', $url)->Add($panel)->ToNode();
 
         return HtmlNodeBuilder::Make($el, $pos)
             ->AddClasses($classes)
@@ -169,10 +194,16 @@ class WikiImageTag extends Tag
         }
     }
 
-    private static array $validClasses = ['large', 'medium', 'small', 'thumb', 'left', 'right', 'center', 'inline'];
+    private static array $validSizeClasses = ['large', 'medium', 'small', 'thumb'];
+    private static array $validPositionClasses = ['left', 'right', 'center', 'inline'];
 
-    private static function IsClass(string $param): bool
+    private static function IsSizeClass(string $param): bool
     {
-        return in_array($param, self::$validClasses);
+        return in_array($param, self::$validSizeClasses);
+    }
+
+    private static function IsPositionClass(string $param): bool
+    {
+        return in_array($param, self::$validPositionClasses);
     }
 }

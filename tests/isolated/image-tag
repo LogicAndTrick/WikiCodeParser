@@ -6,14 +6,19 @@
 
 [img]javascript://alert(1)[/img]
 
+[img][/img]
+
 ###
 
 <div class="embedded image"><span class="caption-panel"><img class="caption-body" src="http://example.com/example.png" alt="User posted image" /></span></div>
-<span class="embedded image inline"><span class="caption-panel"><img class="caption-body" src="http://example.com/example.png" alt="User posted image" /></span></span><br/>
+<span class="embedded image inline"><span class="caption-panel"><img class="caption-body" src="https://example.com/example.png" alt="User posted image" /></span></span><br/>
 <br/>
 [img]invalid://test.png[/img]<br/>
 <br/>
-[img]javascript://alert(1)[/img]
+[img]javascript://alert(1)[/img]<br/>
+<br/>
+[img][/img]
+
 ###
 
 [User posted image]
@@ -23,3 +28,5 @@
 [img]invalid://test.png[/img]
 
 [img]javascript://alert(1)[/img]
+
+[img][/img]

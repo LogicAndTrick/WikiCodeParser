@@ -7,6 +7,8 @@
 [img:invalid://test.png]
 [img:https://example.com/example.png|url:http://example.com]
 [img:https://example.com/example.png|url: javascript:alert(1)]
+[img:test|caption|url:]
+[img:test|image|with|multiple|captions]
 
 ###
 
@@ -23,8 +25,9 @@
 <div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></div>
 [img:invalid://test.png]
 <div class="embedded image"><a href="http://example.com"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></a></div>
-
-<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></div>
+[img:https://example.com/example.png|url: javascript:alert(1)]<br/>
+[img:test|caption|url:]<br/>
+[img:test|image|with|multiple|captions]
 
 ###
 
@@ -41,8 +44,9 @@
 [Image]
 [img:invalid://test.png]
 [Image]
-
-[Image]
+[img:https://example.com/example.png|url: javascript:alert(1)]
+[img:test|caption|url:]
+[img:test|image|with|multiple|captions]
 
 ###
 

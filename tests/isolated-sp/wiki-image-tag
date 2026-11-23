@@ -19,8 +19,8 @@
 
 <div class="embedded image" title="&amp;"><span class="caption-panel"><img class="caption-body" alt="&amp;" src="https://example.com/test5.png" /><span class="caption">&amp;</span></span></div>
 [img:test]<br/>
-[img:invalid://test.png]
-<div class="embedded image"><span class="caption-panel"><img class="caption-body" alt="User posted image" src="https://example.com/example.png" /></span></div>
+[img:invalid://test.png]<br/>
+[img:https://example.com/example.png|url: javascript:alert(1)]
 
 ###
 
@@ -35,4 +35,4 @@
 [Image] &
 [img:test]
 [img:invalid://test.png]
-[Image]
+[img:https://example.com/example.png|url: javascript:alert(1)]

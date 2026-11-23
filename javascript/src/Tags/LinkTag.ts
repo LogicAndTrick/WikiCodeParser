@@ -21,7 +21,7 @@ export class LinkTag extends Tag {
     public FormatResult(
         parser: Parser,
         data: ParseData,
-        state: State,
+        _state: State,
         scope: string,
         options: Record<string, string>,
         text: string,
@@ -51,9 +51,8 @@ export class LinkTag extends Tag {
     private BuildUrl(options: Record<string, string>, text: string): string {
         let url = text;
         if (options['url']) url = options['url'];
-        url = HtmlHelper.StripControlCharacters(url);
-        if (this.Token == 'email') url = 'mailto:' + url;
-        else if (HtmlHelper.GetUrlScheme(url) == null) url = 'http://' + url;
-        return url;
+        if (!HtmlHelper.ValidateUrl(url)) return '';
+        if (this.Token == 'email') url = 'mailto:' + Trim(url);
+        return HtmlHelper.SanitiseUrl(url);
     }
 }

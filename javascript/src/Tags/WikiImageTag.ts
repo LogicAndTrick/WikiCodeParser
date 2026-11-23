@@ -65,7 +65,7 @@ export class WikiImageTag extends Tag {
 
         const content = new NodeCollection();
 
-        const image = match[1];
+        const image = HtmlHelper.StripControlCharacters(match[1]);
         const params = match[2] ? Trim(match[2]).split('|') : [];
         let src = image;
         if (!image.includes('/')) {
@@ -76,13 +76,14 @@ export class WikiImageTag extends Tag {
                 state.Seek(index, true);
                 return null;
             }
-        } else {
-            src = HtmlHelper.StripControlCharacters(src);
-            if (!HtmlHelper.ValidateUrl(src)) {
-                state.Seek(index, true);
-                return null;
-            }
         }
+
+        if (!HtmlHelper.ValidateUrl(src)) {
+            state.Seek(index, true);
+            return null;
+        }
+
+        src = HtmlHelper.SanitiseUrl(src);
 
         let url: string | null = null;
         let caption: string | null = null;
@@ -90,25 +91,50 @@ export class WikiImageTag extends Tag {
 
         const classes = ['embedded', 'image'];
         if (this.ElementClass != null) classes.push(this.ElementClass);
+        let sizeClass: string | null = null;
+        let positionClass: string | null = null;
+        let valid = true;
 
         for (const p of params) {
             const l = p.toLowerCase();
-            if (WikiImageTag.IsClass(l)) classes.push(l);
-            else if (l == 'loop') loop = true;
-            else if (l.length > 4 && l.substring(0, 4) == 'url:') url = Trim(p.substring(4));
-            else caption = Trim(p);
+            if (WikiImageTag.IsSizeClass(l)) {
+                if (sizeClass !== null) valid = false;
+                sizeClass = l;
+                classes.push(l);
+            } else if (WikiImageTag.IsPositionClass(l)) {
+                if (positionClass !== null) valid = false;
+                positionClass = l;
+                classes.push(l);
+            } else if (l == 'loop') {
+                if (loop) valid = false;
+                loop = true;
+            } else if (l.startsWith('url:')) {
+                if (url !== null) valid = false;
+                url = Trim(p.substring(4));
+            } else {
+                if (caption !== null) valid = false;
+                caption = Trim(p);
+            }
+        }
+
+        if (!valid) {
+            state.Seek(index, true);
+            return null;
         }
 
         if (!caption || caption.trim() == '') caption = null;
 
-        if (url != null) url = HtmlHelper.StripControlCharacters(url);
-        if (tag == 'img' && url != null && HtmlHelper.ValidateUrl(url)) {
-            if (this.TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null) {
-                content.Nodes.push(new MetadataNode(pos, 'WikiLink', url));
-                url = parser.Configuration.BuildUrl(`/wiki/page/${WikiRevision.CreateSlug(url)}`);
+        if (url !== null) {
+            if (tag == 'img' && HtmlHelper.ValidateUrl(url)) {
+                if (this.TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null) {
+                    content.Nodes.push(new MetadataNode(pos, 'WikiLink', url));
+                    url = parser.Configuration.BuildUrl(`/wiki/page/${WikiRevision.CreateSlug(url)}`);
+                }
+                url = HtmlHelper.SanitiseUrl(url);
+            } else {
+                state.Seek(index, true);
+                return null;
             }
-        } else {
-            url = '';
         }
 
         let el = 'span';
@@ -127,7 +153,7 @@ export class WikiImageTag extends Tag {
         if (caption != null) content.Nodes.push(HtmlNodeBuilder.make('span', pos).addClass('caption').add(new PlainTextNode(pos, caption)).toNode({ plainBefore: ' ' }));
 
         const panel = HtmlNodeBuilder.make('span', pos).addClass('caption-panel').add(content).toNode();
-        const wrapper = !url || url.length == 0 ? panel : HtmlNodeBuilder.make('a', pos).attr('href', url).add(panel).toNode();
+        const wrapper = url === null ? panel : HtmlNodeBuilder.make('a', pos).attr('href', url).add(panel).toNode();
 
         return HtmlNodeBuilder.make(el, pos)
             .addClasses(classes)
@@ -159,9 +185,14 @@ export class WikiImageTag extends Tag {
         }
     }
 
-    private static ValidClasses: string[] = ['large', 'medium', 'small', 'thumb', 'left', 'right', 'center', 'inline'];
+    private static ValidSizeClasses: string[] = ['large', 'medium', 'small', 'thumb'];
+    private static ValidPositionClasses: string[] = ['left', 'right', 'center', 'inline'];
 
-    private static IsClass(param: string): boolean {
-        return WikiImageTag.ValidClasses.includes(param);
+    private static IsSizeClass(param: string): boolean {
+        return WikiImageTag.ValidSizeClasses.includes(param);
+    }
+
+    private static IsPositionClass(param: string): boolean {
+        return WikiImageTag.ValidPositionClasses.includes(param);
     }
 }

@@ -67,7 +67,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var content = new NodeCollection();
 
-            var image = match.Groups[1].Value;
+            var image = HtmlHelper.StripControlCharacters(match.Groups[1].Value);
             var @params = match.Groups[2].Success ? Util.Trim(match.Groups[2].Value).Split('|') : Array.Empty<string>();
             var src = image;
             if (!image.Contains("/"))
@@ -83,15 +83,14 @@ namespace LogicAndTrick.WikiCodeParser.Tags
                     return null;
                 }
             }
-            else
+            
+            if (!HtmlHelper.ValidateUrl(src))
             {
-                src = HtmlHelper.StripControlCharacters(src);
-                if (!HtmlHelper.ValidateUrl(src))
-                {
-                    state.Seek(index, true);
-                    return null;
-                }
+                state.Seek(index, true);
+                return null;
             }
+
+            src = HtmlHelper.SanitiseUrl(src);
 
             string url = null;
             string caption = null;
@@ -99,30 +98,66 @@ namespace LogicAndTrick.WikiCodeParser.Tags
 
             var classes = new List<string> { "embedded", "image" };
             if (ElementClass != null) classes.Add(ElementClass);
+            string sizeClass = null;
+            string positionClass = null;
+            var valid = true;
 
             foreach (var p in @params)
             {
                 var l = p.ToLower();
-                if (IsClass(l)) classes.Add(l);
-                else if (l == "loop") loop = true;
-                else if (l.Length > 4 && l.Substring(0, 4) == "url:") url = Util.Trim(p.Substring(4));
-                else caption = Util.Trim(p);
+                if (IsSizeClass(l))
+                {
+                    if (sizeClass != null) valid = false;
+                    sizeClass = l;
+                    classes.Add(sizeClass);
+                }
+                else if (IsPositionClass(l))
+                {
+                    if (positionClass != null) valid = false;
+                    positionClass = l;
+                    classes.Add(positionClass);
+                }
+                else if (l == "loop")
+                {
+                    if (loop) valid = false;
+                    loop = true;
+                }
+                else if (l.StartsWith("url:"))
+                {
+                    if (url != null) valid = false;
+                    url = Util.Trim(p.Substring(4));
+                }
+                else
+                {
+                    if (caption != null) valid = false;
+                    caption = Util.Trim(p);
+                }
+            }
+
+            if (!valid)
+            {
+                state.Seek(index, true);
+                return null;
             }
 
             if (String.IsNullOrWhiteSpace(caption)) caption = null;
 
-            if (url != null) url = HtmlHelper.StripControlCharacters(url);
-            if (tag == "img" && url != null && HtmlHelper.ValidateUrl(url))
+            if (url != null)
             {
-                if (TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null)
+                if (tag == "img" && HtmlHelper.ValidateUrl(url))
                 {
-                    content.Nodes.Add(new MetadataNode(pos, "WikiLink", url));
-                    url = parser.Configuration.BuildUrl($"/wiki/page/{WikiRevision.CreateSlug(url)}");
+                    if (TwhlBehaviour && HtmlHelper.GetUrlScheme(url) == null)
+                    {
+                        content.Nodes.Add(new MetadataNode(pos, "WikiLink", url));
+                        url = parser.Configuration.BuildUrl($"/wiki/page/{WikiRevision.CreateSlug(url)}");
+                    }
+                    url = HtmlHelper.SanitiseUrl(url);
                 }
-            }
-            else
-            {
-                url = "";
+                else
+                {
+                    state.Seek(index, true);
+                    return null;
+                }
             }
 
             var el = "span";
@@ -142,7 +177,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             if (caption != null) content.Nodes.Add(HtmlNodeBuilder.Make("span", pos).AddClass("caption").Add(new PlainTextNode(pos, caption)).ToNode(plainBefore: " "));
 
             var panel = HtmlNodeBuilder.Make("span", pos).AddClass("caption-panel").Add(content).ToNode();
-            var wrapper = url.Length == 0 ? panel : HtmlNodeBuilder.Make("a", pos).Attr("href", url).Add(panel).ToNode();
+            var wrapper = url == null ? panel : HtmlNodeBuilder.Make("a", pos).Attr("href", url).Add(panel).ToNode();
 
             return HtmlNodeBuilder.Make(el, pos)
                 .AddClasses(classes)
@@ -176,7 +211,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
             }
         }
 
-        private static readonly string[] ValidClasses = { "large", "medium", "small", "thumb", "left", "right", "center", "inline" };
-        private static bool IsClass(string param) => ValidClasses.Contains(param);
+        private static readonly string[] ValidSizeClasses = { "large", "medium", "small", "thumb" };
+        private static readonly string[] ValidPositionClasses = { "left", "right", "center", "inline" };
+        private static bool IsSizeClass(string param) => ValidSizeClasses.Contains(param);
+        private static bool IsPositionClass(string param) => ValidPositionClasses.Contains(param);
     }
 }

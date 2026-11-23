@@ -44,10 +44,9 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];
-            url = HtmlHelper.StripControlCharacters(url);
-            if (Token == "email") url = "mailto:" + url;
-            else if (HtmlHelper.GetUrlScheme(url) == null) url = "http://" + url;
-            return url;
+            if (!HtmlHelper.ValidateUrl(url)) return "";
+            if (Token == "email") url = "mailto:" + Util.Trim(url);
+            return HtmlHelper.SanitiseUrl(url);
         }
     }
 }

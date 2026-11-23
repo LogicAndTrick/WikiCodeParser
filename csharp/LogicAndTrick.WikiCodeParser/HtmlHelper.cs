@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace LogicAndTrick.WikiCodeParser
 {
@@ -41,7 +40,11 @@ namespace LogicAndTrick.WikiCodeParser
         public static bool ValidateUrl(string url)
         {
             if (url == null) return false;
-            var scheme = GetUrlScheme(StripControlCharacters(url).Trim());
+
+            url = Util.Trim(StripControlCharacters(url));
+            if (url.Length == 0) return false;
+
+            var scheme = GetUrlScheme(url);
             return scheme == null || Array.IndexOf(AllowedUrlSchemes, scheme) >= 0;
         }
 
@@ -53,9 +56,15 @@ namespace LogicAndTrick.WikiCodeParser
         public static string SanitiseUrl(string url)
         {
             if (url == null) return "";
-            var scheme = GetUrlScheme(StripControlCharacters(url).Trim());
-            var hasValidScheme = Array.IndexOf(AllowedUrlSchemes, scheme) >= 0;
-            return hasValidScheme ? url.Trim() : "https://" + url.Trim();
+
+            url = Util.Trim(StripControlCharacters(url));
+            if (url.Length == 0) return "";
+
+            var scheme = GetUrlScheme(url);
+            var hasValidScheme = scheme == null || Array.IndexOf(AllowedUrlSchemes, scheme) >= 0;
+            if (!hasValidScheme)  return "";
+
+            return scheme != null ? url : "https://" + url;
         }
 
         private static readonly HashSet<string> AllowedTagNames = new HashSet<string>

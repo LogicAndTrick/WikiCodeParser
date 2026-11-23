@@ -58,8 +58,6 @@ export class ImageTag extends Tag {
     private static BuildUrl(options: Record<string, string>, text: string): string {
         let url = text;
         if (options['url']) url = options['url'];
-        url = HtmlHelper.StripControlCharacters(url);
-        if (HtmlHelper.GetUrlScheme(url) == null) url = 'http://' + url;
-        return url;
+        return HtmlHelper.SanitiseUrl(url);
     }
 }

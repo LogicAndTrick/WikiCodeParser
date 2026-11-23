@@ -1,3 +1,5 @@
+import { Trim } from './Util';
+
 const ALLOWED_URL_SCHEMES = ['http', 'https', 'mailto', 'ftp'];
 
 // prettier-ignore
@@ -52,7 +54,11 @@ export class HtmlHelper {
 
     public static ValidateUrl(url: string): boolean {
         if (url == null) return false;
-        const scheme = HtmlHelper.GetUrlScheme(HtmlHelper.StripControlCharacters(url).trim());
+
+        url = Trim(HtmlHelper.StripControlCharacters(url));
+        if (url.length == 0) return false;
+
+        const scheme = HtmlHelper.GetUrlScheme(url);
         return scheme == null || ALLOWED_URL_SCHEMES.includes(scheme);
     }
 
@@ -63,9 +69,15 @@ export class HtmlHelper {
      */
     public static SanitiseUrl(url: string): string {
         if (url == null) return '';
-        const scheme = HtmlHelper.GetUrlScheme(HtmlHelper.StripControlCharacters(url).trim());
-        const hasValidScheme = scheme != null && ALLOWED_URL_SCHEMES.includes(scheme);
-        return hasValidScheme ? url.trim() : 'https://' + url.trim();
+
+        url = Trim(HtmlHelper.StripControlCharacters(url));
+        if (url.length == 0) return '';
+
+        const scheme = HtmlHelper.GetUrlScheme(url);
+        const hasValidScheme = scheme === null || ALLOWED_URL_SCHEMES.includes(scheme);
+        if (!hasValidScheme) return '';
+
+        return scheme != null ? url : 'https://' + url;
     }
 
     public static ValidateTagName(name: string | null): boolean {

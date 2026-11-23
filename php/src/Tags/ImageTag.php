@@ -59,8 +59,6 @@ class ImageTag extends Tag
     {
         $url = $text;
         if (isset($options['url'])) $url = $options['url'];
-        $url = HtmlHelper::StripControlCharacters($url);
-        if (HtmlHelper::GetUrlScheme($url) == null) $url = 'http://' . $url;
-        return $url;
+        return HtmlHelper::SanitiseUrl($url);
     }
 }

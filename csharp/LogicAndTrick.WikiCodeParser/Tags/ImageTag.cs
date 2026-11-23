@@ -57,9 +57,7 @@ namespace LogicAndTrick.WikiCodeParser.Tags
         {
             var url = text;
             if (options.ContainsKey("url")) url = options["url"];
-            url = HtmlHelper.StripControlCharacters(url);
-            if (HtmlHelper.GetUrlScheme(url) == null) url = "http://" + url;
-            return url;
+            return HtmlHelper.SanitiseUrl(url);
         }
     }
 }

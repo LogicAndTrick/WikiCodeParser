@@ -52,9 +52,8 @@ class LinkTag extends Tag
     {
         $url = $text;
         if (isset($options['url'])) $url = $options['url'];
-        $url = HtmlHelper::StripControlCharacters($url);
-        if ($this->token == 'email') $url = 'mailto:' . $url;
-        else if (HtmlHelper::GetUrlScheme($url) == null) $url = 'http://' . $url;
-        return $url;
+        if (!HtmlHelper::ValidateUrl($url)) return '';
+        if ($this->token == 'email') $url = 'mailto:' . Util::Trim($url);
+        return HtmlHelper::SanitiseUrl($url);
     }
 }
