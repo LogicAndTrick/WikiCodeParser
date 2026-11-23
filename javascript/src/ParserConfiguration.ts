@@ -14,6 +14,7 @@ import { HtmlHelper } from './HtmlHelper';
 import { AutoLinkingProcessor } from './Processors/AutoLinkingProcessor';
 import { INodeProcessor } from './Processors/INodeProcessor';
 import { MarkdownTextProcessor } from './Processors/MarkdownTextProcessor';
+import { MentionsProcessor } from './Processors/MentionsProcessor';
 import { NewLineProcessor } from './Processors/NewLineProcessor';
 import { SmiliesProcessor } from './Processors/SmiliesProcessor';
 import { TrimWhitespaceAroundBlockNodesProcessor } from './Processors/TrimWhitespaceAroundBlockNodesProcessor';
@@ -104,6 +105,7 @@ export class ParserConfiguration {
         conf.Processors.push(new SmiliesProcessor('/images/smilies/{0}.png').AddTwhl());
         conf.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
         conf.Processors.push(new NewLineProcessor());
+        conf.Processors.push(new MentionsProcessor('/user/name/{0}'));
 
         return conf;
     }

@@ -55,6 +55,7 @@ import {
     YoutubeTag,
 } from '../src';
 import { Position } from '../src/Position';
+import { MentionsProcessor } from '../src/Processors/MentionsProcessor';
 import { JsonNode, TestConfig, TestDefinition, TestNode } from './TestModels';
 import { GetTestCaseDirectory, GetTestCaseNames, sanitise } from './Util';
 
@@ -223,6 +224,9 @@ function CreateConfig(config: TestConfig): ParserConfiguration {
                 break;
             case 'TrimWhitespace':
                 con.Processors.push(new TrimWhitespaceAroundBlockNodesProcessor());
+                break;
+            case 'Mentions':
+                con.Processors.push(new MentionsProcessor('/user/{0}'));
                 break;
             default:
                 throw new Error(`Unknown processor name '${p}'`);
