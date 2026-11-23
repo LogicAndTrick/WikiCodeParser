@@ -98,6 +98,7 @@ public class ImplementationTests
                 "NewLine" => new NewLineProcessor(),
                 "Smilies" => new SmiliesProcessor("/smilies/{0}.png").Add("smile", ":)"),
                 "TrimWhitespace" => new TrimWhitespaceAroundBlockNodesProcessor(),
+                "Mentions" => new MentionsProcessor("/user/{0}"),
                 _ => throw new ArgumentException($"Unknown processor name '{p}'")
             });
         }

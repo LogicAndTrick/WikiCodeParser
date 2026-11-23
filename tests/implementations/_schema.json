@@ -78,7 +78,8 @@
               "MarkdownText",
               "NewLine",
               "Smilies",
-              "TrimWhitespace"
+              "TrimWhitespace",
+              "Mentions"
             ]
           }
         }

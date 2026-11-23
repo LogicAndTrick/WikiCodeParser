@@ -73,6 +73,7 @@ namespace LogicAndTrick.WikiCodeParser
             conf.Processors.Add(new SmiliesProcessor("/images/smilies/{0}.png").AddTwhl());
             conf.Processors.Add(new TrimWhitespaceAroundBlockNodesProcessor());
             conf.Processors.Add(new NewLineProcessor());
+            conf.Processors.Add(new MentionsProcessor("/user/name/{0}"));
 
             return conf;
         }

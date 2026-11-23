@@ -1,0 +1,55 @@
+{
+  "$schema": "_schema.json",
+  "config": {
+    "base": "none",
+    "processors": ["Mentions"]
+  },
+  "input": "a @<user name> b",
+  "html": "a <a class=\"mention\" data-name=\"user name\" href=\"https://example.com/user/user%20name\">@user name</a> b",
+  "plain": "a @user name b",
+  "nodes": {
+    "name": "root",
+    "type": "list",
+    "pos": [1, 0],
+    "children": [
+      {
+        "name": "sublist",
+        "type": "list",
+        "pos": [1, 0],
+        "children": [
+          {
+            "name": "a",
+            "type": "plain",
+            "pos": [1, 0],
+            "text": "a "
+          },
+          {
+            "type": "meta",
+            "pos": [1, 2],
+            "key": "Mention",
+            "value": "user name"
+          },
+          {
+            "name": "mention",
+            "type": "html",
+            "pos": [1, 2],
+            "html": [
+              "<a class=\"mention\" data-name=\"user name\" href=\"https://example.com/user/user%20name\">",
+              "</a>"
+            ],
+            "plain": ["", ""],
+            "children": [
+              { "type": "plain", "pos": [1, 4], "text": "@user name" }
+            ]
+          },
+          {
+            "name": "b",
+            "type": "plain",
+            "pos": [1, 14],
+            "text": " b"
+          }
+        ]
+      }
+    ]
+  }
+}
