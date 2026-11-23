@@ -6,9 +6,12 @@ export class State {
     public get Length(): number {
         return this.Text.length;
     }
-    public Index: number;
+    private _index: number;
+    public get Index(): number {
+        return this._index;
+    }
     public get Done(): boolean {
-        return this.Index >= this.Length;
+        return this._index >= this.Length;
     }
 
     private readonly newlinePositions: Array<number>;
@@ -17,7 +20,7 @@ export class State {
 
     public constructor(startSourceLine: number, startSourceColumn: number, text: string) {
         this.Text = text;
-        this.Index = 0;
+        this._index = 0;
 
         this.startSourceLine = startSourceLine;
         this.startSourceColumn = startSourceColumn;
@@ -32,11 +35,11 @@ export class State {
     }
 
     public get SourceLine(): number {
-        return this.startSourceLine + this.newlinePositions.filter(x => x < this.Index).length - 1; // the input line is 1-indexed too, so subtract 1 here.
+        return this.startSourceLine + this.newlinePositions.filter(x => x < this._index).length - 1; // the input line is 1-indexed too, so subtract 1 here.
     }
     public get SourceColumn(): number {
-        const last = (this.newlinePositions.filter(x => x < this.Index).pop() ?? 0) + 1;
-        return this.Index - last + (last == 0 ? this.startSourceColumn : 0);
+        const last = (this.newlinePositions.filter(x => x < this._index).pop() ?? 0) + 1;
+        return this._index - last + (last == 0 ? this.startSourceColumn : 0);
     }
     public get SourcePosition(): Position {
         return new Position(this.SourceLine, this.SourceColumn);
@@ -48,16 +51,16 @@ export class State {
         if (ignoreCase) {
             const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regex = new RegExp(escaped, 'gi');
-            regex.lastIndex = this.Index;
+            regex.lastIndex = this._index;
             const match = regex.exec(this.Text);
             pos = match ? match.index : this.Length;
         } else {
-            pos = this.Text.indexOf(find, this.Index);
+            pos = this.Text.indexOf(find, this._index);
             if (pos < 0) pos = this.Length;
         }
         if (pos < 0) pos = this.Length;
-        const ret = this.Text.substring(this.Index, pos);
-        this.Index = pos;
+        const ret = this.Text.substring(this._index, pos);
+        this._index = pos;
         return ret;
     }
 
@@ -67,65 +70,65 @@ export class State {
         if (ignoreCase) {
             const escaped = find.map(f => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
             const regex = new RegExp(escaped.join('|'), 'gi');
-            regex.lastIndex = this.Index;
+            regex.lastIndex = this._index;
             const match = regex.exec(this.Text);
             pos = match ? match.index : this.Length;
         } else {
-            pos = IndexOfAny(this.Text, find, this.Index);
+            pos = IndexOfAny(this.Text, find, this._index);
             if (pos < 0) pos = this.Length;
         }
         if (pos < 0) pos = this.Length;
-        const ret = this.Text.substring(this.Index, pos);
-        this.Index = pos;
+        const ret = this.Text.substring(this._index, pos);
+        this._index = pos;
         return ret;
     }
 
     public ScanToEnd(): string {
-        const ret = this.Text.substring(this.Index, this.Length);
-        this.Index = this.Length;
+        const ret = this.Text.substring(this._index, this.Length);
+        this._index = this.Length;
         return ret;
     }
 
     public SkipWhitespace() {
-        while (this.Index < this.Length && this.Text[this.Index].trim() == '') this.Index++;
+        while (this._index < this.Length && this.Text[this._index].trim() == '') this._index++;
     }
 
     public PeekTo(find: string): string | null {
-        const pos = this.Text.indexOf(find, this.Index);
+        const pos = this.Text.indexOf(find, this._index);
         if (pos < 0) return null;
-        return this.Text.substring(this.Index, pos);
+        return this.Text.substring(this._index, pos);
     }
 
     public PeekToAny(find: string[]): string | null {
-        const pos = IndexOfAny(this.Text, find, this.Index);
+        const pos = IndexOfAny(this.Text, find, this._index);
         if (pos < 0) return null;
-        return this.Text.substring(this.Index, pos);
+        return this.Text.substring(this._index, pos);
     }
 
     public Seek(index: number, fromStart: boolean) {
-        this.Index = fromStart ? index : this.Index + index;
+        this._index = fromStart ? index : this._index + index;
     }
 
     public Peek(count: number): string {
         if (count < 0) {
-            const start = Math.max(0, this.Index + count);
-            return this.Text.substring(start, this.Index);
+            const start = Math.max(0, this._index + count);
+            return this.Text.substring(start, this._index);
         } else {
-            if (this.Index + count > this.Length) count = this.Length - this.Index;
-            return this.Text.substring(this.Index, this.Index + count);
+            if (this._index + count > this.Length) count = this.Length - this._index;
+            return this.Text.substring(this._index, this._index + count);
         }
     }
 
     public Next(): string {
-        if (this.Index >= this.Length) return '\0';
-        return this.Text[this.Index++];
+        if (this._index >= this.Length) return '\0';
+        return this.Text[this._index++];
     }
 
     public GetToken(): string | null {
-        if (this.Done || this.Text[this.Index] != '[') return null;
+        if (this.Done || this.Text[this._index] != '[') return null;
         let found = false;
         let tok = '';
-        for (let i = this.Index + 1; i < Math.min(this.Index + 10, this.Length); i++) {
+        for (let i = this._index + 1; i < Math.min(this._index + 10, this.Length); i++) {
             const c = this.Text[i];
             if (c == ' ' || c == '=' || c == ']') {
                 found = tok.length > 0;

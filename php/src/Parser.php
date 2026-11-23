@@ -140,7 +140,7 @@ class Parser
         $inscope = Util::OrderByDescending(array_filter($this->configuration->tags, fn(Tag $x) => $x->InScope($scope)), fn(Tag $x) => $x->priority);
         if ($data->current_tag_depth > $this->configuration->max_tag_depth) $inscope = [];
 
-        while (!$state->Done()) {
+        while (!$state->Done) {
             $pos = $state->sourcePosition;
             $plain = $state->ScanTo('[');
             if ($plain !== null && $plain !== '') {
@@ -149,7 +149,7 @@ class Parser
                 $p->column = $pos->column;
                 $root->nodes[] = $p;
             }
-            if ($state->Done()) break;
+            if ($state->Done) break;
 
             $token = $state->GetToken();
             $found = false;

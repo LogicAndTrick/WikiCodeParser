@@ -94,7 +94,7 @@ class SmiliesProcessor implements INodeProcessor
         $plainPos = $state->sourcePosition;
         $plain = '';
         $advanceToken = false;
-        while (!$state->Done()) {
+        while (!$state->Done) {
             // always advance one token except at the start, or after we find a valid smiley
             if ($advanceToken) $plain .= $state->Next();
             $advanceToken = true;

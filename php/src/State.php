@@ -9,14 +9,15 @@ use LogicAndTrick\WikiCodeParser\Position;
  */
 class State
 {
-    public string $text;
-    public int $length;
-    public int $index;
-    public function Done(): bool
-    {
-        return $this->index >= $this->length;
+    public readonly string $text;
+    public private(set) int $length;
+    public private(set) int $index;
+
+    public bool $Done {
+        get => $this->index >= $this->length;
     }
 
+    /** @var array<int> */
     private array $newlinePositions;
     private int $startSourceLine;
     private int $startSourceColumn;
@@ -157,7 +158,7 @@ class State
 
     public function GetToken(): string | null
     {
-        if ($this->Done() || $this->text[$this->index] != '[') return null;
+        if ($this->Done || $this->text[$this->index] != '[') return null;
         $found = false;
         $tok = "";
         for ($i = $this->index + 1; $i < min($this->index + 10, $this->length); $i++) {

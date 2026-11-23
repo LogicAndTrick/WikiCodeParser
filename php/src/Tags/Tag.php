@@ -108,7 +108,7 @@ class Tag
         if ($this->isNested) {
             $stack = 1;
             $text = '';
-            while (!$state->Done()) {
+            while (!$state->Done) {
                 $text .= $state->ScanTo('[');
                 $tok = $state->GetToken();
                 if ($tok && strtolower($tok) == strtolower($this->token)) $stack++;

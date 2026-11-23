@@ -52,16 +52,16 @@ class MentionsProcessor implements INodeProcessor
         $state = new State($node->line, $node->column, $text);
         $plainPos = $state->sourcePosition;
         $plain = '';
-        while (!$state->Done()) {
+        while (!$state->Done) {
             $plain .= $state->ScanTo('@<');
-            if ($state->Done() || $state->Peek(2) != '@<') continue;
+            if ($state->Done || $state->Peek(2) != '@<') continue;
 
             $tagStart = $state->sourcePosition;
             $state->Seek(2, false); // @<
 
             $textStart = $state->sourcePosition;
             $name = $state->ScanTo('>');
-            if ($state->Done() || str_contains($name, "\n") || $state->Peek(1) != '>' || strlen($name) < 1 || strlen($name) > 64 || strlen($name) != strlen(Util::Trim($name))) {
+            if ($state->Done || str_contains($name, "\n") || $state->Peek(1) != '>' || strlen($name) < 1 || strlen($name) > 64 || strlen($name) != strlen(Util::Trim($name))) {
                 $plain .= '@<' . $name;
                 continue;
             }

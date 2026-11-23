@@ -41,7 +41,7 @@ class ListTag extends Tag
 
         $itemState = new State($textPosition->line, $textPosition->column, $text);
         $itemPos = $textPosition;
-        while (!$itemState->Done()) {
+        while (!$itemState->Done) {
             $plainPos = $itemState->sourcePosition;
             $plain = $itemState->ScanTo("[*]");
 

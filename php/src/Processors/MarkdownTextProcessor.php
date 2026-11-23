@@ -72,7 +72,7 @@ class MarkdownTextProcessor implements INodeProcessor
         }
 
         // Make sure we can close this token
-        $valid = ($state->Done() || self::IsEndBreakChar($state->Peek(1))) // end of string or before an end breaker
+        $valid = ($state->Done || self::IsEndBreakChar($state->Peek(1))) // end of string or before an end breaker
             && strlen(Util::TrimEnd($str)) == strlen($str); // not whitespace previous
         if (!$valid) {
             $state->Seek($index, true);
@@ -110,13 +110,13 @@ class MarkdownTextProcessor implements INodeProcessor
         $plainPos = $state->sourcePosition;
         $plain = "";
         $advanceToken = false;
-        while (!$state->Done()) {
+        while (!$state->Done) {
             // always advance one token except at the start, or after we find a valid token
             if ($advanceToken) $plain .= $state->Next();
             $advanceToken = true;
 
             $plain .= $state->ScanToAny(self::$Tokens);
-            if ($state->Done()) break;
+            if ($state->Done) break;
 
             // Make sure we can start a new token
             $valid = ($state->index == 0 || self::IsStartBreakChar($state->text[$state->index - 1])) // start of string or after a start breaker
