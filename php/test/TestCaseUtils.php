@@ -24,6 +24,7 @@ class TestCaseUtils
                     ->allowAttribute('data-vault-id', ['div'])
                     ->allowAttribute('data-info', ['span'])
                     ->allowAttribute('data-youtube-id', ['div'])
+                    ->allowAttribute('data-name', ['a'])
                     ->withMaxInputLength(pow(2, 32))
             );
         }

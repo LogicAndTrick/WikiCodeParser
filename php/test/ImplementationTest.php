@@ -29,6 +29,7 @@ use LogicAndTrick\WikiCodeParser\ParserConfiguration;
 use LogicAndTrick\WikiCodeParser\ParseResult;
 use LogicAndTrick\WikiCodeParser\Processors\AutoLinkingProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\MarkdownTextProcessor;
+use LogicAndTrick\WikiCodeParser\Processors\MentionsProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\NewLineProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\SmiliesProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\TrimWhitespaceAroundBlockNodesProcessor;
@@ -146,6 +147,7 @@ class ImplementationTest extends TestCase
                 "NewLine" => new NewLineProcessor(),
                 "Smilies" => new SmiliesProcessor("/smilies/{0}.png")->Add('smile', ':)'),
                 "TrimWhitespace" => new TrimWhitespaceAroundBlockNodesProcessor(),
+                "Mentions" => new MentionsProcessor("/user/{0}"),
                 default => throw new InvalidArgumentException("Unknown processor name '$p'"),
             };
         }

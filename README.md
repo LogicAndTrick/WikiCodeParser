@@ -93,6 +93,7 @@ I have tested each implementation with the following sanitisation libraries:
             ->allowAttribute('data-vault-id', ['div'])
             ->allowAttribute('data-info', ['span'])
             ->allowAttribute('data-youtube-id', ['div'])
+            ->allowAttribute('data-name', ['a'])
     );
     ```
 

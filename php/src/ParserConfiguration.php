@@ -16,6 +16,7 @@ use LogicAndTrick\WikiCodeParser\Elements\QuoteElement;
 use LogicAndTrick\WikiCodeParser\Elements\RefElement;
 use LogicAndTrick\WikiCodeParser\Processors\AutoLinkingProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\MarkdownTextProcessor;
+use LogicAndTrick\WikiCodeParser\Processors\MentionsProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\NewLineProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\SmiliesProcessor;
 use LogicAndTrick\WikiCodeParser\Processors\TrimWhitespaceAroundBlockNodesProcessor;
@@ -109,6 +110,7 @@ class ParserConfiguration
         $conf->processors[] = (new SmiliesProcessor('/images/smilies/{0}.png'))->AddTwhl();
         $conf->processors[] = new TrimWhitespaceAroundBlockNodesProcessor();
         $conf->processors[] = new NewLineProcessor();
+        $conf->processors[] = new MentionsProcessor("/user/name/{0}");
 
         return $conf;
     }
