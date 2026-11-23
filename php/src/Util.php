@@ -26,8 +26,14 @@ class Util
 
     public static function OrderByDescending(array $array, callable $selector): array
     {
-        $array = self::OrderBy($array, $selector);
-        return array_reverse($array);
+        usort($array, function ($a, $b) use ($selector) {
+            $av = call_user_func($selector, $a);
+            $bv = call_user_func($selector, $b);
+            if ($av > $bv) return -1;
+            if ($av < $bv) return 1;
+            return 0;
+        });
+        return $array;
     }
 
     public static function IndexOfAny(string $str, array $searchStrings, int $position = 0): int
