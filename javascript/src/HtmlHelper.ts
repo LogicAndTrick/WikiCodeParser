@@ -32,7 +32,7 @@ export class HtmlHelper {
     }
 
     public static UrlEncode(text: string): string {
-        return encodeURI(text);
+        return encodeURIComponent(text).replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
     }
 
     public static AttributeEncode(text: string): string {

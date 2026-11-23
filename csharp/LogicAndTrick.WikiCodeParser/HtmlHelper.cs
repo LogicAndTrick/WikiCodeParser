@@ -16,7 +16,7 @@ namespace LogicAndTrick.WikiCodeParser
 
         public static string UrlEncode(string urlPart)
         {
-            return HttpUtility.UrlEncode(urlPart);
+            return Uri.EscapeDataString(urlPart);
         }
 
         public static string AttributeEncode(string attributeText)

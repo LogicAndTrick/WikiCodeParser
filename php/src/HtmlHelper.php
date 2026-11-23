@@ -16,7 +16,7 @@ class HtmlHelper
 
     public static function UrlEncode(string $text): string
     {
-        return urlencode($text);
+        return rawurlencode($text);
     }
 
     public static function AttributeEncode(string $text): string
