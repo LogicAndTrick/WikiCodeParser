@@ -4,9 +4,9 @@
     "base": "none",
     "elements": ["MdHeading"]
   },
-  "input": "= Test",
-  "html": "<h1 id=\"Test\">Test</h1>",
-  "plain": "Test\n----",
+  "input": "= Test\n\n1",
+  "html": "<h1 id=\"Test\">Test</h1>\n1",
+  "plain": "Test\n----\n1",
   "nodes": {
     "name": "root",
     "type": "list",
@@ -18,11 +18,24 @@
         "pos": [1, 0],
         "children": [
           {
+            "name": "heading-text",
             "type": "plain",
             "pos": [1, 1],
             "text": "Test"
           }
         ]
+      },
+      {
+        "name": "newline",
+        "type": "plain",
+        "pos": [1, 0],
+        "text": "\n"
+      },
+      {
+        "name": "after-text",
+        "type": "plain",
+        "pos": [3, 0],
+        "text": "1"
       }
     ]
   }

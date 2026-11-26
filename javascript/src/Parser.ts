@@ -95,14 +95,34 @@ export class Parser {
         return ret;
     }
 
+    private static TrimStartAndGetPositionChange(line: number, column: number, text: string): { line: number; column: number; text: string } {
+        const trimmed = TrimStart(text);
+        const wsLines = text.substring(0, text.length - trimmed.length).split('\n');
+        const lineOffset = wsLines.length - 1;
+        line += lineOffset;
+        if (lineOffset > 0) column = wsLines[lineOffset].length;
+        else column -= wsLines[lineOffset].length;
+        return { line, column, text: trimmed };
+    }
+
     public static TrimWhitespace(node: INode, start = true, end = true): INode {
         const removeNodes: INode[] = [];
 
         if (start) {
             NodeExtensions.Walk(node, x => {
                 if (x instanceof NodeCollection) return true;
-                if (x instanceof UnprocessablePlainTextNode && x.Text != null) x.Text = TrimStart(x.Text ?? '');
-                if (x instanceof PlainTextNode && x.Text != null) x.Text = TrimStart(x.Text ?? '');
+                if (x instanceof UnprocessablePlainTextNode && x.Text != null) {
+                    const tsp = Parser.TrimStartAndGetPositionChange(x.Line, x.Column, x.Text);
+                    x.Line = tsp.line;
+                    x.Column = tsp.column;
+                    x.Text = tsp.text;
+                }
+                if (x instanceof PlainTextNode && x.Text != null) {
+                    const tsp = Parser.TrimStartAndGetPositionChange(x.Line, x.Column, x.Text);
+                    x.Line = tsp.line;
+                    x.Column = tsp.column;
+                    x.Text = tsp.text;
+                }
                 if (x.HasContent()) return false;
                 if (x instanceof UnprocessablePlainTextNode || x instanceof PlainTextNode) removeNodes.push(x);
                 return true;

@@ -17,7 +17,7 @@ public class LineColumnTests
             Assert.AreEqual(expected.Column, node.Column, $"Wrong column for '{expected.Name}'");
         }
 
-        var children = node.GetChildren();
+        var children = node.GetChildren().Where(x => x is not RemovedNode).ToList();
         Assert.AreEqual(expected.Children.Length, children.Count);
 
         for (int i = 0; i < expected.Children.Length; i++)
@@ -72,8 +72,7 @@ public class LineColumnTests
         var result = new Parser(config).ParseResult("\n\n\n[b]TEST[/b]");
         
         AssertPositionHierarchy(result.Content,
-            new Position("root", 1, 0,
-                new Position("whitespace", 1, 0),
+            new Position("root", 4, 0,
                 new Position("b", 4, 0,
                     new Position("TEST", 4, 3)
                 )

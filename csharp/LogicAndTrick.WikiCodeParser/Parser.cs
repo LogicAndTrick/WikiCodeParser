@@ -105,6 +105,17 @@ namespace LogicAndTrick.WikiCodeParser
             return ret;
         }
 
+        private static (int line, int column, string text) TrimStartAndGetPositionChange(int line, int column, string text)
+        {
+            var trimmed = Util.TrimStart(text);
+            var wsLines = text.Substring(0, text.Length - trimmed.Length).Split('\n');
+            var lineOffset = wsLines.Length - 1;
+            line += lineOffset;
+            if (lineOffset > 0) column = wsLines[lineOffset].Length;
+            else column -= wsLines[lineOffset].Length;
+            return (line, column, text: trimmed);
+        }
+
         // ReSharper disable once MemberCanBePrivate.Global
         public static INode TrimWhitespace(INode node, bool start = true, bool end = true)
         {
@@ -115,8 +126,20 @@ namespace LogicAndTrick.WikiCodeParser
                 node.Walk(x =>
                 {
                     if (x is NodeCollection) return true;
-                    if (x is UnprocessablePlainTextNode uptn && uptn.Text != null) uptn.Text = Util.TrimStart(uptn.Text ?? "");
-                    if (x is PlainTextNode ptn && ptn.Text != null) ptn.Text = Util.TrimStart(ptn.Text ?? "");
+                    if (x is UnprocessablePlainTextNode uptn && uptn.Text != null)
+                    {
+                        var tsp = TrimStartAndGetPositionChange(uptn.Line, uptn.Column, uptn.Text);
+                        uptn.Line = tsp.line;
+                        uptn.Column = tsp.column;
+                        uptn.Text = tsp.text;
+                    }
+                    if (x is PlainTextNode ptn && ptn.Text != null)
+                    {
+                        var tsp = TrimStartAndGetPositionChange(ptn.Line, ptn.Column, ptn.Text);
+                        ptn.Line = tsp.line;
+                        ptn.Column = tsp.column;
+                        ptn.Text = tsp.text;
+                    }
                     if (x.HasContent()) return false;
                     if (x is UnprocessablePlainTextNode || x is PlainTextNode) removeNodes.Add(x);
                     return true;

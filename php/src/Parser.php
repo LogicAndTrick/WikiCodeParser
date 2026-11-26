@@ -98,6 +98,17 @@ class Parser
         return $ret;
     }
 
+    private static function TrimStartAndGetPositionChange(int $line, int $column, string $text): array
+    {
+        $trimmed = Util::TrimStart($text);
+        $wsLines = explode("\n", substr($text, 0, strlen($text) - strlen($trimmed)));
+        $lineOffset = count($wsLines) - 1;
+        $line += $lineOffset;
+        if ($lineOffset > 0) $column = strlen($wsLines[$lineOffset]);
+        else $column -= strlen($wsLines[$lineOffset]);
+        return ['line' => $line, 'column' => $column, 'text' => $trimmed];
+    }
+
     public static function TrimWhitespace(INode $node, bool $start = true, bool $end = true): INode
     {
         $removedNodes = [];
@@ -105,8 +116,18 @@ class Parser
         if ($start) {
             NodeExtensions::Walk($node, function (INode $x) use (&$removedNodes) {
                 if ($x instanceof NodeCollection) return true;
-                if ($x instanceof UnprocessablePlainTextNode && $x->text !== null) $x->text = Util::TrimStart($x->text);
-                if ($x instanceof PlainTextNode && $x->text !== null) $x->text = Util::TrimStart($x->text);
+                if ($x instanceof UnprocessablePlainTextNode && $x->text !== null) {
+                    $tsp = self::TrimStartAndGetPositionChange($x->line, $x->column, $x->text);
+                    $x->line = $tsp['line'];
+                    $x->column = $tsp['column'];
+                    $x->text = $tsp['text'];
+                }
+                if ($x instanceof PlainTextNode && $x->text !== null) {
+                    $tsp = self::TrimStartAndGetPositionChange($x->line, $x->column, $x->text);
+                    $x->line = $tsp['line'];
+                    $x->column = $tsp['column'];
+                    $x->text = $tsp['text'];
+                }
                 if ($x->HasContent()) return false;
                 if ($x instanceof UnprocessablePlainTextNode || $x instanceof PlainTextNode) $removedNodes[] = $x;
                 return true;
